@@ -10,6 +10,9 @@ on:
 permissions:
   contents: write
 
+env:
+  GODOT_VERSION: "4.7.1"
+
 jobs:
   export-web:
     runs-on: ubuntu-latest
@@ -19,6 +22,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Preparar plantillas de exportación
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          mkdir -p "$HOME/.config"
+          if [ -d /root/.config/godot ]; then
+            mv /root/.config/godot "$HOME/.config/godot"
+          fi
+          mv "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
 
       - name: Export Web
         run: |
