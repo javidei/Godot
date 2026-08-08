@@ -1,26 +1,48 @@
-# Godot
+# Entre líneas · Godot
 
-Base mínima para empezar un juego con **Godot 4**.
+Primera base jugable del proyecto narrativo en **Godot 4**, tomando como referencia la demo `juego-otome`.
 
-Ahora mismo el proyecto solo muestra una pantalla inicial con el texto **“Aquí va un juego en Godot”**. La idea es usar este repositorio como base e ir añadiendo escenas, personajes, diálogos, animaciones y mecánicas poco a poco.
+## Qué incluye ahora
 
-## Abrir el proyecto
+- Menú principal con **Nueva partida** y **Continuar**.
+- Escena narrativa en una cafetería.
+- Javi, Sue y Smokey.
+- Tres estados visuales por personaje usando los mismos sprite sheets temporales de `juego-otome`.
+- Texto con efecto de escritura progresiva.
+- Dos momentos de decisión.
+- Sistema básico de afinidad.
+- Guardado y carga de partida en `user://godot_otome_save.json`.
+- Efectos sencillos de zoom, sacudida y onomatopeyas.
+- Pantalla final con resumen de afinidad.
+- Preset preparado para una futura exportación **Web**.
+
+## Recursos gráficos
+
+Por ahora el proyecto carga los recursos gráficos directamente desde el repositorio público `javidei/juego-otome` mediante `HTTPRequest`. Si la descarga falla, el juego sigue funcionando mostrando placeholders.
+
+Esto es temporal: cuando la base esté asentada podremos mover/copiar los recursos definitivos a este repositorio para que el proyecto sea completamente autónomo y funcione también sin conexión.
+
+## Abrir en Godot
 
 1. Instala Godot 4.
 2. Abre Godot y pulsa **Importar**.
-3. Selecciona el archivo `project.godot`.
-4. Ejecuta el proyecto con **F6/F5**.
+3. Selecciona `project.godot`.
+4. Ejecuta con **F6/F5**.
 
 ## Estructura
 
 ```text
 Godot/
 ├── project.godot
+├── export_presets.cfg
 ├── scenes/
 │   └── main.tscn
 ├── scripts/
-│   └── main.gd
+│   ├── main.gd
+│   └── story.gd
 └── README.md
 ```
 
-El proyecto usa el renderizador **Compatibility**, pensado para que más adelante sea sencillo preparar también una exportación web.
+## Siguiente evolución
+
+La arquitectura ya permite empezar a separar escenas, sistema de diálogos, personajes, rutas, inventario, audio, efectos y minijuegos sin cambiar de motor.
