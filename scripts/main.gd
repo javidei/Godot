@@ -42,6 +42,7 @@ var continue_button: Button
 var stage: Control
 var topbar: HBoxContainer
 var chapter_label: Label
+var fullscreen_button: Button
 var speaker_label: Label
 var dialogue_text: Label
 var dialogue_panel: PanelContainer
@@ -192,7 +193,7 @@ func _build_game() -> void:
 	stage.anchor_left = 0.0
 	stage.anchor_top = 0.07
 	stage.anchor_right = 1.0
-	stage.anchor_bottom = 0.79
+	stage.anchor_bottom = 1.0
 	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stage.z_index = 0
 	game_screen.add_child(stage)
@@ -244,6 +245,11 @@ func _build_game() -> void:
 	var menu_button := _make_small_button("Menú")
 	menu_button.pressed.connect(_show_menu)
 	topbar.add_child(menu_button)
+
+	fullscreen_button = _make_small_button("Pantalla completa")
+	fullscreen_button.custom_minimum_size = Vector2(132, 42)
+	fullscreen_button.pressed.connect(_toggle_fullscreen)
+	topbar.add_child(fullscreen_button)
 
 	choices_box = VBoxContainer.new()
 	choices_box.anchor_left = 0.16
@@ -393,13 +399,13 @@ func _create_character(character: String, position_id: String) -> void:
 	character_positions[character] = position_id
 
 	var view := TextureRect.new()
-	view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	view.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	view.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	view.stretch_mode = TextureRect.STRETCH_SCALE
 	view.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	view.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	slot.add_child(view)
 	character_views[character] = view
+	slot.resized.connect(_layout_character_view.bind(character))
 	_set_character_position(character, position_id)
 
 
@@ -416,6 +422,23 @@ func _set_character_position(character: String, position_id: String) -> void:
 	slot.offset_right = 0.0
 	slot.offset_bottom = 0.0
 	character_positions[character] = position_id
+	_layout_character_view(character)
+
+
+func _layout_character_view(character: String) -> void:
+	if not character_slots.has(character) or not character_views.has(character):
+		return
+	var slot: Control = character_slots[character]
+	var view: TextureRect = character_views[character]
+	if view.texture == null or slot.size.x <= 0.0 or slot.size.y <= 0.0:
+		return
+	var texture_size := view.texture.get_size()
+	if texture_size.x <= 0.0 or texture_size.y <= 0.0:
+		return
+	var fit_scale := min(slot.size.x / texture_size.x, slot.size.y / texture_size.y)
+	var fitted_size := texture_size * fit_scale
+	view.position = Vector2((slot.size.x - fitted_size.x) * 0.5, slot.size.y - fitted_size.y)
+	view.size = fitted_size
 
 
 func _make_button(button_text: String, primary: bool) -> Button:
@@ -666,6 +689,7 @@ func _apply_expression(character: String, expression: String) -> void:
 	if texture == null:
 		return
 	character_views[character].texture = texture
+	_layout_character_view(character)
 
 
 func _play_effect(effect: Dictionary) -> void:
@@ -716,7 +740,7 @@ func _zoom_character(character: String, amount: float = 1.08) -> void:
 	if not character_slots.has(character):
 		return
 	var slot: Control = character_slots[character]
-	slot.pivot_offset = slot.size * 0.5
+	slot.pivot_offset = Vector2(slot.size.x * 0.5, slot.size.y)
 	var base_scale := slot.scale
 	var tween := create_tween()
 	tween.tween_property(slot, "scale", base_scale * amount, 0.16)
@@ -735,6 +759,12 @@ func _show_toast(text: String) -> void:
 
 func _play_ui_sound() -> void:
 	audio_manager.play_ui("confirm")
+
+
+func _toggle_fullscreen() -> void:
+	var mode := DisplayServer.window_get_mode()
+	var is_fullscreen := mode == DisplayServer.WINDOW_MODE_FULLSCREEN or mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if is_fullscreen else DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 
 func _finish_demo() -> void:
@@ -794,7 +824,7 @@ func _apply_responsive_layout() -> void:
 		menu_content.anchor_right = 0.92
 		menu_content.anchor_bottom = 0.88
 		stage.anchor_top = 0.08
-		stage.anchor_bottom = 0.72
+		stage.anchor_bottom = 1.0
 		topbar.anchor_left = 0.025
 		topbar.anchor_right = 0.975
 		topbar.anchor_bottom = 0.085
@@ -810,13 +840,15 @@ func _apply_responsive_layout() -> void:
 		dialogue_text.add_theme_font_size_override("font_size", 18)
 		sfx_label.anchor_left = 0.12
 		sfx_label.anchor_right = 0.88
+		fullscreen_button.text = "Pantalla"
+		fullscreen_button.custom_minimum_size = Vector2(86, 42)
 	else:
 		menu_content.anchor_left = 0.06
 		menu_content.anchor_top = 0.2
 		menu_content.anchor_right = 0.49
 		menu_content.anchor_bottom = 0.82
 		stage.anchor_top = 0.07
-		stage.anchor_bottom = 0.79
+		stage.anchor_bottom = 1.0
 		topbar.anchor_left = 0.025
 		topbar.anchor_right = 0.975
 		topbar.anchor_bottom = 0.09
@@ -832,6 +864,8 @@ func _apply_responsive_layout() -> void:
 		dialogue_text.add_theme_font_size_override("font_size", 19)
 		sfx_label.anchor_left = 0.27
 		sfx_label.anchor_right = 0.73
+		fullscreen_button.text = "Pantalla completa"
+		fullscreen_button.custom_minimum_size = Vector2(132, 42)
 
 	for character in character_positions.keys():
 		_set_character_position(str(character), str(character_positions[character]))
