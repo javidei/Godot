@@ -432,11 +432,11 @@ func _layout_character_view(character: String) -> void:
 	var view: TextureRect = character_views[character]
 	if view.texture == null or slot.size.x <= 0.0 or slot.size.y <= 0.0:
 		return
-	var texture_size := view.texture.get_size()
+	var texture_size: Vector2 = view.texture.get_size()
 	if texture_size.x <= 0.0 or texture_size.y <= 0.0:
 		return
-	var fit_scale := min(slot.size.x / texture_size.x, slot.size.y / texture_size.y)
-	var fitted_size := texture_size * fit_scale
+	var fit_scale: float = min(slot.size.x / texture_size.x, slot.size.y / texture_size.y)
+	var fitted_size: Vector2 = texture_size * fit_scale
 	view.position = Vector2((slot.size.x - fitted_size.x) * 0.5, slot.size.y - fitted_size.y)
 	view.size = fitted_size
 
