@@ -11,38 +11,38 @@ const BACKGROUNDS := {
 
 const CHARACTER_POSES := {
 	"javi": {
-		"neutral": "res://assets/characters/javi/javi-01-neutro.png",
-		"happy": "res://assets/characters/javi/javi-02-sonriendo.png",
-		"laugh": "res://assets/characters/javi/javi-02-sonriendo.png",
-		"thoughtful": "res://assets/characters/javi/javi-03-pensativo.png",
-		"jagermeister": "res://assets/characters/javi/javi-04-jagermeister.png",
-		"expressive": "res://assets/characters/javi/javi-05-expresivo.png",
-		"embarrassed": "res://assets/characters/javi/javi-05-expresivo.png",
-		"annoyed": "res://assets/characters/javi/javi-05-expresivo.png",
-		"teasing": "res://assets/characters/javi/javi-05-expresivo.png"
+		"neutral": "res://assets/characters/javi/javi_a.png",
+		"happy": "res://assets/characters/javi/javi_a.png",
+		"laugh": "res://assets/characters/javi/javi_a.png",
+		"thoughtful": "res://assets/characters/javi/javi_c.png",
+		"jagermeister": "res://assets/characters/javi/javi_b.png",
+		"expressive": "res://assets/characters/javi/javi_b.png",
+		"embarrassed": "res://assets/characters/javi/javi_b.png",
+		"annoyed": "res://assets/characters/javi/javi_b.png",
+		"teasing": "res://assets/characters/javi/javi_b.png"
 	},
 	"sue": {
-		"neutral": "res://assets/characters/sue/sue-01-neutra.png",
-		"happy": "res://assets/characters/sue/sue-02-sonriendo.png",
-		"laugh": "res://assets/characters/sue/sue-02-sonriendo.png",
-		"thoughtful": "res://assets/characters/sue/sue-03-pensativa.png",
-		"chocolate": "res://assets/characters/sue/sue-04-chocolate.png",
-		"expressive": "res://assets/characters/sue/sue-05-expresiva.png",
-		"embarrassed": "res://assets/characters/sue/sue-05-expresiva.png",
-		"annoyed": "res://assets/characters/sue/sue-05-expresiva.png",
-		"teasing": "res://assets/characters/sue/sue-05-expresiva.png"
+		"neutral": "res://assets/characters/sue/sue_a.png",
+		"happy": "res://assets/characters/sue/sue_b.png",
+		"laugh": "res://assets/characters/sue/sue_b.png",
+		"thoughtful": "res://assets/characters/sue/sue_c.png",
+		"chocolate": "res://assets/characters/sue/sue_b.png",
+		"expressive": "res://assets/characters/sue/sue_b.png",
+		"embarrassed": "res://assets/characters/sue/sue_c.png",
+		"annoyed": "res://assets/characters/sue/sue_b.png",
+		"teasing": "res://assets/characters/sue/sue_c.png"
 	},
 	"smokey": {
-		"neutral": "res://assets/characters/smokey/smokey_01_confidente.png",
-		"confident": "res://assets/characters/smokey/smokey_01_confidente.png",
-		"happy": "res://assets/characters/smokey/smokey_02_sonrisa.png",
-		"laugh": "res://assets/characters/smokey/smokey_02_sonrisa.png",
-		"thoughtful": "res://assets/characters/smokey/smokey_03_pensativo.png",
-		"vaping": "res://assets/characters/smokey/smokey_04_vapeando.png",
-		"expressive": "res://assets/characters/smokey/smokey_05_expresivo.png",
-		"embarrassed": "res://assets/characters/smokey/smokey_05_expresivo.png",
-		"annoyed": "res://assets/characters/smokey/smokey_05_expresivo.png",
-		"teasing": "res://assets/characters/smokey/smokey_05_expresivo.png"
+		"neutral": "res://assets/characters/smokey/smokey_a.png",
+		"confident": "res://assets/characters/smokey/smokey_a.png",
+		"happy": "res://assets/characters/smokey/smokey_a.png",
+		"laugh": "res://assets/characters/smokey/smokey_a.png",
+		"thoughtful": "res://assets/characters/smokey/smokey_b.png",
+		"vaping": "res://assets/characters/smokey/smokey_b.png",
+		"expressive": "res://assets/characters/smokey/smokey_a.png",
+		"embarrassed": "res://assets/characters/smokey/smokey_b.png",
+		"annoyed": "res://assets/characters/smokey/smokey_a.png",
+		"teasing": "res://assets/characters/smokey/smokey_b.png"
 	}
 }
 
