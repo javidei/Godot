@@ -399,13 +399,13 @@ func _create_character(character: String, position_id: String) -> void:
 	character_positions[character] = position_id
 
 	var view := TextureRect.new()
+	view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	view.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	view.stretch_mode = TextureRect.STRETCH_SCALE
+	view.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	view.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	view.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	slot.add_child(view)
 	character_views[character] = view
-	slot.resized.connect(_layout_character_view.bind(character))
 	_set_character_position(character, position_id)
 
 
@@ -422,23 +422,6 @@ func _set_character_position(character: String, position_id: String) -> void:
 	slot.offset_right = 0.0
 	slot.offset_bottom = 0.0
 	character_positions[character] = position_id
-	_layout_character_view(character)
-
-
-func _layout_character_view(character: String) -> void:
-	if not character_slots.has(character) or not character_views.has(character):
-		return
-	var slot: Control = character_slots[character]
-	var view: TextureRect = character_views[character]
-	if view.texture == null or slot.size.x <= 0.0 or slot.size.y <= 0.0:
-		return
-	var texture_size: Vector2 = view.texture.get_size()
-	if texture_size.x <= 0.0 or texture_size.y <= 0.0:
-		return
-	var fit_scale: float = min(slot.size.x / texture_size.x, slot.size.y / texture_size.y)
-	var fitted_size: Vector2 = texture_size * fit_scale
-	view.position = Vector2((slot.size.x - fitted_size.x) * 0.5, slot.size.y - fitted_size.y)
-	view.size = fitted_size
 
 
 func _make_button(button_text: String, primary: bool) -> Button:
@@ -689,7 +672,6 @@ func _apply_expression(character: String, expression: String) -> void:
 	if texture == null:
 		return
 	character_views[character].texture = texture
-	_layout_character_view(character)
 
 
 func _play_effect(effect: Dictionary) -> void:
