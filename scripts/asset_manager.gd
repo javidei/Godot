@@ -99,6 +99,5 @@ func _touch(path: String) -> void:
 
 func _trim_cache() -> void:
 	while _cache_order.size() > MAX_CACHED_TEXTURES:
-		var oldest := _cache_order.pop_front()
+		var oldest: String = str(_cache_order.pop_front())
 		_cache.erase(oldest)
-
