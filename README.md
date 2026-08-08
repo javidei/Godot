@@ -1,48 +1,57 @@
 # Entre líneas · Godot
 
-Primera base jugable del proyecto narrativo en **Godot 4**, tomando como referencia la demo `juego-otome`.
+Demo de novela visual en **Godot 4.7.1** con Javi, Sue y Smokey.
 
-## Qué incluye ahora
+## Base actual
 
-- Menú principal con **Nueva partida** y **Continuar**.
-- Escena narrativa en una cafetería.
-- Javi, Sue y Smokey.
-- Tres estados visuales por personaje usando los mismos sprite sheets temporales de `juego-otome`.
-- Texto con efecto de escritura progresiva.
-- Dos momentos de decisión.
-- Sistema básico de afinidad.
-- Guardado y carga de partida en `user://godot_otome_save.json`.
-- Efectos sencillos de zoom, sacudida y onomatopeyas.
-- Pantalla final con resumen de afinidad.
-- Preset preparado para una futura exportación **Web**.
+- Recursos gráficos locales: no depende de `raw.githubusercontent.com` para fondos o personajes.
+- 3 fondos y 5 poses de cada personaje, conservados como PNG originales.
+- Poses seleccionables desde los datos del diálogo y posiciones `left`, `center` y `right`.
+- Carga bajo demanda con caché acotada y precarga ligera de la siguiente escena.
+- Composición de novela visual sin `ColorRect` ni placeholders detrás de los personajes.
+- Foco sutil del personaje que habla, zoom, sacudida y onomatopeyas animadas.
+- Interfaz para ratón/táctil y composición alternativa en orientación vertical.
+- Guardado compatible en `user://godot_otome_save.json`.
+- AudioManager con canales Music/SFX/UI. La demo genera tonos `strum`, `clonk` y UI sin usar audio externo.
 
-## Recursos gráficos
-
-Por ahora el proyecto carga los recursos gráficos directamente desde el repositorio público `javidei/juego-otome` mediante `HTTPRequest`. Si la descarga falla, el juego sigue funcionando mostrando placeholders.
-
-Esto es temporal: cuando la base esté asentada podremos mover/copiar los recursos definitivos a este repositorio para que el proyecto sea completamente autónomo y funcione también sin conexión.
-
-## Abrir en Godot
-
-1. Instala Godot 4.
-2. Abre Godot y pulsa **Importar**.
-3. Selecciona `project.godot`.
-4. Ejecuta con **F6/F5**.
-
-## Estructura
+## Recursos
 
 ```text
-Godot/
-├── project.godot
-├── export_presets.cfg
-├── scenes/
-│   └── main.tscn
-├── scripts/
-│   ├── main.gd
-│   └── story.gd
-└── README.md
+assets/
+├── backgrounds/
+├── characters/
+│   ├── javi/
+│   ├── sue/
+│   └── smokey/
+└── audio/
 ```
 
-## Siguiente evolución
+`scripts/asset_manager.gd` es el único catálogo de rutas de imágenes. Si más adelante se migra el almacenamiento a Supabase, el resto del motor no necesita conocer las rutas físicas.
 
-La arquitectura ya permite empezar a separar escenas, sistema de diálogos, personajes, rutas, inventario, audio, efectos y minijuegos sin cambiar de motor.
+Los PNG de personajes conservan su resolución original y transparencia. Los `TextureRect` usan filtrado lineal y `KEEP_ASPECT_CENTERED`: las imágenes grandes se reducen visualmente sin recomprimirlas ni sustituirlas por copias pequeñas. Para este rango de escala 2D no se fuerzan mipmaps, evitando crear copias innecesarias de la textura.
+
+## Diálogo
+
+Una escena puede indicar recursos y composición sin crear escenas Godot nuevas:
+
+```gdscript
+{
+    "background": "cafeteria",
+    "positions": {"sue": "center"},
+    "expressions": {"sue": "chocolate"},
+    "effect": {"type": "shake", "text": "CLONK!", "sfx": "clonk"}
+}
+```
+
+Los nombres de expresiones antiguos (`embarrassed`, `teasing`, `annoyed`, etc.) siguen mapeados para no romper partidas guardadas existentes.
+
+## Audio
+
+No se encontraron ficheros de audio válidos en el Godot actual ni en la demo HTML previa. Aquella demo generaba los tonos en el navegador; Godot replica ese comportamiento de forma procedural. `assets/audio/` queda preparado para música/SFX definitivos y `AudioManager` puede reproducir archivos registrados sin cambiar los datos del diálogo.
+
+## Web y estabilidad
+
+La exportación Web usa `export_presets.cfg`. El workflow de GitHub Actions mantiene la validación que impide publicar si aparecen `SCRIPT ERROR`, `Parse Error` o `Failed to load script`, y comprueba `index.html`, `index.wasm` e `index.pck` antes de guardar la build.
+
+La versión jugable se sincroniza después en `javidei/cvitae/godot/`.
+
