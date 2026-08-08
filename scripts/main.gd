@@ -580,7 +580,7 @@ func _choose(choice: Dictionary) -> void:
 
 func _set_focus(focus: String) -> void:
 	for character in character_slots.keys():
-		var active := focus == "all" or focus == character
+		var active: bool = focus == "all" or focus == str(character)
 		character_slots[character].modulate = Color(1, 1, 1, 1) if active else Color(0.58, 0.58, 0.58, 0.82)
 
 
