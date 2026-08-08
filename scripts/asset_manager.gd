@@ -1,6 +1,7 @@
 extends RefCounted
 
 const MAX_CACHED_TEXTURES := 12
+const MENU_CHARACTERS := "res://assets/ui/menu-lineup.png"
 
 const BACKGROUNDS := {
 	"forest": "res://assets/backgrounds/fondo-bosque.png",
@@ -47,6 +48,10 @@ const CHARACTER_POSES := {
 
 var _cache: Dictionary = {}
 var _cache_order: Array[String] = []
+
+
+func get_menu_characters() -> Texture2D:
+	return _load_texture(MENU_CHARACTERS)
 
 
 func get_background(background_id: String) -> Texture2D:

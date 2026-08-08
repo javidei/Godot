@@ -35,6 +35,7 @@ var menu_screen: Control
 var game_screen: Control
 var ending_screen: Control
 var menu_background: TextureRect
+var menu_characters: TextureRect
 var ending_background: TextureRect
 var game_background: TextureRect
 var menu_content: VBoxContainer
@@ -120,12 +121,28 @@ func _build_menu() -> void:
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	menu_screen.add_child(shade)
 
+	menu_characters = TextureRect.new()
+	menu_characters.name = "MenuCharacters"
+	menu_characters.anchor_left = 0.34
+	menu_characters.anchor_top = 0.18
+	menu_characters.anchor_right = 1.02
+	menu_characters.anchor_bottom = 1.02
+	menu_characters.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	menu_characters.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	menu_characters.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	menu_characters.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	menu_characters.texture = asset_manager.get_menu_characters()
+	menu_characters.modulate = Color(1, 1, 1, 0.96)
+	menu_characters.z_index = 1
+	menu_screen.add_child(menu_characters)
+
 	menu_content = VBoxContainer.new()
 	menu_content.anchor_left = 0.06
 	menu_content.anchor_top = 0.2
 	menu_content.anchor_right = 0.49
 	menu_content.anchor_bottom = 0.82
 	menu_content.add_theme_constant_override("separation", 13)
+	menu_content.z_index = 2
 	menu_screen.add_child(menu_content)
 
 	var tag := Label.new()
@@ -805,6 +822,11 @@ func _apply_responsive_layout() -> void:
 		menu_content.anchor_top = 0.14
 		menu_content.anchor_right = 0.92
 		menu_content.anchor_bottom = 0.88
+		menu_characters.anchor_left = 0.02
+		menu_characters.anchor_top = 0.58
+		menu_characters.anchor_right = 0.98
+		menu_characters.anchor_bottom = 1.02
+		menu_characters.modulate = Color(1, 1, 1, 0.68)
 		stage.anchor_top = 0.08
 		stage.anchor_bottom = 1.0
 		topbar.anchor_left = 0.025
@@ -829,6 +851,11 @@ func _apply_responsive_layout() -> void:
 		menu_content.anchor_top = 0.2
 		menu_content.anchor_right = 0.49
 		menu_content.anchor_bottom = 0.82
+		menu_characters.anchor_left = 0.34
+		menu_characters.anchor_top = 0.18
+		menu_characters.anchor_right = 1.02
+		menu_characters.anchor_bottom = 1.02
+		menu_characters.modulate = Color(1, 1, 1, 0.96)
 		stage.anchor_top = 0.07
 		stage.anchor_bottom = 1.0
 		topbar.anchor_left = 0.025
