@@ -7,6 +7,8 @@ const SAVE_PATH := "user://godot_otome_save.json"
 
 const CHARACTER_NAMES := {"javi": "Javi", "sue": "Sue", "smokey": "Smokey"}
 const DEFAULT_POSITIONS := {"javi": "left", "sue": "center", "smokey": "right"}
+const LANDSCAPE_CHARACTER_SCALE := 1.06
+const PORTRAIT_CHARACTER_SCALE := 1.04
 const LANDSCAPE_POSITIONS := {
 	"left": Vector2(0.02, 0.43),
 	"center": Vector2(0.295, 0.705),
@@ -190,7 +192,7 @@ func _build_game() -> void:
 	stage.anchor_left = 0.0
 	stage.anchor_top = 0.07
 	stage.anchor_right = 1.0
-	stage.anchor_bottom = 0.78
+	stage.anchor_bottom = 0.79
 	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stage.z_index = 0
 	game_screen.add_child(stage)
@@ -254,7 +256,7 @@ func _build_game() -> void:
 
 	dialogue_panel = PanelContainer.new()
 	dialogue_panel.anchor_left = 0.07
-	dialogue_panel.anchor_top = 0.73
+	dialogue_panel.anchor_top = 0.79
 	dialogue_panel.anchor_right = 0.93
 	dialogue_panel.anchor_bottom = 0.965
 	dialogue_panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -644,10 +646,13 @@ func _set_focus(focus: String) -> void:
 	for character in character_slots.keys():
 		var slot: Control = character_slots[character]
 		var active: bool = focus == "all" or focus == str(character)
-		slot.pivot_offset = slot.size * 0.5
+		# Escalamos desde los pies para que todos conserven la misma linea de suelo.
+		slot.pivot_offset = Vector2(slot.size.x * 0.5, slot.size.y)
 		slot.z_index = 3 if active and focus != "all" else 1
 		var target_color := Color.WHITE if active else Color(0.56, 0.56, 0.56, 0.82)
-		var target_scale := Vector2(1.025, 1.025) if active and focus != "all" else Vector2.ONE
+		var base_scale := PORTRAIT_CHARACTER_SCALE if portrait_layout else LANDSCAPE_CHARACTER_SCALE
+		var focus_scale := 1.025 if active and focus != "all" else 1.0
+		var target_scale := Vector2.ONE * base_scale * focus_scale
 		var tween := create_tween()
 		tween.set_parallel(true)
 		tween.tween_property(slot, "modulate", target_color, 0.18)
@@ -811,7 +816,7 @@ func _apply_responsive_layout() -> void:
 		menu_content.anchor_right = 0.49
 		menu_content.anchor_bottom = 0.82
 		stage.anchor_top = 0.07
-		stage.anchor_bottom = 0.78
+		stage.anchor_bottom = 0.79
 		topbar.anchor_left = 0.025
 		topbar.anchor_right = 0.975
 		topbar.anchor_bottom = 0.09
@@ -821,7 +826,7 @@ func _apply_responsive_layout() -> void:
 		choices_box.anchor_right = 0.84
 		choices_box.anchor_bottom = 0.72
 		dialogue_panel.anchor_left = 0.07
-		dialogue_panel.anchor_top = 0.73
+		dialogue_panel.anchor_top = 0.79
 		dialogue_panel.anchor_right = 0.93
 		dialogue_panel.anchor_bottom = 0.965
 		dialogue_text.add_theme_font_size_override("font_size", 19)
