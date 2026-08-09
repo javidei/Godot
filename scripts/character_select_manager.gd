@@ -144,11 +144,13 @@ func _build_selection_view() -> Control:
 	box.add_child(subtitle)
 
 	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	box.add_child(scroll)
 
 	character_grid = GridContainer.new()
-	character_grid.columns = 3
+	character_grid.columns = 4
 	character_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	character_grid.add_theme_constant_override("h_separation", 12)
 	character_grid.add_theme_constant_override("v_separation", 12)
@@ -311,6 +313,7 @@ func _make_character_card(character_id: String) -> Button:
 	button.name = "Character_" + character_id
 	button.text = ""
 	button.custom_minimum_size = Vector2(210, 210)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.clip_contents = true
 	button.focus_mode = Control.FOCUS_ALL
 	button.add_theme_stylebox_override("normal", _panel_style(Color(0.065, 0.043, 0.033, 0.95), Color(0.72, 0.51, 0.28, 0.55), 1, 14))
@@ -367,6 +370,7 @@ func _make_custom_card() -> Button:
 	button.name = "Character_Custom"
 	button.text = ""
 	button.custom_minimum_size = Vector2(210, 210)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_ALL
 	button.add_theme_stylebox_override("normal", _panel_style(Color(0.055, 0.038, 0.033, 0.95), Color(0.55, 0.48, 0.40, 0.55), 1, 14))
 	button.add_theme_stylebox_override("hover", _panel_style(Color(0.11, 0.07, 0.05, 0.98), Color("efc371"), 2, 14))
@@ -611,11 +615,13 @@ func _apply_layout() -> void:
 	if character_grid == null:
 		return
 	var size: Vector2 = get_viewport().get_visible_rect().size
-	character_grid.columns = 3 if size.x >= 900.0 else 2
+	var wide_layout: bool = size.x >= 900.0
+	character_grid.columns = 4 if wide_layout else 2
+	var card_width: float = 165.0 if wide_layout else 190.0
 	var card_height: float = 210.0
 	if size.y < 560.0:
 		card_height = 155.0
 	elif size.y < 700.0:
 		card_height = 180.0
 	for card in character_cards:
-		card.custom_minimum_size = Vector2(190.0, card_height)
+		card.custom_minimum_size = Vector2(card_width, card_height)

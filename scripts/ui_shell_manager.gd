@@ -22,6 +22,7 @@ var stage: Control
 var controls: Dictionary = {}
 var menu_fullscreen_button: Button
 var install_button: Button
+var install_confirmation: ConfirmationDialog
 
 
 func _ready() -> void:
@@ -117,17 +118,30 @@ func _add_menu_actions() -> void:
 		if continue_index >= 0:
 			menu_content.move_child(menu_fullscreen_button, continue_index + 1)
 
-	var install_result: Variant = main.call("_make_button", "Instalar en Android", false)
+	var install_result: Variant = main.call("_make_button", "Instalar en el móvil", false)
 	install_button = install_result as Button
 	if install_button != null:
-		install_button.name = "InstallAndroidButton"
+		install_button.name = "InstallMobileButton"
 		install_button.custom_minimum_size = Vector2(0, 42)
-		install_button.tooltip_text = "Añadir Entre líneas a la pantalla de inicio"
-		install_button.pressed.connect(_install_android_shortcut)
+		install_button.tooltip_text = "Descargar e instalar Entre líneas como aplicación"
+		install_button.pressed.connect(_confirm_mobile_install)
 		install_button.visible = _is_android_web()
 		menu_content.add_child(install_button)
 		if continue_index >= 0:
 			menu_content.move_child(install_button, continue_index + 2)
+		_build_install_confirmation()
+
+
+func _build_install_confirmation() -> void:
+	install_confirmation = ConfirmationDialog.new()
+	install_confirmation.name = "InstallMobileConfirmation"
+	install_confirmation.title = "Instalar Entre líneas"
+	install_confirmation.dialog_text = "¿Quieres instalar Entre líneas en este móvil?\n\nSe añadirá como una aplicación y podrás abrirla directamente desde tu pantalla de inicio."
+	install_confirmation.dialog_autowrap = true
+	install_confirmation.ok_button_text = "Instalar"
+	install_confirmation.cancel_button_text = "Cancelar"
+	install_confirmation.confirmed.connect(_install_mobile_app)
+	main.add_child(install_confirmation)
 
 
 func _add_version_label() -> void:
@@ -169,7 +183,13 @@ func _request_fullscreen_from_menu() -> void:
 		main.call("_toggle_fullscreen")
 
 
-func _install_android_shortcut() -> void:
+func _confirm_mobile_install() -> void:
+	if install_confirmation == null:
+		return
+	install_confirmation.popup_centered_clamped(Vector2i(460, 220), 0.9)
+
+
+func _install_mobile_app() -> void:
 	if not OS.has_feature("web"):
 		return
 	JavaScriptBridge.eval("window.entreLineasInstall && window.entreLineasInstall();", true)

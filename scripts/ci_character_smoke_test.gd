@@ -50,6 +50,19 @@ func _run() -> void:
 		return
 	selection_manager.call("open_selection")
 	await process_frame
+	var character_grid := selection_manager.get("character_grid") as GridContainer
+	var character_cards: Array = selection_manager.get("character_cards") as Array
+	if character_grid == null or character_grid.columns != 4:
+		_fail("La selección no usa cuatro columnas en escritorio")
+		return
+	if character_cards.size() != 8:
+		_fail("La selección no contiene las ocho opciones esperadas")
+		return
+	for card in character_cards:
+		var card_button := card as Button
+		if card_button == null or (card_button.size_flags_horizontal & Control.SIZE_EXPAND) == 0:
+			_fail("Una tarjeta de selección no rellena el ancho disponible")
+			return
 	for character_id in CHARACTER_IDS:
 		var card := _find_named(main, "Character_" + character_id)
 		var portrait := _find_texture_rect(card)
@@ -105,7 +118,17 @@ func _run() -> void:
 		_fail("Bosque no se muestra en la partida")
 		return
 
-	print("SMOKE OK: 7 retratos visibles en selección y escenas; Bosque carga correctamente.")
+	var ui_shell := main.get_node_or_null("UIShellManager")
+	var install_button: Button = null
+	var install_confirmation: ConfirmationDialog = null
+	if ui_shell != null:
+		install_button = ui_shell.get("install_button") as Button
+		install_confirmation = ui_shell.get("install_confirmation") as ConfirmationDialog
+	if install_button == null or install_button.text != "Instalar en el móvil" or install_confirmation == null:
+		_fail("La instalación móvil con confirmación no está disponible")
+		return
+
+	print("SMOKE OK: selección a ancho completo, instalación móvil confirmada, 7 retratos y Bosque correctos.")
 	quit(0)
 
 func _all_rendered(slots: Dictionary, views: Dictionary, ids: Array) -> bool:
