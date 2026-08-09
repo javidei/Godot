@@ -139,7 +139,7 @@ func _build_install_confirmation() -> void:
 	install_confirmation = ConfirmationDialog.new()
 	install_confirmation.name = "InstallMobileConfirmation"
 	install_confirmation.title = "Instalar Entre líneas"
-	install_confirmation.dialog_text = "¿Quieres instalar Entre líneas en este móvil?\n\nSe añadirá como una aplicación y podrás abrirla directamente desde tu pantalla de inicio."
+	install_confirmation.dialog_text = "¿Quieres instalar Entre líneas en este móvil?\n\nSe añadirá con su propio nombre e icono. Si Chrome muestra que ya está instalada pero no aparece en tu móvil, elige «Crear acceso directo»."
 	install_confirmation.dialog_autowrap = true
 	install_confirmation.ok_button_text = "Instalar"
 	install_confirmation.cancel_button_text = "Cancelar"
