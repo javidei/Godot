@@ -48,7 +48,7 @@ const CHARACTERS := {
 	}
 }
 
-const LOCATION_ORDER: Array[String] = ["casa", "bar", "calle"]
+const LOCATION_ORDER: Array[String] = ["casa", "bar", "bosque"]
 
 const LOCATIONS := {
 	"casa": {
@@ -63,11 +63,11 @@ const LOCATIONS := {
 		"background": "cafeteria",
 		"chapter": "PRÓLOGO · BAR"
 	},
-	"calle": {
-		"name": "Calle",
-		"description": "Escenario para desplazamientos, encuentros inesperados y eventos.",
-		"background": "forest",
-		"chapter": "PRÓLOGO · CALLE"
+	"bosque": {
+		"name": "Bosque",
+		"description": "Escenario natural para encuentros inesperados y eventos.",
+		"background": "bosque",
+		"chapter": "PRÓLOGO · BOSQUE"
 	}
 }
 

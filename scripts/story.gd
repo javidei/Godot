@@ -5,7 +5,7 @@ const START := "bar_01"
 const START_BY_LOCATION := {
 	"casa": "casa_01",
 	"bar": "bar_01",
-	"calle": "calle_01"
+	"bosque": "bosque_01"
 }
 
 const NODES := {
@@ -64,26 +64,26 @@ const NODES := {
 		"next": "plan_choice"
 	},
 
-	"calle_01": {
+	"bosque_01": {
 		"speaker": "Narrador",
-		"text": "La partida empieza en la calle. No hay un destino cerrado todavía, así que cualquier propuesta puede cambiar el lugar al que termina llegando el grupo.",
-		"background": "forest",
+		"text": "La partida empieza en el bosque. No hay un destino cerrado todavía, así que cualquier propuesta puede cambiar el lugar al que termina llegando el grupo.",
+		"background": "bosque",
 		"show": ["javi", "sue", "smokey"],
 		"positions": {"javi": "left", "sue": "center", "smokey": "right"},
 		"expressions": {"javi": "neutral", "sue": "neutral", "smokey": "neutral"},
 		"focus": "all",
-		"next": "calle_02"
+		"next": "bosque_02"
 	},
-	"calle_02": {
+	"bosque_02": {
 		"speaker": "Smokey",
 		"text": "Confía en mí. Tengo una idea.",
 		"show": ["javi", "sue", "smokey"],
 		"expressions": {"smokey": "confident", "sue": "annoyed", "javi": "thoughtful"},
 		"focus": "smokey",
 		"effect": {"type": "emote", "character": "smokey", "text": "!"},
-		"next": "calle_03"
+		"next": "bosque_03"
 	},
-	"calle_03": {
+	"bosque_03": {
 		"speaker": "Sue",
 		"text": "Ya estamos... Primero dinos la idea y luego decidimos si hay que confiar en ti.",
 		"show": ["javi", "sue", "smokey"],

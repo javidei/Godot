@@ -4,10 +4,9 @@ const MAX_CACHED_TEXTURES := 24
 const MENU_CHARACTERS := "res://assets/ui/menu-lineup.png"
 
 const BACKGROUNDS := {
-	"forest": "res://assets/backgrounds/fondo-bosque.png",
+	"bosque": "res://assets/backgrounds/fondo-bosque.png",
 	"cafeteria": "res://assets/backgrounds/fondo-cafeteria.png",
-	"asturias_home": "res://assets/backgrounds/fondo-casa-asturias.png",
-	"calle": "res://assets/backgrounds/fondo-bosque.png"
+	"asturias_home": "res://assets/backgrounds/fondo-casa-asturias.png"
 }
 
 const CHARACTER_POSES := {
@@ -45,10 +44,10 @@ const CHARACTER_POSES := {
 		"annoyed": "res://assets/characters/smokey/smokey_a.png",
 		"teasing": "res://assets/characters/smokey/smokey_b.png"
 	},
-	"carmen": {"neutral": "res://assets/characters/carmen/carmen.webp"},
-	"jony": {"neutral": "res://assets/characters/jony/jony.webp"},
-	"ana": {"neutral": "res://assets/characters/ana/ana.webp"},
-	"argentino": {"neutral": "res://assets/characters/argentino/argentino.webp"}
+	"carmen": {"neutral": "res://assets/characters/carmen/carmen.png"},
+	"jony": {"neutral": "res://assets/characters/jony/jony.png"},
+	"ana": {"neutral": "res://assets/characters/ana/ana.png"},
+	"argentino": {"neutral": "res://assets/characters/argentino/argentino.png"}
 }
 
 var _cache: Dictionary = {}

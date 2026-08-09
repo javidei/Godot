@@ -4,7 +4,6 @@ const GameData = preload("res://scripts/game_data.gd")
 const Story = preload("res://scripts/story.gd")
 
 const SAVE_PATH := "user://godot_otome_save.json"
-const PRIMARY_IDS: Array[String] = ["javi", "sue", "smokey"]
 
 var main: Control
 var flow_screen: Control
@@ -29,7 +28,6 @@ func _ready() -> void:
 	main = get_parent() as Control
 	if main == null:
 		return
-	_ensure_secondary_slots()
 	_build_flow_screen()
 	_rewire_game_flow()
 	get_viewport().size_changed.connect(_queue_layout)
@@ -46,18 +44,6 @@ func open_selection() -> void:
 	creation_view.visible = false
 	map_view.visible = false
 	selection_title.text = "Elige quién protagoniza esta partida"
-
-
-func _ensure_secondary_slots() -> void:
-	var slots: Dictionary = main.get("character_slots")
-	for character_id in ["carmen", "jony", "ana"]:
-		if slots.has(character_id):
-			continue
-		main.call("_create_character", character_id, "center")
-		slots = main.get("character_slots")
-		var slot: Control = slots.get(character_id) as Control
-		if slot != null:
-			slot.visible = false
 
 
 func _rewire_game_flow() -> void:
@@ -439,15 +425,12 @@ func _character_portrait(character_id: String) -> Texture2D:
 	var texture: Texture2D = assets.call("get_character", character_id, "neutral") as Texture2D
 	if texture == null:
 		return null
-	var should_crop := PRIMARY_IDS.has(character_id) or ResourceLoader.exists("res://assets/personajes/%s.png" % character_id)
-	if not should_crop:
-		return texture
 	var size: Vector2 = texture.get_size()
 	if size.x <= 0.0 or size.y <= 0.0:
 		return texture
 	var cropped := AtlasTexture.new()
 	cropped.atlas = texture
-	cropped.region = Rect2(0.0, 0.0, size.x, size.y * 0.48)
+	cropped.region = Rect2(0.0, 0.0, size.x, size.y * 0.50)
 	return cropped
 
 
@@ -545,7 +528,12 @@ func _continue_with_migration() -> void:
 		if not loaded_state["expressions"].has(character_id):
 			loaded_state["expressions"][character_id] = "neutral"
 	var location_id := str(loaded_state.get("location_id", "bar"))
+	if location_id == "calle":
+		location_id = "bosque"
+		loaded_state["location_id"] = location_id
 	var node_id := str(loaded_state.get("node_id", ""))
+	if node_id.begins_with("calle_"):
+		node_id = "bosque_" + node_id.trim_prefix("calle_")
 	if node_id.is_empty() or not Story.NODES.has(node_id):
 		node_id = str(Story.START_BY_LOCATION.get(location_id, Story.START))
 		loaded_state["node_id"] = node_id

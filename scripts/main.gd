@@ -5,7 +5,15 @@ const AssetManagerScript = preload("res://scripts/asset_manager.gd")
 const AudioManagerScript = preload("res://scripts/audio_manager.gd")
 const SAVE_PATH := "user://godot_otome_save.json"
 
-const CHARACTER_NAMES := {"javi": "Javi", "sue": "Sue", "smokey": "Smokey"}
+const CHARACTER_NAMES := {
+	"javi": "Javi",
+	"sue": "Sue",
+	"smokey": "Smokey",
+	"carmen": "Carmen",
+	"jony": "Jony",
+	"ana": "Ana",
+	"argentino": "El Argentino"
+}
 const DEFAULT_POSITIONS := {"javi": "left", "sue": "center", "smokey": "right"}
 const LANDSCAPE_CHARACTER_SCALE := 1.06
 const PORTRAIT_CHARACTER_SCALE := 1.04
@@ -218,6 +226,10 @@ func _build_game() -> void:
 	_create_character("javi", "left")
 	_create_character("sue", "center")
 	_create_character("smokey", "right")
+	_create_character("carmen", "left")
+	_create_character("jony", "center")
+	_create_character("ana", "right")
+	_create_character("argentino", "center")
 
 	sfx_label = Label.new()
 	sfx_label.anchor_left = 0.27
@@ -421,9 +433,11 @@ func _create_character(character: String, position_id: String) -> void:
 	view.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	view.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	view.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	view.texture = asset_manager.get_character(character, "neutral")
 	slot.add_child(view)
 	character_views[character] = view
 	_set_character_position(character, position_id)
+	slot.visible = false
 
 
 func _set_character_position(character: String, position_id: String) -> void:
