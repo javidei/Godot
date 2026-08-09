@@ -1,6 +1,6 @@
 extends RefCounted
 
-const MAX_CACHED_TEXTURES := 16
+const MAX_CACHED_TEXTURES := 20
 const MENU_CHARACTERS := "res://assets/ui/menu-lineup.png"
 
 const BACKGROUNDS := {
@@ -47,16 +47,17 @@ const CHARACTER_POSES := {
 	}
 }
 
-const SECONDARY_PLACEHOLDERS := {
+const EXTRA_CHARACTER_IMAGES := {
+	"carmen": "res://assets/personajes/carmen.webp",
+	"jony": "res://assets/personajes/jony.webp",
+	"ana": "res://assets/personajes/ana.webp",
+	"argentino": "res://assets/personajes/argentino.webp"
+}
+
+const EXTRA_CHARACTER_FALLBACKS := {
 	"carmen": "res://assets/personajes/carmen-placeholder.svg",
 	"jony": "res://assets/personajes/jony-placeholder.svg",
 	"ana": "res://assets/personajes/ana-placeholder.svg"
-}
-
-const SECONDARY_FINAL_IMAGES := {
-	"carmen": "res://assets/personajes/carmen.png",
-	"jony": "res://assets/personajes/jony.png",
-	"ana": "res://assets/personajes/ana.png"
 }
 
 var _cache: Dictionary = {}
@@ -73,11 +74,15 @@ func get_background(background_id: String) -> Texture2D:
 
 
 func get_character(character: String, pose: String) -> Texture2D:
-	if SECONDARY_PLACEHOLDERS.has(character):
-		var final_path: String = str(SECONDARY_FINAL_IMAGES.get(character, ""))
+	if EXTRA_CHARACTER_IMAGES.has(character):
+		var final_path: String = str(EXTRA_CHARACTER_IMAGES.get(character, ""))
 		if not final_path.is_empty() and ResourceLoader.exists(final_path):
 			return _load_texture(final_path)
-		return _load_texture(str(SECONDARY_PLACEHOLDERS.get(character, "")))
+		var fallback_path: String = str(EXTRA_CHARACTER_FALLBACKS.get(character, ""))
+		if not fallback_path.is_empty():
+			return _load_texture(fallback_path)
+		push_warning("Personaje sin recurso local disponible: " + character)
+		return null
 
 	var poses: Dictionary = CHARACTER_POSES.get(character, {})
 	if poses.is_empty():

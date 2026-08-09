@@ -1,7 +1,7 @@
 extends RefCounted
 class_name GameData
 
-const CHARACTER_ORDER: Array[String] = ["javi", "sue", "smokey", "carmen", "jony", "ana"]
+const CHARACTER_ORDER: Array[String] = ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"]
 
 const CHARACTERS := {
 	"javi": {
@@ -39,6 +39,12 @@ const CHARACTERS := {
 		"alias": "Ana",
 		"role": "secundario",
 		"summary": "Gótico · libros · vampiros · rol · fantasía"
+	},
+	"argentino": {
+		"name": "El Argentino",
+		"alias": "El Argentino",
+		"role": "secundario",
+		"summary": "Gabardina negra · gafas oscuras · tatuajes"
 	}
 }
 

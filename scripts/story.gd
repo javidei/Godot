@@ -146,6 +146,22 @@ const NODES := {
 		"text": "Y si acaba en libros, rol, fantasía o vampiros, tampoco suena mal.",
 		"expressions": {"ana": "neutral"},
 		"focus": "ana",
+		"next": "argentino_01"
+	},
+	"argentino_01": {
+		"speaker": "Narrador",
+		"text": "Cuando parecía que el grupo ya estaba completo, aparece El Argentino. Gabardina negra, gafas oscuras y una entrada que hace que todos miren un segundo hacia la puerta.",
+		"show": ["jony", "argentino", "ana"],
+		"positions": {"jony": "left", "argentino": "center", "ana": "right"},
+		"expressions": {"jony": "neutral", "argentino": "neutral", "ana": "neutral"},
+		"focus": "argentino",
+		"next": "argentino_02"
+	},
+	"argentino_02": {
+		"speaker": "El Argentino",
+		"text": "¿Qué pasa? ¿Llegué tarde o todavía estáis decidiendo?",
+		"expressions": {"argentino": "neutral"},
+		"focus": "argentino",
 		"next": "final_choice"
 	},
 	"final_choice": {
@@ -168,8 +184,9 @@ const NODES := {
 	"final_02": {
 		"speaker": "Narrador",
 		"text": "Nadie fuerza una decisión. El plan sigue abierto y, precisamente por eso, todavía puede acabar en cualquier sitio.",
-		"show": ["carmen", "jony", "ana"],
-		"expressions": {"carmen": "neutral", "jony": "neutral", "ana": "neutral"},
+		"show": ["carmen", "argentino", "ana"],
+		"positions": {"carmen": "left", "argentino": "center", "ana": "right"},
+		"expressions": {"carmen": "neutral", "argentino": "neutral", "ana": "neutral"},
 		"focus": "all",
 		"next": "__END__"
 	}
