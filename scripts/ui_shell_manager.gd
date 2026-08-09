@@ -21,8 +21,6 @@ var topbar: HBoxContainer
 var stage: Control
 var controls: Dictionary = {}
 var menu_fullscreen_button: Button
-var install_button: Button
-var install_confirmation: ConfirmationDialog
 
 
 func _ready() -> void:
@@ -118,34 +116,6 @@ func _add_menu_actions() -> void:
 		if continue_index >= 0:
 			menu_content.move_child(menu_fullscreen_button, continue_index + 1)
 
-	var install_result: Variant = main.call("_make_button", "Instalar en el móvil", false)
-	install_button = install_result as Button
-	if install_button != null:
-		install_button.name = "InstallMobileButton"
-		install_button.custom_minimum_size = Vector2(0, 42)
-		install_button.tooltip_text = "Descargar e instalar Entre líneas como aplicación"
-		install_button.pressed.connect(request_mobile_install_confirmation)
-		# La exportación web ya es instalable tanto en Android como en otros
-		# navegadores compatibles. No dependemos del user-agent: algunos móviles
-		# lo reducen u ocultan y el botón desaparecía aunque la PWA fuese válida.
-		install_button.visible = OS.has_feature("web")
-		menu_content.add_child(install_button)
-		if continue_index >= 0:
-			menu_content.move_child(install_button, continue_index + 2)
-		_build_install_confirmation()
-
-
-func _build_install_confirmation() -> void:
-	install_confirmation = ConfirmationDialog.new()
-	install_confirmation.name = "InstallMobileConfirmation"
-	install_confirmation.title = "Instalar Entre líneas"
-	install_confirmation.dialog_text = "¿Quieres instalar Entre líneas en este móvil?\n\nSe añadirá con su propio nombre e icono. Si Chrome muestra que ya está instalada pero no aparece en tu móvil, elige «Crear acceso directo»."
-	install_confirmation.dialog_autowrap = true
-	install_confirmation.ok_button_text = "Instalar"
-	install_confirmation.cancel_button_text = "Cancelar"
-	install_confirmation.confirmed.connect(_install_mobile_app)
-	main.add_child(install_confirmation)
-
 
 func _add_version_label() -> void:
 	if menu_content == null:
@@ -184,18 +154,6 @@ func _request_fullscreen_from_menu() -> void:
 		JavaScriptBridge.eval("window.entreLineasToggleFullscreen && window.entreLineasToggleFullscreen();", true)
 	else:
 		main.call("_toggle_fullscreen")
-
-
-func request_mobile_install_confirmation() -> void:
-	if install_confirmation == null:
-		return
-	install_confirmation.popup_centered_clamped(Vector2i(460, 220), 0.9)
-
-
-func _install_mobile_app() -> void:
-	if not OS.has_feature("web"):
-		return
-	JavaScriptBridge.eval("window.entreLineasInstall && window.entreLineasInstall();", true)
 
 
 func _queue_layout() -> void:

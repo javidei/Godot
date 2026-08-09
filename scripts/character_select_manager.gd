@@ -11,7 +11,6 @@ var selection_view: Control
 var creation_view: Control
 var map_view: Control
 var character_grid: GridContainer
-var selection_install_button: Button
 var selection_title: Label
 var map_title: Label
 var name_input: LineEdit
@@ -177,17 +176,6 @@ func _build_selection_view() -> Control:
 	back_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	back_button.pressed.connect(_back_to_menu)
 	footer.add_child(back_button)
-
-	var install_result: Variant = main.call("_make_button", "Instalar en el móvil", true)
-	selection_install_button = install_result as Button
-	if selection_install_button != null:
-		selection_install_button.name = "SelectionInstallMobileButton"
-		selection_install_button.custom_minimum_size = Vector2(0, 42)
-		selection_install_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		selection_install_button.tooltip_text = "Instalar Entre líneas como aplicación"
-		selection_install_button.visible = OS.has_feature("web")
-		selection_install_button.pressed.connect(_confirm_mobile_install)
-		footer.add_child(selection_install_button)
 	return view
 
 
@@ -468,13 +456,6 @@ func _character_portrait(character_id: String) -> Texture2D:
 	# combinarlo con KEEP_ASPECT_CENTERED nunca se pierde la zona superior.
 	cropped.region = Rect2(0.0, 0.0, size.x, size.y * 0.36)
 	return cropped
-
-
-func _confirm_mobile_install() -> void:
-	var ui_shell := main.get_node_or_null("UIShellManager")
-	if ui_shell == null:
-		return
-	ui_shell.call("request_mobile_install_confirmation")
 
 
 func _select_existing_character(character_id: String) -> void:

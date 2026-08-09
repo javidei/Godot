@@ -83,12 +83,8 @@ func _run() -> void:
 		if portrait_frame == null or portrait_frame.get_theme_constant("margin_top") < 6:
 			_fail("Falta el margen superior del retrato: " + character_id)
 			return
-	var selection_install := selection_manager.get("selection_install_button") as Button
-	if selection_install == null or selection_install.text != "Instalar en el móvil":
-		_fail("La selección no ofrece la instalación móvil")
-		return
-	if selection_install.visible != OS.has_feature("web"):
-		_fail("La visibilidad de instalación no sigue a la exportación web")
+	if _find_named(main, "SelectionInstallMobileButton") != null:
+		_fail("La selección todavía contiene el botón de instalación")
 		return
 	var flow_screen := selection_manager.get("flow_screen") as Control
 	if flow_screen != null:
@@ -136,20 +132,11 @@ func _run() -> void:
 		_fail("Bosque no se muestra en la partida")
 		return
 
-	var ui_shell := main.get_node_or_null("UIShellManager")
-	var install_button: Button = null
-	var install_confirmation: ConfirmationDialog = null
-	if ui_shell != null:
-		install_button = ui_shell.get("install_button") as Button
-		install_confirmation = ui_shell.get("install_confirmation") as ConfirmationDialog
-	if install_button == null or install_button.text != "Instalar en el móvil" or install_confirmation == null:
-		_fail("La instalación móvil con confirmación no está disponible")
-		return
-	if install_button.visible != OS.has_feature("web"):
-		_fail("El botón principal de instalación no se muestra en web")
+	if _find_named(main, "InstallMobileButton") != null or _find_named(main, "InstallMobileConfirmation") != null:
+		_fail("El menú todavía contiene controles de instalación")
 		return
 
-	print("SMOKE OK: instalación visible, 7 cabezas completas, selección y Bosque correctos.")
+	print("SMOKE OK: sin botones de instalación, 7 cabezas completas, selección y Bosque correctos.")
 	quit(0)
 
 func _all_rendered(slots: Dictionary, views: Dictionary, ids: Array) -> bool:
