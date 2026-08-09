@@ -74,6 +74,7 @@ jobs:
           test -s web/index.html
           test -s web/index.wasm
           test -s web/index.pck
+          ./scripts/prepare_web_export.sh web "${GITHUB_SHA}"
           touch web/.nojekyll
 
       - name: Guardar exportación en el repositorio
