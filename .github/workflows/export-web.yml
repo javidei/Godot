@@ -32,6 +32,19 @@ jobs:
           fi
           mv "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
 
+      - name: Smoke test de personajes y escenas
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_character_smoke_test.gd > character-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat character-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SMOKE FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" character-smoke.log; then
+            echo "La prueba de personajes ha fallado; no se exportará."
+            exit 1
+          fi
+          grep -q "SMOKE OK:" character-smoke.log
+
       - name: Export Web y validar GDScript
         run: |
           rm -rf web
