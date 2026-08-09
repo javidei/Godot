@@ -32,6 +32,18 @@ jobs:
           fi
           mv "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
 
+      - name: Importar recursos Godot
+        run: |
+          set +e
+          godot --headless --editor --path . --quit > import.log 2>&1
+          STATUS=$?
+          set -e
+          cat import.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" import.log; then
+            echo "La importación de recursos contiene errores; no se continuará."
+            exit 1
+          fi
+
       - name: Smoke test de personajes y escenas
         run: |
           set +e
