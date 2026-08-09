@@ -4,7 +4,8 @@ config_version=5
 [application]
 
 config/name="Entre líneas · Godot"
-config/version="0.2.5"
+config/version="0.2.6"
+config/icon="res://assets/ui/menu-lineup.png"
 run/main_scene="res://scenes/main.tscn"
 
 [display]
