@@ -865,7 +865,7 @@ const Engine = (function () {
 			installServiceWorker: function () {
 				if (this.config.serviceWorker && 'serviceWorker' in navigator) {
 					try {
-						return navigator.serviceWorker.register(this.config.serviceWorker);
+						return navigator.serviceWorker.register(this.config.serviceWorker, { updateViaCache: 'none' });
 					} catch (e) {
 						return Promise.reject(e);
 					}
