@@ -92,14 +92,15 @@ body {
 		</style>
 		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 <link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
+<link rel="manifest" href="index.manifest.json">
 <style>
 html,body{width:100%;height:100%;margin:0;padding:0;background:#090604;overflow:hidden}
-body{min-height:100dvh;min-width:100vw}
-#canvas{display:block;width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important}
+body{position:fixed;inset:0;width:100vw;height:100dvh;overscroll-behavior:none;touch-action:none}
+#canvas{position:fixed!important;inset:0!important;display:block;width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;margin:0!important}
 #status{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;min-width:100vw;min-height:100dvh;background:#090604!important}
 #status-splash{max-width:100%!important;max-height:100%!important}
-#status-splash.fullsize--true{width:100vw!important;height:100dvh!important;object-fit:contain!important}
-#rotate-device-overlay{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;flex-direction:column;gap:22px;padding:32px;text-align:center;background:radial-gradient(circle at 50% 38%,#2c1b12 0,#100a07 58%,#050302 100%);color:#fff1dc;font-family:Arial,sans-serif}
+#status-splash.fullsize--true{width:100vw!important;height:100dvh!important;object-fit:cover!important}
+#rotate-device-overlay{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;flex-direction:column;gap:22px;padding:32px;box-sizing:border-box;text-align:center;background:radial-gradient(circle at 50% 38%,#2c1b12 0,#100a07 58%,#050302 100%);color:#fff1dc;font-family:Arial,sans-serif}
 #rotate-device-overlay.is-visible{display:flex}
 #rotate-device-overlay .rotate-phone{width:54px;height:92px;border:3px solid #e4b968;border-radius:12px;position:relative;animation:rotateDevice 1.8s ease-in-out infinite}
 #rotate-device-overlay .rotate-phone:after{content:"";position:absolute;width:18px;height:3px;border-radius:3px;background:#e4b968;left:50%;bottom:7px;transform:translateX(-50%)}
@@ -109,25 +110,62 @@ body{min-height:100dvh;min-width:100vw}
 </style>
 <script>
 (function(){
-  const mobileLike=()=>navigator.maxTouchPoints>0&&Math.min(screen.width,screen.height)<=1100;
+  const mobileLike=()=>navigator.maxTouchPoints>0&&Math.min(screen.width,screen.height)<=1200;
   const portrait=()=>window.matchMedia&&window.matchMedia("(orientation: portrait)").matches;
   let overlay=null;
+  let deferredInstallPrompt=null;
+
+  async function lockLandscape(){
+    if(!mobileLike()||!screen.orientation||!screen.orientation.lock)return;
+    try{await screen.orientation.lock("landscape");}catch(e){}
+  }
+
+  async function requestFullscreen(){
+    if(document.fullscreenElement){await lockLandscape();return true;}
+    if(!document.documentElement.requestFullscreen)return false;
+    try{
+      await document.documentElement.requestFullscreen({navigationUI:"hide"});
+    }catch(e){
+      try{await document.documentElement.requestFullscreen();}catch(inner){return false;}
+    }
+    await lockLandscape();
+    return true;
+  }
+
+  window.entreLineasRequestFullscreen=requestFullscreen;
+  window.entreLineasToggleFullscreen=async()=>{
+    if(document.fullscreenElement&&document.exitFullscreen){
+      try{await document.exitFullscreen();}catch(e){}
+      return;
+    }
+    await requestFullscreen();
+  };
+
+  window.addEventListener("beforeinstallprompt",event=>{
+    event.preventDefault();
+    deferredInstallPrompt=event;
+  });
+  window.addEventListener("appinstalled",()=>{deferredInstallPrompt=null;});
+  window.entreLineasInstall=async()=>{
+    const installed=(window.matchMedia&&window.matchMedia("(display-mode: fullscreen)").matches)||(window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches)||window.navigator.standalone===true;
+    if(installed){alert("Entre líneas ya está instalado en este dispositivo.");return true;}
+    if(deferredInstallPrompt){
+      deferredInstallPrompt.prompt();
+      try{await deferredInstallPrompt.userChoice;}catch(e){}
+      deferredInstallPrompt=null;
+      return true;
+    }
+    alert("En Android, abre el menú del navegador y selecciona ‘Instalar aplicación’ o ‘Añadir a pantalla de inicio’.");
+    return false;
+  };
+
   function ensureOverlay(){
     if(overlay||!document.body)return overlay;
     overlay=document.createElement("div");
     overlay.id="rotate-device-overlay";
     overlay.innerHTML='<div class="rotate-phone" aria-hidden="true"></div><strong>Gira el móvil</strong><span>Entre líneas está diseñado para jugarse en horizontal. Gira el dispositivo para continuar.</span>';
     document.body.appendChild(overlay);
-    overlay.addEventListener("click",async()=>{
-      try{
-        if(!document.fullscreenElement&&document.documentElement.requestFullscreen){
-          await document.documentElement.requestFullscreen({navigationUI:"hide"});
-        }
-      }catch(e){}
-      try{
-        if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock("landscape");
-      }catch(e){}
-    });
+    overlay.addEventListener("click",requestFullscreen);
     return overlay;
   }
   function sync(){
@@ -135,20 +173,13 @@ body{min-height:100dvh;min-width:100vw}
     if(!node)return;
     node.classList.toggle("is-visible",mobileLike()&&portrait());
   }
-  async function lockLandscape(){
-    if(!mobileLike()||!screen.orientation||!screen.orientation.lock)return;
-    try{await screen.orientation.lock("landscape");}catch(e){}
-  }
   document.addEventListener("DOMContentLoaded",()=>{
     ensureOverlay();
     sync();
     window.addEventListener("resize",sync,{passive:true});
     window.addEventListener("orientationchange",sync,{passive:true});
     if(screen.orientation&&screen.orientation.addEventListener)screen.orientation.addEventListener("change",sync);
-    document.addEventListener("fullscreenchange",()=>{
-      sync();
-      if(document.fullscreenElement)lockLandscape();
-    });
+    document.addEventListener("fullscreenchange",()=>{sync();if(document.fullscreenElement)lockLandscape();});
   });
 })();
 </script>
@@ -170,7 +201,7 @@ body{min-height:100dvh;min-width:100vw}
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":23904904,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":23910996,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"serviceWorker":"index.service.worker.js"};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
