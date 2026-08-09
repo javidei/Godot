@@ -1,7 +1,6 @@
 extends SceneTree
 
 const CHARACTER_IDS: Array[String] = ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"]
-const EXTRA_IDS: Array[String] = ["carmen", "jony", "ana", "argentino"]
 const Story = preload("res://scripts/story.gd")
 
 func _initialize() -> void:
@@ -24,6 +23,7 @@ func _run() -> void:
 		_fail("AssetManager no está disponible")
 		return
 
+	var test_state := {"node_id": "group_01", "affinity": {}, "expressions": {}, "history": []}
 	for character_id in CHARACTER_IDS:
 		if not slots.has(character_id):
 			_fail("Falta slot de personaje: " + character_id)
@@ -40,16 +40,38 @@ func _run() -> void:
 		if view.texture == null or view.texture.get_size().x <= 0.0 or view.texture.get_size().y <= 0.0:
 			_fail("Textura inválida en vista: " + character_id)
 			return
+		test_state["affinity"][character_id] = 0
+		test_state["expressions"][character_id] = "neutral"
+	main.set("state", test_state)
 
-	var group_node: Dictionary = Story.NODES.get("group_01", {})
-	var group_show: Array = group_node.get("show", [])
-	for character_id in ["carmen", "jony", "ana"]:
-		if not group_show.has(character_id):
-			_fail("group_01 no muestra a: " + character_id)
-			return
-	var argentino_node: Dictionary = Story.NODES.get("argentino_01", {})
-	if not (argentino_node.get("show", []) as Array).has("argentino"):
-		_fail("argentino_01 no muestra a El Argentino")
+	main.call("_go_to", "group_01", false)
+	await process_frame
+	if not _all_visible(slots, ["carmen", "jony", "ana"]):
+		_fail("Carmen, Jony y Ana no están visibles en group_01")
+		return
+
+	main.call("_go_to", "carmen_01", false)
+	await process_frame
+	if not _all_visible(slots, ["carmen", "jony", "ana"]):
+		_fail("Los secundarios desaparecen al hablar Carmen")
+		return
+
+	main.call("_go_to", "jony_01", false)
+	await process_frame
+	if not _all_visible(slots, ["carmen", "jony", "ana"]):
+		_fail("Los secundarios desaparecen al hablar Jony")
+		return
+
+	main.call("_go_to", "ana_01", false)
+	await process_frame
+	if not _all_visible(slots, ["carmen", "jony", "ana"]):
+		_fail("Los secundarios desaparecen al hablar Ana")
+		return
+
+	main.call("_go_to", "argentino_01", false)
+	await process_frame
+	if not _all_visible(slots, ["jony", "argentino", "ana"]):
+		_fail("El Argentino no aparece en argentino_01")
 		return
 
 	var calle: Texture2D = assets.call("get_background", "calle") as Texture2D
@@ -58,8 +80,15 @@ func _run() -> void:
 		_fail("Calle no está usando el fondo del bosque")
 		return
 
-	print("SMOKE OK: 7 personajes con slot y textura; secundarios visibles en historia; calle usa bosque.")
+	print("SMOKE OK: 7 personajes cargan; Carmen/Jony/Ana y El Argentino aparecen en escena; calle usa bosque.")
 	quit(0)
+
+func _all_visible(slots: Dictionary, ids: Array) -> bool:
+	for character_id in ids:
+		var slot: Control = slots.get(character_id) as Control
+		if slot == null or not slot.visible:
+			return false
+	return true
 
 func _fail(message: String) -> void:
 	push_error("SMOKE FAIL: " + message)
