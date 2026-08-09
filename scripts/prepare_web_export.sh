@@ -7,9 +7,10 @@ BUILD_ID="${2:?Falta el identificador de la build}"
 SERVICE_WORKER="${EXPORT_DIR}/index.service.worker.js"
 ENGINE_SCRIPT="${EXPORT_DIR}/index.js"
 MANIFEST="${EXPORT_DIR}/index.manifest.json"
+HTML_SHELL="${EXPORT_DIR}/index.html"
 
-if [ ! -s "${SERVICE_WORKER}" ] || [ ! -s "${ENGINE_SCRIPT}" ] || [ ! -s "${MANIFEST}" ]; then
-	echo "La exportacion web no contiene el service worker, index.js o el manifiesto" >&2
+if [ ! -s "${SERVICE_WORKER}" ] || [ ! -s "${ENGINE_SCRIPT}" ] || [ ! -s "${MANIFEST}" ] || [ ! -s "${HTML_SHELL}" ]; then
+	echo "La exportacion web no contiene el HTML, service worker, index.js o el manifiesto" >&2
 	exit 1
 fi
 
@@ -20,6 +21,10 @@ if ! grep -Fq '"id":"./entre-lineas"' "${MANIFEST}"; then
 	sed -i 's/{"background_color"/{"id":".\/entre-lineas","short_name":"Entre líneas","description":"Novela visual Entre líneas","scope":".\/","background_color"/' "${MANIFEST}"
 fi
 sed -i 's/"name":"Entre líneas · Godot"/"name":"Entre líneas"/' "${MANIFEST}"
+
+# Chrome mantiene su propia cache del manifiesto. La referencia versionada
+# obliga a leer la identidad nueva y evita que siga mostrando la PWA fantasma.
+sed -i "s#href=\"index.manifest.json[^\"]*\"#href=\"index.manifest.json?v=${BUILD_ID}\"#" "${HTML_SHELL}"
 
 # Cada build usa una cache distinta aunque Godot reutilice su plantilla.
 sed -i "s/^const CACHE_VERSION = .*/const CACHE_VERSION = '${BUILD_ID}';/" "${SERVICE_WORKER}"
@@ -63,3 +68,4 @@ grep -Fq "updateViaCache: 'none'" "${ENGINE_SCRIPT}"
 grep -Fq '"id":"./entre-lineas"' "${MANIFEST}"
 grep -Fq '"short_name":"Entre líneas"' "${MANIFEST}"
 grep -Fq '"scope":"./"' "${MANIFEST}"
+grep -Fq "href=\"index.manifest.json?v=${BUILD_ID}\"" "${HTML_SHELL}"
