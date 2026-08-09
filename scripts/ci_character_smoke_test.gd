@@ -72,6 +72,24 @@ func _run() -> void:
 		if not portrait.is_visible_in_tree():
 			_fail("Retrato oculto en selección: " + character_id)
 			return
+		if portrait.stretch_mode != TextureRect.STRETCH_KEEP_ASPECT_CENTERED:
+			_fail("El retrato puede volver a recortar la cabeza: " + character_id)
+			return
+		var atlas := portrait.texture as AtlasTexture
+		if atlas == null or atlas.region.position.y != 0.0 or atlas.region.size.y > atlas.atlas.get_size().y * 0.37:
+			_fail("El encuadre superior del retrato no es seguro: " + character_id)
+			return
+		var portrait_frame := _find_named(card, "PortraitFrame") as MarginContainer
+		if portrait_frame == null or portrait_frame.get_theme_constant("margin_top") < 6:
+			_fail("Falta el margen superior del retrato: " + character_id)
+			return
+	var selection_install := selection_manager.get("selection_install_button") as Button
+	if selection_install == null or selection_install.text != "Instalar en el móvil":
+		_fail("La selección no ofrece la instalación móvil")
+		return
+	if selection_install.visible != OS.has_feature("web"):
+		_fail("La visibilidad de instalación no sigue a la exportación web")
+		return
 	var flow_screen := selection_manager.get("flow_screen") as Control
 	if flow_screen != null:
 		flow_screen.visible = false
@@ -127,8 +145,11 @@ func _run() -> void:
 	if install_button == null or install_button.text != "Instalar en el móvil" or install_confirmation == null:
 		_fail("La instalación móvil con confirmación no está disponible")
 		return
+	if install_button.visible != OS.has_feature("web"):
+		_fail("El botón principal de instalación no se muestra en web")
+		return
 
-	print("SMOKE OK: selección a ancho completo, instalación móvil confirmada, 7 retratos y Bosque correctos.")
+	print("SMOKE OK: instalación visible, 7 cabezas completas, selección y Bosque correctos.")
 	quit(0)
 
 func _all_rendered(slots: Dictionary, views: Dictionary, ids: Array) -> bool:
