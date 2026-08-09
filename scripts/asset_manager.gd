@@ -1,12 +1,13 @@
 extends RefCounted
 
-const MAX_CACHED_TEXTURES := 12
+const MAX_CACHED_TEXTURES := 16
 const MENU_CHARACTERS := "res://assets/ui/menu-lineup.png"
 
 const BACKGROUNDS := {
 	"forest": "res://assets/backgrounds/fondo-bosque.png",
 	"cafeteria": "res://assets/backgrounds/fondo-cafeteria.png",
-	"asturias_home": "res://assets/backgrounds/fondo-casa-asturias.png"
+	"asturias_home": "res://assets/backgrounds/fondo-casa-asturias.png",
+	"calle": "res://assets/backgrounds/calle-placeholder.svg"
 }
 
 const CHARACTER_POSES := {
@@ -46,6 +47,18 @@ const CHARACTER_POSES := {
 	}
 }
 
+const SECONDARY_PLACEHOLDERS := {
+	"carmen": "res://assets/personajes/carmen-placeholder.svg",
+	"jony": "res://assets/personajes/jony-placeholder.svg",
+	"ana": "res://assets/personajes/ana-placeholder.svg"
+}
+
+const SECONDARY_FINAL_IMAGES := {
+	"carmen": "res://assets/personajes/carmen.png",
+	"jony": "res://assets/personajes/jony.png",
+	"ana": "res://assets/personajes/ana.png"
+}
+
 var _cache: Dictionary = {}
 var _cache_order: Array[String] = []
 
@@ -55,16 +68,22 @@ func get_menu_characters() -> Texture2D:
 
 
 func get_background(background_id: String) -> Texture2D:
-	var path := str(BACKGROUNDS.get(background_id, ""))
+	var path: String = str(BACKGROUNDS.get(background_id, ""))
 	return _load_texture(path)
 
 
 func get_character(character: String, pose: String) -> Texture2D:
+	if SECONDARY_PLACEHOLDERS.has(character):
+		var final_path: String = str(SECONDARY_FINAL_IMAGES.get(character, ""))
+		if not final_path.is_empty() and ResourceLoader.exists(final_path):
+			return _load_texture(final_path)
+		return _load_texture(str(SECONDARY_PLACEHOLDERS.get(character, "")))
+
 	var poses: Dictionary = CHARACTER_POSES.get(character, {})
 	if poses.is_empty():
 		push_warning("Personaje sin recursos registrados: " + character)
 		return null
-	var path := str(poses.get(pose, poses.get("neutral", "")))
+	var path: String = str(poses.get(pose, poses.get("neutral", "")))
 	return _load_texture(path)
 
 
@@ -86,7 +105,7 @@ func _load_texture(path: String) -> Texture2D:
 		push_warning("No existe el recurso local: " + path)
 		return null
 
-	var texture := ResourceLoader.load(path) as Texture2D
+	var texture: Texture2D = ResourceLoader.load(path) as Texture2D
 	if texture == null:
 		push_warning("No se ha podido cargar la textura: " + path)
 		return null

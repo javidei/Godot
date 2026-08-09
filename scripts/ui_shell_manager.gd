@@ -93,6 +93,7 @@ func _move_game_controls() -> void:
 		menu_button.tooltip_text = "Volver al menú"
 	if screen_button != null:
 		screen_button.tooltip_text = "Pantalla completa"
+	_enforce_icon_only()
 
 
 func _add_menu_actions() -> void:
@@ -189,6 +190,7 @@ func _apply_layout() -> void:
 	if dialogue_panel == null or controls.is_empty():
 		return
 
+	_enforce_icon_only()
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 	var compact: bool = viewport_size.x < COMPACT_WIDTH
 	var is_portrait: bool = viewport_size.y > viewport_size.x
@@ -218,8 +220,6 @@ func _apply_layout() -> void:
 
 
 func _apply_portrait_fallback(viewport_size: Vector2, compact: bool) -> void:
-	# En Web móvil el shell tapa el juego con "gira el dispositivo".
-	# Este fallback conserva cuatro controles cuadrados en otros destinos.
 	var button_size: float = 44.0
 	var gap: float = 8.0
 	var total_width: float = button_size * 4.0 + gap * 3.0
@@ -254,8 +254,17 @@ func _apply_icon_sizes(compact: bool) -> void:
 		var button := _button(str(key))
 		if button == null:
 			continue
+		button.text = ""
+		button.clip_text = true
 		button.add_theme_constant_override("icon_max_width", icon_size)
 		button.add_theme_constant_override("h_separation", 0)
+
+
+func _enforce_icon_only() -> void:
+	for key in controls.keys():
+		var button := _button(str(key))
+		if button != null:
+			button.text = ""
 
 
 func _place_button_pixels(key: String, position: Vector2, side: float) -> void:
