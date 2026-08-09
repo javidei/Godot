@@ -1,11 +1,11 @@
 # Entre líneas · Godot
 
-Demo de novela visual en **Godot 4.7.1** con Javi, Sue y Smokey.
+Demo de novela visual en **Godot 4.7.1** con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
 
 ## Base actual
 
 - Recursos gráficos locales: no depende de `raw.githubusercontent.com` para fondos o personajes.
-- 3 fondos y 5 poses de cada personaje, conservados como PNG originales.
+- 3 fondos, 5 poses de cada protagonista y una pose inicial de cada personaje secundario.
 - Poses seleccionables desde los datos del diálogo y posiciones `left`, `center` y `right`.
 - Carga bajo demanda con caché acotada y precarga ligera de la siguiente escena.
 - Composición de novela visual sin `ColorRect` ni placeholders detrás de los personajes.
@@ -22,7 +22,11 @@ assets/
 ├── characters/
 │   ├── javi/
 │   ├── sue/
-│   └── smokey/
+│   ├── smokey/
+│   ├── carmen/
+│   ├── jony/
+│   ├── ana/
+│   └── argentino/
 └── audio/
 ```
 
@@ -54,4 +58,3 @@ No se encontraron ficheros de audio válidos en el Godot actual ni en la demo HT
 La exportación Web usa `export_presets.cfg`. El workflow de GitHub Actions mantiene la validación que impide publicar si aparecen `SCRIPT ERROR`, `Parse Error` o `Failed to load script`, y comprueba `index.html`, `index.wasm` e `index.pck` antes de guardar la build.
 
 La versión jugable se sincroniza después en `javidei/cvitae/godot/`.
-

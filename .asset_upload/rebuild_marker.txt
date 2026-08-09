@@ -1,1 +1,0 @@
-Rebuilding character assets from validated local sources. This marker will be removed after the binary assets are committed and the smoke test passes.
