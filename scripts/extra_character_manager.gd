@@ -6,27 +6,41 @@ var main: Control
 
 
 func _ready() -> void:
-	# CharacterSelectManager construye la selección tras tres frames.
-	# Esperamos un poco más para añadir cualquier slot que falte y ajustar las tarjetas.
-	for _index in range(5):
-		await get_tree().process_frame
+	# Los hijos reciben _ready antes que Main. Un frame después Main ya ha creado stage y AssetManager.
+	await get_tree().process_frame
 	main = get_parent() as Control
 	if main == null:
 		return
 	_ensure_extra_character_slots()
+	_prime_extra_character_textures()
+
+	# CharacterSelectManager construye las tarjetas unos frames después.
+	for _index in range(5):
+		await get_tree().process_frame
 	_refresh_selection_portraits()
 
 
 func _ensure_extra_character_slots() -> void:
 	var slots: Dictionary = main.get("character_slots")
 	for character_id in EXTRA_CHARACTER_IDS:
-		if slots.has(character_id):
-			continue
-		main.call("_create_character", character_id, "center")
-		slots = main.get("character_slots")
+		if not slots.has(character_id):
+			main.call("_create_character", character_id, "center")
+			slots = main.get("character_slots")
 		var slot: Control = slots.get(character_id) as Control
 		if slot != null:
 			slot.visible = false
+
+
+func _prime_extra_character_textures() -> void:
+	var assets: Variant = main.get("asset_manager")
+	var views: Dictionary = main.get("character_views")
+	if assets == null:
+		return
+	for character_id in EXTRA_CHARACTER_IDS:
+		var texture: Texture2D = assets.call("get_character", character_id, "neutral") as Texture2D
+		var view: TextureRect = views.get(character_id) as TextureRect
+		if texture != null and view != null:
+			view.texture = texture
 
 
 func _refresh_selection_portraits() -> void:
