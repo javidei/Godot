@@ -113,8 +113,8 @@ func _apply_layout() -> void:
 	var panel_bottom := dialogue_panel.anchor_bottom
 	var middle_y := (panel_top + panel_bottom) * 0.5
 
-	var left_right := max(outer_margin + 0.035, panel_left - gap_x)
-	var right_left := min(1.0 - outer_margin - 0.035, panel_right + gap_x)
+	var left_right: float = max(outer_margin + 0.035, panel_left - gap_x)
+	var right_left: float = min(1.0 - outer_margin - 0.035, panel_right + gap_x)
 
 	_place_button("save", outer_margin, panel_top, left_right, middle_y - gap_y * 0.5)
 	_place_button("load", outer_margin, middle_y + gap_y * 0.5, left_right, panel_bottom)
