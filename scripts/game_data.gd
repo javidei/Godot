@@ -66,7 +66,7 @@ const LOCATIONS := {
 	"calle": {
 		"name": "Calle",
 		"description": "Escenario para desplazamientos, encuentros inesperados y eventos.",
-		"background": "calle",
+		"background": "forest",
 		"chapter": "PRÓLOGO · CALLE"
 	}
 }
