@@ -99,7 +99,7 @@ func _add_menu_actions() -> void:
 	if menu_content == null:
 		return
 
-	var continue_index := -1
+	var continue_index: int = -1
 	for child in menu_content.get_children():
 		if child is Button and (child as Button).text == "Continuar":
 			continue_index = child.get_index()
@@ -134,7 +134,7 @@ func _add_version_label() -> void:
 		return
 	if menu_content.get_node_or_null("VersionLabel") != null:
 		return
-	var version := str(ProjectSettings.get_setting("application/config/version", "0.1.0"))
+	var version: String = str(ProjectSettings.get_setting("application/config/version", "0.1.0"))
 	var label := Label.new()
 	label.name = "VersionLabel"
 	label.text = "Versión " + version
@@ -202,7 +202,7 @@ func _apply_layout() -> void:
 
 	var button_size: float = COMPACT_BUTTON_SIZE if compact else DESKTOP_BUTTON_SIZE
 	var gap: float = 8.0 if compact else 10.0
-	var outer_margin := 12.0
+	var outer_margin: float = 12.0
 	var panel_position: Vector2 = dialogue_panel.position
 	var panel_size: Vector2 = dialogue_panel.size
 	var stack_height: float = button_size * 2.0 + gap
@@ -221,12 +221,13 @@ func _apply_portrait_fallback(viewport_size: Vector2, compact: bool) -> void:
 	# En Web móvil el shell tapa el juego con "gira el dispositivo".
 	# Este fallback conserva cuatro controles cuadrados en otros destinos.
 	var button_size: float = 44.0
-	var gap := 8.0
+	var gap: float = 8.0
 	var total_width: float = button_size * 4.0 + gap * 3.0
 	var start_x: float = max(8.0, (viewport_size.x - total_width) * 0.5)
-	for index in range(4):
-		var key := ["save", "load", "menu", "fullscreen"][index]
-		_place_button_pixels(str(key), Vector2(start_x + index * (button_size + gap), 10.0), button_size)
+	var keys: Array[String] = ["save", "load", "menu", "fullscreen"]
+	for index in range(keys.size()):
+		var key: String = keys[index]
+		_place_button_pixels(key, Vector2(start_x + index * (button_size + gap), 10.0), button_size)
 	_apply_icon_sizes(compact)
 
 
