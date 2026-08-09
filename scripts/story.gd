@@ -22,6 +22,7 @@ const NODES := {
 	"casa_02": {
 		"speaker": "Javi",
 		"text": "Pero vamos a ver... ¿vamos a decidir qué hacemos o vamos a seguir dándole vueltas toda la tarde?",
+		"show": ["javi", "sue", "smokey"],
 		"expressions": {"javi": "thoughtful", "sue": "neutral", "smokey": "neutral"},
 		"focus": "javi",
 		"next": "casa_03"
@@ -29,6 +30,7 @@ const NODES := {
 	"casa_03": {
 		"speaker": "Smokey",
 		"text": "Tengo una idea.",
+		"show": ["javi", "sue", "smokey"],
 		"expressions": {"smokey": "confident", "javi": "annoyed", "sue": "neutral"},
 		"focus": "smokey",
 		"effect": {"type": "emote", "character": "smokey", "text": "!"},
@@ -48,6 +50,7 @@ const NODES := {
 	"bar_02": {
 		"speaker": "Sue",
 		"text": "Ya estamos... Si al final pedimos pizza, yo lo tengo claro: la número 9 sin champiñones.",
+		"show": ["javi", "sue", "smokey"],
 		"expressions": {"sue": "happy", "javi": "neutral", "smokey": "neutral"},
 		"focus": "sue",
 		"next": "bar_03"
@@ -55,6 +58,7 @@ const NODES := {
 	"bar_03": {
 		"speaker": "Javi",
 		"text": "illo, pues decidamos ya. Esperar por esperar no mejora ningún plan.",
+		"show": ["javi", "sue", "smokey"],
 		"expressions": {"javi": "thoughtful", "sue": "happy", "smokey": "teasing"},
 		"focus": "javi",
 		"next": "plan_choice"
@@ -63,7 +67,7 @@ const NODES := {
 	"calle_01": {
 		"speaker": "Narrador",
 		"text": "La partida empieza en la calle. No hay un destino cerrado todavía, así que cualquier propuesta puede cambiar el lugar al que termina llegando el grupo.",
-		"background": "calle",
+		"background": "forest",
 		"show": ["javi", "sue", "smokey"],
 		"positions": {"javi": "left", "sue": "center", "smokey": "right"},
 		"expressions": {"javi": "neutral", "sue": "neutral", "smokey": "neutral"},
@@ -73,6 +77,7 @@ const NODES := {
 	"calle_02": {
 		"speaker": "Smokey",
 		"text": "Confía en mí. Tengo una idea.",
+		"show": ["javi", "sue", "smokey"],
 		"expressions": {"smokey": "confident", "sue": "annoyed", "javi": "thoughtful"},
 		"focus": "smokey",
 		"effect": {"type": "emote", "character": "smokey", "text": "!"},
@@ -81,6 +86,7 @@ const NODES := {
 	"calle_03": {
 		"speaker": "Sue",
 		"text": "Ya estamos... Primero dinos la idea y luego decidimos si hay que confiar en ti.",
+		"show": ["javi", "sue", "smokey"],
 		"expressions": {"sue": "teasing", "smokey": "laugh", "javi": "neutral"},
 		"focus": "sue",
 		"next": "plan_choice"
@@ -89,6 +95,7 @@ const NODES := {
 	"plan_choice": {
 		"speaker": "Narrador",
 		"text": "El plan todavía no está decidido. ¿A quién le das espacio para marcar el siguiente paso?",
+		"show": ["javi", "sue", "smokey"],
 		"focus": "all",
 		"choices": [
 			{"label": "Preguntar a Sue qué le apetece", "next": "plan_sue", "affinity": {"sue": 1}},
@@ -99,6 +106,7 @@ const NODES := {
 	"plan_sue": {
 		"speaker": "Sue",
 		"text": "Te lo dije. Si elegimos algo sencillo ahora, luego ya veremos cómo se complica solo.",
+		"show": ["javi", "sue", "smokey"],
 		"expressions": {"sue": "happy"},
 		"focus": "sue",
 		"next": "group_01"
@@ -106,6 +114,7 @@ const NODES := {
 	"plan_smokey": {
 		"speaker": "Smokey",
 		"text": "Confía en mí. Lo importante es que el plan no sea demasiado serio.",
+		"show": ["javi", "sue", "smokey"],
 		"expressions": {"smokey": "laugh"},
 		"focus": "smokey",
 		"next": "group_01"
@@ -113,6 +122,7 @@ const NODES := {
 	"plan_javi": {
 		"speaker": "Javi",
 		"text": "Perfecto. Una cosa cada vez y sin darle veinte vueltas. Así sí.",
+		"show": ["javi", "sue", "smokey"],
 		"expressions": {"javi": "happy"},
 		"focus": "javi",
 		"next": "group_01"
@@ -130,21 +140,27 @@ const NODES := {
 	"carmen_01": {
 		"speaker": "Carmen",
 		"text": "Como el plan incluya comer, avisad antes de pedir por todo el mundo. Yo voy con opción vegetariana.",
-		"expressions": {"carmen": "neutral"},
+		"show": ["carmen", "jony", "ana"],
+		"positions": {"carmen": "left", "jony": "center", "ana": "right"},
+		"expressions": {"carmen": "neutral", "jony": "neutral", "ana": "neutral"},
 		"focus": "carmen",
 		"next": "jony_01"
 	},
 	"jony_01": {
 		"speaker": "Jony",
 		"text": "Si esto termina derivando en Pokémon o Magic, por mí bien.",
-		"expressions": {"jony": "neutral"},
+		"show": ["carmen", "jony", "ana"],
+		"positions": {"carmen": "left", "jony": "center", "ana": "right"},
+		"expressions": {"carmen": "neutral", "jony": "neutral", "ana": "neutral"},
 		"focus": "jony",
 		"next": "ana_01"
 	},
 	"ana_01": {
 		"speaker": "Ana",
 		"text": "Y si acaba en libros, rol, fantasía o vampiros, tampoco suena mal.",
-		"expressions": {"ana": "neutral"},
+		"show": ["carmen", "jony", "ana"],
+		"positions": {"carmen": "left", "jony": "center", "ana": "right"},
+		"expressions": {"carmen": "neutral", "jony": "neutral", "ana": "neutral"},
 		"focus": "ana",
 		"next": "argentino_01"
 	},
@@ -160,13 +176,16 @@ const NODES := {
 	"argentino_02": {
 		"speaker": "El Argentino",
 		"text": "¿Qué pasa? ¿Llegué tarde o todavía estáis decidiendo?",
-		"expressions": {"argentino": "neutral"},
+		"show": ["jony", "argentino", "ana"],
+		"positions": {"jony": "left", "argentino": "center", "ana": "right"},
+		"expressions": {"jony": "neutral", "argentino": "neutral", "ana": "neutral"},
 		"focus": "argentino",
 		"next": "final_choice"
 	},
 	"final_choice": {
 		"speaker": "Narrador",
 		"text": "Parece una decisión pequeña, pero este tipo de elecciones son las que irán cambiando relaciones, rutas y escenas más adelante.",
+		"show": ["jony", "argentino", "ana"],
 		"focus": "all",
 		"choices": [
 			{"label": "Seguir con el plan que ha salido", "next": "final_01"},
@@ -177,6 +196,7 @@ const NODES := {
 		"speaker": "Narrador",
 		"text": "El grupo se pone en marcha con un plan provisional. No parece gran cosa todavía, pero ya hay una primera decisión detrás.",
 		"show": ["javi", "sue", "smokey"],
+		"positions": {"javi": "left", "sue": "center", "smokey": "right"},
 		"expressions": {"javi": "neutral", "sue": "happy", "smokey": "neutral"},
 		"focus": "all",
 		"next": "__END__"
