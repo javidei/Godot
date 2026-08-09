@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths-ignore:
       - "web/**"
+      - ".asset_upload/**"
   workflow_dispatch:
 
 permissions:
