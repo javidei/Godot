@@ -11,6 +11,7 @@ var selection_view: Control
 var creation_view: Control
 var map_view: Control
 var character_grid: GridContainer
+var selection_install_button: Button
 var selection_title: Label
 var map_title: Label
 var name_input: LineEdit
@@ -165,11 +166,28 @@ func _build_selection_view() -> Control:
 	character_cards.append(custom_card)
 	character_grid.add_child(custom_card)
 
+	var footer := HBoxContainer.new()
+	footer.name = "SelectionFooter"
+	footer.add_theme_constant_override("separation", 12)
+	box.add_child(footer)
+
 	var back_result: Variant = main.call("_make_button", "Volver al menú", false)
 	var back_button := back_result as Button
 	back_button.custom_minimum_size = Vector2(0, 42)
+	back_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	back_button.pressed.connect(_back_to_menu)
-	box.add_child(back_button)
+	footer.add_child(back_button)
+
+	var install_result: Variant = main.call("_make_button", "Instalar en el móvil", true)
+	selection_install_button = install_result as Button
+	if selection_install_button != null:
+		selection_install_button.name = "SelectionInstallMobileButton"
+		selection_install_button.custom_minimum_size = Vector2(0, 42)
+		selection_install_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		selection_install_button.tooltip_text = "Instalar Entre líneas como aplicación"
+		selection_install_button.visible = OS.has_feature("web")
+		selection_install_button.pressed.connect(_confirm_mobile_install)
+		footer.add_child(selection_install_button)
 	return view
 
 
@@ -336,15 +354,27 @@ func _make_character_card(character_id: String) -> Button:
 	box.add_theme_constant_override("separation", 5)
 	margin.add_child(box)
 
+	var portrait_frame := MarginContainer.new()
+	portrait_frame.name = "PortraitFrame"
+	portrait_frame.custom_minimum_size = Vector2(0, 125)
+	portrait_frame.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	portrait_frame.clip_contents = true
+	portrait_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	portrait_frame.add_theme_constant_override("margin_top", 7)
+	box.add_child(portrait_frame)
+
 	var portrait := TextureRect.new()
-	portrait.custom_minimum_size = Vector2(0, 125)
+	portrait.name = "Portrait"
+	portrait.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	portrait.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	# Ajusta el busto completo dentro de su zona en vez de ampliarlo hasta
+	# cubrirla. El modo anterior centraba el recorte y cortaba pelo y frente.
+	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	portrait.texture = _character_portrait(character_id)
-	box.add_child(portrait)
+	portrait_frame.add_child(portrait)
 
 	var name_label := Label.new()
 	name_label.text = str(data.get("alias", data.get("name", character_id.capitalize())))
@@ -434,8 +464,17 @@ func _character_portrait(character_id: String) -> Texture2D:
 		return texture
 	var cropped := AtlasTexture.new()
 	cropped.atlas = texture
-	cropped.region = Rect2(0.0, 0.0, size.x, size.y * 0.50)
+	# El 36 % superior conserva cabeza, pelo, hombros y parte del torso. Al
+	# combinarlo con KEEP_ASPECT_CENTERED nunca se pierde la zona superior.
+	cropped.region = Rect2(0.0, 0.0, size.x, size.y * 0.36)
 	return cropped
+
+
+func _confirm_mobile_install() -> void:
+	var ui_shell := main.get_node_or_null("UIShellManager")
+	if ui_shell == null:
+		return
+	ui_shell.call("request_mobile_install_confirmation")
 
 
 func _select_existing_character(character_id: String) -> void:
