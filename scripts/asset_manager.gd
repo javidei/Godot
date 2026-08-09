@@ -1,13 +1,13 @@
 extends RefCounted
 
-const MAX_CACHED_TEXTURES := 20
+const MAX_CACHED_TEXTURES := 24
 const MENU_CHARACTERS := "res://assets/ui/menu-lineup.png"
 
 const BACKGROUNDS := {
 	"forest": "res://assets/backgrounds/fondo-bosque.png",
 	"cafeteria": "res://assets/backgrounds/fondo-cafeteria.png",
 	"asturias_home": "res://assets/backgrounds/fondo-casa-asturias.png",
-	"calle": "res://assets/backgrounds/calle-placeholder.svg"
+	"calle": "res://assets/backgrounds/fondo-bosque.png"
 }
 
 const CHARACTER_POSES := {
@@ -44,20 +44,11 @@ const CHARACTER_POSES := {
 		"embarrassed": "res://assets/characters/smokey/smokey_b.png",
 		"annoyed": "res://assets/characters/smokey/smokey_a.png",
 		"teasing": "res://assets/characters/smokey/smokey_b.png"
-	}
-}
-
-const EXTRA_CHARACTER_IMAGES := {
-	"carmen": "res://assets/personajes/carmen.webp",
-	"jony": "res://assets/personajes/jony.webp",
-	"ana": "res://assets/personajes/ana.webp",
-	"argentino": "res://assets/personajes/argentino.webp"
-}
-
-const EXTRA_CHARACTER_FALLBACKS := {
-	"carmen": "res://assets/personajes/carmen-placeholder.svg",
-	"jony": "res://assets/personajes/jony-placeholder.svg",
-	"ana": "res://assets/personajes/ana-placeholder.svg"
+	},
+	"carmen": {"neutral": "res://assets/characters/carmen/carmen.webp"},
+	"jony": {"neutral": "res://assets/characters/jony/jony.webp"},
+	"ana": {"neutral": "res://assets/characters/ana/ana.webp"},
+	"argentino": {"neutral": "res://assets/characters/argentino/argentino.webp"}
 }
 
 var _cache: Dictionary = {}
@@ -74,16 +65,6 @@ func get_background(background_id: String) -> Texture2D:
 
 
 func get_character(character: String, pose: String) -> Texture2D:
-	if EXTRA_CHARACTER_IMAGES.has(character):
-		var final_path: String = str(EXTRA_CHARACTER_IMAGES.get(character, ""))
-		if not final_path.is_empty() and ResourceLoader.exists(final_path):
-			return _load_texture(final_path)
-		var fallback_path: String = str(EXTRA_CHARACTER_FALLBACKS.get(character, ""))
-		if not fallback_path.is_empty():
-			return _load_texture(fallback_path)
-		push_warning("Personaje sin recurso local disponible: " + character)
-		return null
-
 	var poses: Dictionary = CHARACTER_POSES.get(character, {})
 	if poses.is_empty():
 		push_warning("Personaje sin recursos registrados: " + character)
