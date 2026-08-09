@@ -124,8 +124,11 @@ func _add_menu_actions() -> void:
 		install_button.name = "InstallMobileButton"
 		install_button.custom_minimum_size = Vector2(0, 42)
 		install_button.tooltip_text = "Descargar e instalar Entre líneas como aplicación"
-		install_button.pressed.connect(_confirm_mobile_install)
-		install_button.visible = _is_android_web()
+		install_button.pressed.connect(request_mobile_install_confirmation)
+		# La exportación web ya es instalable tanto en Android como en otros
+		# navegadores compatibles. No dependemos del user-agent: algunos móviles
+		# lo reducen u ocultan y el botón desaparecía aunque la PWA fuese válida.
+		install_button.visible = OS.has_feature("web")
 		menu_content.add_child(install_button)
 		if continue_index >= 0:
 			menu_content.move_child(install_button, continue_index + 2)
@@ -183,7 +186,7 @@ func _request_fullscreen_from_menu() -> void:
 		main.call("_toggle_fullscreen")
 
 
-func _confirm_mobile_install() -> void:
+func request_mobile_install_confirmation() -> void:
 	if install_confirmation == null:
 		return
 	install_confirmation.popup_centered_clamped(Vector2i(460, 220), 0.9)
@@ -193,13 +196,6 @@ func _install_mobile_app() -> void:
 	if not OS.has_feature("web"):
 		return
 	JavaScriptBridge.eval("window.entreLineasInstall && window.entreLineasInstall();", true)
-
-
-func _is_android_web() -> bool:
-	if not OS.has_feature("web"):
-		return false
-	var result: Variant = JavaScriptBridge.eval("/Android/i.test(navigator.userAgent)", true)
-	return typeof(result) == TYPE_BOOL and bool(result)
 
 
 func _queue_layout() -> void:
