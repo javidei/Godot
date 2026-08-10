@@ -55,6 +55,16 @@ func _run() -> void:
 		_fail("Se ha eliminado accidentalmente el ajuste global de efectos del menú")
 		return
 
+	# Reproduce un estado de partida válido antes de entrar directamente en una habitación.
+	var state := main.call("_fresh_state") as Dictionary
+	state["player"] = {"id": "hud_test", "name": "HUD Test"}
+	state["visit_mode"] = true
+	state["completed_characters"] = []
+	state["visit_order"] = []
+	state["intro_transitions_seen"] = ["javi"]
+	state["outro_transitions_seen"] = []
+	main.set("state", state)
+
 	var game_screen := main.get("game_screen") as Control
 	if game_screen != null:
 		game_screen.visible = true
