@@ -15,7 +15,7 @@ const EXPECTED_BACKGROUNDS := {
 	"sue": "habitacion_sue",
 	"smokey": "habitacion_fran",
 	"carmen": "habitacion_fran",
-	"jony": "habitacion_ana",
+	"jony": "habitacion_jony",
 	"ana": "habitacion_ana",
 	"argentino": "habitacion_argentino"
 }
@@ -27,6 +27,7 @@ const BACKGROUND_IDS: Array[String] = [
 	"habitacion_argentino",
 	"habitacion_fran",
 	"habitacion_sue",
+	"habitacion_jony",
 	"habitacion_javi"
 ]
 const Story = preload("res://scripts/story.gd")
