@@ -21,7 +21,6 @@ var topbar: HBoxContainer
 var stage: Control
 var controls: Dictionary = {}
 var menu_fullscreen_button: Button
-var menu_exit_button: Button
 
 
 func _ready() -> void:
@@ -116,18 +115,6 @@ func _add_menu_actions() -> void:
 		menu_content.add_child(menu_fullscreen_button)
 		if continue_index >= 0:
 			menu_content.move_child(menu_fullscreen_button, continue_index + 1)
-
-	var exit_result: Variant = main.call("_make_button", "Salir", false)
-	menu_exit_button = exit_result as Button
-	if menu_exit_button != null:
-		menu_exit_button.name = "ExitGameButton"
-		menu_exit_button.custom_minimum_size = Vector2(0, 52)
-		menu_exit_button.tooltip_text = "Salir del juego"
-		menu_exit_button.pressed.connect(Callable(main, "_quit_game"))
-		menu_content.add_child(menu_exit_button)
-		if menu_fullscreen_button != null:
-			menu_content.move_child(menu_exit_button, menu_fullscreen_button.get_index() + 1)
-
 
 func _add_version_label() -> void:
 	if menu_content == null:

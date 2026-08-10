@@ -49,7 +49,6 @@ var ending_background: TextureRect
 var game_background: TextureRect
 var menu_content: VBoxContainer
 var continue_button: Button
-var exit_confirmation: ConfirmationDialog
 var stage: Control
 var topbar: HBoxContainer
 var chapter_label: Label
@@ -109,7 +108,6 @@ func _build_interface() -> void:
 	_build_menu()
 	_build_game()
 	_build_ending()
-	_build_exit_confirmation()
 
 
 func _build_menu() -> void:
@@ -198,12 +196,14 @@ func _build_menu() -> void:
 
 	var exit_button := _make_button("Salir", false)
 	exit_button.name = "ExitGameButton"
-	exit_button.pressed.connect(_show_exit_confirmation)
+	exit_button.tooltip_text = "Salir del juego"
+	exit_button.pressed.connect(_quit_game)
 	menu_content.add_child(exit_button)
 
 	var info := Label.new()
 	info.name = "VersionLabel"
-	info.text = "EARLY ACCESS · Diálogos, preguntas, amistad, guardado, efectos y audio."
+	var version: String = str(ProjectSettings.get_setting("application/config/version", "0.1.0"))
+	info.text = "Versión " + version + " · EARLY ACCESS · Diálogos, preguntas, amistad, guardado, efectos y audio."
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.add_theme_color_override("font_color", Color(0.78, 0.73, 0.67, 0.86))
 	info.add_theme_font_size_override("font_size", 12)
@@ -550,22 +550,6 @@ func _show_menu() -> void:
 	game_screen.visible = false
 	ending_screen.visible = false
 	continue_button.disabled = not FileAccess.file_exists(SAVE_PATH)
-
-
-func _build_exit_confirmation() -> void:
-	exit_confirmation = ConfirmationDialog.new()
-	exit_confirmation.name = "ExitGameConfirmation"
-	exit_confirmation.title = "Salir del juego"
-	exit_confirmation.dialog_text = "Se va a cerrar \"El Mejor juego the best GOTY of the year del año\".\n\n¿Seguro que quieres salir?"
-	exit_confirmation.ok_button_text = "Sí, salir"
-	exit_confirmation.cancel_button_text = "Cancelar"
-	exit_confirmation.exclusive = true
-	exit_confirmation.confirmed.connect(_quit_game)
-	add_child(exit_confirmation)
-
-
-func _show_exit_confirmation() -> void:
-	exit_confirmation.popup_centered_clamped(Vector2i(620, 240), 0.9)
 
 
 func _quit_game() -> void:
@@ -950,7 +934,7 @@ func _read_save() -> bool:
 
 
 func _apply_responsive_layout() -> void:
-	var window_size := get_window().size
+	var window_size := size
 	portrait_layout = window_size.y > window_size.x
 
 	if portrait_layout:
@@ -958,10 +942,6 @@ func _apply_responsive_layout() -> void:
 		menu_content.anchor_top = 0.14
 		menu_content.anchor_right = 0.92
 		menu_content.anchor_bottom = 0.88
-		menu_characters.anchor_left = 0.02
-		menu_characters.anchor_top = 0.58
-		menu_characters.anchor_right = 0.98
-		menu_characters.anchor_bottom = 1.02
 		menu_characters.modulate = Color(1, 1, 1, 0.68)
 		stage.anchor_top = 0.08
 		stage.anchor_bottom = 1.0
@@ -987,10 +967,6 @@ func _apply_responsive_layout() -> void:
 		menu_content.anchor_top = 0.12
 		menu_content.anchor_right = 0.54
 		menu_content.anchor_bottom = 0.92
-		menu_characters.anchor_left = 0.4
-		menu_characters.anchor_top = 0.18
-		menu_characters.anchor_right = 1.02
-		menu_characters.anchor_bottom = 1.02
 		menu_characters.modulate = Color(1, 1, 1, 0.96)
 		stage.anchor_top = 0.07
 		stage.anchor_bottom = 1.0
@@ -1012,5 +988,31 @@ func _apply_responsive_layout() -> void:
 		fullscreen_button.text = "Pantalla completa"
 		fullscreen_button.custom_minimum_size = Vector2(132, 42)
 
+	_layout_menu_characters(window_size)
+
 	for character in character_positions.keys():
 		_set_character_position(str(character), str(character_positions[character]))
+
+
+func _layout_menu_characters(window_size: Vector2) -> void:
+	if menu_characters == null or menu_characters.texture == null:
+		return
+	var texture_size := menu_characters.texture.get_size()
+	if texture_size.x <= 0.0 or texture_size.y <= 0.0:
+		return
+	var width_factor := 0.96 if portrait_layout else 0.62
+	var target_width := window_size.x * width_factor
+	var target_height := target_width * texture_size.y / texture_size.x
+	var max_height := window_size.y * 0.96
+	if target_height > max_height:
+		target_height = max_height
+		target_width = target_height * texture_size.x / texture_size.y
+
+	menu_characters.anchor_left = 1.0
+	menu_characters.anchor_top = 1.0
+	menu_characters.anchor_right = 1.0
+	menu_characters.anchor_bottom = 1.0
+	menu_characters.offset_left = -target_width
+	menu_characters.offset_top = -target_height
+	menu_characters.offset_right = 0.0
+	menu_characters.offset_bottom = 0.0

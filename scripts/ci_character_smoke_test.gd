@@ -38,8 +38,8 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.4":
-		_fail("La versión del proyecto no es 0.3.4")
+	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.5":
+		_fail("La versión del proyecto no es 0.3.5")
 		return
 	if str(ProjectSettings.get_setting("application/config/name", "")) != "Entre líneas: La octava silla":
 		_fail("El título del proyecto no es Entre líneas: La octava silla")
@@ -128,9 +128,9 @@ func _run() -> void:
 	var engine_tag := _find_named(main, "EngineTag") as Label
 	var narrative_font := load("res://assets/ui/fonts/DejaVuSerif-Bold.ttf") as Font
 	var exit_button := _find_named(main, "ExitGameButton") as Button
-	var exit_confirmation := _find_named(main, "ExitGameConfirmation") as ConfirmationDialog
 	var version_label := _find_named(main, "VersionLabel") as Label
 	var menu_content: VBoxContainer = main.get("menu_content") as VBoxContainer
+	var menu_characters := main.get("menu_characters") as TextureRect
 	if title == null or title.text != "Entre líneas:\nLa octava silla" or narrative_font == null or not title.has_theme_font_override("font"):
 		_fail("El menú no muestra el nuevo título y su tipografía narrativa")
 		return
@@ -140,20 +140,17 @@ func _run() -> void:
 	if exit_button == null or exit_button.text != "Salir":
 		_fail("El menú principal no contiene el botón Salir")
 		return
-	if exit_confirmation == null or exit_confirmation.dialog_text != "Se va a cerrar \"El Mejor juego the best GOTY of the year del año\".\n\n¿Seguro que quieres salir?":
-		_fail("El botón Salir no contiene la advertencia esperada")
+	if _count_buttons_with_text(menu_content, "Salir") != 1:
+		_fail("El menú principal no contiene exactamente un botón Salir")
 		return
-	if exit_confirmation.ok_button_text != "Sí, salir" or exit_confirmation.cancel_button_text != "Cancelar":
-		_fail("La confirmación de salida no ofrece aceptar y cancelar")
+	if _find_named(main, "ExitGameConfirmation") != null:
+		_fail("El popup de confirmación de salida no se ha eliminado")
 		return
-	main.call("_show_exit_confirmation")
-	await process_frame
-	if not exit_confirmation.visible:
-		_fail("El botón Salir no abre el popup de confirmación")
+	if version_label == null or not version_label.text.contains("Versión 0.3.5 · EARLY ACCESS"):
+		_fail("La versión 0.3.5 no se muestra en el menú")
 		return
-	exit_confirmation.hide()
-	if version_label == null or not version_label.text.contains("EARLY ACCESS"):
-		_fail("La versión no indica Early Access")
+	if menu_characters == null or not is_equal_approx(menu_characters.anchor_left, 1.0) or not is_equal_approx(menu_characters.anchor_top, 1.0) or not is_zero_approx(menu_characters.offset_right) or not is_zero_approx(menu_characters.offset_bottom):
+		_fail("El trío del menú no está anclado abajo a la derecha")
 		return
 	if menu_content == null or menu_content.anchor_right - menu_content.anchor_left < 0.48:
 		_fail("Los botones del menú no ocupan el ancho ampliado")
@@ -363,6 +360,15 @@ func _find_named(node: Node, target_name: String) -> Node:
 		if found != null:
 			return found
 	return null
+
+
+func _count_buttons_with_text(node: Node, target_text: String) -> int:
+	var count := 0
+	for child in node.get_children():
+		if child is Button and (child as Button).text == target_text:
+			count += 1
+		count += _count_buttons_with_text(child, target_text)
+	return count
 
 
 func _find_texture_rect(node: Node) -> TextureRect:
