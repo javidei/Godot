@@ -74,7 +74,7 @@ func _ready() -> void:
 	audio_manager.name = "AudioManager"
 	add_child(audio_manager)
 	_build_interface()
-	_set_background("cafeteria")
+	_set_background("casa_asturias")
 	_show_menu()
 	get_viewport().size_changed.connect(_apply_responsive_layout)
 	call_deferred("_apply_responsive_layout")
@@ -537,6 +537,7 @@ func _neutral_expressions() -> Dictionary:
 
 
 func _show_menu() -> void:
+	_set_background("casa_asturias")
 	menu_screen.visible = true
 	game_screen.visible = false
 	ending_screen.visible = false

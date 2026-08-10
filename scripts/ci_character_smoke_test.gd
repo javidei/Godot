@@ -10,6 +10,23 @@ const CHARACTER_NAMES := {
 	"ana": "Ana",
 	"argentino": "El Argentino"
 }
+const EXPECTED_BACKGROUNDS := {
+	"javi": "bar",
+	"sue": "bosque",
+	"smokey": "habitacion_fran",
+	"carmen": "habitacion_fran",
+	"jony": "habitacion_ana",
+	"ana": "habitacion_ana",
+	"argentino": "habitacion_argentino"
+}
+const BACKGROUND_IDS: Array[String] = [
+	"bar",
+	"bosque",
+	"casa_asturias",
+	"habitacion_ana",
+	"habitacion_argentino",
+	"habitacion_fran"
+]
 const Story = preload("res://scripts/story.gd")
 
 
@@ -18,8 +35,8 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.1":
-		_fail("La versión del proyecto no es 0.3.1")
+	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.2":
+		_fail("La versión del proyecto no es 0.3.2")
 		return
 	if str(ProjectSettings.get_setting("application/config/name", "")) != "Entre líneas: La octava silla":
 		_fail("El título del proyecto no es Entre líneas: La octava silla")
@@ -41,6 +58,17 @@ func _run() -> void:
 	var assets: Variant = main.get("asset_manager")
 	if assets == null:
 		_fail("AssetManager no está disponible")
+		return
+	for background_id in BACKGROUND_IDS:
+		var background_texture: Texture2D = assets.call("get_background", background_id) as Texture2D
+		if background_texture == null or background_texture.get_size().x <= 0.0 or background_texture.get_size().y <= 0.0:
+			_fail("No carga el fondo: " + background_id)
+			return
+
+	var menu_background := main.get("menu_background") as TextureRect
+	var home_background: Texture2D = assets.call("get_background", "casa_asturias") as Texture2D
+	if menu_background == null or menu_background.texture == null or menu_background.texture.resource_path != home_background.resource_path:
+		_fail("La pantalla principal no usa Casa Asturias")
 		return
 
 	var test_state := {"node_id": Story.START, "affinity": {}, "expressions": {}, "history": []}
@@ -65,6 +93,12 @@ func _run() -> void:
 		await process_frame
 		if not _only_character_visible(slots, character_id):
 			_fail("El encuentro no muestra exclusivamente a: " + character_id)
+			return
+		var expected_background_id := str(EXPECTED_BACKGROUNDS[character_id])
+		var expected_background: Texture2D = assets.call("get_background", expected_background_id) as Texture2D
+		var current_background := main.get("game_background") as TextureRect
+		if current_background == null or current_background.texture == null or current_background.texture.resource_path != expected_background.resource_path:
+			_fail("El fondo no corresponde al personaje: " + character_id)
 			return
 
 	main.call("_go_to", "ana_q2", false)
@@ -129,7 +163,7 @@ func _run() -> void:
 		_fail("Han reaparecido controles de instalación móvil")
 		return
 
-	print("SMOKE OK: 7 encuentros, 21 preguntas con 4 respuestas, cuadrícula 2x2, menú ampliado, Early Access, retratos y Bosque correctos.")
+	print("SMOKE OK: 7 encuentros, 6 fondos asociados, 21 preguntas con 4 respuestas, cuadrícula 2x2, menú ampliado, Early Access y retratos correctos.")
 	quit(0)
 
 
@@ -144,6 +178,9 @@ func _validate_story_data() -> bool:
 			_fail("Falta la presentación de: " + character_id)
 			return false
 		var encounter: Dictionary = Story.ENCOUNTERS.get(character_id, {})
+		if str(encounter.get("background", "")) != str(EXPECTED_BACKGROUNDS[character_id]):
+			_fail("El catálogo no asigna el fondo correcto a: " + character_id)
+			return false
 		var intro_text := ""
 		var intro_lines: Array = encounter.get("intro", [])
 		for intro_line_value in intro_lines:
@@ -172,6 +209,11 @@ func _validate_story_data() -> bool:
 			var next_id := str(node["next"])
 			if next_id != "__END__" and not Story.NODES.has(next_id):
 				_fail("La escena %s apunta a una escena inexistente" % node_id)
+				return false
+		if str(node.get("speaker", "")) != "Narrador":
+			var shown_character := str(shown[0])
+			if str(node.get("background", "")) != str(EXPECTED_BACKGROUNDS.get(shown_character, "")):
+				_fail("La escena %s no conserva el fondo de %s" % [node_id, shown_character])
 				return false
 		if not node.has("question_character"):
 			continue

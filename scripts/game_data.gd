@@ -54,13 +54,13 @@ const LOCATIONS := {
 	"casa": {
 		"name": "Casa",
 		"description": "Lugar habitual donde los personajes pueden hablar y tomar decisiones.",
-		"background": "asturias_home",
+		"background": "casa_asturias",
 		"chapter": "PRÓLOGO · CASA"
 	},
 	"bar": {
 		"name": "Bar",
 		"description": "Lugar donde se reúnen y ocurren conversaciones importantes o situaciones cómicas.",
-		"background": "cafeteria",
+		"background": "bar",
 		"chapter": "PRÓLOGO · BAR"
 	},
 	"bosque": {

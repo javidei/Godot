@@ -13,7 +13,7 @@ const ENCOUNTER_ORDER: Array[String] = ["javi", "sue", "smokey", "carmen", "jony
 const ENCOUNTERS := {
 	"javi": {
 		"name": "Javi",
-		"background": "asturias_home",
+		"background": "bar",
 		"intro": [
 			{"expression": "thoughtful", "text": "Soy Javi. Cuando se me mete un proyecto en la cabeza, puedo pasar horas dándole vueltas hasta que consigo verlo funcionar."},
 			{"expression": "happy", "text": "Con mis amigos suelo analizar cada plan, encontrarle alguna pega y, aun así, terminar apuntándome. Supongo que esa contradicción también dice bastante de mí."}
@@ -44,7 +44,7 @@ const ENCOUNTERS := {
 	},
 	"sue": {
 		"name": "Sue",
-		"background": "asturias_home",
+		"background": "bosque",
 		"intro": [
 			{"expression": "happy", "text": "Soy Sue. No necesito hacer mucho ruido para sentirme parte de un plan; me importa más que la gente a mi lado pueda ser ella misma."},
 			{"expression": "thoughtful", "text": "Me gusta que las cosas tengan identidad y no parezcan copiadas de todo lo demás. Con confianza, cualquier tarde corriente puede acabar teniendo algo especial."}
@@ -75,7 +75,7 @@ const ENCOUNTERS := {
 	},
 	"smokey": {
 		"name": "Smokey",
-		"background": "cafeteria",
+		"background": "habitacion_fran",
 		"intro": [
 			{"expression": "confident", "text": "Puedes llamarme Smokey. No soy muy de presentaciones formales; prefiero que una conversación empiece sola y termine en alguna historia memorable."},
 			{"expression": "laugh", "text": "A veces mis mejores recuerdos comienzan cuando nadie tenía demasiado claro qué iba a pasar. Si acabamos riéndonos, para mí el plan ya ha salido bien."}
@@ -106,7 +106,7 @@ const ENCOUNTERS := {
 	},
 	"carmen": {
 		"name": "Carmen",
-		"background": "cafeteria",
+		"background": "habitacion_fran",
 		"intro": [
 			{"expression": "neutral", "text": "Soy Carmen, aunque también puedes llamarme Carmela. Si alguien propone un plan con buena compañía, no suele costar mucho convencerme."},
 			{"expression": "neutral", "text": "Me gusta que la gente tenga algo propio y que una tarde cualquiera pueda acabar siendo una anécdota. Los planes demasiado serios no suelen durar mucho a mi alrededor."}
@@ -137,7 +137,7 @@ const ENCOUNTERS := {
 	},
 	"jony": {
 		"name": "Jony",
-		"background": "cafeteria",
+		"background": "habitacion_ana",
 		"intro": [
 			{"expression": "neutral", "text": "Soy Jony, o Jon si quieres ahorrar una letra. Al principio puedo parecer algo reservado, pero con el tema adecuado se me pasa bastante rápido."},
 			{"expression": "neutral", "text": "Cuando algo me interesa de verdad, puedo analizar hasta el último detalle y alargar la conversación más de la cuenta. Avisado quedas."}
@@ -168,7 +168,7 @@ const ENCOUNTERS := {
 	},
 	"ana": {
 		"name": "Ana",
-		"background": "bosque",
+		"background": "habitacion_ana",
 		"intro": [
 			{"expression": "neutral", "text": "Soy Ana. No suelo contarlo todo de primeras; prefiero observar, coger confianza y decidir cuánto de mí enseño en cada momento."},
 			{"expression": "neutral", "text": "Las historias que dejan espacio para imaginar me atrapan con facilidad. Por dentro casi siempre está pasando bastante más de lo que cuento en voz alta."}
@@ -199,7 +199,7 @@ const ENCOUNTERS := {
 	},
 	"argentino": {
 		"name": "El Argentino",
-		"background": "bosque",
+		"background": "habitacion_argentino",
 		"intro": [
 			{"expression": "neutral", "text": "No soy de soltar discursos largos sobre mí. Prefiero aparecer, escuchar un rato y hablar cuando tengo algo que merece la pena decir."},
 			{"expression": "neutral", "text": "Dentro del grupo suelo ir a mi ritmo. Puede que llegue con cara de saber exactamente qué ocurre, aunque muchas veces solo esté esperando a que alguien se decida."}
@@ -235,8 +235,8 @@ static var NODES: Dictionary = _build_nodes()
 
 static func _build_nodes() -> Dictionary:
 	var nodes: Dictionary = {}
-	_add_opening(nodes, "casa_01", "asturias_home", "CASA")
-	_add_opening(nodes, "bar_01", "cafeteria", "BAR")
+	_add_opening(nodes, "casa_01", "casa_asturias", "CASA")
+	_add_opening(nodes, "bar_01", "bar", "BAR")
 	_add_opening(nodes, "bosque_01", "bosque", "BOSQUE")
 
 	for character_index in range(ENCOUNTER_ORDER.size()):
@@ -251,8 +251,6 @@ static func _build_nodes() -> Dictionary:
 			var next_id := "%s_intro_%02d" % [character_id, intro_index + 2] if intro_index + 1 < intro_lines.size() else "%s_q1" % character_id
 			var node := _single_character_node(character_id, display_name, str(line.get("text", "")), next_id, chapter)
 			node["expressions"] = {character_id: str(line.get("expression", "neutral"))}
-			if character_index > 0 and intro_index == 0:
-				node["background"] = str(encounter.get("background", "cafeteria"))
 			nodes[node_id] = node
 
 		var questions: Array = encounter.get("questions", [])
@@ -314,9 +312,11 @@ static func _add_opening(nodes: Dictionary, node_id: String, background: String,
 
 
 static func _single_character_node(character_id: String, speaker: String, text: String, next_id: String, chapter: String) -> Dictionary:
+	var encounter: Dictionary = ENCOUNTERS.get(character_id, {})
 	var node := {
 		"speaker": speaker,
 		"text": text,
+		"background": str(encounter.get("background", "bar")),
 		"show": [character_id],
 		"positions": {character_id: "center"},
 		"focus": character_id,

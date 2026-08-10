@@ -5,8 +5,11 @@ const MENU_CHARACTERS := "res://assets/ui/menu-lineup.png"
 
 const BACKGROUNDS := {
 	"bosque": "res://assets/backgrounds/fondo-bosque.png",
-	"cafeteria": "res://assets/backgrounds/fondo-cafeteria.png",
-	"asturias_home": "res://assets/backgrounds/fondo-casa-asturias.png"
+	"bar": "res://assets/backgrounds/fondo-bar.png",
+	"casa_asturias": "res://assets/backgrounds/fondo-casa-asturias.png",
+	"habitacion_ana": "res://assets/backgrounds/fondo-habitacion-ana.png",
+	"habitacion_argentino": "res://assets/backgrounds/fondo-habitacion-argentino.png",
+	"habitacion_fran": "res://assets/backgrounds/fondo-habitacion-fran.png"
 }
 
 const CHARACTER_POSES := {

@@ -5,7 +5,7 @@ Novela visual en **Godot 4.7.1**, actualmente en **Early Access**, con Javi, Sue
 ## Base actual
 
 - Recursos gráficos locales: no depende de `raw.githubusercontent.com` para fondos o personajes.
-- 3 fondos, 5 poses de cada protagonista y una pose inicial de cada personaje secundario.
+- 6 fondos, 5 poses de cada protagonista y una pose inicial de cada personaje secundario.
 - Poses seleccionables desde los datos del diálogo y posiciones `left`, `center` y `right`.
 - Carga bajo demanda con caché acotada y precarga ligera de la siguiente escena.
 - Composición de novela visual sin `ColorRect` ni placeholders detrás de los personajes.
@@ -42,15 +42,15 @@ El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la
 
 ## Diálogo
 
-La versión Early Access `0.3.1` recorre a Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino de uno en uno. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata del personaje. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
+La versión Early Access `0.3.2` recorre a Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino de uno en uno. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata del personaje. El fondo acompaña siempre al personaje visible: Javi usa el bar; Sue, el bosque; Smokey y Carmen, la habitación de Fran; Jony y Ana, la habitación de Ana; y El Argentino, su habitación. La pantalla principal conserva Casa Asturias. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
 
 Una escena puede indicar recursos y composición sin crear escenas Godot nuevas:
 
 ```gdscript
 {
-    "background": "cafeteria",
-    "positions": {"sue": "center"},
-    "expressions": {"sue": "chocolate"},
+    "background": "habitacion_fran",
+    "positions": {"smokey": "center"},
+    "expressions": {"smokey": "vaping"},
     "effect": {"type": "shake", "text": "CLONK!", "sfx": "clonk"}
 }
 ```
