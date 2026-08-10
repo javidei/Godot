@@ -11,6 +11,7 @@ const BACKGROUNDS := {
 	"habitacion_argentino": "res://assets/backgrounds/fondo-habitacion-argentino.png",
 	"habitacion_fran": "res://assets/backgrounds/fondo-habitacion-fran.png",
 	"habitacion_sue": "res://assets/backgrounds/fondo-habitacion-sue.png",
+	"habitacion_jony": "res://assets/backgrounds/fondo-habitacion-jony.png",
 	"habitacion_javi": "res://assets/backgrounds/fondo-habitacion-javi.png"
 }
 
