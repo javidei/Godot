@@ -14,7 +14,7 @@ El subtítulo se calcula automáticamente con el número de personajes más una 
 - Foco sutil del personaje que habla, zoom, sacudida y onomatopeyas animadas.
 - Interfaz para ratón/táctil y composición alternativa en orientación vertical.
 - Guardado compatible en `user://godot_otome_save.json`.
-- AudioManager con canales Music/SFX/UI. La demo genera tonos `strum`, `clonk` y UI sin usar audio externo.
+- AudioManager con canales Music/SFX/UI, volumen general persistente, silencio y música en bucle asociada automáticamente a cada fondo.
 - La nueva partida empieza eligiendo protagonista, sin una selección de escenario intermedia.
 - Recorrido individual por el resto del grupo: el personaje elegido representa al jugador y no aparece como encuentro.
 - Cuatro respuestas por pregunta en una cuadrícula táctil de dos columnas.
@@ -45,7 +45,7 @@ El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la
 
 ## Diálogo
 
-La versión Early Access `0.3.6` permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de la historia y el recorrido se adapta a los otros seis; si se crea un personaje nuevo, aparecen los siete. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata. Ya no se elige escenario al comenzar: cada personaje carga directamente su fondo asociado. Javi y Sue usan sus habitaciones; Smokey y Carmen, la habitación de Fran; Jony y Ana, la habitación de Ana; y El Argentino, su habitación. La pantalla principal conserva Casa Asturias. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
+La versión Early Access `0.3.7` permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de la historia y el recorrido se adapta a los otros seis; si se crea un personaje nuevo, aparecen los siete. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata. Ya no se elige escenario al comenzar: cada personaje carga directamente su fondo asociado. Javi, Sue, Jony, Ana y El Argentino usan sus habitaciones; Smokey y Carmen comparten la habitación de Fran. La pantalla principal conserva Casa Asturias. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
 
 Una escena puede indicar recursos y composición sin crear escenas Godot nuevas:
 
@@ -62,7 +62,11 @@ Los nombres de expresiones antiguos (`embarrassed`, `teasing`, `annoyed`, etc.) 
 
 ## Audio
 
-No se encontraron ficheros de audio válidos en el Godot actual ni en la demo HTML previa. Aquella demo generaba los tonos en el navegador; Godot replica ese comportamiento de forma procedural. `assets/audio/` queda preparado para música/SFX definitivos y `AudioManager` puede reproducir archivos registrados sin cambiar los datos del diálogo.
+El menú permite bajar o subir el volumen general en pasos del 10 % y silenciar o volver a activar todo el sonido. Ambas preferencias se guardan en `user://audio_settings.cfg`, por lo que se conservan al volver a abrir el juego.
+
+Cada uno de los nueve fondos registrados tiene un tema musical asignado en `scripts/audio_manager.gd`. Al cambiar el fondo, el tema correspondiente se carga una vez y continúa en bucle. Las rutas están preparadas para ficheros OGG dentro de `assets/audio/music/`; mientras un fichero no exista, el juego continúa en silencio sin errores. La guía y los nombres esperados están en `assets/audio/README.md`.
+
+Los tonos `strum`, `clonk` y la confirmación de interfaz continúan generándose de forma procedural y no incorporan audio externo ni material con copyright.
 
 ## Web y estabilidad
 

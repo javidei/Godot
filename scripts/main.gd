@@ -49,6 +49,8 @@ var ending_background: TextureRect
 var game_background: TextureRect
 var menu_content: VBoxContainer
 var continue_button: Button
+var volume_label: Label
+var mute_button: Button
 var stage: Control
 var topbar: HBoxContainer
 var chapter_label: Label
@@ -196,6 +198,45 @@ func _build_menu() -> void:
 	continue_button = _make_button("Continuar", false)
 	continue_button.pressed.connect(_continue_game)
 	menu_content.add_child(continue_button)
+
+	var audio_controls := HBoxContainer.new()
+	audio_controls.name = "AudioControls"
+	audio_controls.custom_minimum_size = Vector2(0, 44)
+	audio_controls.add_theme_constant_override("separation", 8)
+	menu_content.add_child(audio_controls)
+
+	var volume_down_button := _make_small_button("−")
+	volume_down_button.name = "VolumeDownButton"
+	volume_down_button.tooltip_text = "Bajar volumen"
+	volume_down_button.custom_minimum_size = Vector2(48, 42)
+	volume_down_button.pressed.connect(func(): _change_volume(-AudioManagerScript.VOLUME_STEP))
+	audio_controls.add_child(volume_down_button)
+
+	volume_label = Label.new()
+	volume_label.name = "VolumeLabel"
+	volume_label.text = "Volumen · 70 %"
+	volume_label.custom_minimum_size = Vector2(118, 42)
+	volume_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	volume_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	volume_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	volume_label.add_theme_color_override("font_color", Color("f7ead8"))
+	volume_label.add_theme_font_size_override("font_size", 15)
+	audio_controls.add_child(volume_label)
+
+	var volume_up_button := _make_small_button("+")
+	volume_up_button.name = "VolumeUpButton"
+	volume_up_button.tooltip_text = "Subir volumen"
+	volume_up_button.custom_minimum_size = Vector2(48, 42)
+	volume_up_button.pressed.connect(func(): _change_volume(AudioManagerScript.VOLUME_STEP))
+	audio_controls.add_child(volume_up_button)
+
+	mute_button = _make_small_button("Silenciar")
+	mute_button.name = "MuteButton"
+	mute_button.tooltip_text = "Silenciar o activar todo el sonido"
+	mute_button.custom_minimum_size = Vector2(126, 42)
+	mute_button.pressed.connect(_toggle_mute)
+	audio_controls.add_child(mute_button)
+	_refresh_audio_controls()
 
 	var exit_button := _make_button("Salir", false)
 	exit_button.name = "ExitGameButton"
@@ -637,11 +678,13 @@ func _go_to(node_id: String, add_to_history: bool = true) -> void:
 
 func _set_background(background_id: String) -> void:
 	if background_id == current_background and game_background.texture != null:
+		audio_manager.play_background_music(background_id)
 		return
 	var texture: Texture2D = asset_manager.get_background(background_id)
 	if texture == null:
 		return
 	current_background = background_id
+	audio_manager.play_background_music(background_id)
 	menu_background.texture = texture
 	game_background.texture = texture
 	ending_background.texture = texture
@@ -848,6 +891,23 @@ func _show_toast(text: String) -> void:
 
 func _play_ui_sound() -> void:
 	audio_manager.play_ui("confirm")
+
+
+func _change_volume(delta: float) -> void:
+	audio_manager.adjust_volume(delta)
+	_refresh_audio_controls()
+
+
+func _toggle_mute() -> void:
+	audio_manager.toggle_mute()
+	_refresh_audio_controls()
+
+
+func _refresh_audio_controls() -> void:
+	if volume_label != null:
+		volume_label.text = "Volumen · %d %%" % audio_manager.get_volume_percent()
+	if mute_button != null:
+		mute_button.text = "Activar sonido" if audio_manager.is_muted() else "Silenciar"
 
 
 func _toggle_fullscreen() -> void:

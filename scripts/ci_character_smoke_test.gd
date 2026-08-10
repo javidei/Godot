@@ -38,8 +38,8 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.6":
-		_fail("La versión del proyecto no es 0.3.6")
+	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.7":
+		_fail("La versión del proyecto no es 0.3.7")
 		return
 	if Story.game_title() != "Entre líneas: La octava silla":
 		_fail("El título actual no se calcula desde los siete personajes")
@@ -65,13 +65,22 @@ func _run() -> void:
 	var slots: Dictionary = main.get("character_slots")
 	var views: Dictionary = main.get("character_views")
 	var assets: Variant = main.get("asset_manager")
+	var audio: Variant = main.get("audio_manager")
 	if assets == null:
 		_fail("AssetManager no está disponible")
+		return
+	if audio == null:
+		_fail("AudioManager no está disponible")
 		return
 	for background_id in BACKGROUND_IDS:
 		var background_texture: Texture2D = assets.call("get_background", background_id) as Texture2D
 		if background_texture == null or background_texture.get_size().x <= 0.0 or background_texture.get_size().y <= 0.0:
 			_fail("No carga el fondo: " + background_id)
+			return
+		var music_id := str(audio.call("music_for_background", background_id))
+		var music_path := str(audio.call("path_for_music", music_id))
+		if music_id.is_empty() or not music_path.begins_with("res://assets/audio/music/") or not music_path.ends_with(".ogg"):
+			_fail("El fondo no tiene una canción OGG preparada: " + background_id)
 			return
 
 	var menu_background := main.get("menu_background") as TextureRect
@@ -135,6 +144,10 @@ func _run() -> void:
 	var narrative_font := load("res://assets/ui/fonts/DejaVuSerif-Bold.ttf") as Font
 	var exit_button := _find_named(main, "ExitGameButton") as Button
 	var version_label := _find_named(main, "VersionLabel") as Label
+	var volume_down_button := _find_named(main, "VolumeDownButton") as Button
+	var volume_up_button := _find_named(main, "VolumeUpButton") as Button
+	var volume_label := _find_named(main, "VolumeLabel") as Label
+	var mute_button := _find_named(main, "MuteButton") as Button
 	var menu_content: VBoxContainer = main.get("menu_content") as VBoxContainer
 	var menu_characters := main.get("menu_characters") as TextureRect
 	if title == null or title.text != Story.menu_title() or narrative_font == null or not title.has_theme_font_override("font"):
@@ -152,9 +165,25 @@ func _run() -> void:
 	if _find_named(main, "ExitGameConfirmation") != null:
 		_fail("El popup de confirmación de salida no se ha eliminado")
 		return
-	if version_label == null or not version_label.text.contains("Versión 0.3.6 · EARLY ACCESS"):
-		_fail("La versión 0.3.6 no se muestra en el menú")
+	if version_label == null or not version_label.text.contains("Versión 0.3.7 · EARLY ACCESS"):
+		_fail("La versión 0.3.7 no se muestra en el menú")
 		return
+	if volume_down_button == null or volume_up_button == null or volume_label == null or mute_button == null:
+		_fail("El menú no contiene todos los controles de audio")
+		return
+	audio.call("set_master_volume", 0.4)
+	main.call("_refresh_audio_controls")
+	if not volume_label.text.contains("40 %"):
+		_fail("El indicador de volumen no refleja el nivel actual")
+		return
+	var was_muted := bool(audio.call("is_muted"))
+	main.call("_toggle_mute")
+	var is_now_muted := bool(audio.call("is_muted"))
+	var expected_mute_text := "Activar sonido" if is_now_muted else "Silenciar"
+	if is_now_muted == was_muted or mute_button.text != expected_mute_text:
+		_fail("El botón de silencio no cambia el estado y su texto")
+		return
+	main.call("_toggle_mute")
 	if menu_characters == null or not is_equal_approx(menu_characters.anchor_left, 1.0) or not is_equal_approx(menu_characters.anchor_top, 1.0) or not is_zero_approx(menu_characters.offset_right) or not is_zero_approx(menu_characters.offset_bottom):
 		_fail("El trío del menú no está anclado abajo a la derecha")
 		return
