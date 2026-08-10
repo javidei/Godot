@@ -101,7 +101,7 @@ jobs:
           fi
           grep -q "V040 OK:" v040-smoke.log
 
-      - name: Smoke test de transiciones 0.4.4
+      - name: Smoke test de transiciones 0.4.5
         run: |
           set +e
           godot --headless --path . --script res://scripts/ci_v044_transition_smoke_test.gd > v044-smoke.log 2>&1
@@ -109,7 +109,7 @@ jobs:
           set -e
           cat v044-smoke.log
           if [ "$STATUS" -ne 0 ] || grep -Eqi "V044 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v044-smoke.log; then
-            echo "La validación de fundidos narrativos 0.4.4 ha fallado; no se exportará."
+            echo "La validación de fundidos narrativos interactivos ha fallado; no se exportará."
             exit 1
           fi
           grep -q "V044 OK:" v044-smoke.log
@@ -126,6 +126,19 @@ jobs:
             exit 1
           fi
           grep -q "HUD OK:" hud-smoke.log
+
+      - name: Smoke test de menú e interacción 0.4.5
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v045_menu_input_smoke_test.gd > v045-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat v045-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V045 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v045-smoke.log; then
+            echo "La validación del menú compacto y avance por pantalla ha fallado; no se exportará."
+            exit 1
+          fi
+          grep -q "V045 OK:" v045-smoke.log
 
       - name: Export Web y validar GDScript
         run: |
