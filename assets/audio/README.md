@@ -1,7 +1,8 @@
 # Audio
 
-`AudioManager` crea los canales Music, SFX y UI. El menú controla el volumen general,
-permite silenciarlo y guarda ambas preferencias para la siguiente sesión.
+`AudioManager` crea los canales Music, SFX y UI. El menú separa Música de Efectos,
+permite regularlos y silenciarlos de forma independiente y guarda las cuatro
+preferencias. La música empieza al 30 % y los efectos/UI al 100 %.
 
 ## Añadir la música de los escenarios
 
