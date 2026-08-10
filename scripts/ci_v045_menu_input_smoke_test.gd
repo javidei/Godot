@@ -42,22 +42,32 @@ func _run() -> void:
 	var primary_texts: Array[String] = []
 	for child in primary.get_children():
 		if child is Button:
-			primary_texts.append((child as Button).text)
+			var button := child as Button
+			primary_texts.append(button.text)
+			if button.custom_minimum_size.y > 43.0:
+				_fail("Nueva partida/Continuar siguen siendo demasiado altos")
+				return
 	if not primary_texts.has("Nueva partida") or not primary_texts.has("Continuar"):
 		_fail("La primera pareja no contiene Nueva partida y Continuar")
 		return
+
 	var secondary_texts: Array[String] = []
 	for child in secondary.get_children():
 		if child is Button:
-			secondary_texts.append((child as Button).text)
+			var button := child as Button
+			secondary_texts.append(button.text)
+			if button.custom_minimum_size.y > 41.0:
+				_fail("Pantalla completa/Salir siguen siendo demasiado altos")
+				return
 	if not secondary_texts.has("Pantalla completa") or not secondary_texts.has("Salir"):
 		_fail("La segunda pareja no contiene Pantalla completa y Salir")
 		return
 
 	var menu_width_ratio := menu_content.anchor_right - menu_content.anchor_left
-	if root.get_visible_rect().size.x >= root.get_visible_rect().size.y and menu_width_ratio > 0.44:
-		_fail("El menú sigue ocupando demasiado ancho y puede tapar al personaje")
-		return
+	if root.get_visible_rect().size.x >= root.get_visible_rect().size.y:
+		if menu_width_ratio < 0.45 or menu_width_ratio > 0.50:
+			_fail("El menú no tiene la anchura compacta prevista para botones más anchos sin tapar al personaje")
+			return
 
 	# Simula una escena válida y dos clics en una zona libre del propio GameScreen:
 	# el primero completa el tipeado y el segundo avanza al siguiente tramo.
@@ -99,7 +109,7 @@ func _run() -> void:
 		_fail("Pulsar en una zona libre de la pantalla no avanza al siguiente diálogo")
 		return
 
-	print("V045 OK: menú compacto y avance por clic directo sobre GameScreen validados.")
+	print("V045 OK: menú más ancho/menos alto y avance por clic directo sobre GameScreen validados.")
 	quit(0)
 
 
