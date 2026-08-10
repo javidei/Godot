@@ -26,8 +26,9 @@ func _run() -> void:
 	var manager := main.get_node_or_null("Version040Manager")
 	var layout_patch := main.get_node_or_null("Version042LayoutPatch")
 	var selection_manager := main.get_node_or_null("CharacterSelectManager")
-	if manager == null or layout_patch == null or selection_manager == null:
-		_fail("No están disponibles los gestores de selección y layout 0.4.x")
+	var room_audio_patch := main.get_node_or_null("Version046RoomAudioPatch")
+	if manager == null or layout_patch == null or selection_manager == null or room_audio_patch == null:
+		_fail("No están disponibles los gestores de selección, layout y audio de la rama 0.4.x")
 		return
 
 	selection_manager.call("open_selection")
@@ -129,7 +130,7 @@ func _run() -> void:
 		return
 
 	manager.call("_select_visit", "ana")
-	for _i in range(2):
+	for _i in range(4):
 		await process_frame
 	state = main.get("state")
 	if str(state.get("node_id", "")) != "ana_intro_01":
@@ -140,14 +141,71 @@ func _run() -> void:
 		_fail("El orden libre de visitas no registra a Ana como primera visita")
 		return
 
-	var room_panel := manager.get("room_panel") as PanelContainer
-	var room_music_icon := manager.get("room_music_icon") as TextureRect
-	var room_label := manager.get("room_label") as Label
+	var room_panel := room_audio_patch.get("room_panel") as PanelContainer
+	var room_music_button := room_audio_patch.get("room_music_button") as Button
+	var room_effects_button := room_audio_patch.get("room_effects_button") as Button
+	var room_all_button := room_audio_patch.get("room_all_button") as Button
 	if room_panel == null or not room_panel.visible:
-		_fail("La habitación no muestra el regulador individual de canción")
+		_fail("La habitación no muestra la botonera local de audio")
 		return
-	if room_music_icon == null or room_music_icon.texture == null or room_label == null or room_label.text.contains("♫"):
-		_fail("El control de música de habitación sigue dependiendo de un glifo roto")
+	if room_music_button == null or room_effects_button == null or room_all_button == null:
+		_fail("La habitación no contiene los tres botones de música, efectos y ambos")
+		return
+	var room_button_count := 0
+	for child in room_panel.find_children("*", "Button", true, false):
+		if child is Button:
+			room_button_count += 1
+	if room_button_count != 3:
+		_fail("La botonera de habitación debe tener exactamente tres botones y ningún regulador de volumen")
+		return
+	if room_panel.find_child("RoomMusicPercent", true, false) != null:
+		_fail("La nueva botonera de habitación sigue mostrando un porcentaje de volumen")
+		return
+	var legacy_room_panel := manager.get("room_panel") as PanelContainer
+	if legacy_room_panel != null and legacy_room_panel.modulate.a > 0.001:
+		_fail("La botonera antigua de volumen de habitación sigue siendo visible")
+		return
+
+	var audio_manager := main.get("audio_manager") as Node
+	if bool(audio_manager.call("is_music_muted")):
+		audio_manager.call("toggle_music_mute")
+	if bool(audio_manager.call("is_effects_muted")):
+		audio_manager.call("toggle_effects_mute")
+	audio_manager.call("set_music_volume", 0.5)
+	audio_manager.call("set_effects_volume", 1.0)
+	room_audio_patch.call("_apply_room_audio")
+	var music_bus := AudioServer.get_bus_index("Music")
+	var sfx_bus := AudioServer.get_bus_index("SFX")
+	var ui_bus := AudioServer.get_bus_index("UI")
+	if music_bus < 0 or sfx_bus < 0 or ui_bus < 0:
+		_fail("No están disponibles los buses de audio necesarios")
+		return
+
+	room_audio_patch.call("_toggle_room_music")
+	if not AudioServer.is_bus_mute(music_bus) or AudioServer.is_bus_mute(sfx_bus):
+		_fail("Silenciar música en la habitación afecta a un canal incorrecto")
+		return
+	room_audio_patch.call("_toggle_room_music")
+	if AudioServer.is_bus_mute(music_bus):
+		_fail("La música de la habitación no puede volver a activarse")
+		return
+
+	room_audio_patch.call("_toggle_room_effects")
+	if not AudioServer.is_bus_mute(sfx_bus) or AudioServer.is_bus_mute(music_bus) or AudioServer.is_bus_mute(ui_bus):
+		_fail("Silenciar efectos de habitación debe afectar solo a los efectos, no a música ni interfaz")
+		return
+	room_audio_patch.call("_toggle_room_effects")
+	if AudioServer.is_bus_mute(sfx_bus):
+		_fail("Los efectos de la habitación no pueden volver a activarse")
+		return
+
+	room_audio_patch.call("_toggle_room_all")
+	if not AudioServer.is_bus_mute(music_bus) or not AudioServer.is_bus_mute(sfx_bus):
+		_fail("Silenciar ambos no silencia música y efectos de la habitación")
+		return
+	room_audio_patch.call("_toggle_room_all")
+	if AudioServer.is_bus_mute(music_bus) or AudioServer.is_bus_mute(sfx_bus):
+		_fail("Activar ambos no restaura música y efectos de la habitación")
 		return
 
 	main.call("_go_to", "ana_q3_correct", false)
@@ -179,7 +237,7 @@ func _run() -> void:
 		_fail("No se puede salir al menú desde el selector de visitas")
 		return
 
-	print("V040 OK: filas 4+3 centradas, tarjetas visuales, Carmen más baja, iconos SVG, progreso y salida al menú validados.")
+	print("V040 OK: visitas, layout, tres botones de audio por habitación, iconos, progreso y salida al menú validados.")
 	quit(0)
 
 
