@@ -4,6 +4,9 @@ set -eu
 
 EXPORT_DIR="${1:?Falta el directorio de exportacion web}"
 BUILD_ID="${2:?Falta el identificador de la build}"
+GAME_TITLE="${3:?Falta el titulo dinamico del juego}"
+CHAIR_TITLE="${GAME_TITLE#Entre líneas: La }"
+SHORT_NAME="$(printf '%s' "${CHAIR_TITLE}" | sed 's/^./\U&/')"
 SERVICE_WORKER="${EXPORT_DIR}/index.service.worker.js"
 ENGINE_SCRIPT="${EXPORT_DIR}/index.js"
 MANIFEST="${EXPORT_DIR}/index.manifest.json"
@@ -18,12 +21,11 @@ fi
 # puede asociar la exportacion generica de Godot a otra PWA del mismo sitio y
 # afirmar que ya esta instalada aunque el juego no tenga acceso visible.
 if ! grep -Fq '"id":"./entre-lineas"' "${MANIFEST}"; then
-	sed -i 's/{"background_color"/{"id":".\/entre-lineas","short_name":"Octava silla","description":"Novela visual Entre líneas: La octava silla","scope":".\/","background_color"/' "${MANIFEST}"
+	sed -i "s#{\"background_color\"#{\"id\":\"./entre-lineas\",\"short_name\":\"${SHORT_NAME}\",\"description\":\"Novela visual ${GAME_TITLE}\",\"scope\":\"./\",\"background_color\"#" "${MANIFEST}"
 fi
-sed -i 's/"name":"Entre líneas · Godot"/"name":"Entre líneas: La octava silla"/' "${MANIFEST}"
-sed -i 's/"name":"Entre líneas"/"name":"Entre líneas: La octava silla"/' "${MANIFEST}"
-sed -i 's/"short_name":"Entre líneas"/"short_name":"Octava silla"/' "${MANIFEST}"
-sed -i 's/"description":"Novela visual Entre líneas"/"description":"Novela visual Entre líneas: La octava silla"/' "${MANIFEST}"
+sed -i "s#\"name\":\"[^\"]*\"#\"name\":\"${GAME_TITLE}\"#" "${MANIFEST}"
+sed -i "s#\"short_name\":\"[^\"]*\"#\"short_name\":\"${SHORT_NAME}\"#" "${MANIFEST}"
+sed -i "s#\"description\":\"[^\"]*\"#\"description\":\"Novela visual ${GAME_TITLE}\"#" "${MANIFEST}"
 
 # Chrome mantiene su propia cache del manifiesto. La referencia versionada
 # obliga a leer la identidad nueva y evita que siga mostrando la PWA fantasma.
@@ -69,7 +71,7 @@ grep -Fq "new Request(event.request, { cache: 'reload' })" "${SERVICE_WORKER}"
 grep -Fq "ENTRE_LINEAS_AUTO_UPDATE" "${SERVICE_WORKER}"
 grep -Fq "updateViaCache: 'none'" "${ENGINE_SCRIPT}"
 grep -Fq '"id":"./entre-lineas"' "${MANIFEST}"
-grep -Fq '"name":"Entre líneas: La octava silla"' "${MANIFEST}"
-grep -Fq '"short_name":"Octava silla"' "${MANIFEST}"
+grep -Fq "\"name\":\"${GAME_TITLE}\"" "${MANIFEST}"
+grep -Fq "\"short_name\":\"${SHORT_NAME}\"" "${MANIFEST}"
 grep -Fq '"scope":"./"' "${MANIFEST}"
 grep -Fq "href=\"index.manifest.json?v=${BUILD_ID}\"" "${HTML_SHELL}"

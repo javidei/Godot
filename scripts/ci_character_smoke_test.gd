@@ -38,11 +38,14 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.5":
-		_fail("La versión del proyecto no es 0.3.5")
+	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.6":
+		_fail("La versión del proyecto no es 0.3.6")
 		return
-	if str(ProjectSettings.get_setting("application/config/name", "")) != "Entre líneas: La octava silla":
-		_fail("El título del proyecto no es Entre líneas: La octava silla")
+	if Story.game_title() != "Entre líneas: La octava silla":
+		_fail("El título actual no se calcula desde los siete personajes")
+		return
+	if Story.title_for_character_count(13) != "Entre líneas: La decimocuarta silla":
+		_fail("El título no calcula correctamente la silla para trece personajes")
 		return
 	if not _validate_story_data():
 		return
@@ -55,6 +58,9 @@ func _run() -> void:
 	root.add_child(main)
 	for _i in range(10):
 		await process_frame
+	if str(ProjectSettings.get_setting("application/config/name", "")) != Story.game_title() or root.title != Story.game_title():
+		_fail("El título dinámico no se aplica a la ventana del juego")
+		return
 
 	var slots: Dictionary = main.get("character_slots")
 	var views: Dictionary = main.get("character_views")
@@ -131,8 +137,8 @@ func _run() -> void:
 	var version_label := _find_named(main, "VersionLabel") as Label
 	var menu_content: VBoxContainer = main.get("menu_content") as VBoxContainer
 	var menu_characters := main.get("menu_characters") as TextureRect
-	if title == null or title.text != "Entre líneas:\nLa octava silla" or narrative_font == null or not title.has_theme_font_override("font"):
-		_fail("El menú no muestra el nuevo título y su tipografía narrativa")
+	if title == null or title.text != Story.menu_title() or narrative_font == null or not title.has_theme_font_override("font"):
+		_fail("El menú no muestra el título dinámico y su tipografía narrativa")
 		return
 	if engine_tag == null or engine_tag.text != "GODOT 4 · NOVELA VISUAL" or engine_tag.text.contains("DEMO"):
 		_fail("La cabecera del menú todavía muestra DEMO")
@@ -146,8 +152,8 @@ func _run() -> void:
 	if _find_named(main, "ExitGameConfirmation") != null:
 		_fail("El popup de confirmación de salida no se ha eliminado")
 		return
-	if version_label == null or not version_label.text.contains("Versión 0.3.5 · EARLY ACCESS"):
-		_fail("La versión 0.3.5 no se muestra en el menú")
+	if version_label == null or not version_label.text.contains("Versión 0.3.6 · EARLY ACCESS"):
+		_fail("La versión 0.3.6 no se muestra en el menú")
 		return
 	if menu_characters == null or not is_equal_approx(menu_characters.anchor_left, 1.0) or not is_equal_approx(menu_characters.anchor_top, 1.0) or not is_zero_approx(menu_characters.offset_right) or not is_zero_approx(menu_characters.offset_bottom):
 		_fail("El trío del menú no está anclado abajo a la derecha")

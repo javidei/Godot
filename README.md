@@ -1,6 +1,8 @@
-# Entre líneas: La octava silla
+# Entre líneas
 
 Novela visual en **Godot 4.7.1**, actualmente en **Early Access**, con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
+
+El subtítulo se calcula automáticamente con el número de personajes más una silla: los siete personajes actuales producen **«La octava silla»** y trece producirían **«La decimocuarta silla»**.
 
 ## Base actual
 
@@ -43,7 +45,7 @@ El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la
 
 ## Diálogo
 
-La versión Early Access `0.3.4` permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de la historia y el recorrido se adapta a los otros seis; si se crea un personaje nuevo, aparecen los siete. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata. Ya no se elige escenario al comenzar: cada personaje carga directamente su fondo asociado. Javi y Sue usan sus habitaciones; Smokey y Carmen, la habitación de Fran; Jony y Ana, la habitación de Ana; y El Argentino, su habitación. La pantalla principal conserva Casa Asturias. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
+La versión Early Access `0.3.6` permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de la historia y el recorrido se adapta a los otros seis; si se crea un personaje nuevo, aparecen los siete. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata. Ya no se elige escenario al comenzar: cada personaje carga directamente su fondo asociado. Javi y Sue usan sus habitaciones; Smokey y Carmen, la habitación de Fran; Jony y Ana, la habitación de Ana; y El Argentino, su habitación. La pantalla principal conserva Casa Asturias. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
 
 Una escena puede indicar recursos y composición sin crear escenas Godot nuevas:
 

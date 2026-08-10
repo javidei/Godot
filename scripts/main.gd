@@ -69,6 +69,9 @@ var is_typing := false
 
 
 func _ready() -> void:
+	var dynamic_title := Story.game_title()
+	ProjectSettings.set_setting("application/config/name", dynamic_title)
+	get_window().title = dynamic_title
 	asset_manager = AssetManagerScript.new()
 	audio_manager = AudioManagerScript.new()
 	audio_manager.name = "AudioManager"
@@ -163,7 +166,7 @@ func _build_menu() -> void:
 
 	var title := Label.new()
 	title.name = "GameTitle"
-	title.text = "Entre líneas:\nLa octava silla"
+	title.text = Story.menu_title()
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title.custom_minimum_size = Vector2(0, 118)
 	title.add_theme_color_override("font_color", Color("fff1dc"))

@@ -6,6 +6,30 @@ const LEGACY_START_NODES: Array[String] = ["casa_01", "bar_01", "bosque_01"]
 
 const ENCOUNTER_ORDER: Array[String] = ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"]
 
+const FEMININE_ORDINALS: Array[String] = [
+	"",
+	"primera",
+	"segunda",
+	"tercera",
+	"cuarta",
+	"quinta",
+	"sexta",
+	"séptima",
+	"octava",
+	"novena",
+	"décima",
+	"undécima",
+	"duodécima",
+	"decimotercera",
+	"decimocuarta",
+	"decimoquinta",
+	"decimosexta",
+	"decimoséptima",
+	"decimoctava",
+	"decimonovena",
+	"vigésima"
+]
+
 const ENCOUNTERS := {
 	"javi": {
 		"name": "Javi",
@@ -227,6 +251,25 @@ const ENCOUNTERS := {
 }
 
 static var NODES: Dictionary = _build_nodes()
+
+
+static func game_title() -> String:
+	return title_for_character_count(ENCOUNTER_ORDER.size())
+
+
+static func menu_title() -> String:
+	return game_title().replace(": ", ":\n")
+
+
+static func title_for_character_count(character_count: int) -> String:
+	var chair_number := maxi(character_count + 1, 1)
+	return "Entre líneas: La %s silla" % _feminine_ordinal(chair_number)
+
+
+static func _feminine_ordinal(value: int) -> String:
+	if value < FEMININE_ORDINALS.size():
+		return FEMININE_ORDINALS[value]
+	return "%d.ª" % value
 
 
 static func _build_nodes() -> Dictionary:

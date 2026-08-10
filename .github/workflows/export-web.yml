@@ -51,6 +51,21 @@ jobs:
             exit 1
           fi
 
+      - name: Configurar título dinámico
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/configure_dynamic_title.gd > dynamic-title.log 2>&1
+          STATUS=$?
+          set -e
+          cat dynamic-title.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" dynamic-title.log; then
+            echo "No se ha podido calcular el título dinámico."
+            exit 1
+          fi
+          GAME_TITLE=$(sed -n 's/^DYNAMIC TITLE: //p' dynamic-title.log | tail -n 1)
+          test -n "$GAME_TITLE"
+          echo "GAME_TITLE=$GAME_TITLE" >> "$GITHUB_ENV"
+
       - name: Smoke test de personajes y escenas
         run: |
           set +e
@@ -80,7 +95,7 @@ jobs:
           test -s web/index.html
           test -s web/index.wasm
           test -s web/index.pck
-          ./scripts/prepare_web_export.sh web "${GITHUB_SHA}"
+          ./scripts/prepare_web_export.sh web "${GITHUB_SHA}" "${GAME_TITLE}"
           touch web/.nojekyll
 
       - name: Guardar exportación en el repositorio
