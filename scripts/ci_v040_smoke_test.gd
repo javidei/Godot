@@ -20,19 +20,20 @@ func _run() -> void:
 		return
 	var main := packed.instantiate() as Control
 	root.add_child(main)
-	for _i in range(10):
+	for _i in range(12):
 		await process_frame
 
 	var manager := main.get_node_or_null("Version040Manager")
+	var layout_patch := main.get_node_or_null("Version042LayoutPatch")
 	var selection_manager := main.get_node_or_null("CharacterSelectManager")
-	if manager == null or selection_manager == null:
-		_fail("No están disponibles los gestores de selección y versión 0.4.x")
+	if manager == null or layout_patch == null or selection_manager == null:
+		_fail("No están disponibles los gestores de selección y layout 0.4.x")
 		return
 
 	selection_manager.call("open_selection")
 	await process_frame
 	selection_manager.call("_select_existing_character", "javi")
-	for _i in range(3):
+	for _i in range(4):
 		await process_frame
 
 	var state: Dictionary = main.get("state")
@@ -51,30 +52,81 @@ func _run() -> void:
 	var visit_center := manager.get("visit_center") as CenterContainer
 	var visit_panel := manager.get("visit_panel") as PanelContainer
 	var visit_grid := manager.get("visit_grid") as GridContainer
-	if overlay == null or not overlay.visible or visit_grid == null or visit_grid.get_child_count() != 6:
-		_fail("El selector no muestra las seis visitas disponibles al elegir a Javi")
+	var visit_rows := layout_patch.get("visit_rows") as VBoxContainer
+	if overlay == null or not overlay.visible or visit_grid == null or visit_rows == null:
+		_fail("El selector visual de visitas no está disponible")
 		return
 	if visit_center == null or visit_panel == null or visit_panel.get_parent() != visit_center:
 		_fail("El selector de visitas no está centrado mediante su contenedor")
 		return
 
-	for child in visit_grid.get_children():
-		var card := child as Button
-		if card == null:
-			_fail("Una visita no se representa mediante una tarjeta clicable")
-			return
-		var preview_background := card.find_child("PreviewBackground", true, false) as TextureRect
-		var preview_character := card.find_child("PreviewCharacter", true, false) as TextureRect
-		var preview_name := card.find_child("PreviewName", true, false) as Label
-		if preview_background == null or preview_background.texture == null:
-			_fail("Una tarjeta de visita no muestra el fondo de su habitación")
-			return
-		if preview_character == null or preview_character.texture == null:
-			_fail("Una tarjeta de visita no muestra el cuerpo del personaje")
-			return
-		if preview_name == null or preview_name.text.is_empty():
-			_fail("Una tarjeta de visita no muestra el nombre del personaje")
-			return
+	# Fuerza un protagonista personalizado para validar exactamente el caso 4 + 3.
+	var original_player: Dictionary = player.duplicate(true)
+	state["player"] = {"id": "custom_test", "name": "Custom Test"}
+	state["completed_characters"] = []
+	main.set("state", state)
+	manager.call("_open_selector", state)
+	for _i in range(4):
+		await process_frame
+
+	if visit_grid.get_child_count() != 0:
+		_fail("Las tarjetas siguen ocupando el GridContainer antiguo")
+		return
+	if visit_rows.get_child_count() != 2:
+		_fail("Siete visitas no se reparten en dos filas")
+		return
+	var first_row := visit_rows.get_child(0) as HBoxContainer
+	var second_row := visit_rows.get_child(1) as HBoxContainer
+	if first_row == null or second_row == null or first_row.get_child_count() != 4 or second_row.get_child_count() != 3:
+		_fail("El selector no distribuye las visitas como 4 + 3")
+		return
+	if first_row.alignment != BoxContainer.ALIGNMENT_CENTER or second_row.alignment != BoxContainer.ALIGNMENT_CENTER:
+		_fail("Las filas de visitas no quedan centradas")
+		return
+
+	for row_node in visit_rows.get_children():
+		var row := row_node as HBoxContainer
+		if row == null:
+			continue
+		for child in row.get_children():
+			var card := child as Button
+			if card == null:
+				_fail("Una visita no se representa mediante una tarjeta clicable")
+				return
+			var preview_background := card.find_child("PreviewBackground", true, false) as TextureRect
+			var preview_character := card.find_child("PreviewCharacter", true, false) as TextureRect
+			var preview_name := card.find_child("PreviewName", true, false) as Label
+			if preview_background == null or preview_background.texture == null:
+				_fail("Una tarjeta de visita no muestra el fondo de su habitación")
+				return
+			if preview_character == null or preview_character.texture == null:
+				_fail("Una tarjeta de visita no muestra el cuerpo del personaje")
+				return
+			if preview_name == null or preview_name.text.is_empty():
+				_fail("Una tarjeta de visita no muestra el nombre del personaje")
+				return
+
+	# Restaura a Javi para continuar el flujo habitual de seis encuentros.
+	state = main.get("state")
+	state["player"] = original_player
+	state["completed_characters"] = []
+	main.set("state", state)
+	manager.call("_open_selector", state)
+	for _i in range(4):
+		await process_frame
+	if _count_visit_cards(visit_rows) != 6:
+		_fail("Al restaurar a Javi no aparecen sus seis visitas disponibles")
+		return
+
+	var views_value: Variant = main.get("character_views")
+	if typeof(views_value) != TYPE_DICTIONARY:
+		_fail("No se pueden comprobar las vistas de personajes")
+		return
+	var views: Dictionary = views_value
+	var carmen_view := views.get("carmen") as TextureRect
+	if carmen_view == null or float(carmen_view.get_meta("height_shift", 0.0)) < 50.0:
+		_fail("Carmen no está desplazada hacia abajo para reflejar su menor altura")
+		return
 
 	manager.call("_select_visit", "ana")
 	for _i in range(2):
@@ -101,14 +153,14 @@ func _run() -> void:
 	main.call("_go_to", "ana_q3_correct", false)
 	await process_frame
 	main.call("_go_to", VISIT_NODE, false)
-	for _i in range(2):
+	for _i in range(4):
 		await process_frame
 	state = main.get("state")
 	var completed: Array = state.get("completed_characters", [])
 	if not completed.has("ana"):
 		_fail("Ana no se marca como visita completada tras su tercera pregunta")
 		return
-	if visit_grid.get_child_count() != 5:
+	if _count_visit_cards(visit_rows) != 5:
 		_fail("El selector vuelve a ofrecer un personaje ya completado")
 		return
 
@@ -127,8 +179,17 @@ func _run() -> void:
 		_fail("No se puede salir al menú desde el selector de visitas")
 		return
 
-	print("V040 OK: visitas visuales centradas, fondos y personajes, iconos SVG, progreso, audio por habitación y salida al menú validados.")
+	print("V040 OK: filas 4+3 centradas, tarjetas visuales, Carmen más baja, iconos SVG, progreso y salida al menú validados.")
 	quit(0)
+
+
+func _count_visit_cards(rows: VBoxContainer) -> int:
+	var total := 0
+	for row_node in rows.get_children():
+		var row := row_node as HBoxContainer
+		if row != null:
+			total += row.get_child_count()
+	return total
 
 
 func _fail(message: String) -> void:
