@@ -104,6 +104,19 @@ jobs:
           fi
           grep -q "V040 OK:" v040-smoke.log
 
+      - name: Smoke test de transiciones 0.4.4
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v044_transition_smoke_test.gd > v044-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat v044-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V044 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v044-smoke.log; then
+            echo "La validación de fundidos narrativos 0.4.4 ha fallado; no se exportará."
+            exit 1
+          fi
+          grep -q "V044 OK:" v044-smoke.log
+
       - name: Export Web y validar GDScript
         run: |
           rm -rf web
