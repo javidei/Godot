@@ -66,4 +66,8 @@ No se encontraron ficheros de audio válidos en el Godot actual ni en la demo HT
 
 La exportación Web usa `export_presets.cfg`. El workflow de GitHub Actions mantiene la validación que impide publicar si aparecen `SCRIPT ERROR`, `Parse Error` o `Failed to load script`, y comprueba `index.html`, `index.wasm` e `index.pck` antes de guardar la build.
 
-La versión jugable se sincroniza después en `javidei/cvitae/godot/`.
+Cada cambio en `main` se valida, exporta y publica directamente mediante GitHub Pages en:
+
+<https://javidei.github.io/Godot/>
+
+`cvitae` conserva únicamente la tarjeta y los enlaces al juego y al repositorio; no almacena una segunda copia de la build.

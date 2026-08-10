@@ -10,6 +10,12 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: godot-pages
+  cancel-in-progress: false
 
 env:
   GODOT_VERSION: "4.7.1"
@@ -89,3 +95,24 @@ jobs:
             git commit -m "build: actualizar exportación web de Godot"
             git push origin HEAD:main
           fi
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Preparar artefacto de GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+  deploy-pages:
+    name: Publicar GitHub Pages
+    needs: export-web
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Publicar juego
+        id: deployment
+        uses: actions/deploy-pages@v5
