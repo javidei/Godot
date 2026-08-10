@@ -15,7 +15,7 @@ permissions:
 
 concurrency:
   group: godot-pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
   GODOT_VERSION: "4.7.1"
