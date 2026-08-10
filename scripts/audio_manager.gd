@@ -1,7 +1,8 @@
 extends Node
 
 const SETTINGS_PATH := "user://audio_settings.cfg"
-const DEFAULT_VOLUME := 0.7
+const DEFAULT_MUSIC_VOLUME := 0.3
+const DEFAULT_EFFECTS_VOLUME := 1.0
 const VOLUME_STEP := 0.1
 
 # Para añadir o cambiar canciones solo hay que:
@@ -39,12 +40,17 @@ const UI_FILES := {}
 var music_player: AudioStreamPlayer
 var sfx_player: AudioStreamPlayer
 var ui_player: AudioStreamPlayer
-var master_volume := DEFAULT_VOLUME
-var muted := false
+var music_volume := DEFAULT_MUSIC_VOLUME
+var effects_volume := DEFAULT_EFFECTS_VOLUME
+var music_muted := false
+var effects_muted := false
 var current_music_id := ""
 
 
 func _ready() -> void:
+	_ensure_audio_bus("Music")
+	_ensure_audio_bus("SFX")
+	_ensure_audio_bus("UI")
 	music_player = _make_player("Music")
 	sfx_player = _make_player("SFX")
 	ui_player = _make_player("UI")
@@ -82,29 +88,84 @@ func stop_music() -> void:
 		music_player.stop()
 
 
+func adjust_music_volume(delta: float) -> void:
+	set_music_volume(music_volume + delta)
+
+
+func set_music_volume(value: float) -> void:
+	music_volume = clampf(snappedf(value, 0.01), 0.0, 1.0)
+	_apply_audio_settings()
+	_save_settings()
+
+
+func adjust_effects_volume(delta: float) -> void:
+	set_effects_volume(effects_volume + delta)
+
+
+func set_effects_volume(value: float) -> void:
+	effects_volume = clampf(snappedf(value, 0.01), 0.0, 1.0)
+	_apply_audio_settings()
+	_save_settings()
+
+
+func toggle_music_mute() -> bool:
+	music_muted = not music_muted
+	_apply_audio_settings()
+	_save_settings()
+	return music_muted
+
+
+func toggle_effects_mute() -> bool:
+	effects_muted = not effects_muted
+	_apply_audio_settings()
+	_save_settings()
+	return effects_muted
+
+
+func get_music_volume_percent() -> int:
+	return roundi(music_volume * 100.0)
+
+
+func get_effects_volume_percent() -> int:
+	return roundi(effects_volume * 100.0)
+
+
+func is_music_muted() -> bool:
+	return music_muted
+
+
+func is_effects_muted() -> bool:
+	return effects_muted
+
+
+# Alias de compatibilidad con la versión 0.3.7: afecta a ambos canales.
 func adjust_volume(delta: float) -> void:
-	set_master_volume(master_volume + delta)
+	set_master_volume(maxf(music_volume, effects_volume) + delta)
 
 
 func set_master_volume(value: float) -> void:
-	master_volume = clampf(snappedf(value, 0.01), 0.0, 1.0)
+	var normalized := clampf(snappedf(value, 0.01), 0.0, 1.0)
+	music_volume = normalized
+	effects_volume = normalized
 	_apply_audio_settings()
 	_save_settings()
 
 
 func toggle_mute() -> bool:
-	muted = not muted
+	var should_mute := not (music_muted and effects_muted)
+	music_muted = should_mute
+	effects_muted = should_mute
 	_apply_audio_settings()
 	_save_settings()
-	return muted
+	return should_mute
 
 
 func get_volume_percent() -> int:
-	return roundi(master_volume * 100.0)
+	return get_music_volume_percent()
 
 
 func is_muted() -> bool:
-	return muted
+	return music_muted and effects_muted
 
 
 func music_for_background(background_id: String) -> String:
@@ -133,9 +194,17 @@ func play_ui(sound_id: String = "confirm") -> void:
 	_play_generated(ui_player, [520.0, 760.0], 0.09, 0.045)
 
 
+func _ensure_audio_bus(bus_name: String) -> void:
+	if AudioServer.get_bus_index(bus_name) >= 0:
+		return
+	AudioServer.add_bus()
+	AudioServer.set_bus_name(AudioServer.get_bus_count() - 1, bus_name)
+
+
 func _make_player(player_name: String) -> AudioStreamPlayer:
 	var player := AudioStreamPlayer.new()
 	player.name = player_name
+	player.bus = player_name
 	add_child(player)
 	return player
 
@@ -170,25 +239,36 @@ func _enable_loop(stream: AudioStream) -> void:
 
 
 func _apply_audio_settings() -> void:
-	var master_bus := AudioServer.get_bus_index("Master")
-	if master_bus < 0:
+	_apply_bus_settings("Music", music_volume, music_muted)
+	_apply_bus_settings("SFX", effects_volume, effects_muted)
+	_apply_bus_settings("UI", effects_volume, effects_muted)
+
+
+func _apply_bus_settings(bus_name: String, volume: float, muted: bool) -> void:
+	var bus_index := AudioServer.get_bus_index(bus_name)
+	if bus_index < 0:
 		return
-	AudioServer.set_bus_volume_db(master_bus, linear_to_db(maxf(master_volume, 0.0001)))
-	AudioServer.set_bus_mute(master_bus, muted)
+	AudioServer.set_bus_volume_db(bus_index, linear_to_db(maxf(volume, 0.0001)))
+	AudioServer.set_bus_mute(bus_index, muted)
 
 
 func _load_settings() -> void:
 	var config := ConfigFile.new()
 	if config.load(SETTINGS_PATH) != OK:
 		return
-	master_volume = clampf(float(config.get_value("audio", "volume", DEFAULT_VOLUME)), 0.0, 1.0)
-	muted = bool(config.get_value("audio", "muted", false))
+	var legacy_muted := bool(config.get_value("audio", "muted", false))
+	music_volume = clampf(float(config.get_value("audio", "music_volume", DEFAULT_MUSIC_VOLUME)), 0.0, 1.0)
+	effects_volume = clampf(float(config.get_value("audio", "effects_volume", DEFAULT_EFFECTS_VOLUME)), 0.0, 1.0)
+	music_muted = bool(config.get_value("audio", "music_muted", legacy_muted))
+	effects_muted = bool(config.get_value("audio", "effects_muted", legacy_muted))
 
 
 func _save_settings() -> void:
 	var config := ConfigFile.new()
-	config.set_value("audio", "volume", master_volume)
-	config.set_value("audio", "muted", muted)
+	config.set_value("audio", "music_volume", music_volume)
+	config.set_value("audio", "effects_volume", effects_volume)
+	config.set_value("audio", "music_muted", music_muted)
+	config.set_value("audio", "effects_muted", effects_muted)
 	config.save(SETTINGS_PATH)
 
 
