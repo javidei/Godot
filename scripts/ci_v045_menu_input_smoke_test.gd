@@ -44,8 +44,8 @@ func _run() -> void:
 		if child is Button:
 			var button := child as Button
 			primary_texts.append(button.text)
-			if button.custom_minimum_size.y > 43.0:
-				_fail("Nueva partida/Continuar siguen siendo demasiado altos")
+			if button.custom_minimum_size.y < 58.0 or button.custom_minimum_size.y > 62.0:
+				_fail("Nueva partida/Continuar no tienen la altura vertical prevista")
 				return
 	if not primary_texts.has("Nueva partida") or not primary_texts.has("Continuar"):
 		_fail("La primera pareja no contiene Nueva partida y Continuar")
@@ -56,8 +56,8 @@ func _run() -> void:
 		if child is Button:
 			var button := child as Button
 			secondary_texts.append(button.text)
-			if button.custom_minimum_size.y > 41.0:
-				_fail("Pantalla completa/Salir siguen siendo demasiado altos")
+			if button.custom_minimum_size.y < 54.0 or button.custom_minimum_size.y > 58.0:
+				_fail("Pantalla completa/Salir no tienen la altura vertical prevista")
 				return
 	if not secondary_texts.has("Pantalla completa") or not secondary_texts.has("Salir"):
 		_fail("La segunda pareja no contiene Pantalla completa y Salir")
@@ -65,12 +65,10 @@ func _run() -> void:
 
 	var menu_width_ratio := menu_content.anchor_right - menu_content.anchor_left
 	if root.get_visible_rect().size.x >= root.get_visible_rect().size.y:
-		if menu_width_ratio < 0.45 or menu_width_ratio > 0.50:
-			_fail("El menú no tiene la anchura compacta prevista para botones más anchos sin tapar al personaje")
+		if menu_width_ratio < 0.36 or menu_width_ratio > 0.40:
+			_fail("El menú sigue siendo demasiado ancho o demasiado estrecho para el nuevo formato vertical")
 			return
 
-	# Simula una escena válida y dos clics en una zona libre del propio GameScreen:
-	# el primero completa el tipeado y el segundo avanza al siguiente tramo.
 	var state: Dictionary = main.call("_fresh_state")
 	state["player"] = {"id": "sue", "name": "Sue"}
 	state["visit_mode"] = true
@@ -109,7 +107,7 @@ func _run() -> void:
 		_fail("Pulsar en una zona libre de la pantalla no avanza al siguiente diálogo")
 		return
 
-	print("V045 OK: menú más ancho/menos alto y avance por clic directo sobre GameScreen validados.")
+	print("V045 OK: menú más estrecho, botones más altos y avance por clic validados.")
 	quit(0)
 
 
