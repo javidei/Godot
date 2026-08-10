@@ -38,8 +38,8 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.7":
-		_fail("La versión del proyecto no es 0.3.7")
+	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.8":
+		_fail("La versión del proyecto no es 0.3.8")
 		return
 	if Story.game_title() != "Entre líneas: La octava silla":
 		_fail("El título actual no se calcula desde los siete personajes")
@@ -144,10 +144,14 @@ func _run() -> void:
 	var narrative_font := load("res://assets/ui/fonts/DejaVuSerif-Bold.ttf") as Font
 	var exit_button := _find_named(main, "ExitGameButton") as Button
 	var version_label := _find_named(main, "VersionLabel") as Label
-	var volume_down_button := _find_named(main, "VolumeDownButton") as Button
-	var volume_up_button := _find_named(main, "VolumeUpButton") as Button
-	var volume_label := _find_named(main, "VolumeLabel") as Label
-	var mute_button := _find_named(main, "MuteButton") as Button
+	var music_down_button := _find_named(main, "MusicVolumeDownButton") as Button
+	var music_up_button := _find_named(main, "MusicVolumeUpButton") as Button
+	var music_volume_label := _find_named(main, "MusicVolumeLabel") as Label
+	var music_mute_button := _find_named(main, "MusicMuteButton") as Button
+	var effects_down_button := _find_named(main, "EffectsVolumeDownButton") as Button
+	var effects_up_button := _find_named(main, "EffectsVolumeUpButton") as Button
+	var effects_volume_label := _find_named(main, "EffectsVolumeLabel") as Label
+	var effects_mute_button := _find_named(main, "EffectsMuteButton") as Button
 	var menu_content: VBoxContainer = main.get("menu_content") as VBoxContainer
 	var menu_characters := main.get("menu_characters") as TextureRect
 	if title == null or title.text != Story.menu_title() or narrative_font == null or not title.has_theme_font_override("font"):
@@ -165,19 +169,39 @@ func _run() -> void:
 	if _find_named(main, "ExitGameConfirmation") != null:
 		_fail("El popup de confirmación de salida no se ha eliminado")
 		return
-	if version_label == null or not version_label.text.contains("Versión 0.3.7 · EARLY ACCESS"):
-		_fail("La versión 0.3.7 no se muestra en el menú")
+	if version_label == null or not version_label.text.contains("Versión 0.3.8 · EARLY ACCESS"):
+		_fail("La versión 0.3.8 no se muestra en el menú")
 		return
-	if volume_down_button == null or volume_up_button == null or volume_label == null or mute_button == null:
-		_fail("El menú no contiene todos los controles de audio")
+	if music_down_button == null or music_up_button == null or music_volume_label == null or music_mute_button == null:
+		_fail("El menú no contiene todos los controles de música")
 		return
-	audio.call("set_master_volume", 0.4)
+	if effects_down_button == null or effects_up_button == null or effects_volume_label == null or effects_mute_button == null:
+		_fail("El menú no contiene todos los controles de efectos")
+		return
+	if int(audio.call("get_music_volume_percent")) != 30 or int(audio.call("get_effects_volume_percent")) != 100:
+		_fail("Los volúmenes iniciales no son música 30 % y efectos 100 %")
+		return
+	audio.call("set_music_volume", 0.4)
+	audio.call("set_effects_volume", 0.8)
 	main.call("_refresh_audio_controls")
-	if not volume_label.text.contains("40 %"):
-		_fail("El indicador de volumen no refleja el nivel actual")
+	if not music_volume_label.text.contains("40 %") or not effects_volume_label.text.contains("80 %"):
+		_fail("Los indicadores separados no reflejan sus niveles")
 		return
-	var was_muted := bool(audio.call("is_muted"))
-	main.call("_toggle_mute")
+	var effects_was_muted := bool(audio.call("is_effects_muted"))
+	main.call("_toggle_music_mute")
+	var music_is_muted := bool(audio.call("is_music_muted"))
+	var expected_music_text := "Activar música" if music_is_muted else "Silenciar música"
+	if not music_is_muted or music_mute_button.text != expected_music_text or bool(audio.call("is_effects_muted")) != effects_was_muted:
+		_fail("El silencio de música no funciona de forma independiente")
+		return
+	main.call("_toggle_music_mute")
+	main.call("_toggle_effects_mute")
+	var effects_are_muted := bool(audio.call("is_effects_muted"))
+	var expected_effects_text := "Activar efectos" if effects_are_muted else "Silenciar efectos"
+	if not effects_are_muted or effects_mute_button.text != expected_effects_text or bool(audio.call("is_music_muted")):
+		_fail("El silencio de efectos no funciona de forma independiente")
+		return
+	main.call("_toggle_effects_mute")
 	var is_now_muted := bool(audio.call("is_muted"))
 	var expected_mute_text := "Activar sonido" if is_now_muted else "Silenciar"
 	if is_now_muted == was_muted or mute_button.text != expected_mute_text:
