@@ -11,7 +11,7 @@ const CHARACTER_NAMES := {
 	"argentino": "El Argentino"
 }
 const EXPECTED_BACKGROUNDS := {
-	"javi": "bar",
+	"javi": "habitacion_javi",
 	"sue": "bosque",
 	"smokey": "habitacion_fran",
 	"carmen": "habitacion_fran",
