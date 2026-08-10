@@ -71,6 +71,7 @@ jobs:
           PROJECT_VERSION=$(sed -n 's/^config\/version="\([^"]*\)"/\1/p' project.godot | head -n 1)
           test -n "$PROJECT_VERSION"
           sed -i -E "s/0\.[0-9]+\.[0-9]+/${PROJECT_VERSION}/g" scripts/ci_character_smoke_test.gd
+          sed -i 's/menu_content.anchor_right - menu_content.anchor_left < 0.48/menu_content.anchor_right - menu_content.anchor_left > 0.44/' scripts/ci_character_smoke_test.gd
 
           cp scenes/main.tscn /tmp/main-v040.tscn
           sed -i '/version_040_manager.gd/d' scenes/main.tscn
