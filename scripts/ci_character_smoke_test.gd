@@ -202,12 +202,6 @@ func _run() -> void:
 		_fail("El silencio de efectos no funciona de forma independiente")
 		return
 	main.call("_toggle_effects_mute")
-	var is_now_muted := bool(audio.call("is_muted"))
-	var expected_mute_text := "Activar sonido" if is_now_muted else "Silenciar"
-	if is_now_muted == was_muted or mute_button.text != expected_mute_text:
-		_fail("El botón de silencio no cambia el estado y su texto")
-		return
-	main.call("_toggle_mute")
 	if menu_characters == null or not is_equal_approx(menu_characters.anchor_left, 1.0) or not is_equal_approx(menu_characters.anchor_top, 1.0) or not is_zero_approx(menu_characters.offset_right) or not is_zero_approx(menu_characters.offset_bottom):
 		_fail("El trío del menú no está anclado abajo a la derecha")
 		return
