@@ -44,7 +44,7 @@ const ENCOUNTERS := {
 	},
 	"sue": {
 		"name": "Sue",
-		"background": "bosque",
+		"background": "habitacion_sue",
 		"intro": [
 			{"expression": "happy", "text": "Soy Sue. No necesito hacer mucho ruido para sentirme parte de un plan; me importa más que la gente a mi lado pueda ser ella misma."},
 			{"expression": "thoughtful", "text": "Me gusta que las cosas tengan identidad y no parezcan copiadas de todo lo demás. Con confianza, cualquier tarde corriente puede acabar teniendo algo especial."}
