@@ -146,10 +146,10 @@ func _on_transition_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		continue_requested = true
-		accept_event()
+		get_viewport().set_input_as_handled()
 	elif event is InputEventScreenTouch and event.pressed:
 		continue_requested = true
-		accept_event()
+		get_viewport().set_input_as_handled()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -375,16 +375,10 @@ func _ensure_transition_state(save_if_changed: bool) -> void:
 
 func _ensure_transition_arrays(state: Dictionary) -> bool:
 	var changed := false
-	if typeof(state.get("intro_transitions_seen", [])) != TYPE_ARRAY:
+	if typeof(state.get("intro_transitions_seen", [])) != TYPE_ARRAY or not state.has("intro_transitions_seen"):
 		state["intro_transitions_seen"] = []
 		changed = true
-	elif not state.has("intro_transitions_seen"):
-		state["intro_transitions_seen"] = []
-		changed = true
-	if typeof(state.get("outro_transitions_seen", [])) != TYPE_ARRAY:
-		state["outro_transitions_seen"] = []
-		changed = true
-	elif not state.has("outro_transitions_seen"):
+	if typeof(state.get("outro_transitions_seen", [])) != TYPE_ARRAY or not state.has("outro_transitions_seen"):
 		state["outro_transitions_seen"] = []
 		changed = true
 	return changed
