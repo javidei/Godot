@@ -70,4 +70,6 @@ Cada cambio en `main` se valida, exporta y publica directamente mediante GitHub 
 
 <https://javidei.github.io/Godot/>
 
+Para actualizar la aplicación basta con guardar los cambios en `Godot/main` y esperar a que termine en verde la acción **Export Godot Web**; no es necesario sincronizar ni modificar `cvitae`.
+
 `cvitae` conserva únicamente la tarjeta y los enlaces al juego y al repositorio; no almacena una segunda copia de la build.
