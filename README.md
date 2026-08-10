@@ -45,7 +45,7 @@ El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la
 
 ## Diálogo
 
-La versión Early Access `0.3.8` permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de la historia y el recorrido se adapta a los otros seis; si se crea un personaje nuevo, aparecen los siete. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata. Ya no se elige escenario al comenzar: cada personaje carga directamente su fondo asociado. Javi, Sue, Jony, Ana y El Argentino usan sus habitaciones; Smokey y Carmen comparten la habitación de Fran. La pantalla principal conserva Casa Asturias. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
+La versión Early Access `0.3.9` permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de la historia y el recorrido se adapta a los otros seis; si se crea un personaje nuevo, aparecen los siete. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata. Ya no se elige escenario al comenzar: cada personaje carga directamente su fondo asociado. Javi, Sue, Jony, Ana y El Argentino usan sus habitaciones; Smokey y Carmen comparten la habitación de Fran. La pantalla principal conserva Casa Asturias. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
 
 Una escena puede indicar recursos y composición sin crear escenas Godot nuevas:
 
@@ -62,7 +62,7 @@ Los nombres de expresiones antiguos (`embarrassed`, `teasing`, `annoyed`, etc.) 
 
 ## Audio
 
-El menú separa los ajustes de **Música** y **Efectos de sonido**. Ambos se regulan en pasos del 10 % y pueden silenciarse de forma independiente. En una instalación nueva, la música empieza al 30 % y los efectos —incluidos los sonidos de interfaz— al 100 %. Las cuatro preferencias se guardan en `user://audio_settings.cfg`.
+El menú separa los ajustes de **Música** y **Efectos de sonido**. Ambos se regulan en pasos del 10 % y pueden silenciarse de forma independiente. En una instalación nueva, la música empieza al 30 % y los efectos —incluidos los sonidos de interfaz— al 100 %. La escala de música está atenuada: su 100 % equivale al 10 % de la escala lineal anterior, por lo que el 30 % inicial equivale al 3 % anterior. Los efectos conservan su escala completa. Las cuatro preferencias se guardan en `user://audio_settings.cfg`; al actualizar desde una versión anterior, la música migra una sola vez al nuevo 30 %.
 
 Cada uno de los nueve fondos registrados tiene un tema musical asignado en `scripts/audio_manager.gd`. Al cambiar el fondo, el tema correspondiente se carga una vez y continúa en bucle. Las rutas están preparadas para ficheros OGG dentro de `assets/audio/music/`; mientras un fichero no exista, el juego continúa en silencio sin errores. La guía y los nombres esperados están en `assets/audio/README.md`.
 

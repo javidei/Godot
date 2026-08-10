@@ -1,9 +1,13 @@
 extends Node
 
 const SETTINGS_PATH := "user://audio_settings.cfg"
+const SETTINGS_VERSION := 2
 const DEFAULT_MUSIC_VOLUME := 0.3
 const DEFAULT_EFFECTS_VOLUME := 1.0
 const VOLUME_STEP := 0.1
+# El 100 % visible de música equivale al 10 % de la escala lineal anterior.
+# Los efectos conservan su escala completa e independiente.
+const MUSIC_OUTPUT_MAX := 0.1
 
 # Para añadir o cambiar canciones solo hay que:
 # 1. Copiar el .ogg en assets/audio/music/.
@@ -126,6 +130,10 @@ func get_music_volume_percent() -> int:
 	return roundi(music_volume * 100.0)
 
 
+func get_music_output_linear() -> float:
+	return music_volume * MUSIC_OUTPUT_MAX
+
+
 func get_effects_volume_percent() -> int:
 	return roundi(effects_volume * 100.0)
 
@@ -239,7 +247,7 @@ func _enable_loop(stream: AudioStream) -> void:
 
 
 func _apply_audio_settings() -> void:
-	_apply_bus_settings("Music", music_volume, music_muted)
+	_apply_bus_settings("Music", get_music_output_linear(), music_muted)
 	_apply_bus_settings("SFX", effects_volume, effects_muted)
 	_apply_bus_settings("UI", effects_volume, effects_muted)
 
@@ -256,15 +264,24 @@ func _load_settings() -> void:
 	var config := ConfigFile.new()
 	if config.load(SETTINGS_PATH) != OK:
 		return
+	var settings_version := int(config.get_value("audio", "settings_version", 1))
 	var legacy_muted := bool(config.get_value("audio", "muted", false))
-	music_volume = clampf(float(config.get_value("audio", "music_volume", DEFAULT_MUSIC_VOLUME)), 0.0, 1.0)
+	if settings_version < SETTINGS_VERSION:
+		# La escala cambió en 0.3.9. Se aplica una sola vez el nuevo valor inicial
+		# para no reinterpretar un porcentaje antiguo como si ya fuera el nuevo.
+		music_volume = DEFAULT_MUSIC_VOLUME
+	else:
+		music_volume = clampf(float(config.get_value("audio", "music_volume", DEFAULT_MUSIC_VOLUME)), 0.0, 1.0)
 	effects_volume = clampf(float(config.get_value("audio", "effects_volume", DEFAULT_EFFECTS_VOLUME)), 0.0, 1.0)
 	music_muted = bool(config.get_value("audio", "music_muted", legacy_muted))
 	effects_muted = bool(config.get_value("audio", "effects_muted", legacy_muted))
+	if settings_version < SETTINGS_VERSION:
+		_save_settings()
 
 
 func _save_settings() -> void:
 	var config := ConfigFile.new()
+	config.set_value("audio", "settings_version", SETTINGS_VERSION)
 	config.set_value("audio", "music_volume", music_volume)
 	config.set_value("audio", "effects_volume", effects_volume)
 	config.set_value("audio", "music_muted", music_muted)

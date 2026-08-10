@@ -38,8 +38,8 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.8":
-		_fail("La versión del proyecto no es 0.3.8")
+	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.9":
+		_fail("La versión del proyecto no es 0.3.9")
 		return
 	if Story.game_title() != "Entre líneas: La octava silla":
 		_fail("El título actual no se calcula desde los siete personajes")
@@ -169,8 +169,8 @@ func _run() -> void:
 	if _find_named(main, "ExitGameConfirmation") != null:
 		_fail("El popup de confirmación de salida no se ha eliminado")
 		return
-	if version_label == null or not version_label.text.contains("Versión 0.3.8 · EARLY ACCESS"):
-		_fail("La versión 0.3.8 no se muestra en el menú")
+	if version_label == null or not version_label.text.contains("Versión 0.3.9 · EARLY ACCESS"):
+		_fail("La versión 0.3.9 no se muestra en el menú")
 		return
 	if music_down_button == null or music_up_button == null or music_volume_label == null or music_mute_button == null:
 		_fail("El menú no contiene todos los controles de música")
@@ -181,11 +181,29 @@ func _run() -> void:
 	if int(audio.call("get_music_volume_percent")) != 30 or int(audio.call("get_effects_volume_percent")) != 100:
 		_fail("Los volúmenes iniciales no son música 30 % y efectos 100 %")
 		return
+	if not is_equal_approx(float(audio.call("get_music_output_linear")), 0.03):
+		_fail("El 30 % de música no equivale al 3 % de la escala anterior")
+		return
+	var music_bus := AudioServer.get_bus_index("Music")
+	var effects_bus := AudioServer.get_bus_index("SFX")
+	if music_bus < 0 or effects_bus < 0:
+		_fail("No se han creado los buses de música y efectos")
+		return
+	if not is_equal_approx(db_to_linear(AudioServer.get_bus_volume_db(music_bus)), 0.03):
+		_fail("El bus Music no aplica el límite de salida del 10 %")
+		return
+	if not is_equal_approx(db_to_linear(AudioServer.get_bus_volume_db(effects_bus)), 1.0):
+		_fail("El bus SFX ya no conserva su escala completa")
+		return
 	audio.call("set_music_volume", 0.4)
 	audio.call("set_effects_volume", 0.8)
 	main.call("_refresh_audio_controls")
 	if not music_volume_label.text.contains("40 %") or not effects_volume_label.text.contains("80 %"):
 		_fail("Los indicadores separados no reflejan sus niveles")
+		return
+	audio.call("set_music_volume", 1.0)
+	if not is_equal_approx(float(audio.call("get_music_output_linear")), 0.1):
+		_fail("El 100 % de música no equivale al 10 % de la escala anterior")
 		return
 	var effects_was_muted := bool(audio.call("is_effects_muted"))
 	main.call("_toggle_music_mute")
