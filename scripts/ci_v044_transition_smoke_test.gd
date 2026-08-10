@@ -26,10 +26,10 @@ func _run() -> void:
 	var transition := main.get_node_or_null("Version044VisitTransitions")
 	var visit_manager := main.get_node_or_null("Version040Manager")
 	var selection_manager := main.get_node_or_null("CharacterSelectManager")
-	if transition == null or visit_manager == null or selection_manager == null:
+	var audio_manager := main.get("audio_manager") as Node
+	if transition == null or visit_manager == null or selection_manager == null or audio_manager == null:
 		_fail("No están disponibles los gestores necesarios para las transiciones")
 		return
-	transition.call("set_fast_mode", true)
 
 	var hint_label := transition.get("hint_label") as Label
 	if hint_label == null or not hint_label.text.contains("clic"):
@@ -62,11 +62,36 @@ func _run() -> void:
 		_fail("La tarjeta de visita no está conectada al fundido narrativo")
 		return
 
+	# Usa la transición real para comprobar el instante en que la pantalla ya está
+	# negra y el texto espera al usuario. En ese momento aún no hemos entrado en
+	# la habitación, pero su música ya debe estar sonando.
+	transition.call("set_fast_mode", false)
 	card.emit_signal("pressed")
-	for _i in range(14):
+	var waited := 0
+	while not bool(transition.get("waiting_for_continue")) and waited < 180:
 		await process_frame
-
+		waited += 1
+	if not bool(transition.get("waiting_for_continue")):
+		_fail("La presentación no llega al estado de espera sobre pantalla negra")
+		return
 	var state: Dictionary = main.get("state")
+	if str(state.get("node_id", "")) != VISIT_NODE:
+		_fail("La prueba ya ha entrado en la habitación antes de confirmar la pantalla negra")
+		return
+	if str(audio_manager.get("current_music_id")) != "ana_vampirica":
+		_fail("La música de Ana no empieza durante su presentación en negro")
+		return
+
+	transition.call("request_continue")
+	waited = 0
+	while bool(transition.get("transition_active")) and waited < 180:
+		await process_frame
+		waited += 1
+	if bool(transition.get("transition_active")):
+		_fail("La presentación no termina después de continuar")
+		return
+
+	state = main.get("state")
 	if str(state.get("node_id", "")) != "ana_intro_01":
 		_fail("El fundido de entrada no termina en la habitación de Ana")
 		return
@@ -75,8 +100,9 @@ func _run() -> void:
 		_fail("La presentación de Ana no queda registrada como vista")
 		return
 
+	transition.call("set_fast_mode", true)
 	main.call("_go_to", "ana_outro_044", false)
-	for _i in range(16):
+	for _i in range(18):
 		await process_frame
 
 	state = main.get("state")
@@ -88,8 +114,6 @@ func _run() -> void:
 	if not completed.has("ana") or not outros.has("ana"):
 		_fail("La despedida de Ana no queda registrada como completada y vista")
 		return
-	# Otros gestores de la rama 0.4.x pueden actualizar save_version en el mismo
-	# frame. Solo comprobamos que siga siendo una versión compatible 0.4.x.
 	if not str(state.get("save_version", "")).begins_with("0.4."):
 		_fail("El guardado pierde el versionado compatible tras las transiciones")
 		return
@@ -99,7 +123,7 @@ func _run() -> void:
 		_fail("La capa negra no se oculta al terminar la transición")
 		return
 
-	print("V044 OK: fundidos interactivos, presentación, despedida y persistencia 0.4.x validados.")
+	print("V044 OK: música en negro, fundidos interactivos, presentación, despedida y persistencia validados.")
 	quit(0)
 
 
