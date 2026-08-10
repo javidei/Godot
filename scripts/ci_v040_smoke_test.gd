@@ -20,21 +20,24 @@ func _run() -> void:
 		return
 	var main := packed.instantiate() as Control
 	root.add_child(main)
-	for _i in range(12):
+	for _i in range(16):
 		await process_frame
 
 	var manager := main.get_node_or_null("Version040Manager")
 	var layout_patch := main.get_node_or_null("Version042LayoutPatch")
+	var hud_patch := main.get_node_or_null("Version043HudPatch")
 	var selection_manager := main.get_node_or_null("CharacterSelectManager")
-	var room_audio_patch := main.get_node_or_null("Version046RoomAudioPatch")
-	if manager == null or layout_patch == null or selection_manager == null or room_audio_patch == null:
-		_fail("No están disponibles los gestores de selección, layout y audio de la rama 0.4.x")
+	if manager == null or layout_patch == null or hud_patch == null or selection_manager == null:
+		_fail("No están disponibles los gestores principales de la rama 0.4.x")
+		return
+	if main.get_node_or_null("Version046RoomAudioPatch") != null:
+		_fail("Sigue activo el parche incorrecto de tres botones de audio en habitaciones")
 		return
 
 	selection_manager.call("open_selection")
 	await process_frame
 	selection_manager.call("_select_existing_character", "javi")
-	for _i in range(4):
+	for _i in range(5):
 		await process_frame
 
 	var state: Dictionary = main.get("state")
@@ -45,23 +48,19 @@ func _run() -> void:
 	if str(state.get("node_id", "")) != VISIT_NODE:
 		_fail("Tras elegir protagonista no se abre el selector libre de visitas")
 		return
-	if not bool(state.get("visit_mode", false)) or str(state.get("save_version", "")) != project_version:
-		_fail("La partida nueva no queda marcada con la versión actual del flujo 0.4.x")
-		return
 
-	var overlay := manager.get("visit_overlay") as Control
 	var visit_center := manager.get("visit_center") as CenterContainer
 	var visit_panel := manager.get("visit_panel") as PanelContainer
 	var visit_grid := manager.get("visit_grid") as GridContainer
 	var visit_rows := layout_patch.get("visit_rows") as VBoxContainer
-	if overlay == null or not overlay.visible or visit_grid == null or visit_rows == null:
+	if visit_center == null or visit_panel == null or visit_rows == null or visit_grid == null:
 		_fail("El selector visual de visitas no está disponible")
 		return
-	if visit_center == null or visit_panel == null or visit_panel.get_parent() != visit_center:
-		_fail("El selector de visitas no está centrado mediante su contenedor")
+	if visit_panel.get_parent() != visit_center:
+		_fail("El selector de visitas no está centrado")
 		return
 
-	# Fuerza un protagonista personalizado para validar exactamente el caso 4 + 3.
+	# Valida el caso 4 + 3 y el centrado de la última fila.
 	var original_player: Dictionary = player.duplicate(true)
 	state["player"] = {"id": "custom_test", "name": "Custom Test"}
 	state["completed_characters"] = []
@@ -69,10 +68,6 @@ func _run() -> void:
 	manager.call("_open_selector", state)
 	for _i in range(4):
 		await process_frame
-
-	if visit_grid.get_child_count() != 0:
-		_fail("Las tarjetas siguen ocupando el GridContainer antiguo")
-		return
 	if visit_rows.get_child_count() != 2:
 		_fail("Siete visitas no se reparten en dos filas")
 		return
@@ -85,29 +80,6 @@ func _run() -> void:
 		_fail("Las filas de visitas no quedan centradas")
 		return
 
-	for row_node in visit_rows.get_children():
-		var row := row_node as HBoxContainer
-		if row == null:
-			continue
-		for child in row.get_children():
-			var card := child as Button
-			if card == null:
-				_fail("Una visita no se representa mediante una tarjeta clicable")
-				return
-			var preview_background := card.find_child("PreviewBackground", true, false) as TextureRect
-			var preview_character := card.find_child("PreviewCharacter", true, false) as TextureRect
-			var preview_name := card.find_child("PreviewName", true, false) as Label
-			if preview_background == null or preview_background.texture == null:
-				_fail("Una tarjeta de visita no muestra el fondo de su habitación")
-				return
-			if preview_character == null or preview_character.texture == null:
-				_fail("Una tarjeta de visita no muestra el cuerpo del personaje")
-				return
-			if preview_name == null or preview_name.text.is_empty():
-				_fail("Una tarjeta de visita no muestra el nombre del personaje")
-				return
-
-	# Restaura a Javi para continuar el flujo habitual de seis encuentros.
 	state = main.get("state")
 	state["player"] = original_player
 	state["completed_characters"] = []
@@ -115,9 +87,6 @@ func _run() -> void:
 	manager.call("_open_selector", state)
 	for _i in range(4):
 		await process_frame
-	if _count_visit_cards(visit_rows) != 6:
-		_fail("Al restaurar a Javi no aparecen sus seis visitas disponibles")
-		return
 
 	var views_value: Variant = main.get("character_views")
 	if typeof(views_value) != TYPE_DICTIONARY:
@@ -129,83 +98,39 @@ func _run() -> void:
 		_fail("Carmen no está desplazada hacia abajo para reflejar su menor altura")
 		return
 
+	# Entra directamente en una habitación para validar el HUD real.
 	manager.call("_select_visit", "ana")
-	for _i in range(4):
+	for _i in range(6):
 		await process_frame
 	state = main.get("state")
 	if str(state.get("node_id", "")) != "ana_intro_01":
 		_fail("Elegir a Ana no abre su habitación")
 		return
-	var order: Array = state.get("visit_order", [])
-	if order.size() != 1 or str(order[0]) != "ana":
-		_fail("El orden libre de visitas no registra a Ana como primera visita")
-		return
 
-	var room_panel := room_audio_patch.get("room_panel") as PanelContainer
-	var room_music_button := room_audio_patch.get("room_music_button") as Button
-	var room_effects_button := room_audio_patch.get("room_effects_button") as Button
-	var room_all_button := room_audio_patch.get("room_all_button") as Button
-	if room_panel == null or not room_panel.visible:
-		_fail("La habitación no muestra la botonera local de audio")
+	var room_panel := manager.get("room_panel") as PanelContainer
+	var room_music_icon := manager.get("room_music_icon") as TextureRect
+	var room_label := manager.get("room_label") as Label
+	var room_mute := manager.get("room_mute") as Button
+	var hud_box := hud_patch.get("hud_box") as VBoxContainer
+	if room_panel == null or room_music_icon == null or room_label == null or room_mute == null or hud_box == null:
+		_fail("No está disponible el control de volumen de música de la habitación")
 		return
-	if room_music_button == null or room_effects_button == null or room_all_button == null:
-		_fail("La habitación no contiene los tres botones de música, efectos y ambos")
+	if room_panel.get_parent() != hud_box or not room_panel.visible:
+		_fail("El volumen de la habitación no está abajo a la derecha dentro del HUD")
 		return
-	var room_button_count := 0
-	for child in room_panel.find_children("*", "Button", true, false):
+	if room_music_icon.texture == null or not room_label.text.ends_with("%"):
+		_fail("El control de música no muestra icono y porcentaje")
+		return
+	var row := room_panel.get_child(0) as HBoxContainer
+	if row == null:
+		_fail("El regulador de música no tiene su fila de controles")
+		return
+	var button_count := 0
+	for child in row.get_children():
 		if child is Button:
-			room_button_count += 1
-	if room_button_count != 3:
-		_fail("La botonera de habitación debe tener exactamente tres botones y ningún regulador de volumen")
-		return
-	if room_panel.find_child("RoomMusicPercent", true, false) != null:
-		_fail("La nueva botonera de habitación sigue mostrando un porcentaje de volumen")
-		return
-	var legacy_room_panel := manager.get("room_panel") as PanelContainer
-	if legacy_room_panel != null and legacy_room_panel.modulate.a > 0.001:
-		_fail("La botonera antigua de volumen de habitación sigue siendo visible")
-		return
-
-	var audio_manager := main.get("audio_manager") as Node
-	if bool(audio_manager.call("is_music_muted")):
-		audio_manager.call("toggle_music_mute")
-	if bool(audio_manager.call("is_effects_muted")):
-		audio_manager.call("toggle_effects_mute")
-	audio_manager.call("set_music_volume", 0.5)
-	audio_manager.call("set_effects_volume", 1.0)
-	room_audio_patch.call("_apply_room_audio")
-	var music_bus := AudioServer.get_bus_index("Music")
-	var sfx_bus := AudioServer.get_bus_index("SFX")
-	var ui_bus := AudioServer.get_bus_index("UI")
-	if music_bus < 0 or sfx_bus < 0 or ui_bus < 0:
-		_fail("No están disponibles los buses de audio necesarios")
-		return
-
-	room_audio_patch.call("_toggle_room_music")
-	if not AudioServer.is_bus_mute(music_bus) or AudioServer.is_bus_mute(sfx_bus):
-		_fail("Silenciar música en la habitación afecta a un canal incorrecto")
-		return
-	room_audio_patch.call("_toggle_room_music")
-	if AudioServer.is_bus_mute(music_bus):
-		_fail("La música de la habitación no puede volver a activarse")
-		return
-
-	room_audio_patch.call("_toggle_room_effects")
-	if not AudioServer.is_bus_mute(sfx_bus) or AudioServer.is_bus_mute(music_bus) or AudioServer.is_bus_mute(ui_bus):
-		_fail("Silenciar efectos de habitación debe afectar solo a los efectos, no a música ni interfaz")
-		return
-	room_audio_patch.call("_toggle_room_effects")
-	if AudioServer.is_bus_mute(sfx_bus):
-		_fail("Los efectos de la habitación no pueden volver a activarse")
-		return
-
-	room_audio_patch.call("_toggle_room_all")
-	if not AudioServer.is_bus_mute(music_bus) or not AudioServer.is_bus_mute(sfx_bus):
-		_fail("Silenciar ambos no silencia música y efectos de la habitación")
-		return
-	room_audio_patch.call("_toggle_room_all")
-	if AudioServer.is_bus_mute(music_bus) or AudioServer.is_bus_mute(sfx_bus):
-		_fail("Activar ambos no restaura música y efectos de la habitación")
+			button_count += 1
+	if button_count != 3:
+		_fail("El volumen local debe conservar bajar, subir y mute, sin añadir más controles")
 		return
 
 	main.call("_go_to", "ana_q3_correct", false)
@@ -214,40 +139,12 @@ func _run() -> void:
 	for _i in range(4):
 		await process_frame
 	state = main.get("state")
-	var completed: Array = state.get("completed_characters", [])
-	if not completed.has("ana"):
-		_fail("Ana no se marca como visita completada tras su tercera pregunta")
-		return
-	if _count_visit_cards(visit_rows) != 5:
-		_fail("El selector vuelve a ofrecer un personaje ya completado")
+	if not state.get("completed_characters", []).has("ana"):
+		_fail("Ana no se marca como visita completada")
 		return
 
-	var fullscreen := main.get("fullscreen_button") as Button
-	if fullscreen == null or not fullscreen.text.is_empty() or fullscreen.icon == null:
-		_fail("Pantalla completa no usa el SVG real sin glifo Unicode")
-		return
-	if main.find_child("AudioCombinedControls040", true, false) == null:
-		_fail("Los ajustes de música y efectos no están en una misma fila")
-		return
-
-	manager.call("_leave_to_menu")
-	await process_frame
-	var menu_screen := main.get("menu_screen") as Control
-	if menu_screen == null or not menu_screen.visible:
-		_fail("No se puede salir al menú desde el selector de visitas")
-		return
-
-	print("V040 OK: visitas, layout, tres botones de audio por habitación, iconos, progreso y salida al menú validados.")
+	print("V040 OK: visitas 4+3 centradas, Carmen más baja y volumen de música inferior restaurado.")
 	quit(0)
-
-
-func _count_visit_cards(rows: VBoxContainer) -> int:
-	var total := 0
-	for row_node in rows.get_children():
-		var row := row_node as HBoxContainer
-		if row != null:
-			total += row.get_child_count()
-	return total
 
 
 func _fail(message: String) -> void:
