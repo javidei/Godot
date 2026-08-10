@@ -3,6 +3,7 @@
 `AudioManager` crea los canales Music, SFX y UI. El menú separa Música de Efectos,
 permite regularlos y silenciarlos de forma independiente y guarda las cuatro
 preferencias. La música empieza al 30 % y los efectos/UI al 100 %.
+Los botones − y + cambian cada canal en pasos del 10 %.
 
 ## Añadir la música de los escenarios
 
