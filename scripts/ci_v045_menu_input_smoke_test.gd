@@ -1,0 +1,99 @@
+extends SceneTree
+
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.4.5":
+		_fail("La prueba requiere la versión 0.4.5")
+		return
+
+	var packed := load("res://scenes/main.tscn") as PackedScene
+	if packed == null:
+		_fail("No se puede cargar main.tscn")
+		return
+	var main := packed.instantiate() as Control
+	root.add_child(main)
+	for _i in range(22):
+		await process_frame
+
+	var patch := main.get_node_or_null("Version045InteractionMenuPatch")
+	var menu_content := main.get("menu_content") as VBoxContainer
+	if patch == null or menu_content == null:
+		_fail("No está disponible el parche de interacción/menú 0.4.5")
+		return
+
+	var audio_row := menu_content.find_child("AudioCombinedControls040", true, false) as HBoxContainer
+	var primary := menu_content.find_child("MenuPrimaryActions045", true, false) as HBoxContainer
+	var secondary := menu_content.find_child("MenuSecondaryActions045", true, false) as HBoxContainer
+	if audio_row == null or primary == null or secondary == null:
+		_fail("No se han creado los tres bloques del menú")
+		return
+	if primary.get_child_count() != 2 or secondary.get_child_count() != 2:
+		_fail("Nueva/Continuar y Pantalla completa/Salir no están organizados en parejas")
+		return
+	if audio_row.get_index() > primary.get_index() or primary.get_index() > secondary.get_index():
+		_fail("El orden del menú no es audio, acciones principales y acciones secundarias")
+		return
+
+	var primary_texts: Array[String] = []
+	for child in primary.get_children():
+		if child is Button:
+			primary_texts.append((child as Button).text)
+	if not primary_texts.has("Nueva partida") or not primary_texts.has("Continuar"):
+		_fail("La primera pareja no contiene Nueva partida y Continuar")
+		return
+	var secondary_texts: Array[String] = []
+	for child in secondary.get_children():
+		if child is Button:
+			secondary_texts.append((child as Button).text)
+	if not secondary_texts.has("Pantalla completa") or not secondary_texts.has("Salir"):
+		_fail("La segunda pareja no contiene Pantalla completa y Salir")
+		return
+
+	var menu_width_ratio := menu_content.anchor_right - menu_content.anchor_left
+	if root.get_visible_rect().size.x >= root.get_visible_rect().size.y and menu_width_ratio > 0.44:
+		_fail("El menú sigue ocupando demasiado ancho y puede tapar al personaje")
+		return
+
+	# Simula una escena válida y dos pulsaciones: la primera completa el tipeado y la segunda avanza.
+	var state: Dictionary = main.call("_fresh_state")
+	state["player"] = {"id": "sue", "name": "Sue"}
+	state["visit_mode"] = true
+	state["completed_characters"] = []
+	state["visit_order"] = ["javi"]
+	state["save_version"] = "0.4.5"
+	main.set("state", state)
+	var game_screen := main.get("game_screen") as Control
+	var menu_screen := main.get("menu_screen") as Control
+	game_screen.visible = true
+	menu_screen.visible = false
+	main.call("_go_to", "javi_intro_01", false)
+	await process_frame
+	var current: Dictionary = main.get("current_node")
+	var expected_next := str(current.get("next", ""))
+	if expected_next.is_empty():
+		_fail("La escena usada para probar el avance no tiene siguiente diálogo")
+		return
+
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.pressed = true
+	patch.call("_unhandled_input", click)
+	await process_frame
+	patch.call("_unhandled_input", click)
+	await process_frame
+	state = main.get("state")
+	if str(state.get("node_id", "")) != expected_next:
+		_fail("Pulsar sobre la pantalla no avanza al siguiente diálogo")
+		return
+
+	print("V045 OK: menú compacto por parejas y avance de diálogo por pantalla validados.")
+	quit(0)
+
+
+func _fail(message: String) -> void:
+	push_error("V045 FAIL: " + message)
+	quit(1)
