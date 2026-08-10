@@ -10,8 +10,8 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var project_version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if project_version != "0.4.4":
-		_fail("La prueba de transiciones requiere la versión 0.4.4")
+	if project_version != "0.4.5":
+		_fail("La prueba de transiciones requiere la versión 0.4.5")
 		return
 
 	var packed := load("res://scenes/main.tscn") as PackedScene
@@ -27,9 +27,17 @@ func _run() -> void:
 	var visit_manager := main.get_node_or_null("Version040Manager")
 	var selection_manager := main.get_node_or_null("CharacterSelectManager")
 	if transition == null or visit_manager == null or selection_manager == null:
-		_fail("No están disponibles los gestores necesarios para las transiciones 0.4.4")
+		_fail("No están disponibles los gestores necesarios para las transiciones")
 		return
 	transition.call("set_fast_mode", true)
+
+	var hint_label := transition.get("hint_label") as Label
+	if hint_label == null or not hint_label.text.contains("clic"):
+		_fail("El fundido no muestra la indicación para continuar manualmente")
+		return
+	if not transition.has_method("request_continue"):
+		_fail("El fundido no dispone de continuación manual")
+		return
 
 	if not Story.NODES.has("ana_outro_044"):
 		_fail("No se ha creado la escena técnica de despedida de Ana")
@@ -51,7 +59,7 @@ func _run() -> void:
 		_fail("No se encuentra la tarjeta de Ana para probar la entrada")
 		return
 	if not bool(card.get_meta("transition_044_bound", false)):
-		_fail("La tarjeta de visita no está conectada al nuevo fundido narrativo")
+		_fail("La tarjeta de visita no está conectada al fundido narrativo")
 		return
 
 	card.emit_signal("pressed")
@@ -81,7 +89,7 @@ func _run() -> void:
 		_fail("La despedida de Ana no queda registrada como completada y vista")
 		return
 	if str(state.get("save_version", "")) != project_version:
-		_fail("El guardado no conserva la versión 0.4.4 tras las transiciones")
+		_fail("El guardado no conserva la versión 0.4.5 tras las transiciones")
 		return
 
 	var overlay := transition.get("overlay") as Control
@@ -89,7 +97,7 @@ func _run() -> void:
 		_fail("La capa negra no se oculta al terminar la transición")
 		return
 
-	print("V044 OK: presentación, fundido de entrada, despedida, fundido de salida y persistencia validados.")
+	print("V044 OK: fundidos interactivos, presentación, despedida y persistencia 0.4.5 validados.")
 	quit(0)
 
 
