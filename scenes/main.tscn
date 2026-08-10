@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/ui_shell_manager.gd" id="2_ui_shell"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://scripts/version_043_hud_patch.gd" id="6_version_043"]
 [ext_resource type="Script" path="res://scripts/version_044_visit_transitions.gd" id="7_version_044"]
 [ext_resource type="Script" path="res://scripts/version_045_interaction_menu_patch.gd" id="8_version_045"]
-[ext_resource type="Script" path="res://scripts/version_046_room_audio_patch.gd" id="9_version_046"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -39,6 +38,3 @@ script = ExtResource("7_version_044")
 
 [node name="Version045InteractionMenuPatch" type="Node" parent="."]
 script = ExtResource("8_version_045")
-
-[node name="Version046RoomAudioPatch" type="Node" parent="."]
-script = ExtResource("9_version_046")
