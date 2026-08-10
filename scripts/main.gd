@@ -49,6 +49,7 @@ var ending_background: TextureRect
 var game_background: TextureRect
 var menu_content: VBoxContainer
 var continue_button: Button
+var exit_confirmation: ConfirmationDialog
 var stage: Control
 var topbar: HBoxContainer
 var chapter_label: Label
@@ -108,6 +109,7 @@ func _build_interface() -> void:
 	_build_menu()
 	_build_game()
 	_build_ending()
+	_build_exit_confirmation()
 
 
 func _build_menu() -> void:
@@ -194,8 +196,14 @@ func _build_menu() -> void:
 	continue_button.pressed.connect(_continue_game)
 	menu_content.add_child(continue_button)
 
+	var exit_button := _make_button("Salir", false)
+	exit_button.name = "ExitGameButton"
+	exit_button.pressed.connect(_show_exit_confirmation)
+	menu_content.add_child(exit_button)
+
 	var info := Label.new()
-	info.text = "Early Access: diálogos, preguntas, amistad, guardado, efectos y audio."
+	info.name = "VersionLabel"
+	info.text = "EARLY ACCESS · Diálogos, preguntas, amistad, guardado, efectos y audio."
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.add_theme_color_override("font_color", Color(0.78, 0.73, 0.67, 0.86))
 	info.add_theme_font_size_override("font_size", 12)
@@ -544,9 +552,25 @@ func _show_menu() -> void:
 	continue_button.disabled = not FileAccess.file_exists(SAVE_PATH)
 
 
+func _build_exit_confirmation() -> void:
+	exit_confirmation = ConfirmationDialog.new()
+	exit_confirmation.name = "ExitGameConfirmation"
+	exit_confirmation.title = "Salir del juego"
+	exit_confirmation.dialog_text = "Se va a cerrar \"El Mejor juego the best GOTY of the year del año\".\n\n¿Seguro que quieres salir?"
+	exit_confirmation.ok_button_text = "Sí, salir"
+	exit_confirmation.cancel_button_text = "Cancelar"
+	exit_confirmation.exclusive = true
+	exit_confirmation.confirmed.connect(_quit_game)
+	add_child(exit_confirmation)
+
+
+func _show_exit_confirmation() -> void:
+	exit_confirmation.popup_centered_clamped(Vector2i(620, 240), 0.9)
+
+
 func _quit_game() -> void:
 	if OS.has_feature("web"):
-		JavaScriptBridge.eval("if(document.fullscreenElement&&document.exitFullscreen){document.exitFullscreen().catch(()=>{}).finally(()=>window.location.assign(new URL('../',window.location.href).href));}else{window.location.assign(new URL('../',window.location.href).href);}", true)
+		JavaScriptBridge.eval("(()=>{const closeGame=()=>window.close();if(document.fullscreenElement&&document.exitFullscreen){document.exitFullscreen().catch(()=>{}).finally(closeGame);}else{closeGame();}})();", true)
 		return
 	get_tree().quit()
 

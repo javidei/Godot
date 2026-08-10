@@ -37,8 +37,8 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.3":
-		_fail("La versión del proyecto no es 0.3.3")
+	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.4":
+		_fail("La versión del proyecto no es 0.3.4")
 		return
 	if str(ProjectSettings.get_setting("application/config/name", "")) != "Entre líneas: La octava silla":
 		_fail("El título del proyecto no es Entre líneas: La octava silla")
@@ -127,6 +127,7 @@ func _run() -> void:
 	var engine_tag := _find_named(main, "EngineTag") as Label
 	var narrative_font := load("res://assets/ui/fonts/DejaVuSerif-Bold.ttf") as Font
 	var exit_button := _find_named(main, "ExitGameButton") as Button
+	var exit_confirmation := _find_named(main, "ExitGameConfirmation") as ConfirmationDialog
 	var version_label := _find_named(main, "VersionLabel") as Label
 	var menu_content: VBoxContainer = main.get("menu_content") as VBoxContainer
 	if title == null or title.text != "Entre líneas:\nLa octava silla" or narrative_font == null or not title.has_theme_font_override("font"):
@@ -138,6 +139,18 @@ func _run() -> void:
 	if exit_button == null or exit_button.text != "Salir":
 		_fail("El menú principal no contiene el botón Salir")
 		return
+	if exit_confirmation == null or exit_confirmation.dialog_text != "Se va a cerrar \"El Mejor juego the best GOTY of the year del año\".\n\n¿Seguro que quieres salir?":
+		_fail("El botón Salir no contiene la advertencia esperada")
+		return
+	if exit_confirmation.ok_button_text != "Sí, salir" or exit_confirmation.cancel_button_text != "Cancelar":
+		_fail("La confirmación de salida no ofrece aceptar y cancelar")
+		return
+	main.call("_show_exit_confirmation")
+	await process_frame
+	if not exit_confirmation.visible:
+		_fail("El botón Salir no abre el popup de confirmación")
+		return
+	exit_confirmation.hide()
 	if version_label == null or not version_label.text.contains("EARLY ACCESS"):
 		_fail("La versión no indica Early Access")
 		return
