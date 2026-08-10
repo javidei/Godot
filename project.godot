@@ -4,7 +4,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.4.3"
+config/version="0.4.4"
 config/icon="res://assets/ui/menu-lineup.png"
 run/main_scene="res://scenes/main.tscn"
 
