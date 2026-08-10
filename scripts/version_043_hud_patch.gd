@@ -1,6 +1,6 @@
 extends Node
 
-const RELEASE_VERSION := "0.4.4"
+const RELEASE_VERSION := "0.4.5"
 const MUTE_ICON_PATH := "res://assets/ui/icons/mute.svg"
 const DESKTOP_BREAKPOINT := 1000.0
 
@@ -213,8 +213,6 @@ func _apply_layout() -> void:
 		if button != null:
 			button.custom_minimum_size = utility_size
 
-	# La HUD ingame solo contiene utilidades + música de habitación.
-	# Los efectos/globales permanecen exclusivamente en ajustes del menú.
 	var old_effects := main.find_child("HudEffectsRow043", true, false)
 	if old_effects != null:
 		old_effects.queue_free()
