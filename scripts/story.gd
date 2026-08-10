@@ -13,7 +13,7 @@ const ENCOUNTER_ORDER: Array[String] = ["javi", "sue", "smokey", "carmen", "jony
 const ENCOUNTERS := {
 	"javi": {
 		"name": "Javi",
-		"background": "bar",
+		"background": "habitacion_javi",
 		"intro": [
 			{"expression": "thoughtful", "text": "Soy Javi. Cuando se me mete un proyecto en la cabeza, puedo pasar horas dándole vueltas hasta que consigo verlo funcionar."},
 			{"expression": "happy", "text": "Con mis amigos suelo analizar cada plan, encontrarle alguna pega y, aun así, terminar apuntándome. Supongo que esa contradicción también dice bastante de mí."}
