@@ -71,6 +71,10 @@ jobs:
           PROJECT_VERSION=$(sed -n 's/^config\/version="\([^"]*\)"/\1/p' project.godot | head -n 1)
           test -n "$PROJECT_VERSION"
           sed -i -E "s/0\.[0-9]+\.[0-9]+/${PROJECT_VERSION}/g" scripts/ci_character_smoke_test.gd
+          # La 0.4.0 sustituye el arranque lineal tras seleccionar protagonista
+          # por el selector libre de visitas. Esa mecánica se valida en el test
+          # específico del siguiente paso; el resto del smoke histórico se conserva.
+          sed -i 's/var selection_ok: bool = await _validate_selection(main)/var selection_ok: bool = true/' scripts/ci_character_smoke_test.gd
           set +e
           godot --headless --path . --script res://scripts/ci_character_smoke_test.gd > character-smoke.log 2>&1
           STATUS=$?
@@ -81,6 +85,19 @@ jobs:
             exit 1
           fi
           grep -q "SMOKE OK:" character-smoke.log
+
+      - name: Smoke test de mecánicas 0.4.0
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v040_smoke_test.gd > v040-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat v040-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V040 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v040-smoke.log; then
+            echo "La validación específica de la 0.4.0 ha fallado; no se exportará."
+            exit 1
+          fi
+          grep -q "V040 OK:" v040-smoke.log
 
       - name: Export Web y validar GDScript
         run: |
