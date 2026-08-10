@@ -3,7 +3,7 @@ extends Node
 const Story = preload("res://scripts/story.gd")
 const GameData = preload("res://scripts/game_data.gd")
 
-const RELEASE_VERSION := "0.4.4"
+const RELEASE_VERSION := "0.4.5"
 const VISIT_NODE := "__VISIT_SELECT__"
 const OUTRO_SUFFIX := "_outro_044"
 
@@ -44,9 +44,12 @@ var shade: ColorRect
 var text_box: VBoxContainer
 var name_label: Label
 var message_label: Label
+var hint_label: Label
 var transition_active := false
 var pending_outro := ""
 var fast_mode := false
+var waiting_for_continue := false
+var continue_requested := false
 
 
 func _ready() -> void:
@@ -76,6 +79,11 @@ func set_fast_mode(enabled: bool) -> void:
 	fast_mode = enabled
 
 
+func request_continue() -> void:
+	if waiting_for_continue:
+		continue_requested = true
+
+
 func _build_overlay() -> void:
 	overlay = Control.new()
 	overlay.name = "VisitNarrativeTransition044"
@@ -91,6 +99,7 @@ func _build_overlay() -> void:
 	shade.color = Color.BLACK
 	shade.modulate.a = 0.0
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
+	shade.gui_input.connect(_on_transition_input)
 	overlay.add_child(shade)
 
 	var center := CenterContainer.new()
@@ -122,6 +131,34 @@ func _build_overlay() -> void:
 	message_label.add_theme_constant_override("line_spacing", 6)
 	message_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	text_box.add_child(message_label)
+
+	hint_label = Label.new()
+	hint_label.text = "Pulsa o haz clic para continuar"
+	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint_label.add_theme_color_override("font_color", Color(0.72, 0.66, 0.58, 0.9))
+	hint_label.add_theme_font_size_override("font_size", 14)
+	hint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	text_box.add_child(hint_label)
+
+
+func _on_transition_input(event: InputEvent) -> void:
+	if not waiting_for_continue:
+		return
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		continue_requested = true
+		accept_event()
+	elif event is InputEventScreenTouch and event.pressed:
+		continue_requested = true
+		accept_event()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not waiting_for_continue:
+		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_SPACE or event.keycode == KEY_ENTER:
+			continue_requested = true
+			get_viewport().set_input_as_handled()
 
 
 func _ensure_story_patches() -> void:
@@ -189,7 +226,7 @@ func _play_intro(character_id: String) -> void:
 
 	await _fade(shade, 1.0, 0.55)
 	await _fade(text_box, 1.0, 0.22)
-	await _pause(2.15)
+	await _wait_for_continue()
 	await _fade(text_box, 0.0, 0.18)
 
 	_mark_intro_seen(character_id)
@@ -241,7 +278,7 @@ func _play_outro(character_id: String) -> void:
 
 	await _fade(shade, 1.0, 0.55)
 	await _fade(text_box, 1.0, 0.22)
-	await _pause(2.15)
+	await _wait_for_continue()
 	await _fade(text_box, 0.0, 0.18)
 
 	_complete_visit(character_id)
@@ -253,6 +290,18 @@ func _play_outro(character_id: String) -> void:
 
 	overlay.visible = false
 	transition_active = false
+
+
+func _wait_for_continue() -> void:
+	if fast_mode:
+		await get_tree().process_frame
+		return
+	continue_requested = false
+	waiting_for_continue = true
+	while not continue_requested:
+		await get_tree().process_frame
+	waiting_for_continue = false
+	continue_requested = false
 
 
 func _prepare_text(character_id: String, message: String) -> void:
@@ -362,10 +411,3 @@ func _fade(target: CanvasItem, alpha: float, seconds: float) -> void:
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.tween_property(target, "modulate:a", alpha, seconds)
 	await tween.finished
-
-
-func _pause(seconds: float) -> void:
-	if fast_mode:
-		await get_tree().process_frame
-		return
-	await get_tree().create_timer(seconds).timeout
