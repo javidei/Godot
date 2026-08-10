@@ -3,7 +3,6 @@ extends Node
 const Story = preload("res://scripts/story.gd")
 const GameData = preload("res://scripts/game_data.gd")
 
-const RELEASE_VERSION := "0.4.5"
 const VISIT_NODE := "__VISIT_SELECT__"
 const OUTRO_SUFFIX := "_outro_044"
 
@@ -39,6 +38,7 @@ const OUTRO_TEXTS := {
 
 var main: Control
 var version_manager: Node
+var audio_manager: Node
 var overlay: Control
 var shade: ColorRect
 var text_box: VBoxContainer
@@ -59,6 +59,7 @@ func _ready() -> void:
 	if main == null:
 		return
 	version_manager = main.get_node_or_null("Version040Manager")
+	audio_manager = main.get("audio_manager") as Node
 	if version_manager == null:
 		return
 	_build_overlay()
@@ -205,7 +206,7 @@ func _on_visit_selected(character_id: String) -> void:
 	if not order.has(character_id):
 		order.append(character_id)
 	state["visit_order"] = order
-	state["save_version"] = RELEASE_VERSION
+	state["save_version"] = _release_version()
 	main.set("state", state)
 	main.call("_save_game", false)
 
@@ -224,7 +225,11 @@ func _play_intro(character_id: String) -> void:
 	shade.modulate.a = 0.0
 	text_box.modulate.a = 0.0
 
+	# Primero cerramos visualmente la escena anterior. En cuanto la pantalla está
+	# completamente negra, empieza la música de la habitación que vamos a visitar.
+	# Así la presentación ya tiene la ambientación del personaje antes de mostrarlo.
 	await _fade(shade, 1.0, 0.55)
+	_start_character_music(character_id)
 	await _fade(text_box, 1.0, 0.22)
 	await _wait_for_continue()
 	await _fade(text_box, 0.0, 0.18)
@@ -238,6 +243,15 @@ func _play_intro(character_id: String) -> void:
 
 	overlay.visible = false
 	transition_active = false
+
+
+func _start_character_music(character_id: String) -> void:
+	if audio_manager == null:
+		return
+	var background_id := str(CHARACTER_BACKGROUNDS.get(character_id, ""))
+	if background_id.is_empty():
+		return
+	audio_manager.call("play_background_music", background_id)
 
 
 func _detect_outro_node() -> void:
@@ -318,7 +332,7 @@ func _mark_intro_seen(character_id: String) -> void:
 	if not intros.has(character_id):
 		intros.append(character_id)
 	state["intro_transitions_seen"] = intros
-	state["save_version"] = RELEASE_VERSION
+	state["save_version"] = _release_version()
 	main.set("state", state)
 	main.call("_save_game", false)
 
@@ -338,7 +352,7 @@ func _complete_visit(character_id: String) -> void:
 	state["completed_characters"] = completed
 	state["outro_transitions_seen"] = outros
 	state["intro_transitions_seen"] = intros
-	state["save_version"] = RELEASE_VERSION
+	state["save_version"] = _release_version()
 	main.set("state", state)
 	main.call("_save_game", false)
 
@@ -367,7 +381,7 @@ func _ensure_transition_state(save_if_changed: bool) -> void:
 
 	state["intro_transitions_seen"] = intros
 	state["outro_transitions_seen"] = outros
-	state["save_version"] = RELEASE_VERSION
+	state["save_version"] = _release_version()
 	main.set("state", state)
 	if changed and save_if_changed:
 		main.call("_save_game", false)
@@ -389,6 +403,10 @@ func _state() -> Dictionary:
 	if typeof(value) != TYPE_DICTIONARY:
 		return {}
 	return value
+
+
+func _release_version() -> String:
+	return str(ProjectSettings.get_setting("application/config/version", "0.4.5"))
 
 
 func _outro_node_id(character_id: String) -> String:
