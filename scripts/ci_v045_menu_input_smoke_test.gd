@@ -6,8 +6,9 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.4.5":
-		_fail("La prueba requiere la versión 0.4.5")
+	var project_version := str(ProjectSettings.get_setting("application/config/version", ""))
+	if not project_version.begins_with("0.4."):
+		_fail("La prueba requiere una versión 0.4.x")
 		return
 
 	var packed := load("res://scenes/main.tscn") as PackedScene
@@ -22,7 +23,7 @@ func _run() -> void:
 	var patch := main.get_node_or_null("Version045InteractionMenuPatch")
 	var menu_content := main.get("menu_content") as VBoxContainer
 	if patch == null or menu_content == null:
-		_fail("No está disponible el parche de interacción/menú 0.4.5")
+		_fail("No está disponible el parche de interacción/menú 0.4.x")
 		return
 
 	var audio_row := menu_content.find_child("AudioCombinedControls040", true, false) as HBoxContainer
@@ -58,18 +59,25 @@ func _run() -> void:
 		_fail("El menú sigue ocupando demasiado ancho y puede tapar al personaje")
 		return
 
-	# Simula una escena válida y dos pulsaciones: la primera completa el tipeado y la segunda avanza.
+	# Simula una escena válida y dos clics en una zona libre del propio GameScreen:
+	# el primero completa el tipeado y el segundo avanza al siguiente tramo.
 	var state: Dictionary = main.call("_fresh_state")
 	state["player"] = {"id": "sue", "name": "Sue"}
 	state["visit_mode"] = true
 	state["completed_characters"] = []
 	state["visit_order"] = ["javi"]
-	state["save_version"] = "0.4.5"
+	state["save_version"] = project_version
 	main.set("state", state)
 	var game_screen := main.get("game_screen") as Control
 	var menu_screen := main.get("menu_screen") as Control
 	game_screen.visible = true
 	menu_screen.visible = false
+
+	var callback := Callable(patch, "_on_game_screen_input")
+	if not game_screen.gui_input.is_connected(callback):
+		_fail("GameScreen no escucha los clics de las zonas libres")
+		return
+
 	main.call("_go_to", "javi_intro_01", false)
 	await process_frame
 	var current: Dictionary = main.get("current_node")
@@ -81,16 +89,17 @@ func _run() -> void:
 	var click := InputEventMouseButton.new()
 	click.button_index = MOUSE_BUTTON_LEFT
 	click.pressed = true
-	patch.call("_unhandled_input", click)
+	click.position = Vector2(640, 260)
+	patch.call("_on_game_screen_input", click)
 	await process_frame
-	patch.call("_unhandled_input", click)
+	patch.call("_on_game_screen_input", click)
 	await process_frame
 	state = main.get("state")
 	if str(state.get("node_id", "")) != expected_next:
-		_fail("Pulsar sobre la pantalla no avanza al siguiente diálogo")
+		_fail("Pulsar en una zona libre de la pantalla no avanza al siguiente diálogo")
 		return
 
-	print("V045 OK: menú compacto por parejas y avance de diálogo por pantalla validados.")
+	print("V045 OK: menú compacto y avance por clic directo sobre GameScreen validados.")
 	quit(0)
 
 
