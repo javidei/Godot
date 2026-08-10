@@ -133,7 +133,7 @@ const ENCOUNTERS := {
 	},
 	"jony": {
 		"name": "Jony",
-		"background": "habitacion_ana",
+		"background": "habitacion_jony",
 		"intro": [
 			{"expression": "neutral", "text": "Soy Jony, o Jon si quieres ahorrar una letra. Al principio puedo parecer algo reservado, pero con el tema adecuado se me pasa bastante rápido."},
 			{"expression": "neutral", "text": "Cuando algo me interesa de verdad, puedo analizar hasta el último detalle y alargar la conversación más de la cuenta. Avisado quedas."}
