@@ -809,7 +809,7 @@ func _finish_demo() -> void:
 	var result_lines := PackedStringArray()
 	var total := 0
 	for character_id in CHARACTER_ORDER:
-		var value := clamp(int(affinity.get(character_id, 0)), 0, 3)
+		var value: int = clampi(int(affinity.get(character_id, 0)), 0, 3)
 		total += value
 		result_lines.append("%s  %s · %s" % [CHARACTER_NAMES.get(character_id, character_id), _score(value), _friendship_level(value)])
 	result_lines.append("")
