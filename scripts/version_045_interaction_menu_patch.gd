@@ -1,7 +1,7 @@
 extends Node
 
 const LANDSCAPE_LEFT := 0.05
-const LANDSCAPE_RIGHT := 0.47
+const LANDSCAPE_RIGHT := 0.52
 
 var main: Control
 var menu_content: VBoxContainer
@@ -38,10 +38,6 @@ func _ready() -> void:
 func _connect_game_screen_input() -> void:
 	if game_screen == null:
 		return
-	# GameScreen cubre todo el viewport y, como Control, recibe los clics de las
-	# zonas libres antes de que puedan llegar a _unhandled_input. Escuchamos su
-	# gui_input directamente. Los botones y elecciones siguen recibiendo sus
-	# propios eventos y no propagan el clic hasta aquí.
 	var callback := Callable(self, "_on_game_screen_input")
 	if not game_screen.gui_input.is_connected(callback):
 		game_screen.gui_input.connect(callback)
@@ -52,8 +48,6 @@ func _on_game_screen_input(event: InputEvent) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Conservamos este camino para teclado y para cualquier evento que no haya
-	# sido capturado por un Control del HUD.
 	_handle_screen_advance(event)
 
 
@@ -101,31 +95,31 @@ func _build_action_rows() -> void:
 	primary_row = HBoxContainer.new()
 	primary_row.name = "MenuPrimaryActions045"
 	primary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	primary_row.add_theme_constant_override("separation", 8)
+	primary_row.add_theme_constant_override("separation", 10)
 	menu_content.add_child(primary_row)
 
 	secondary_row = HBoxContainer.new()
 	secondary_row.name = "MenuSecondaryActions045"
 	secondary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	secondary_row.add_theme_constant_override("separation", 8)
+	secondary_row.add_theme_constant_override("separation", 10)
 	menu_content.add_child(secondary_row)
 
 	for button in [new_button, continue_button]:
 		if button == null:
 			continue
 		button.reparent(primary_row)
-		_prepare_action_button(button, 50)
+		_prepare_action_button(button, 42)
 	for button in [fullscreen_button, exit_button]:
 		if button == null:
 			continue
 		button.reparent(secondary_row)
-		_prepare_action_button(button, 46)
+		_prepare_action_button(button, 40)
 
 
 func _prepare_action_button(button: Button, height: float) -> void:
 	button.custom_minimum_size = Vector2(0, height)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.add_theme_font_size_override("font_size", 16)
+	button.add_theme_font_size_override("font_size", 15)
 
 
 func _compact_audio_row() -> void:
@@ -137,18 +131,18 @@ func _compact_audio_row() -> void:
 		if child is Label:
 			var label := child as Label
 			if label.text == "|":
-				label.custom_minimum_size = Vector2(8, 34)
+				label.custom_minimum_size = Vector2(8, 32)
 				label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			elif label.name == "MusicVolumeLabel":
-				label.custom_minimum_size = Vector2(76, 34)
+				label.custom_minimum_size = Vector2(76, 32)
 				label.add_theme_font_size_override("font_size", 12)
 			elif label.name == "EffectsVolumeLabel":
-				label.custom_minimum_size = Vector2(62, 34)
+				label.custom_minimum_size = Vector2(62, 32)
 				label.add_theme_font_size_override("font_size", 12)
 		elif child is Button:
 			var button := child as Button
 			var width := 40.0 if button.name.contains("Mute") else 32.0
-			button.custom_minimum_size = Vector2(width, 34)
+			button.custom_minimum_size = Vector2(width, 32)
 			button.add_theme_font_size_override("font_size", 11)
 	if audio_title != null:
 		audio_title.add_theme_font_size_override("font_size", 12)
@@ -203,7 +197,7 @@ func _apply_layout() -> void:
 		return
 	var viewport_size := get_viewport().get_visible_rect().size
 	var portrait := viewport_size.y > viewport_size.x
-	menu_content.add_theme_constant_override("separation", 7)
+	menu_content.add_theme_constant_override("separation", 6)
 	if portrait:
 		menu_content.anchor_left = 0.06
 		menu_content.anchor_right = 0.94
@@ -221,8 +215,8 @@ func _apply_layout() -> void:
 
 	var title := menu_content.find_child("GameTitle", true, false) as Label
 	if title != null:
-		title.custom_minimum_size = Vector2(0, 104 if not portrait else 118)
-		title.add_theme_font_size_override("font_size", 44 if not portrait else 42)
+		title.custom_minimum_size = Vector2(0, 100 if not portrait else 116)
+		title.add_theme_font_size_override("font_size", 43 if not portrait else 42)
 
 	_compact_audio_row()
 
