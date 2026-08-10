@@ -1,7 +1,7 @@
 extends Node
 
 const LANDSCAPE_LEFT := 0.05
-const LANDSCAPE_RIGHT := 0.52
+const LANDSCAPE_RIGHT := 0.43
 
 var main: Control
 var menu_content: VBoxContainer
@@ -95,31 +95,31 @@ func _build_action_rows() -> void:
 	primary_row = HBoxContainer.new()
 	primary_row.name = "MenuPrimaryActions045"
 	primary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	primary_row.add_theme_constant_override("separation", 10)
+	primary_row.add_theme_constant_override("separation", 12)
 	menu_content.add_child(primary_row)
 
 	secondary_row = HBoxContainer.new()
 	secondary_row.name = "MenuSecondaryActions045"
 	secondary_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	secondary_row.add_theme_constant_override("separation", 10)
+	secondary_row.add_theme_constant_override("separation", 12)
 	menu_content.add_child(secondary_row)
 
 	for button in [new_button, continue_button]:
 		if button == null:
 			continue
 		button.reparent(primary_row)
-		_prepare_action_button(button, 42)
+		_prepare_action_button(button, 60)
 	for button in [fullscreen_button, exit_button]:
 		if button == null:
 			continue
 		button.reparent(secondary_row)
-		_prepare_action_button(button, 40)
+		_prepare_action_button(button, 56)
 
 
 func _prepare_action_button(button: Button, height: float) -> void:
 	button.custom_minimum_size = Vector2(0, height)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.add_theme_font_size_override("font_size", 15)
+	button.add_theme_font_size_override("font_size", 16)
 
 
 func _compact_audio_row() -> void:
@@ -197,17 +197,17 @@ func _apply_layout() -> void:
 		return
 	var viewport_size := get_viewport().get_visible_rect().size
 	var portrait := viewport_size.y > viewport_size.x
-	menu_content.add_theme_constant_override("separation", 6)
+	menu_content.add_theme_constant_override("separation", 8)
 	if portrait:
-		menu_content.anchor_left = 0.06
-		menu_content.anchor_right = 0.94
-		menu_content.anchor_top = 0.08
-		menu_content.anchor_bottom = 0.94
+		menu_content.anchor_left = 0.08
+		menu_content.anchor_right = 0.92
+		menu_content.anchor_top = 0.06
+		menu_content.anchor_bottom = 0.96
 	else:
 		menu_content.anchor_left = LANDSCAPE_LEFT
 		menu_content.anchor_right = LANDSCAPE_RIGHT
-		menu_content.anchor_top = 0.055
-		menu_content.anchor_bottom = 0.95
+		menu_content.anchor_top = 0.045
+		menu_content.anchor_bottom = 0.96
 	menu_content.offset_left = 0.0
 	menu_content.offset_top = 0.0
 	menu_content.offset_right = 0.0
@@ -230,7 +230,7 @@ func _process(_delta: float) -> void:
 	var state: Dictionary = value
 	if state.is_empty() or not bool(state.get("visit_mode", false)):
 		return
-	var project_version := str(ProjectSettings.get_setting("application/config/version", "0.4.5"))
+	var project_version := str(ProjectSettings.get_setting("application/config/version", "0.4.9"))
 	if str(state.get("save_version", "")) == project_version:
 		return
 	state["save_version"] = project_version
