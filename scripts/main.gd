@@ -49,8 +49,10 @@ var ending_background: TextureRect
 var game_background: TextureRect
 var menu_content: VBoxContainer
 var continue_button: Button
-var volume_label: Label
-var mute_button: Button
+var music_volume_label: Label
+var effects_volume_label: Label
+var music_mute_button: Button
+var effects_mute_button: Button
 var stage: Control
 var topbar: HBoxContainer
 var chapter_label: Label
@@ -199,43 +201,88 @@ func _build_menu() -> void:
 	continue_button.pressed.connect(_continue_game)
 	menu_content.add_child(continue_button)
 
-	var audio_controls := HBoxContainer.new()
-	audio_controls.name = "AudioControls"
-	audio_controls.custom_minimum_size = Vector2(0, 44)
-	audio_controls.add_theme_constant_override("separation", 8)
-	menu_content.add_child(audio_controls)
+	var audio_title := Label.new()
+	audio_title.name = "AudioSettingsTitle"
+	audio_title.text = "AJUSTES DE AUDIO"
+	audio_title.add_theme_color_override("font_color", Color("f2c97e"))
+	audio_title.add_theme_font_size_override("font_size", 13)
+	menu_content.add_child(audio_title)
 
-	var volume_down_button := _make_small_button("−")
-	volume_down_button.name = "VolumeDownButton"
-	volume_down_button.tooltip_text = "Bajar volumen"
-	volume_down_button.custom_minimum_size = Vector2(48, 42)
-	volume_down_button.pressed.connect(func(): _change_volume(-AudioManagerScript.VOLUME_STEP))
-	audio_controls.add_child(volume_down_button)
+	var music_controls := HBoxContainer.new()
+	music_controls.name = "MusicControls"
+	music_controls.custom_minimum_size = Vector2(0, 40)
+	music_controls.add_theme_constant_override("separation", 8)
+	menu_content.add_child(music_controls)
 
-	volume_label = Label.new()
-	volume_label.name = "VolumeLabel"
-	volume_label.text = "Volumen · 70 %"
-	volume_label.custom_minimum_size = Vector2(118, 42)
-	volume_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	volume_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	volume_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	volume_label.add_theme_color_override("font_color", Color("f7ead8"))
-	volume_label.add_theme_font_size_override("font_size", 15)
-	audio_controls.add_child(volume_label)
+	var music_down_button := _make_small_button("−")
+	music_down_button.name = "MusicVolumeDownButton"
+	music_down_button.tooltip_text = "Bajar volumen de la música"
+	music_down_button.custom_minimum_size = Vector2(44, 40)
+	music_down_button.pressed.connect(func(): _change_music_volume(-AudioManagerScript.VOLUME_STEP))
+	music_controls.add_child(music_down_button)
 
-	var volume_up_button := _make_small_button("+")
-	volume_up_button.name = "VolumeUpButton"
-	volume_up_button.tooltip_text = "Subir volumen"
-	volume_up_button.custom_minimum_size = Vector2(48, 42)
-	volume_up_button.pressed.connect(func(): _change_volume(AudioManagerScript.VOLUME_STEP))
-	audio_controls.add_child(volume_up_button)
+	music_volume_label = Label.new()
+	music_volume_label.name = "MusicVolumeLabel"
+	music_volume_label.text = "Música · 30 %"
+	music_volume_label.custom_minimum_size = Vector2(116, 40)
+	music_volume_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	music_volume_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	music_volume_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	music_volume_label.add_theme_color_override("font_color", Color("f7ead8"))
+	music_volume_label.add_theme_font_size_override("font_size", 15)
+	music_controls.add_child(music_volume_label)
 
-	mute_button = _make_small_button("Silenciar")
-	mute_button.name = "MuteButton"
-	mute_button.tooltip_text = "Silenciar o activar todo el sonido"
-	mute_button.custom_minimum_size = Vector2(126, 42)
-	mute_button.pressed.connect(_toggle_mute)
-	audio_controls.add_child(mute_button)
+	var music_up_button := _make_small_button("+")
+	music_up_button.name = "MusicVolumeUpButton"
+	music_up_button.tooltip_text = "Subir volumen de la música"
+	music_up_button.custom_minimum_size = Vector2(44, 40)
+	music_up_button.pressed.connect(func(): _change_music_volume(AudioManagerScript.VOLUME_STEP))
+	music_controls.add_child(music_up_button)
+
+	music_mute_button = _make_small_button("Silenciar música")
+	music_mute_button.name = "MusicMuteButton"
+	music_mute_button.tooltip_text = "Silenciar o activar solo la música"
+	music_mute_button.custom_minimum_size = Vector2(136, 40)
+	music_mute_button.pressed.connect(_toggle_music_mute)
+	music_controls.add_child(music_mute_button)
+
+	var effects_controls := HBoxContainer.new()
+	effects_controls.name = "EffectsControls"
+	effects_controls.custom_minimum_size = Vector2(0, 40)
+	effects_controls.add_theme_constant_override("separation", 8)
+	menu_content.add_child(effects_controls)
+
+	var effects_down_button := _make_small_button("−")
+	effects_down_button.name = "EffectsVolumeDownButton"
+	effects_down_button.tooltip_text = "Bajar volumen de los efectos"
+	effects_down_button.custom_minimum_size = Vector2(44, 40)
+	effects_down_button.pressed.connect(func(): _change_effects_volume(-AudioManagerScript.VOLUME_STEP))
+	effects_controls.add_child(effects_down_button)
+
+	effects_volume_label = Label.new()
+	effects_volume_label.name = "EffectsVolumeLabel"
+	effects_volume_label.text = "Efectos · 100 %"
+	effects_volume_label.custom_minimum_size = Vector2(116, 40)
+	effects_volume_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	effects_volume_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	effects_volume_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	effects_volume_label.add_theme_color_override("font_color", Color("f7ead8"))
+	effects_volume_label.add_theme_font_size_override("font_size", 15)
+	effects_controls.add_child(effects_volume_label)
+
+	var effects_up_button := _make_small_button("+")
+	effects_up_button.name = "EffectsVolumeUpButton"
+	effects_up_button.tooltip_text = "Subir volumen de los efectos"
+	effects_up_button.custom_minimum_size = Vector2(44, 40)
+	effects_up_button.pressed.connect(func(): _change_effects_volume(AudioManagerScript.VOLUME_STEP))
+	effects_controls.add_child(effects_up_button)
+
+	effects_mute_button = _make_small_button("Silenciar efectos")
+	effects_mute_button.name = "EffectsMuteButton"
+	effects_mute_button.tooltip_text = "Silenciar o activar los efectos y los sonidos de interfaz"
+	effects_mute_button.custom_minimum_size = Vector2(136, 40)
+	effects_mute_button.pressed.connect(_toggle_effects_mute)
+	effects_controls.add_child(effects_mute_button)
 	_refresh_audio_controls()
 
 	var exit_button := _make_button("Salir", false)
@@ -893,21 +940,35 @@ func _play_ui_sound() -> void:
 	audio_manager.play_ui("confirm")
 
 
-func _change_volume(delta: float) -> void:
-	audio_manager.adjust_volume(delta)
+func _change_music_volume(delta: float) -> void:
+	audio_manager.adjust_music_volume(delta)
 	_refresh_audio_controls()
 
 
-func _toggle_mute() -> void:
-	audio_manager.toggle_mute()
+func _change_effects_volume(delta: float) -> void:
+	audio_manager.adjust_effects_volume(delta)
+	_refresh_audio_controls()
+
+
+func _toggle_music_mute() -> void:
+	audio_manager.toggle_music_mute()
+	_refresh_audio_controls()
+
+
+func _toggle_effects_mute() -> void:
+	audio_manager.toggle_effects_mute()
 	_refresh_audio_controls()
 
 
 func _refresh_audio_controls() -> void:
-	if volume_label != null:
-		volume_label.text = "Volumen · %d %%" % audio_manager.get_volume_percent()
-	if mute_button != null:
-		mute_button.text = "Activar sonido" if audio_manager.is_muted() else "Silenciar"
+	if music_volume_label != null:
+		music_volume_label.text = "Música · %d %%" % audio_manager.get_music_volume_percent()
+	if effects_volume_label != null:
+		effects_volume_label.text = "Efectos · %d %%" % audio_manager.get_effects_volume_percent()
+	if music_mute_button != null:
+		music_mute_button.text = "Activar música" if audio_manager.is_music_muted() else "Silenciar música"
+	if effects_mute_button != null:
+		effects_mute_button.text = "Activar efectos" if audio_manager.is_effects_muted() else "Silenciar efectos"
 
 
 func _toggle_fullscreen() -> void:
