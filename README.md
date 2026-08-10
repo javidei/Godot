@@ -13,6 +13,8 @@ Demo de novela visual en **Godot 4.7.1** con Javi, Sue, Smokey, Carmen, Jony, An
 - Interfaz para ratón/táctil y composición alternativa en orientación vertical.
 - Guardado compatible en `user://godot_otome_save.json`.
 - AudioManager con canales Music/SFX/UI. La demo genera tonos `strum`, `clonk` y UI sin usar audio externo.
+- Recorrido individual por los siete personajes: solo aparece una persona cada vez, se presenta con varias líneas y plantea tres preguntas.
+- Afinidad independiente de `0/3` por personaje y resumen final completo de `0/21` puntos.
 
 ## Recursos
 
@@ -35,6 +37,8 @@ assets/
 Los PNG de personajes conservan su resolución original y transparencia. Los `TextureRect` usan filtrado lineal y `KEEP_ASPECT_CENTERED`: las imágenes grandes se reducen visualmente sin recomprimirlas ni sustituirlas por copias pequeñas. Para este rango de escala 2D no se fuerzan mipmaps, evitando crear copias innecesarias de la textura.
 
 ## Diálogo
+
+La demo `0.3.0` recorre a Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino de uno en uno. Cada encuentro contiene presentación, tres preguntas con una única respuesta correcta y una réplica inmediata del personaje. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
 
 Una escena puede indicar recursos y composición sin crear escenas Godot nuevas:
 

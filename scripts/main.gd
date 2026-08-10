@@ -14,6 +14,7 @@ const CHARACTER_NAMES := {
 	"ana": "Ana",
 	"argentino": "El Argentino"
 }
+const CHARACTER_ORDER: Array[String] = ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"]
 const DEFAULT_POSITIONS := {"javi": "left", "sue": "center", "smokey": "right"}
 const LANDSCAPE_CHARACTER_SCALE := 1.06
 const PORTRAIT_CHARACTER_SCALE := 1.04
@@ -361,10 +362,10 @@ func _build_ending() -> void:
 	ending_screen.add_child(shade)
 
 	var panel := PanelContainer.new()
-	panel.anchor_left = 0.22
-	panel.anchor_top = 0.2
-	panel.anchor_right = 0.78
-	panel.anchor_bottom = 0.8
+	panel.anchor_left = 0.16
+	panel.anchor_top = 0.08
+	panel.anchor_right = 0.84
+	panel.anchor_bottom = 0.92
 	panel.add_theme_stylebox_override("panel", _panel_style(Color(0.055, 0.035, 0.027, 0.94), Color("d6a85f"), 2, 18))
 	ending_screen.add_child(panel)
 
@@ -381,21 +382,21 @@ func _build_ending() -> void:
 	margin.add_child(box)
 
 	var eyebrow := Label.new()
-	eyebrow.text = "FIN DE LA DEMO"
+	eyebrow.text = "RESULTADO DE AMISTAD"
 	eyebrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	eyebrow.add_theme_color_override("font_color", Color("e8b86a"))
 	eyebrow.add_theme_font_size_override("font_size", 14)
 	box.add_child(eyebrow)
 
 	var title := Label.new()
-	title.text = "Esto solo es el principio"
+	title.text = "Así has quedado con el grupo"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_color_override("font_color", Color("fff1dc"))
 	title.add_theme_font_size_override("font_size", 38)
 	box.add_child(title)
 
 	var text := Label.new()
-	text.text = "La base ya funciona con recursos locales, poses, decisiones, guardado, efectos y audio."
+	text.text = "Cada respuesta correcta suma un punto con ese personaje. Este es el resultado de tus siete encuentros."
 	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	text.add_theme_color_override("font_color", Color("d9c7b0"))
@@ -404,8 +405,11 @@ func _build_ending() -> void:
 
 	ending_affinity = Label.new()
 	ending_affinity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ending_affinity.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	ending_affinity.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	ending_affinity.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	ending_affinity.add_theme_color_override("font_color", Color("f0b95e"))
-	ending_affinity.add_theme_font_size_override("font_size", 21)
+	ending_affinity.add_theme_font_size_override("font_size", 17)
 	box.add_child(ending_affinity)
 
 	var again := _make_button("Jugar de nuevo", true)
@@ -500,10 +504,24 @@ func _panel_style(background: Color, border: Color, width: int, radius: int) -> 
 func _fresh_state() -> Dictionary:
 	return {
 		"node_id": Story.START,
-		"affinity": {"javi": 0, "sue": 0, "smokey": 0},
-		"expressions": {"javi": "neutral", "sue": "neutral", "smokey": "neutral"},
+		"affinity": _empty_affinity(),
+		"expressions": _neutral_expressions(),
 		"history": []
 	}
+
+
+func _empty_affinity() -> Dictionary:
+	var affinity := {}
+	for character_id in CHARACTER_ORDER:
+		affinity[character_id] = 0
+	return affinity
+
+
+func _neutral_expressions() -> Dictionary:
+	var expressions := {}
+	for character_id in CHARACTER_ORDER:
+		expressions[character_id] = "neutral"
+	return expressions
 
 
 func _show_menu() -> void:
@@ -553,6 +571,8 @@ func _go_to(node_id: String, add_to_history: bool = true) -> void:
 
 	current_node = node
 	state["node_id"] = node_id
+	if node.has("chapter"):
+		chapter_label.text = str(node["chapter"])
 
 	if node.has("background"):
 		_set_background(str(node["background"]))
@@ -786,11 +806,31 @@ func _finish_demo() -> void:
 	menu_screen.visible = false
 	ending_screen.visible = true
 	var affinity: Dictionary = state.get("affinity", {})
-	ending_affinity.text = "Javi " + _score(int(affinity.get("javi", 0))) + "    ·    Sue " + _score(int(affinity.get("sue", 0))) + "    ·    Smokey " + _score(int(affinity.get("smokey", 0)))
+	var result_lines := PackedStringArray()
+	var total := 0
+	for character_id in CHARACTER_ORDER:
+		var value := clamp(int(affinity.get(character_id, 0)), 0, 3)
+		total += value
+		result_lines.append("%s  %s · %s" % [CHARACTER_NAMES.get(character_id, character_id), _score(value), _friendship_level(value)])
+	result_lines.append("")
+	result_lines.append("TOTAL  %d/21" % total)
+	ending_affinity.text = "\n".join(result_lines)
 
 
 func _score(value: int) -> String:
-	return str(clamp(value, 0, 2)) + "/2"
+	return str(clamp(value, 0, 3)) + "/3"
+
+
+func _friendship_level(value: int) -> String:
+	match clamp(value, 0, 3):
+		0:
+			return "Aún os estáis conociendo"
+		1:
+			return "Primer punto de conexión"
+		2:
+			return "Buena amistad"
+		_:
+			return "Amistad muy fuerte"
 
 
 func _save_game(show_message: bool) -> void:
@@ -817,11 +857,19 @@ func _read_save() -> bool:
 		return false
 	state = parsed
 	if not state.has("affinity"):
-		state["affinity"] = {"javi": 0, "sue": 0, "smokey": 0}
+		state["affinity"] = _empty_affinity()
 	if not state.has("expressions"):
-		state["expressions"] = {"javi": "neutral", "sue": "neutral", "smokey": "neutral"}
+		state["expressions"] = _neutral_expressions()
 	if not state.has("history"):
 		state["history"] = []
+	for character_id in CHARACTER_ORDER:
+		if not state["affinity"].has(character_id):
+			state["affinity"][character_id] = 0
+		if not state["expressions"].has(character_id):
+			state["expressions"][character_id] = "neutral"
+	var saved_node := str(state.get("node_id", Story.START))
+	if saved_node != "__END__" and not Story.NODES.has(saved_node):
+		state["node_id"] = str(Story.START_BY_LOCATION.get(str(state.get("location_id", "bar")), Story.START))
 	for character in state["expressions"].keys():
 		_apply_expression(str(character), str(state["expressions"][character]))
 	return true

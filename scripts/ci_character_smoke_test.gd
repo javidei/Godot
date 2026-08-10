@@ -1,12 +1,29 @@
 extends SceneTree
 
 const CHARACTER_IDS: Array[String] = ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"]
+const CHARACTER_NAMES := {
+	"javi": "Javi",
+	"sue": "Sue",
+	"smokey": "Smokey",
+	"carmen": "Carmen",
+	"jony": "Jony",
+	"ana": "Ana",
+	"argentino": "El Argentino"
+}
 const Story = preload("res://scripts/story.gd")
+
 
 func _initialize() -> void:
 	call_deferred("_run")
 
+
 func _run() -> void:
+	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.0":
+		_fail("La versión del proyecto no es 0.3.0")
+		return
+	if not _validate_story_data():
+		return
+
 	var packed := load("res://scenes/main.tscn") as PackedScene
 	if packed == null:
 		_fail("No se puede cargar main.tscn")
@@ -23,129 +40,157 @@ func _run() -> void:
 		_fail("AssetManager no está disponible")
 		return
 
-	var test_state := {"node_id": "group_01", "affinity": {}, "expressions": {}, "history": []}
+	var test_state := {"node_id": Story.START, "affinity": {}, "expressions": {}, "history": []}
 	for character_id in CHARACTER_IDS:
-		if not slots.has(character_id):
-			_fail("Falta slot de personaje: " + character_id)
-			return
-		if not views.has(character_id):
-			_fail("Falta vista de personaje: " + character_id)
+		if not slots.has(character_id) or not views.has(character_id):
+			_fail("Falta la vista del personaje: " + character_id)
 			return
 		var texture: Texture2D = assets.call("get_character", character_id, "neutral") as Texture2D
-		if texture == null:
-			_fail("No carga textura de: " + character_id)
-			return
-		var view := views[character_id] as TextureRect
-		view.texture = texture
-		if view.texture == null or view.texture.get_size().x <= 0.0 or view.texture.get_size().y <= 0.0:
-			_fail("Textura inválida en vista: " + character_id)
+		if texture == null or texture.get_size().x <= 0.0 or texture.get_size().y <= 0.0:
+			_fail("No carga la textura PNG de: " + character_id)
 			return
 		test_state["affinity"][character_id] = 0
 		test_state["expressions"][character_id] = "neutral"
 	main.set("state", test_state)
 
-	var selection_manager := main.get_node_or_null("CharacterSelectManager")
-	if selection_manager == null:
-		_fail("CharacterSelectManager no está disponible")
+	var selection_ok: bool = await _validate_selection(main)
+	if not selection_ok:
 		return
-	selection_manager.call("open_selection")
-	await process_frame
-	var character_grid := selection_manager.get("character_grid") as GridContainer
-	var character_cards: Array = selection_manager.get("character_cards") as Array
-	if character_grid == null or character_grid.columns != 4:
-		_fail("La selección no usa cuatro columnas en escritorio")
-		return
-	if character_cards.size() != 8:
-		_fail("La selección no contiene las ocho opciones esperadas")
-		return
-	for card in character_cards:
-		var card_button := card as Button
-		if card_button == null or (card_button.size_flags_horizontal & Control.SIZE_EXPAND) == 0:
-			_fail("Una tarjeta de selección no rellena el ancho disponible")
-			return
+
 	for character_id in CHARACTER_IDS:
-		var card := _find_named(main, "Character_" + character_id)
-		var portrait := _find_texture_rect(card)
-		if portrait == null or portrait.texture == null:
-			_fail("Retrato vacío en selección: " + character_id)
+		main.call("_go_to", character_id + "_intro_01", false)
+		await process_frame
+		if not _only_character_visible(slots, character_id):
+			_fail("El encuentro no muestra exclusivamente a: " + character_id)
 			return
-		if not portrait.is_visible_in_tree():
-			_fail("Retrato oculto en selección: " + character_id)
-			return
-		if portrait.stretch_mode != TextureRect.STRETCH_KEEP_ASPECT_CENTERED:
-			_fail("El retrato puede volver a recortar la cabeza: " + character_id)
-			return
-		var atlas := portrait.texture as AtlasTexture
-		if atlas == null or atlas.region.position.y != 0.0 or atlas.region.size.y > atlas.atlas.get_size().y * 0.37:
-			_fail("El encuadre superior del retrato no es seguro: " + character_id)
-			return
-		var portrait_frame := _find_named(card, "PortraitFrame") as MarginContainer
-		if portrait_frame == null or portrait_frame.get_theme_constant("margin_top") < 6:
-			_fail("Falta el margen superior del retrato: " + character_id)
-			return
-	if _find_named(main, "SelectionInstallMobileButton") != null:
-		_fail("La selección todavía contiene el botón de instalación")
-		return
-	var flow_screen := selection_manager.get("flow_screen") as Control
-	if flow_screen != null:
-		flow_screen.visible = false
-	selection_manager.call("_set_main_screens", false, true, false)
 
-	main.call("_go_to", "group_01", false)
+	main.call("_go_to", "ana_q2", false)
+	main.call("_finish_typing")
 	await process_frame
-	if not _all_rendered(slots, views, ["carmen", "jony", "ana"]):
-		_fail("Carmen, Jony y Ana no están visibles en group_01")
-		return
-
-	main.call("_go_to", "carmen_01", false)
-	await process_frame
-	if not _all_rendered(slots, views, ["carmen", "jony", "ana"]):
-		_fail("Los secundarios desaparecen al hablar Carmen")
-		return
-
-	main.call("_go_to", "jony_01", false)
-	await process_frame
-	if not _all_rendered(slots, views, ["carmen", "jony", "ana"]):
-		_fail("Los secundarios desaparecen al hablar Jony")
-		return
-
-	main.call("_go_to", "ana_01", false)
-	await process_frame
-	if not _all_rendered(slots, views, ["carmen", "jony", "ana"]):
-		_fail("Los secundarios desaparecen al hablar Ana")
-		return
-
-	main.call("_go_to", "argentino_01", false)
-	await process_frame
-	if not _all_rendered(slots, views, ["jony", "argentino", "ana"]):
-		_fail("El Argentino no aparece en argentino_01")
+	var choices_box: VBoxContainer = main.get("choices_box") as VBoxContainer
+	if choices_box == null or choices_box.get_child_count() != 3:
+		_fail("Las preguntas no muestran tres respuestas")
 		return
 
 	main.call("_go_to", "bosque_01", false)
 	await process_frame
 	var bosque: Texture2D = assets.call("get_background", "bosque") as Texture2D
 	var game_background := main.get("game_background") as TextureRect
-	if bosque == null or game_background == null or game_background.texture == null:
+	if bosque == null or game_background == null or game_background.texture == null or game_background.texture.resource_path != bosque.resource_path:
 		_fail("El fondo del bosque no carga")
 		return
-	if game_background.texture.resource_path != bosque.resource_path:
-		_fail("Bosque no se muestra en la partida")
+
+	var scored_state: Dictionary = main.get("state")
+	for index in range(CHARACTER_IDS.size()):
+		scored_state["affinity"][CHARACTER_IDS[index]] = index % 4
+	main.set("state", scored_state)
+	main.call("_finish_demo")
+	await process_frame
+	var ending_affinity: Label = main.get("ending_affinity") as Label
+	if ending_affinity == null or not ending_affinity.text.contains("TOTAL") or not ending_affinity.text.contains("/21"):
+		_fail("El resumen final no muestra el total de amistad")
+		return
+	for character_id in CHARACTER_IDS:
+		if not ending_affinity.text.contains(str(CHARACTER_NAMES[character_id])):
+			_fail("El resumen final no incluye a: " + character_id)
+			return
+
+	if _find_named(main, "InstallMobileButton") != null or _find_named(main, "InstallMobileConfirmation") != null or _find_named(main, "SelectionInstallMobileButton") != null:
+		_fail("Han reaparecido controles de instalación móvil")
 		return
 
-	if _find_named(main, "InstallMobileButton") != null or _find_named(main, "InstallMobileConfirmation") != null:
-		_fail("El menú todavía contiene controles de instalación")
-		return
-
-	print("SMOKE OK: sin botones de instalación, 7 cabezas completas, selección y Bosque correctos.")
+	print("SMOKE OK: 7 encuentros individuales, 21 preguntas, afinidad 0/3, resumen final, retratos y Bosque correctos.")
 	quit(0)
 
-func _all_rendered(slots: Dictionary, views: Dictionary, ids: Array) -> bool:
-	for character_id in ids:
-		var slot: Control = slots.get(character_id) as Control
-		var view: TextureRect = views.get(character_id) as TextureRect
-		if slot == null or not slot.is_visible_in_tree() or view == null or view.texture == null:
+
+func _validate_story_data() -> bool:
+	if Story.ENCOUNTER_ORDER.size() != 7:
+		_fail("La historia no contiene siete encuentros")
+		return false
+	var question_counts := {}
+	for character_id in CHARACTER_IDS:
+		question_counts[character_id] = 0
+		if not Story.NODES.has(character_id + "_intro_01"):
+			_fail("Falta la presentación de: " + character_id)
+			return false
+
+	for node_id in Story.NODES.keys():
+		var node: Dictionary = Story.NODES[node_id]
+		var shown: Array = node.get("show", [])
+		if shown.size() != 1:
+			_fail("La escena %s no muestra exactamente un personaje" % node_id)
+			return false
+		if node.has("next"):
+			var next_id := str(node["next"])
+			if next_id != "__END__" and not Story.NODES.has(next_id):
+				_fail("La escena %s apunta a una escena inexistente" % node_id)
+				return false
+		if not node.has("question_character"):
+			continue
+		var character_id := str(node["question_character"])
+		question_counts[character_id] = int(question_counts.get(character_id, 0)) + 1
+		var choices: Array = node.get("choices", [])
+		if choices.size() != 3:
+			_fail("La pregunta %s no tiene tres respuestas" % node_id)
+			return false
+		var scoring_choices := 0
+		for choice in choices:
+			var next_id := str(choice.get("next", ""))
+			if not Story.NODES.has(next_id):
+				_fail("Una respuesta de %s no tiene continuación" % node_id)
+				return false
+			var affinity: Dictionary = choice.get("affinity", {})
+			if int(affinity.get(character_id, 0)) == 1:
+				scoring_choices += 1
+		if scoring_choices != 1:
+			_fail("La pregunta %s no tiene una única respuesta correcta" % node_id)
+			return false
+
+	for character_id in CHARACTER_IDS:
+		if int(question_counts[character_id]) != 3:
+			_fail("%s no tiene exactamente tres preguntas" % character_id)
 			return false
 	return true
+
+
+func _validate_selection(main: Control) -> bool:
+	var selection_manager := main.get_node_or_null("CharacterSelectManager")
+	if selection_manager == null:
+		_fail("CharacterSelectManager no está disponible")
+		return false
+	selection_manager.call("open_selection")
+	await process_frame
+	var character_grid := selection_manager.get("character_grid") as GridContainer
+	var character_cards: Array = selection_manager.get("character_cards") as Array
+	if character_grid == null or character_grid.columns != 4 or character_cards.size() != 8:
+		_fail("La selección no conserva sus ocho tarjetas en cuatro columnas")
+		return false
+	for character_id in CHARACTER_IDS:
+		var card := _find_named(main, "Character_" + character_id)
+		var portrait := _find_texture_rect(card)
+		if portrait == null or portrait.texture == null or not portrait.is_visible_in_tree():
+			_fail("Retrato vacío en selección: " + character_id)
+			return false
+		if portrait.stretch_mode != TextureRect.STRETCH_KEEP_ASPECT_CENTERED:
+			_fail("El retrato puede volver a cortar la cabeza: " + character_id)
+			return false
+	var flow_screen := selection_manager.get("flow_screen") as Control
+	if flow_screen != null:
+		flow_screen.visible = false
+	selection_manager.call("_set_main_screens", false, true, false)
+	return true
+
+
+func _only_character_visible(slots: Dictionary, expected_id: String) -> bool:
+	var visible_count := 0
+	for character_id in CHARACTER_IDS:
+		var slot: Control = slots.get(character_id) as Control
+		if slot != null and slot.is_visible_in_tree():
+			visible_count += 1
+			if character_id != expected_id:
+				return false
+	return visible_count == 1
+
 
 func _find_named(node: Node, target_name: String) -> Node:
 	if node == null:
@@ -158,6 +203,7 @@ func _find_named(node: Node, target_name: String) -> Node:
 			return found
 	return null
 
+
 func _find_texture_rect(node: Node) -> TextureRect:
 	if node == null:
 		return null
@@ -168,6 +214,7 @@ func _find_texture_rect(node: Node) -> TextureRect:
 		if found != null:
 			return found
 	return null
+
 
 func _fail(message: String) -> void:
 	push_error("SMOKE FAIL: " + message)
