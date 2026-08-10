@@ -37,8 +37,8 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.2":
-		_fail("La versión del proyecto no es 0.3.2")
+	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.3":
+		_fail("La versión del proyecto no es 0.3.3")
 		return
 	if str(ProjectSettings.get_setting("application/config/name", "")) != "Entre líneas: La octava silla":
 		_fail("El título del proyecto no es Entre líneas: La octava silla")
@@ -73,7 +73,13 @@ func _run() -> void:
 		_fail("La pantalla principal no usa Casa Asturias")
 		return
 
-	var test_state := {"node_id": Story.START, "affinity": {}, "expressions": {}, "history": []}
+	var test_state := {
+		"node_id": Story.START,
+		"affinity": {},
+		"expressions": {},
+		"history": [],
+		"player": {"id": "custom", "display_name": "Prueba", "custom": true}
+	}
 	for character_id in CHARACTER_IDS:
 		if not slots.has(character_id) or not views.has(character_id):
 			_fail("Falta la vista del personaje: " + character_id)
@@ -89,6 +95,7 @@ func _run() -> void:
 	var selection_ok: bool = await _validate_selection(main)
 	if not selection_ok:
 		return
+	main.set("state", test_state)
 
 	for character_id in CHARACTER_IDS:
 		main.call("_go_to", character_id + "_intro_01", false)
@@ -138,34 +145,51 @@ func _run() -> void:
 		_fail("Los botones del menú no ocupan el ancho ampliado")
 		return
 
-	main.call("_go_to", "bosque_01", false)
+	main.call("_go_to", "sue_intro_01", false)
 	await process_frame
-	var bosque: Texture2D = assets.call("get_background", "bosque") as Texture2D
+	var habitacion_sue: Texture2D = assets.call("get_background", "habitacion_sue") as Texture2D
 	var game_background := main.get("game_background") as TextureRect
-	if bosque == null or game_background == null or game_background.texture == null or game_background.texture.resource_path != bosque.resource_path:
-		_fail("El fondo del bosque no carga")
+	if habitacion_sue == null or game_background == null or game_background.texture == null or game_background.texture.resource_path != habitacion_sue.resource_path:
+		_fail("El fondo de la habitación de Sue no carga")
 		return
 
 	var scored_state: Dictionary = main.get("state")
 	for index in range(CHARACTER_IDS.size()):
 		scored_state["affinity"][CHARACTER_IDS[index]] = index % 4
+	scored_state["player"] = {"id": "javi", "display_name": "Javi", "custom": false}
 	main.set("state", scored_state)
 	main.call("_finish_demo")
 	await process_frame
 	var ending_affinity: Label = main.get("ending_affinity") as Label
-	if ending_affinity == null or not ending_affinity.text.contains("TOTAL") or not ending_affinity.text.contains("/21"):
-		_fail("El resumen final no muestra el total de amistad")
+	if ending_affinity == null or not ending_affinity.text.contains("TOTAL") or not ending_affinity.text.contains("/18"):
+		_fail("El resumen final no adapta el total a seis encuentros")
+		return
+	if ending_affinity.text.contains(str(CHARACTER_NAMES["javi"])):
+		_fail("El protagonista elegido aparece en el resumen final")
+		return
+	for index in range(1, CHARACTER_IDS.size()):
+		var character_id: String = CHARACTER_IDS[index]
+		if not ending_affinity.text.contains(str(CHARACTER_NAMES[character_id])):
+			_fail("El resumen final no incluye a: " + character_id)
+			return
+
+	scored_state["player"] = {"id": "custom", "display_name": "Prueba", "custom": true}
+	main.set("state", scored_state)
+	main.call("_finish_demo")
+	await process_frame
+	if not ending_affinity.text.contains("/21"):
+		_fail("El personaje personalizado no conserva los siete encuentros")
 		return
 	for character_id in CHARACTER_IDS:
 		if not ending_affinity.text.contains(str(CHARACTER_NAMES[character_id])):
-			_fail("El resumen final no incluye a: " + character_id)
+			_fail("El resumen personalizado no incluye a: " + character_id)
 			return
 
 	if _find_named(main, "InstallMobileButton") != null or _find_named(main, "InstallMobileConfirmation") != null or _find_named(main, "SelectionInstallMobileButton") != null:
 		_fail("Han reaparecido controles de instalación móvil")
 		return
 
-	print("SMOKE OK: 7 encuentros, 6 fondos asociados, 21 preguntas con 4 respuestas, cuadrícula 2x2, menú ampliado, Early Access y retratos correctos.")
+	print("SMOKE OK: protagonista excluido, 6/7 encuentros dinámicos, sin selector de escenario, 8 fondos, 4 respuestas y resumen adaptado.")
 	quit(0)
 
 
@@ -175,6 +199,18 @@ func _validate_story_data() -> bool:
 		return false
 	var question_counts := {}
 	for character_id in CHARACTER_IDS:
+		var order: Array[String] = Story.encounter_order_for_player(character_id)
+		if order.size() != 6 or order.has(character_id):
+			_fail("El recorrido no excluye al protagonista: " + character_id)
+			return false
+		var start_node := Story.start_for_player(character_id)
+		if Story.character_for_node(start_node) == character_id:
+			_fail("La partida empieza mostrando al protagonista: " + character_id)
+			return false
+		var resolved_node := Story.resolve_for_player(character_id + "_intro_01", character_id)
+		if Story.character_for_node(resolved_node) == character_id:
+			_fail("La navegación no salta el encuentro del protagonista: " + character_id)
+			return false
 		question_counts[character_id] = 0
 		if not Story.NODES.has(character_id + "_intro_01"):
 			_fail("Falta la presentación de: " + character_id)
@@ -270,9 +306,24 @@ func _validate_selection(main: Control) -> bool:
 		if portrait.stretch_mode != TextureRect.STRETCH_KEEP_ASPECT_CENTERED:
 			_fail("El retrato puede volver a cortar la cabeza: " + character_id)
 			return false
+	if _find_named(main, "MapPanel") != null:
+		_fail("La selección de escenario sigue apareciendo al comenzar")
+		return false
+	selection_manager.call("_select_existing_character", "javi")
+	await process_frame
+	var selected_state: Dictionary = main.get("state")
+	var selected_player: Dictionary = selected_state.get("player", {})
+	if str(selected_player.get("id", "")) != "javi" or str(selected_state.get("node_id", "")) != "sue_intro_01":
+		_fail("Elegir a Javi no inicia directamente con Sue")
+		return false
+	var slots: Dictionary = main.get("character_slots")
+	if not _only_character_visible(slots, "sue"):
+		_fail("El protagonista elegido sigue apareciendo al comenzar la historia")
+		return false
 	var flow_screen := selection_manager.get("flow_screen") as Control
-	if flow_screen != null:
-		flow_screen.visible = false
+	if flow_screen == null or flow_screen.visible:
+		_fail("La selección no se cierra al elegir protagonista")
+		return false
 	selection_manager.call("_set_main_screens", false, true, false)
 	return true
 

@@ -1,12 +1,8 @@
 extends RefCounted
 class_name DemoStory
 
-const START := "bar_01"
-const START_BY_LOCATION := {
-	"casa": "casa_01",
-	"bar": "bar_01",
-	"bosque": "bosque_01"
-}
+const START := "javi_intro_01"
+const LEGACY_START_NODES: Array[String] = ["casa_01", "bar_01", "bosque_01"]
 
 const ENCOUNTER_ORDER: Array[String] = ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"]
 
@@ -235,9 +231,6 @@ static var NODES: Dictionary = _build_nodes()
 
 static func _build_nodes() -> Dictionary:
 	var nodes: Dictionary = {}
-	_add_opening(nodes, "casa_01", "casa_asturias", "CASA")
-	_add_opening(nodes, "bar_01", "bar", "BAR")
-	_add_opening(nodes, "bosque_01", "bosque", "BOSQUE")
 
 	for character_index in range(ENCOUNTER_ORDER.size()):
 		var character_id: String = ENCOUNTER_ORDER[character_index]
@@ -297,20 +290,6 @@ static func _build_nodes() -> Dictionary:
 	return nodes
 
 
-static func _add_opening(nodes: Dictionary, node_id: String, background: String, location_name: String) -> void:
-	nodes[node_id] = {
-		"speaker": "Narrador",
-		"text": "Empiezas en %s. Hoy conocerás al grupo de uno en uno: escucha lo que cuenta cada persona y responde tres preguntas para descubrir cuánto la conoces." % location_name.to_lower(),
-		"background": background,
-		"show": ["javi"],
-		"positions": {"javi": "center"},
-		"expressions": {"javi": "neutral"},
-		"focus": "javi",
-		"chapter": "ENCUENTRO 1/7 · JAVI",
-		"next": "javi_intro_01"
-	}
-
-
 static func _single_character_node(character_id: String, speaker: String, text: String, next_id: String, chapter: String) -> Dictionary:
 	var encounter: Dictionary = ENCOUNTERS.get(character_id, {})
 	var node := {
@@ -332,4 +311,37 @@ static func _following_node(character_index: int, question_index: int, question_
 		return "%s_q%d" % [ENCOUNTER_ORDER[character_index], question_index + 2]
 	if character_index + 1 < ENCOUNTER_ORDER.size():
 		return "%s_intro_01" % ENCOUNTER_ORDER[character_index + 1]
+	return "__END__"
+
+
+static func encounter_order_for_player(player_id: String) -> Array[String]:
+	var order: Array[String] = []
+	for character_id in ENCOUNTER_ORDER:
+		if character_id != player_id:
+			order.append(character_id)
+	return order
+
+
+static func start_for_player(player_id: String) -> String:
+	var order := encounter_order_for_player(player_id)
+	if order.is_empty():
+		return "__END__"
+	return order[0] + "_intro_01"
+
+
+static func character_for_node(node_id: String) -> String:
+	for character_id in ENCOUNTER_ORDER:
+		if node_id.begins_with(character_id + "_"):
+			return character_id
+	return ""
+
+
+static func resolve_for_player(node_id: String, player_id: String) -> String:
+	if node_id.is_empty() or LEGACY_START_NODES.has(node_id):
+		return start_for_player(player_id)
+	if character_for_node(node_id) != player_id:
+		return node_id
+	var player_index := ENCOUNTER_ORDER.find(player_id)
+	if player_index >= 0 and player_index + 1 < ENCOUNTER_ORDER.size():
+		return ENCOUNTER_ORDER[player_index + 1] + "_intro_01"
 	return "__END__"

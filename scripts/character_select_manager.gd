@@ -9,10 +9,8 @@ var main: Control
 var flow_screen: Control
 var selection_view: Control
 var creation_view: Control
-var map_view: Control
 var character_grid: GridContainer
 var selection_title: Label
-var map_title: Label
 var name_input: LineEdit
 var gender_input: OptionButton
 var appearance_input: LineEdit
@@ -42,7 +40,6 @@ func open_selection() -> void:
 	flow_screen.visible = true
 	selection_view.visible = true
 	creation_view.visible = false
-	map_view.visible = false
 	selection_title.text = "Elige quién protagoniza esta partida"
 
 
@@ -96,12 +93,9 @@ func _build_flow_screen() -> void:
 
 	selection_view = _build_selection_view()
 	creation_view = _build_creation_view()
-	map_view = _build_map_view()
 	flow_screen.add_child(selection_view)
 	flow_screen.add_child(creation_view)
-	flow_screen.add_child(map_view)
 	creation_view.visible = false
-	map_view.visible = false
 
 
 func _build_selection_view() -> Control:
@@ -136,7 +130,7 @@ func _build_selection_view() -> Control:
 	box.add_child(selection_title)
 
 	var subtitle := Label.new()
-	subtitle.text = "Puedes elegir a cualquiera del grupo o crear un personaje nuevo. La elección queda guardada en la partida."
+	subtitle.text = "El personaje que elijas serás tú y no aparecerá entre los encuentros. También puedes crear un protagonista nuevo."
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	subtitle.add_theme_color_override("font_color", Color("dbcab3"))
@@ -257,62 +251,6 @@ func _build_creation_view() -> Control:
 	return view
 
 
-func _build_map_view() -> Control:
-	var view := Control.new()
-	view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	var panel := PanelContainer.new()
-	panel.name = "MapPanel"
-	panel.anchor_left = 0.10
-	panel.anchor_top = 0.13
-	panel.anchor_right = 0.90
-	panel.anchor_bottom = 0.87
-	panel.add_theme_stylebox_override("panel", _panel_style(Color(0.045, 0.03, 0.025, 0.97), Color("d6a85f"), 2, 18))
-	view.add_child(panel)
-
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 30)
-	margin.add_theme_constant_override("margin_top", 25)
-	margin.add_theme_constant_override("margin_right", 30)
-	margin.add_theme_constant_override("margin_bottom", 25)
-	panel.add_child(margin)
-
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 14)
-	margin.add_child(box)
-
-	map_title = Label.new()
-	map_title.text = "¿Dónde empieza la partida?"
-	map_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	map_title.add_theme_color_override("font_color", Color("f2c97e"))
-	map_title.add_theme_font_size_override("font_size", 29)
-	box.add_child(map_title)
-
-	var subtitle := Label.new()
-	subtitle.text = "Elige un lugar del mapa. Esta base podrá ampliarse con nuevos escenarios y eventos."
-	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	subtitle.add_theme_color_override("font_color", Color("dbcab3"))
-	subtitle.add_theme_font_size_override("font_size", 14)
-	box.add_child(subtitle)
-
-	var location_grid := GridContainer.new()
-	location_grid.columns = 3
-	location_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	location_grid.add_theme_constant_override("h_separation", 14)
-	box.add_child(location_grid)
-
-	for location_id in GameData.LOCATION_ORDER:
-		location_grid.add_child(_make_location_card(location_id))
-
-	var back_result: Variant = main.call("_make_button", "Volver a personajes", false)
-	var back_button := back_result as Button
-	back_button.custom_minimum_size = Vector2(0, 42)
-	back_button.pressed.connect(_show_character_selection)
-	box.add_child(back_button)
-	return view
-
-
 func _make_character_card(character_id: String) -> Button:
 	var data: Dictionary = GameData.CHARACTERS.get(character_id, {})
 	var button := Button.new()
@@ -428,18 +366,6 @@ func _make_custom_card() -> Button:
 	return button
 
 
-func _make_location_card(location_id: String) -> Button:
-	var data: Dictionary = GameData.LOCATIONS.get(location_id, {})
-	var result: Variant = main.call("_make_button", str(data.get("name", location_id.capitalize())), false)
-	var button := result as Button
-	button.custom_minimum_size = Vector2(0, 170)
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.tooltip_text = str(data.get("description", ""))
-	button.add_theme_font_size_override("font_size", 23)
-	button.pressed.connect(_start_location.bind(location_id))
-	return button
-
-
 func _character_portrait(character_id: String) -> Texture2D:
 	var assets: Variant = main.get("asset_manager")
 	if assets == null:
@@ -460,12 +386,11 @@ func _character_portrait(character_id: String) -> Texture2D:
 
 func _select_existing_character(character_id: String) -> void:
 	pending_profile = GameData.character_profile(character_id)
-	_show_map()
+	_start_game()
 
 
 func _show_creation() -> void:
 	selection_view.visible = false
-	map_view.visible = false
 	creation_view.visible = true
 	creation_error.text = ""
 	name_input.grab_focus()
@@ -474,7 +399,6 @@ func _show_creation() -> void:
 func _show_character_selection() -> void:
 	selection_view.visible = true
 	creation_view.visible = false
-	map_view.visible = false
 
 
 func _confirm_custom_character() -> void:
@@ -493,31 +417,23 @@ func _confirm_custom_character() -> void:
 		"custom": true
 	}
 	creation_error.text = ""
-	_show_map()
+	_start_game()
 
 
-func _show_map() -> void:
-	selection_view.visible = false
-	creation_view.visible = false
-	map_view.visible = true
-	map_title.text = "%s · ¿Dónde empieza la partida?" % str(pending_profile.get("display_name", "Protagonista"))
-
-
-func _start_location(location_id: String) -> void:
+func _start_game() -> void:
 	if pending_profile.is_empty():
 		_show_character_selection()
 		return
-	var start_node: String = str(Story.START_BY_LOCATION.get(location_id, Story.START))
+	var player_id := str(pending_profile.get("id", "custom"))
+	var start_node: String = Story.start_for_player(player_id)
 	var new_state := {
 		"node_id": start_node,
 		"affinity": {},
 		"expressions": {},
 		"history": [
-			{"system": "protagonist", "id": str(pending_profile.get("id", "custom"))},
-			{"system": "location", "id": location_id}
+			{"system": "protagonist", "id": player_id}
 		],
-		"player": pending_profile.duplicate(true),
-		"location_id": location_id
+		"player": pending_profile.duplicate(true)
 	}
 	for character_id in GameData.CHARACTER_ORDER:
 		new_state["affinity"][character_id] = 0
@@ -525,9 +441,6 @@ func _start_location(location_id: String) -> void:
 	main.set("state", new_state)
 	flow_screen.visible = false
 	_set_main_screens(false, true, false)
-	var chapter_label: Label = main.get("chapter_label") as Label
-	if chapter_label != null:
-		chapter_label.text = GameData.location_chapter(location_id)
 	main.call("_go_to", start_node, false)
 	main.call("_show_toast", "Protagonista: " + str(pending_profile.get("display_name", "")))
 
@@ -540,8 +453,6 @@ func _continue_with_migration() -> void:
 	var loaded_state: Dictionary = main.get("state")
 	if not loaded_state.has("player") or typeof(loaded_state["player"]) != TYPE_DICTIONARY:
 		loaded_state["player"] = GameData.character_profile("javi")
-	if not loaded_state.has("location_id"):
-		loaded_state["location_id"] = "bar"
 	if not loaded_state.has("affinity") or typeof(loaded_state["affinity"]) != TYPE_DICTIONARY:
 		loaded_state["affinity"] = {}
 	if not loaded_state.has("expressions") or typeof(loaded_state["expressions"]) != TYPE_DICTIONARY:
@@ -551,22 +462,18 @@ func _continue_with_migration() -> void:
 			loaded_state["affinity"][character_id] = 0
 		if not loaded_state["expressions"].has(character_id):
 			loaded_state["expressions"][character_id] = "neutral"
-	var location_id := str(loaded_state.get("location_id", "bar"))
-	if location_id == "calle":
-		location_id = "bosque"
-		loaded_state["location_id"] = location_id
+	var player: Dictionary = loaded_state["player"]
+	var player_id := str(player.get("id", "custom"))
 	var node_id := str(loaded_state.get("node_id", ""))
-	if node_id.begins_with("calle_"):
-		node_id = "bosque_" + node_id.trim_prefix("calle_")
-	if node_id.is_empty() or not Story.NODES.has(node_id):
-		node_id = str(Story.START_BY_LOCATION.get(location_id, Story.START))
-		loaded_state["node_id"] = node_id
+	if node_id.is_empty() or Story.LEGACY_START_NODES.has(node_id) or not Story.NODES.has(node_id):
+		node_id = Story.start_for_player(player_id)
+	else:
+		node_id = Story.resolve_for_player(node_id, player_id)
+	loaded_state["node_id"] = node_id
+	loaded_state.erase("location_id")
 	main.set("state", loaded_state)
 	flow_screen.visible = false
 	_set_main_screens(false, true, false)
-	var chapter_label: Label = main.get("chapter_label") as Label
-	if chapter_label != null:
-		chapter_label.text = GameData.location_chapter(location_id)
 	main.call("_go_to", node_id, false)
 	main.call("_show_toast", "Partida cargada")
 

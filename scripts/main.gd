@@ -176,7 +176,7 @@ func _build_menu() -> void:
 	menu_content.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "Siete encuentros, veintiuna preguntas y una silla que todavía espera a alguien."
+	subtitle.text = "Elige quién eres, conoce al resto del grupo y descubre cuánto sabes de cada persona."
 	subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	subtitle.add_theme_color_override("font_color", Color("dbcab3"))
 	subtitle.add_theme_font_size_override("font_size", 18)
@@ -408,7 +408,7 @@ func _build_ending() -> void:
 	box.add_child(title)
 
 	var text := Label.new()
-	text.text = "Cada respuesta correcta suma un punto con ese personaje. Este es el resultado de tus siete encuentros."
+	text.text = "Cada respuesta correcta suma un punto de amistad. Estos son tus resultados con los personajes que has conocido."
 	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	text.add_theme_color_override("font_color", Color("d9c7b0"))
@@ -580,19 +580,19 @@ func _load_game_from_button() -> void:
 
 func _go_to(node_id: String, add_to_history: bool = true) -> void:
 	_clear_choices()
-	if node_id == "__END__":
+	var resolved_node_id := Story.resolve_for_player(node_id, _player_character_id())
+	if resolved_node_id == "__END__":
 		_finish_demo()
 		return
 
-	var node: Dictionary = Story.NODES.get(node_id, {})
+	var node: Dictionary = Story.NODES.get(resolved_node_id, {})
 	if node.is_empty():
-		_show_toast("No se ha encontrado la escena: " + node_id)
+		_show_toast("No se ha encontrado la escena: " + resolved_node_id)
 		return
 
 	current_node = node
-	state["node_id"] = node_id
-	if node.has("chapter"):
-		chapter_label.text = str(node["chapter"])
+	state["node_id"] = resolved_node_id
+	chapter_label.text = _chapter_for_node(resolved_node_id, node)
 
 	if node.has("background"):
 		_set_background(str(node["background"]))
@@ -641,15 +641,37 @@ func _set_background(background_id: String) -> void:
 
 func _preload_followups(node: Dictionary) -> void:
 	if node.has("next"):
-		var next_node: Dictionary = Story.NODES.get(str(node["next"]), {})
+		var next_id := Story.resolve_for_player(str(node["next"]), _player_character_id())
+		var next_node: Dictionary = Story.NODES.get(next_id, {})
 		if not next_node.is_empty():
 			asset_manager.warm_scene(next_node)
 	if node.has("choices"):
 		for choice in node["choices"]:
-			var next_id := str(choice.get("next", ""))
-			var choice_node: Dictionary = Story.NODES.get(next_id, {})
+			var next_choice_id := Story.resolve_for_player(str(choice.get("next", "")), _player_character_id())
+			var choice_node: Dictionary = Story.NODES.get(next_choice_id, {})
 			if not choice_node.is_empty():
 				asset_manager.warm_scene(choice_node)
+
+
+func _player_character_id() -> String:
+	var player: Dictionary = state.get("player", {})
+	return str(player.get("id", ""))
+
+
+func _chapter_for_node(node_id: String, node: Dictionary) -> String:
+	var character_id: String = Story.character_for_node(node_id)
+	var encounter_order: Array[String] = Story.encounter_order_for_player(_player_character_id())
+	var encounter_index := encounter_order.find(character_id)
+	if encounter_index < 0:
+		return str(node.get("chapter", "ENCUENTRO"))
+	var chapter := "ENCUENTRO %d/%d · %s" % [
+		encounter_index + 1,
+		encounter_order.size(),
+		str(CHARACTER_NAMES.get(character_id, character_id)).to_upper()
+	]
+	if node.has("question_number"):
+		chapter += " · PREGUNTA %d/3" % int(node["question_number"])
+	return chapter
 
 
 func _start_typing(text: String) -> void:
@@ -829,14 +851,15 @@ func _finish_demo() -> void:
 	menu_screen.visible = false
 	ending_screen.visible = true
 	var affinity: Dictionary = state.get("affinity", {})
+	var encounter_order: Array[String] = Story.encounter_order_for_player(_player_character_id())
 	var result_lines := PackedStringArray()
 	var total := 0
-	for character_id in CHARACTER_ORDER:
+	for character_id in encounter_order:
 		var value: int = clampi(int(affinity.get(character_id, 0)), 0, 3)
 		total += value
 		result_lines.append("%s  %s · %s" % [CHARACTER_NAMES.get(character_id, character_id), _score(value), _friendship_level(value)])
 	result_lines.append("")
-	result_lines.append("TOTAL  %d/21" % total)
+	result_lines.append("TOTAL  %d/%d" % [total, encounter_order.size() * 3])
 	ending_affinity.text = "\n".join(result_lines)
 
 
@@ -891,8 +914,12 @@ func _read_save() -> bool:
 		if not state["expressions"].has(character_id):
 			state["expressions"][character_id] = "neutral"
 	var saved_node := str(state.get("node_id", Story.START))
-	if saved_node != "__END__" and not Story.NODES.has(saved_node):
-		state["node_id"] = str(Story.START_BY_LOCATION.get(str(state.get("location_id", "bar")), Story.START))
+	if saved_node != "__END__":
+		if Story.LEGACY_START_NODES.has(saved_node) or not Story.NODES.has(saved_node):
+			saved_node = Story.start_for_player(_player_character_id())
+		else:
+			saved_node = Story.resolve_for_player(saved_node, _player_character_id())
+		state["node_id"] = saved_node
 	for character in state["expressions"].keys():
 		_apply_expression(str(character), str(state["expressions"][character]))
 	return true

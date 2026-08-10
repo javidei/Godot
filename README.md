@@ -5,7 +5,7 @@ Novela visual en **Godot 4.7.1**, actualmente en **Early Access**, con Javi, Sue
 ## Base actual
 
 - Recursos gráficos locales: no depende de `raw.githubusercontent.com` para fondos o personajes.
-- 6 fondos, 5 poses de cada protagonista y una pose inicial de cada personaje secundario.
+- 8 fondos, 5 poses de cada protagonista y una pose inicial de cada personaje secundario.
 - Poses seleccionables desde los datos del diálogo y posiciones `left`, `center` y `right`.
 - Carga bajo demanda con caché acotada y precarga ligera de la siguiente escena.
 - Composición de novela visual sin `ColorRect` ni placeholders detrás de los personajes.
@@ -13,9 +13,10 @@ Novela visual en **Godot 4.7.1**, actualmente en **Early Access**, con Javi, Sue
 - Interfaz para ratón/táctil y composición alternativa en orientación vertical.
 - Guardado compatible en `user://godot_otome_save.json`.
 - AudioManager con canales Music/SFX/UI. La demo genera tonos `strum`, `clonk` y UI sin usar audio externo.
-- Recorrido individual por los siete personajes: solo aparece una persona cada vez, se presenta sin revelar las respuestas y plantea tres preguntas.
+- La nueva partida empieza eligiendo protagonista, sin una selección de escenario intermedia.
+- Recorrido individual por el resto del grupo: el personaje elegido representa al jugador y no aparece como encuentro.
 - Cuatro respuestas por pregunta en una cuadrícula táctil de dos columnas.
-- Afinidad independiente de `0/3` por personaje y resumen final completo de `0/21` puntos.
+- Afinidad independiente de `0/3` por personaje y resumen final de `0/18` puntos al elegir a alguien del grupo (`0/21` con un personaje personalizado).
 
 ## Recursos
 
@@ -42,7 +43,7 @@ El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la
 
 ## Diálogo
 
-La versión Early Access `0.3.2` recorre a Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino de uno en uno. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata del personaje. El fondo acompaña siempre al personaje visible: Javi usa el bar; Sue, el bosque; Smokey y Carmen, la habitación de Fran; Jony y Ana, la habitación de Ana; y El Argentino, su habitación. La pantalla principal conserva Casa Asturias. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
+La versión Early Access `0.3.3` permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de la historia y el recorrido se adapta a los otros seis; si se crea un personaje nuevo, aparecen los siete. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata. Ya no se elige escenario al comenzar: cada personaje carga directamente su fondo asociado. Javi y Sue usan sus habitaciones; Smokey y Carmen, la habitación de Fran; Jony y Ana, la habitación de Ana; y El Argentino, su habitación. La pantalla principal conserva Casa Asturias. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
 
 Una escena puede indicar recursos y composición sin crear escenas Godot nuevas:
 
