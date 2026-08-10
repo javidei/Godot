@@ -1,6 +1,6 @@
 extends Node
 
-const RELEASE_VERSION := "0.4.2"
+const RELEASE_VERSION := "0.4.3"
 const DESKTOP_CARDS_PER_ROW := 4
 const COMPACT_CARDS_PER_ROW := 2
 const DESKTOP_CARD_SIZE := Vector2(240, 150)
