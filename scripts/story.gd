@@ -15,27 +15,27 @@ const ENCOUNTERS := {
 		"name": "Javi",
 		"background": "asturias_home",
 		"intro": [
-			{"expression": "thoughtful", "text": "Soy Javi. Normalmente voy tranquilo, pero cuando algo no tiene sentido me sale el ‘Pero vamos a ver...’ antes de poder evitarlo."},
-			{"expression": "happy", "text": "Soy curioso, sarcástico y bastante cabezota. Me encantan los videojuegos, la informática, la guitarra y, para qué engañarnos, comer."}
+			{"expression": "thoughtful", "text": "Soy Javi. Cuando se me mete un proyecto en la cabeza, puedo pasar horas dándole vueltas hasta que consigo verlo funcionar."},
+			{"expression": "happy", "text": "Con mis amigos suelo analizar cada plan, encontrarle alguna pega y, aun así, terminar apuntándome. Supongo que esa contradicción también dice bastante de mí."}
 		],
 		"questions": [
 			{
 				"text": "Primera pregunta: ¿qué combinación de aficiones me representa mejor?",
-				"choices": ["Videojuegos, informática y guitarra", "Cine, pintura y moda", "Pokémon, Magic y rol"],
+				"choices": ["Videojuegos, informática y guitarra", "Cine, pintura y moda", "Pokémon, Magic y rol", "Senderismo, cocina y fotografía"],
 				"correct": 0,
 				"correct_text": "Exacto. Si hay un ordenador, un juego o una guitarra cerca, ya tienes tema conmigo.",
 				"wrong_text": "No exactamente. Lo mío son los videojuegos, la informática y la guitarra. Y comer también cuenta."
 			},
 			{
 				"text": "¿Qué frase es más probable que diga cuando algo no me cuadra?",
-				"choices": ["Te lo dije.", "Pero vamos a ver...", "Confía en mí."],
+				"choices": ["Te lo dije.", "Pero vamos a ver...", "Confía en mí.", "Ya estamos otra vez."],
 				"correct": 1,
 				"correct_text": "Pero vamos a ver... esa era fácil, illo.",
 				"wrong_text": "La respuesta era ‘Pero vamos a ver...’. Si después digo ‘illo’, ya no quedan dudas."
 			},
 			{
 				"text": "Y la última: ¿cómo describirías mi forma de ser?",
-				"choices": ["Sarcástico, curioso, tranquilo y cabezota", "Serio, distante y nada curioso", "Impulsivo, imprevisible y despreocupado"],
+				"choices": ["Sarcástico, curioso, tranquilo y cabezota", "Serio, distante y nada curioso", "Impulsivo, imprevisible y despreocupado", "Creativo, tímido y muy indeciso"],
 				"correct": 0,
 				"correct_text": "Me tienes bien calado. Sobre todo en lo de cabezota.",
 				"wrong_text": "Casi. Soy sarcástico, curioso, tranquilo y bastante cabezota."
@@ -46,27 +46,27 @@ const ENCOUNTERS := {
 		"name": "Sue",
 		"background": "asturias_home",
 		"intro": [
-			{"expression": "happy", "text": "Soy Susana, aunque aquí todos me llaman Sue. Soy directa, divertida y observadora; si veo algo claro, probablemente lo diga tal cual."},
-			{"expression": "thoughtful", "text": "Me gusta pintar, leer fantasía y mezclar ropa gótica con un estilo más urbano. Tengo carácter, pero también sé reírme de casi todo."}
+			{"expression": "happy", "text": "Soy Sue. No necesito hacer mucho ruido para sentirme parte de un plan; me importa más que la gente a mi lado pueda ser ella misma."},
+			{"expression": "thoughtful", "text": "Me gusta que las cosas tengan identidad y no parezcan copiadas de todo lo demás. Con confianza, cualquier tarde corriente puede acabar teniendo algo especial."}
 		],
 		"questions": [
 			{
 				"text": "¿Qué me gusta hacer cuando tengo tiempo para mí?",
-				"choices": ["Pintar y leer fantasía", "Programar y tocar la guitarra", "Jugar a Magic y Pokémon"],
+				"choices": ["Pintar y leer fantasía", "Programar y tocar la guitarra", "Jugar a Magic y Pokémon", "Hacer senderismo y fotografía"],
 				"correct": 0,
 				"correct_text": "Sí. Dame pinturas o un buen libro de fantasía y ya tengo plan.",
 				"wrong_text": "Te lo dije: pintar y leer fantasía. Esa era la combinación correcta."
 			},
 			{
 				"text": "¿Qué estilo de ropa encaja más conmigo?",
-				"choices": ["Deportivo y clásico", "Gótico y urbano", "Colorido con aros grandes"],
+				"choices": ["Deportivo y clásico", "Gótico y urbano", "Colorido con aros grandes", "Elegante y barroco"],
 				"correct": 1,
 				"correct_text": "Correcto: gótico y urbano, según el día y las ganas.",
 				"wrong_text": "La respuesta era gótico y urbano. Ya estamos... hay que fijarse un poco más."
 			},
 			{
 				"text": "¿Qué descripción se acerca más a mi personalidad?",
-				"choices": ["Directa, divertida, observadora y con carácter", "Despreocupada, impulsiva e imprevisible", "Tranquila, sarcástica y cabezota"],
+				"choices": ["Directa, divertida, observadora y con carácter", "Despreocupada, impulsiva e imprevisible", "Tranquila, sarcástica y cabezota", "Serena, tímida y muy reservada"],
 				"correct": 0,
 				"correct_text": "Bien. Me conoces mejor de lo que parecía.",
 				"wrong_text": "Soy directa, divertida, observadora y con carácter. Para la próxima ya lo sabes."
@@ -77,27 +77,27 @@ const ENCOUNTERS := {
 		"name": "Smokey",
 		"background": "cafeteria",
 		"intro": [
-			{"expression": "confident", "text": "Soy Fran, aunque todo el mundo me llama Smokey. Suelo ir bastante despreocupado y no necesito tener cada detalle del plan cerrado."},
-			{"expression": "laugh", "text": "Soy gracioso, impulsivo e imprevisible. Si digo ‘Confía en mí, tengo una idea’, puede salir genial... o convertirse en otra historia que contar."}
+			{"expression": "confident", "text": "Puedes llamarme Smokey. No soy muy de presentaciones formales; prefiero que una conversación empiece sola y termine en alguna historia memorable."},
+			{"expression": "laugh", "text": "A veces mis mejores recuerdos comienzan cuando nadie tenía demasiado claro qué iba a pasar. Si acabamos riéndonos, para mí el plan ya ha salido bien."}
 		],
 		"questions": [
 			{
 				"text": "Empezamos fácil: ¿cómo me llamo fuera del apodo Smokey?",
-				"choices": ["Jony", "Fran", "Javi"],
+				"choices": ["Jony", "Fran", "Javi", "Juan"],
 				"correct": 1,
 				"correct_text": "Eso es: Fran. Aunque seguramente me oigas más veces Smokey.",
 				"wrong_text": "Mi nombre es Fran. Smokey es el apodo que terminó ganando."
 			},
 			{
 				"text": "¿Qué descripción encaja mejor con mi forma de actuar?",
-				"choices": ["Despreocupado, impulsivo e imprevisible", "Directo, observador y muy organizado", "Serio, tranquilo y enemigo de improvisar"],
+				"choices": ["Despreocupado, impulsivo e imprevisible", "Directo, observador y muy organizado", "Serio, tranquilo y enemigo de improvisar", "Metódico, prudente y previsor"],
 				"correct": 0,
 				"correct_text": "Exacto. La improvisación también es un método, más o menos.",
 				"wrong_text": "Soy despreocupado, impulsivo e imprevisible. Organizarlo todo no sería muy propio de mí."
 			},
 			{
 				"text": "¿Qué frase encaja conmigo antes de explicar un plan?",
-				"choices": ["Ya estamos...", "¿Llegué tarde?", "Confía en mí. Tengo una idea."],
+				"choices": ["Ya estamos...", "¿Llegué tarde?", "Confía en mí. Tengo una idea.", "Primero hacemos una lista."],
 				"correct": 2,
 				"correct_text": "Confía en mí. Sabía que esa la acertabas.",
 				"wrong_text": "Era ‘Confía en mí. Tengo una idea’. La próxima vez quizá convenga preguntar por la idea primero."
@@ -108,27 +108,27 @@ const ENCOUNTERS := {
 		"name": "Carmen",
 		"background": "cafeteria",
 		"intro": [
-			{"expression": "neutral", "text": "Soy Carmen, aunque también puedes llamarme Carmela. Estudio Cine, soy vegetariana y casi siempre encuentro una excusa para bromear."},
-			{"expression": "neutral", "text": "Me gusta salir, comer, vapear y la ropa colorida. Las gafas, los tatuajes y los aros o pendientes también forman parte de mi estilo."}
+			{"expression": "neutral", "text": "Soy Carmen, aunque también puedes llamarme Carmela. Si alguien propone un plan con buena compañía, no suele costar mucho convencerme."},
+			{"expression": "neutral", "text": "Me gusta que la gente tenga algo propio y que una tarde cualquiera pueda acabar siendo una anécdota. Los planes demasiado serios no suelen durar mucho a mi alrededor."}
 		],
 		"questions": [
 			{
 				"text": "¿Qué estoy estudiando?",
-				"choices": ["Informática", "Bellas Artes", "Cine"],
+				"choices": ["Informática", "Bellas Artes", "Cine", "Diseño gráfico"],
 				"correct": 2,
 				"correct_text": "Cine, correcto. Algún día todo esto podría acabar en una película.",
 				"wrong_text": "Estudio Cine. Tendrás que prestar más atención a los créditos."
 			},
 			{
 				"text": "Si vamos a comer en grupo, ¿qué detalle deberías recordar?",
-				"choices": ["Soy vegetariana", "No me gusta salir a comer", "Solo tomo postre"],
+				"choices": ["Soy vegetariana", "No me gusta salir a comer", "Solo tomo postre", "No tomo bebidas con gas"],
 				"correct": 0,
 				"correct_text": "Exacto: opción vegetariana y todos contentos.",
 				"wrong_text": "Soy vegetariana. Avisar antes de pedir por todo el mundo siempre ayuda."
 			},
 			{
 				"text": "¿Qué conjunto de detalles pega más conmigo?",
-				"choices": ["Ropa colorida, aros y bromas", "Gabardina negra y gafas oscuras", "Guitarra, informática y sarcasmo"],
+				"choices": ["Ropa colorida, aros y bromas", "Gabardina negra y gafas oscuras", "Guitarra, informática y sarcasmo", "Ropa deportiva, cocina y timidez"],
 				"correct": 0,
 				"correct_text": "Sí: color, aros y alguna broma por el camino.",
 				"wrong_text": "Ropa colorida, aros y bromas. Esa es la mezcla más Carmela."
@@ -139,27 +139,27 @@ const ENCOUNTERS := {
 		"name": "Jony",
 		"background": "cafeteria",
 		"intro": [
-			{"expression": "neutral", "text": "Soy Jony, o Jon si quieres ahorrar una letra. Soy informático y puedo hablar bastante más de la cuenta cuando aparece alguno de mis temas favoritos."},
-			{"expression": "neutral", "text": "Me gustan Pokémon y Magic, y también soy vegetariano. Con esas tres pistas ya tienes una buena parte de mi ficha."}
+			{"expression": "neutral", "text": "Soy Jony, o Jon si quieres ahorrar una letra. Al principio puedo parecer algo reservado, pero con el tema adecuado se me pasa bastante rápido."},
+			{"expression": "neutral", "text": "Cuando algo me interesa de verdad, puedo analizar hasta el último detalle y alargar la conversación más de la cuenta. Avisado quedas."}
 		],
 		"questions": [
 			{
 				"text": "¿A qué me dedico?",
-				"choices": ["Informática", "Cine", "Música"],
+				"choices": ["Informática", "Cine", "Música", "Hostelería"],
 				"correct": 0,
 				"correct_text": "Correcto. Informático dentro y fuera de horario.",
-				"wrong_text": "Soy informático. Esa respuesta estaba en mi presentación."
+				"wrong_text": "Soy informático. Esa tendrás que recordarla para la próxima."
 			},
 			{
 				"text": "¿Qué dos juegos pueden darme conversación para rato?",
-				"choices": ["Ajedrez y dominó", "Pokémon y Magic", "Fútbol y tenis"],
+				"choices": ["Ajedrez y dominó", "Pokémon y Magic", "Fútbol y tenis", "Rol y Warhammer"],
 				"correct": 1,
 				"correct_text": "Pokémon y Magic. Con eso has elegido una conversación larga.",
 				"wrong_text": "Pokémon y Magic. La próxima pregunta quizá necesite menos maná."
 			},
 			{
 				"text": "¿Qué comparto con Carmen a la hora de comer?",
-				"choices": ["Los dos somos vegetarianos", "Los dos evitamos los postres", "Los dos odiamos salir a comer"],
+				"choices": ["Los dos somos vegetarianos", "Los dos evitamos los postres", "Los dos odiamos salir a comer", "Los dos pedimos siempre carne"],
 				"correct": 0,
 				"correct_text": "Eso es. Los dos somos vegetarianos.",
 				"wrong_text": "Carmen y yo somos vegetarianos. Esa era la coincidencia."
@@ -170,27 +170,27 @@ const ENCOUNTERS := {
 		"name": "Ana",
 		"background": "bosque",
 		"intro": [
-			{"expression": "neutral", "text": "Soy Ana. Me atrae todo lo gótico, witchy, vampírico y barroco; cuanto más misterio tenga una estética o una historia, mejor."},
-			{"expression": "neutral", "text": "Me gustan los libros, los vampiros, el rol, la fantasía, el pole dance y el arte. Soy sensible e impulsiva, y a veces puedo parecer más seria de lo que estoy."}
+			{"expression": "neutral", "text": "Soy Ana. No suelo contarlo todo de primeras; prefiero observar, coger confianza y decidir cuánto de mí enseño en cada momento."},
+			{"expression": "neutral", "text": "Las historias que dejan espacio para imaginar me atrapan con facilidad. Por dentro casi siempre está pasando bastante más de lo que cuento en voz alta."}
 		],
 		"questions": [
 			{
 				"text": "¿Qué estética encaja mejor conmigo?",
-				"choices": ["Gótica, witchy, vampírica y barroca", "Minimalista y deportiva", "Colorida y tropical"],
+				"choices": ["Gótica, witchy, vampírica y barroca", "Minimalista y deportiva", "Colorida y tropical", "Retro y futurista"],
 				"correct": 0,
 				"correct_text": "Sí. Si parece salido de una historia de vampiros, probablemente me interese.",
 				"wrong_text": "Lo mío es lo gótico, witchy, vampírico y barroco."
 			},
 			{
 				"text": "¿Qué grupo de aficiones es más mío?",
-				"choices": ["Cine, vapeo y ropa colorida", "Libros, rol, fantasía, pole dance y arte", "Informática, guitarra y videojuegos"],
+				"choices": ["Cine, vapeo y ropa colorida", "Libros, rol, fantasía, pole dance y arte", "Informática, guitarra y videojuegos", "Música, cocina y senderismo"],
 				"correct": 1,
 				"correct_text": "Exacto. Ahí hay varias formas distintas de contar o vivir una historia.",
 				"wrong_text": "Libros, rol, fantasía, pole dance y arte. Esa era mi combinación."
 			},
 			{
 				"text": "¿Qué descripción se acerca más a mi personalidad?",
-				"choices": ["Sensible, impulsiva y a veces seria", "Despreocupada y siempre indiferente", "Tranquila, sarcástica y cabezota"],
+				"choices": ["Sensible, impulsiva y a veces seria", "Despreocupada y siempre indiferente", "Tranquila, sarcástica y cabezota", "Extrovertida, paciente y muy práctica"],
 				"correct": 0,
 				"correct_text": "Sí. Has sabido mirar un poco más allá de la estética.",
 				"wrong_text": "Soy sensible, impulsiva y a veces seria. No todo se ve a primera vista."
@@ -201,27 +201,27 @@ const ENCOUNTERS := {
 		"name": "El Argentino",
 		"background": "bosque",
 		"intro": [
-			{"expression": "neutral", "text": "Me llaman El Argentino. Con eso ya tienes el nombre por el que me conoce todo el grupo."},
-			{"expression": "neutral", "text": "Gabardina negra, gafas oscuras y tatuajes: no es difícil reconocerme cuando aparezco. Lo de llegar cuando los demás aún están decidiendo también ayuda a que la entrada se note."}
+			{"expression": "neutral", "text": "No soy de soltar discursos largos sobre mí. Prefiero aparecer, escuchar un rato y hablar cuando tengo algo que merece la pena decir."},
+			{"expression": "neutral", "text": "Dentro del grupo suelo ir a mi ritmo. Puede que llegue con cara de saber exactamente qué ocurre, aunque muchas veces solo esté esperando a que alguien se decida."}
 		],
 		"questions": [
 			{
-				"text": "¿Cómo me conoce el grupo?",
-				"choices": ["Smokey", "El Argentino", "Jon"],
-				"correct": 1,
-				"correct_text": "El Argentino. Directo y fácil de recordar.",
-				"wrong_text": "Me conocen como El Argentino. No hacía falta darle muchas vueltas."
+				"text": "¿Qué suelo fumar cuando estoy con el grupo?",
+				"choices": ["Tabaco de liar", "Puros", "Cigarrillos mentolados", "No fumo"],
+				"correct": 0,
+				"correct_text": "Tabaco de liar, correcto. Esa sí era una pista fácil de ver.",
+				"wrong_text": "Suelo fumar tabaco de liar. La próxima vez fíjate en el cigarro."
 			},
 			{
 				"text": "¿Qué detalles forman mi aspecto más reconocible?",
-				"choices": ["Gabardina negra, gafas oscuras y tatuajes", "Ropa colorida, aros y gafas", "Estilo gótico urbano y pinturas"],
+				"choices": ["Gabardina negra, gafas oscuras y tatuajes", "Ropa colorida, aros y gafas", "Estilo gótico urbano y pinturas", "Camisa rosa y un vaper"],
 				"correct": 0,
 				"correct_text": "Correcto. Una silueta bastante difícil de confundir.",
 				"wrong_text": "Gabardina negra, gafas oscuras y tatuajes. Esa es la imagen."
 			},
 			{
 				"text": "Cuando aparecí por primera vez, ¿qué pregunté?",
-				"choices": ["¿Ya habéis pedido de comer?", "¿Llegué tarde o todavía estáis decidiendo?", "¿Quién quiere jugar a Magic?"],
+				"choices": ["¿Ya habéis pedido de comer?", "¿Llegué tarde o todavía estáis decidiendo?", "¿Quién quiere jugar a Magic?", "¿Dónde está mi vaso?"],
 				"correct": 1,
 				"correct_text": "Exacto. Y, por supuesto, todavía seguían decidiendo.",
 				"wrong_text": "Pregunté si había llegado tarde o si todavía estaban decidiendo. Seguían decidiendo."

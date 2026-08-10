@@ -21,6 +21,7 @@ var topbar: HBoxContainer
 var stage: Control
 var controls: Dictionary = {}
 var menu_fullscreen_button: Button
+var menu_exit_button: Button
 
 
 func _ready() -> void:
@@ -109,12 +110,23 @@ func _add_menu_actions() -> void:
 	menu_fullscreen_button = fullscreen_result as Button
 	if menu_fullscreen_button != null:
 		menu_fullscreen_button.name = "MenuFullscreenButton"
-		menu_fullscreen_button.custom_minimum_size = Vector2(0, 42)
+		menu_fullscreen_button.custom_minimum_size = Vector2(0, 52)
 		menu_fullscreen_button.tooltip_text = "Entrar o salir de pantalla completa"
 		menu_fullscreen_button.pressed.connect(_request_fullscreen_from_menu)
 		menu_content.add_child(menu_fullscreen_button)
 		if continue_index >= 0:
 			menu_content.move_child(menu_fullscreen_button, continue_index + 1)
+
+	var exit_result: Variant = main.call("_make_button", "Salir", false)
+	menu_exit_button = exit_result as Button
+	if menu_exit_button != null:
+		menu_exit_button.name = "ExitGameButton"
+		menu_exit_button.custom_minimum_size = Vector2(0, 52)
+		menu_exit_button.tooltip_text = "Salir del juego"
+		menu_exit_button.pressed.connect(Callable(main, "_quit_game"))
+		menu_content.add_child(menu_exit_button)
+		if menu_fullscreen_button != null:
+			menu_content.move_child(menu_exit_button, menu_fullscreen_button.get_index() + 1)
 
 
 func _add_version_label() -> void:
@@ -125,9 +137,9 @@ func _add_version_label() -> void:
 	var version: String = str(ProjectSettings.get_setting("application/config/version", "0.1.0"))
 	var label := Label.new()
 	label.name = "VersionLabel"
-	label.text = "Versión " + version
-	label.add_theme_color_override("font_color", Color(0.68, 0.63, 0.57, 0.9))
-	label.add_theme_font_size_override("font_size", 11)
+	label.text = "Versión " + version + " · EARLY ACCESS"
+	label.add_theme_color_override("font_color", Color("e8b86a"))
+	label.add_theme_font_size_override("font_size", 12)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	menu_content.add_child(label)
 
@@ -218,8 +230,10 @@ func _apply_menu_layout(compact: bool, is_portrait: bool) -> void:
 		return
 	if is_portrait:
 		return
+	menu_content.anchor_left = 0.06
+	menu_content.anchor_right = 0.54
 	menu_content.anchor_top = 0.08 if compact else 0.14
-	menu_content.anchor_bottom = 0.96 if compact else 0.9
+	menu_content.anchor_bottom = 0.97 if compact else 0.94
 
 
 func _apply_icon_sizes(compact: bool) -> void:

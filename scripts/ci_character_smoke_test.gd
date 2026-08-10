@@ -18,8 +18,11 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.0":
-		_fail("La versión del proyecto no es 0.3.0")
+	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.1":
+		_fail("La versión del proyecto no es 0.3.1")
+		return
+	if str(ProjectSettings.get_setting("application/config/name", "")) != "Entre líneas: La octava silla":
+		_fail("El título del proyecto no es Entre líneas: La octava silla")
 		return
 	if not _validate_story_data():
 		return
@@ -67,9 +70,36 @@ func _run() -> void:
 	main.call("_go_to", "ana_q2", false)
 	main.call("_finish_typing")
 	await process_frame
-	var choices_box: VBoxContainer = main.get("choices_box") as VBoxContainer
-	if choices_box == null or choices_box.get_child_count() != 3:
-		_fail("Las preguntas no muestran tres respuestas")
+	var choices_box: GridContainer = main.get("choices_box") as GridContainer
+	if choices_box == null or choices_box.columns != 2 or choices_box.get_child_count() != 4:
+		_fail("Las preguntas no muestran cuatro respuestas en dos columnas")
+		return
+	for child in choices_box.get_children():
+		var answer_button := child as Button
+		if answer_button == null or answer_button.custom_minimum_size.y < 64.0 or (answer_button.size_flags_horizontal & Control.SIZE_EXPAND) == 0:
+			_fail("Una respuesta no tiene el área táctil ancha esperada")
+			return
+
+	var title := _find_named(main, "GameTitle") as Label
+	var engine_tag := _find_named(main, "EngineTag") as Label
+	var narrative_font := load("res://assets/ui/fonts/DejaVuSerif-Bold.ttf") as Font
+	var exit_button := _find_named(main, "ExitGameButton") as Button
+	var version_label := _find_named(main, "VersionLabel") as Label
+	var menu_content: VBoxContainer = main.get("menu_content") as VBoxContainer
+	if title == null or title.text != "Entre líneas:\nLa octava silla" or narrative_font == null or not title.has_theme_font_override("font"):
+		_fail("El menú no muestra el nuevo título y su tipografía narrativa")
+		return
+	if engine_tag == null or engine_tag.text != "GODOT 4 · NOVELA VISUAL" or engine_tag.text.contains("DEMO"):
+		_fail("La cabecera del menú todavía muestra DEMO")
+		return
+	if exit_button == null or exit_button.text != "Salir":
+		_fail("El menú principal no contiene el botón Salir")
+		return
+	if version_label == null or not version_label.text.contains("EARLY ACCESS"):
+		_fail("La versión no indica Early Access")
+		return
+	if menu_content == null or menu_content.anchor_right - menu_content.anchor_left < 0.48:
+		_fail("Los botones del menú no ocupan el ancho ampliado")
 		return
 
 	main.call("_go_to", "bosque_01", false)
@@ -99,7 +129,7 @@ func _run() -> void:
 		_fail("Han reaparecido controles de instalación móvil")
 		return
 
-	print("SMOKE OK: 7 encuentros individuales, 21 preguntas, afinidad 0/3, resumen final, retratos y Bosque correctos.")
+	print("SMOKE OK: 7 encuentros, 21 preguntas con 4 respuestas, cuadrícula 2x2, menú ampliado, Early Access, retratos y Bosque correctos.")
 	quit(0)
 
 
@@ -113,6 +143,24 @@ func _validate_story_data() -> bool:
 		if not Story.NODES.has(character_id + "_intro_01"):
 			_fail("Falta la presentación de: " + character_id)
 			return false
+		var encounter: Dictionary = Story.ENCOUNTERS.get(character_id, {})
+		var intro_text := ""
+		var intro_lines: Array = encounter.get("intro", [])
+		for intro_line_value in intro_lines:
+			var intro_line: Dictionary = intro_line_value
+			intro_text += " " + str(intro_line.get("text", ""))
+		var encounter_questions: Array = encounter.get("questions", [])
+		for question_value in encounter_questions:
+			var question: Dictionary = question_value
+			var labels: Array = question.get("choices", [])
+			var correct_index := int(question.get("correct", -1))
+			if labels.size() != 4 or correct_index < 0 or correct_index >= labels.size():
+				_fail("Una pregunta de %s no tiene cuatro respuestas válidas" % character_id)
+				return false
+			var correct_answer := str(labels[correct_index])
+			if _normalize_text(intro_text).contains(_normalize_text(correct_answer)):
+				_fail("La presentación de %s revela una respuesta: %s" % [character_id, correct_answer])
+				return false
 
 	for node_id in Story.NODES.keys():
 		var node: Dictionary = Story.NODES[node_id]
@@ -130,8 +178,8 @@ func _validate_story_data() -> bool:
 		var character_id := str(node["question_character"])
 		question_counts[character_id] = int(question_counts.get(character_id, 0)) + 1
 		var choices: Array = node.get("choices", [])
-		if choices.size() != 3:
-			_fail("La pregunta %s no tiene tres respuestas" % node_id)
+		if choices.size() != 4:
+			_fail("La pregunta %s no tiene cuatro respuestas" % node_id)
 			return false
 		var scoring_choices := 0
 		for choice in choices:
@@ -151,6 +199,10 @@ func _validate_story_data() -> bool:
 			_fail("%s no tiene exactamente tres preguntas" % character_id)
 			return false
 	return true
+
+
+func _normalize_text(value: String) -> String:
+	return value.to_lower().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u").replace("ü", "u")
 
 
 func _validate_selection(main: Control) -> bool:

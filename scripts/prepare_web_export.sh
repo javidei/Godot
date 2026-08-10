@@ -18,9 +18,12 @@ fi
 # puede asociar la exportacion generica de Godot a otra PWA del mismo sitio y
 # afirmar que ya esta instalada aunque el juego no tenga acceso visible.
 if ! grep -Fq '"id":"./entre-lineas"' "${MANIFEST}"; then
-	sed -i 's/{"background_color"/{"id":".\/entre-lineas","short_name":"Entre líneas","description":"Novela visual Entre líneas","scope":".\/","background_color"/' "${MANIFEST}"
+	sed -i 's/{"background_color"/{"id":".\/entre-lineas","short_name":"Octava silla","description":"Novela visual Entre líneas: La octava silla","scope":".\/","background_color"/' "${MANIFEST}"
 fi
-sed -i 's/"name":"Entre líneas · Godot"/"name":"Entre líneas"/' "${MANIFEST}"
+sed -i 's/"name":"Entre líneas · Godot"/"name":"Entre líneas: La octava silla"/' "${MANIFEST}"
+sed -i 's/"name":"Entre líneas"/"name":"Entre líneas: La octava silla"/' "${MANIFEST}"
+sed -i 's/"short_name":"Entre líneas"/"short_name":"Octava silla"/' "${MANIFEST}"
+sed -i 's/"description":"Novela visual Entre líneas"/"description":"Novela visual Entre líneas: La octava silla"/' "${MANIFEST}"
 
 # Chrome mantiene su propia cache del manifiesto. La referencia versionada
 # obliga a leer la identidad nueva y evita que siga mostrando la PWA fantasma.
@@ -66,6 +69,7 @@ grep -Fq "new Request(event.request, { cache: 'reload' })" "${SERVICE_WORKER}"
 grep -Fq "ENTRE_LINEAS_AUTO_UPDATE" "${SERVICE_WORKER}"
 grep -Fq "updateViaCache: 'none'" "${ENGINE_SCRIPT}"
 grep -Fq '"id":"./entre-lineas"' "${MANIFEST}"
-grep -Fq '"short_name":"Entre líneas"' "${MANIFEST}"
+grep -Fq '"name":"Entre líneas: La octava silla"' "${MANIFEST}"
+grep -Fq '"short_name":"Octava silla"' "${MANIFEST}"
 grep -Fq '"scope":"./"' "${MANIFEST}"
 grep -Fq "href=\"index.manifest.json?v=${BUILD_ID}\"" "${HTML_SHELL}"

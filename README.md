@@ -1,6 +1,6 @@
-# Entre líneas · Godot
+# Entre líneas: La octava silla
 
-Demo de novela visual en **Godot 4.7.1** con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
+Novela visual en **Godot 4.7.1**, actualmente en **Early Access**, con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
 
 ## Base actual
 
@@ -13,7 +13,8 @@ Demo de novela visual en **Godot 4.7.1** con Javi, Sue, Smokey, Carmen, Jony, An
 - Interfaz para ratón/táctil y composición alternativa en orientación vertical.
 - Guardado compatible en `user://godot_otome_save.json`.
 - AudioManager con canales Music/SFX/UI. La demo genera tonos `strum`, `clonk` y UI sin usar audio externo.
-- Recorrido individual por los siete personajes: solo aparece una persona cada vez, se presenta con varias líneas y plantea tres preguntas.
+- Recorrido individual por los siete personajes: solo aparece una persona cada vez, se presenta sin revelar las respuestas y plantea tres preguntas.
+- Cuatro respuestas por pregunta en una cuadrícula táctil de dos columnas.
 - Afinidad independiente de `0/3` por personaje y resumen final completo de `0/21` puntos.
 
 ## Recursos
@@ -29,16 +30,19 @@ assets/
 │   ├── jony/
 │   ├── ana/
 │   └── argentino/
-└── audio/
+├── audio/
+└── ui/fonts/
 ```
 
 `scripts/asset_manager.gd` es el único catálogo de rutas de imágenes. Si más adelante se migra el almacenamiento a Supabase, el resto del motor no necesita conocer las rutas físicas.
 
 Los PNG de personajes conservan su resolución original y transparencia. Los `TextureRect` usan filtrado lineal y `KEEP_ASPECT_CENTERED`: las imágenes grandes se reducen visualmente sin recomprimirlas ni sustituirlas por copias pequeñas. Para este rango de escala 2D no se fuerzan mipmaps, evitando crear copias innecesarias de la textura.
 
+El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la misma tipografía narrativa en web, móvil y escritorio. Su licencia se encuentra junto al archivo de fuente.
+
 ## Diálogo
 
-La demo `0.3.0` recorre a Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino de uno en uno. Cada encuentro contiene presentación, tres preguntas con una única respuesta correcta y una réplica inmediata del personaje. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
+La versión Early Access `0.3.1` recorre a Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino de uno en uno. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata del personaje. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
 
 Una escena puede indicar recursos y composición sin crear escenas Godot nuevas:
 

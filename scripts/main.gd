@@ -56,7 +56,7 @@ var fullscreen_button: Button
 var speaker_label: Label
 var dialogue_text: Label
 var dialogue_panel: PanelContainer
-var choices_box: VBoxContainer
+var choices_box: GridContainer
 var sfx_label: Label
 var toast_label: Label
 var ending_affinity: Label
@@ -132,7 +132,7 @@ func _build_menu() -> void:
 
 	menu_characters = TextureRect.new()
 	menu_characters.name = "MenuCharacters"
-	menu_characters.anchor_left = 0.34
+	menu_characters.anchor_left = 0.4
 	menu_characters.anchor_top = 0.18
 	menu_characters.anchor_right = 1.02
 	menu_characters.anchor_bottom = 1.02
@@ -147,27 +147,36 @@ func _build_menu() -> void:
 
 	menu_content = VBoxContainer.new()
 	menu_content.anchor_left = 0.06
-	menu_content.anchor_top = 0.2
-	menu_content.anchor_right = 0.49
-	menu_content.anchor_bottom = 0.82
-	menu_content.add_theme_constant_override("separation", 13)
+	menu_content.anchor_top = 0.12
+	menu_content.anchor_right = 0.54
+	menu_content.anchor_bottom = 0.92
+	menu_content.add_theme_constant_override("separation", 10)
 	menu_content.z_index = 2
 	menu_screen.add_child(menu_content)
 
 	var tag := Label.new()
-	tag.text = "DEMO GODOT 4 · NOVELA VISUAL"
+	tag.name = "EngineTag"
+	tag.text = "GODOT 4 · NOVELA VISUAL"
 	tag.add_theme_color_override("font_color", Color("f2c97e"))
 	tag.add_theme_font_size_override("font_size", 14)
 	menu_content.add_child(tag)
 
 	var title := Label.new()
-	title.text = "Entre líneas"
+	title.name = "GameTitle"
+	title.text = "Entre líneas:\nLa octava silla"
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title.custom_minimum_size = Vector2(0, 118)
 	title.add_theme_color_override("font_color", Color("fff1dc"))
-	title.add_theme_font_size_override("font_size", 64)
+	title.add_theme_color_override("font_outline_color", Color(0.08, 0.035, 0.02, 0.95))
+	title.add_theme_constant_override("outline_size", 7)
+	title.add_theme_font_size_override("font_size", 50)
+	var title_font := load("res://assets/ui/fonts/DejaVuSerif-Bold.ttf") as Font
+	if title_font != null:
+		title.add_theme_font_override("font", title_font)
 	menu_content.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "Tres amigos, una noche y algunas decisiones que quizá todavía no importen."
+	subtitle.text = "Siete encuentros, veintiuna preguntas y una silla que todavía espera a alguien."
 	subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	subtitle.add_theme_color_override("font_color", Color("dbcab3"))
 	subtitle.add_theme_font_size_override("font_size", 18)
@@ -186,7 +195,7 @@ func _build_menu() -> void:
 	menu_content.add_child(continue_button)
 
 	var info := Label.new()
-	info.text = "Demo técnica: diálogos, decisiones, afinidad, guardado, efectos y audio."
+	info.text = "Early Access: diálogos, preguntas, amistad, guardado, efectos y audio."
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.add_theme_color_override("font_color", Color(0.78, 0.73, 0.67, 0.86))
 	info.add_theme_font_size_override("font_size", 12)
@@ -281,12 +290,15 @@ func _build_game() -> void:
 	fullscreen_button.pressed.connect(_toggle_fullscreen)
 	topbar.add_child(fullscreen_button)
 
-	choices_box = VBoxContainer.new()
-	choices_box.anchor_left = 0.16
-	choices_box.anchor_top = 0.48
-	choices_box.anchor_right = 0.84
-	choices_box.anchor_bottom = 0.72
-	choices_box.add_theme_constant_override("separation", 7)
+	choices_box = GridContainer.new()
+	choices_box.name = "ChoicesGrid"
+	choices_box.columns = 2
+	choices_box.anchor_left = 0.08
+	choices_box.anchor_top = 0.47
+	choices_box.anchor_right = 0.92
+	choices_box.anchor_bottom = 0.75
+	choices_box.add_theme_constant_override("h_separation", 14)
+	choices_box.add_theme_constant_override("v_separation", 12)
 	choices_box.z_index = 35
 	game_screen.add_child(choices_box)
 
@@ -531,6 +543,13 @@ func _show_menu() -> void:
 	continue_button.disabled = not FileAccess.file_exists(SAVE_PATH)
 
 
+func _quit_game() -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("if(document.fullscreenElement&&document.exitFullscreen){document.exitFullscreen().catch(()=>{}).finally(()=>window.location.assign(new URL('../',window.location.href).href));}else{window.location.assign(new URL('../',window.location.href).href);}", true)
+		return
+	get_tree().quit()
+
+
 func _start_new_game() -> void:
 	state = _fresh_state()
 	menu_screen.visible = false
@@ -675,7 +694,10 @@ func _render_choices(choices: Array) -> void:
 	_clear_choices()
 	for choice in choices:
 		var button := _make_button(str(choice.get("label", "Elegir")), false)
-		button.custom_minimum_size = Vector2(0, 46)
+		button.custom_minimum_size = Vector2(0, 64)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		button.add_theme_font_size_override("font_size", 16)
 		button.pressed.connect(_choose.bind(choice))
 		choices_box.add_child(button)
 	choices_box.visible = true
@@ -895,9 +917,9 @@ func _apply_responsive_layout() -> void:
 		topbar.anchor_right = 0.975
 		topbar.anchor_bottom = 0.085
 		chapter_label.add_theme_font_size_override("font_size", 12)
-		choices_box.anchor_left = 0.06
-		choices_box.anchor_top = 0.46
-		choices_box.anchor_right = 0.94
+		choices_box.anchor_left = 0.035
+		choices_box.anchor_top = 0.44
+		choices_box.anchor_right = 0.965
 		choices_box.anchor_bottom = 0.68
 		dialogue_panel.anchor_left = 0.035
 		dialogue_panel.anchor_top = 0.69
@@ -910,10 +932,10 @@ func _apply_responsive_layout() -> void:
 		fullscreen_button.custom_minimum_size = Vector2(86, 42)
 	else:
 		menu_content.anchor_left = 0.06
-		menu_content.anchor_top = 0.2
-		menu_content.anchor_right = 0.49
-		menu_content.anchor_bottom = 0.82
-		menu_characters.anchor_left = 0.34
+		menu_content.anchor_top = 0.12
+		menu_content.anchor_right = 0.54
+		menu_content.anchor_bottom = 0.92
+		menu_characters.anchor_left = 0.4
 		menu_characters.anchor_top = 0.18
 		menu_characters.anchor_right = 1.02
 		menu_characters.anchor_bottom = 1.02
@@ -924,10 +946,10 @@ func _apply_responsive_layout() -> void:
 		topbar.anchor_right = 0.975
 		topbar.anchor_bottom = 0.09
 		chapter_label.add_theme_font_size_override("font_size", 17)
-		choices_box.anchor_left = 0.16
-		choices_box.anchor_top = 0.48
-		choices_box.anchor_right = 0.84
-		choices_box.anchor_bottom = 0.72
+		choices_box.anchor_left = 0.08
+		choices_box.anchor_top = 0.47
+		choices_box.anchor_right = 0.92
+		choices_box.anchor_bottom = 0.75
 		dialogue_panel.anchor_left = 0.07
 		dialogue_panel.anchor_top = 0.79
 		dialogue_panel.anchor_right = 0.93
