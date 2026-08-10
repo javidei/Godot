@@ -1,6 +1,5 @@
 extends Node
 
-const RELEASE_VERSION := "0.4.5"
 const LANDSCAPE_LEFT := 0.05
 const LANDSCAPE_RIGHT := 0.47
 
@@ -31,22 +30,49 @@ func _ready() -> void:
 	_build_action_rows()
 	_compact_audio_row()
 	_order_menu()
+	_connect_game_screen_input()
 	_apply_layout()
 	get_viewport().size_changed.connect(_queue_layout)
 
 
+func _connect_game_screen_input() -> void:
+	if game_screen == null:
+		return
+	# GameScreen cubre todo el viewport y, como Control, recibe los clics de las
+	# zonas libres antes de que puedan llegar a _unhandled_input. Escuchamos su
+	# gui_input directamente. Los botones y elecciones siguen recibiendo sus
+	# propios eventos y no propagan el clic hasta aquí.
+	var callback := Callable(self, "_on_game_screen_input")
+	if not game_screen.gui_input.is_connected(callback):
+		game_screen.gui_input.connect(callback)
+
+
+func _on_game_screen_input(event: InputEvent) -> void:
+	_handle_screen_advance(event)
+
+
 func _unhandled_input(event: InputEvent) -> void:
+	# Conservamos este camino para teclado y para cualquier evento que no haya
+	# sido capturado por un Control del HUD.
+	_handle_screen_advance(event)
+
+
+func _handle_screen_advance(event: InputEvent) -> void:
 	if main == null or game_screen == null or not game_screen.visible:
 		return
 	if transition_manager != null and bool(transition_manager.get("transition_active")):
 		return
+
 	var advance := false
 	if event is InputEventMouseButton:
 		advance = event.button_index == MOUSE_BUTTON_LEFT and event.pressed
 	elif event is InputEventScreenTouch:
 		advance = event.pressed
+	elif event is InputEventKey and event.pressed and not event.echo:
+		advance = event.keycode == KEY_SPACE or event.keycode == KEY_ENTER
 	if not advance:
 		return
+
 	main.call("_advance")
 	get_viewport().set_input_as_handled()
 
@@ -210,7 +236,8 @@ func _process(_delta: float) -> void:
 	var state: Dictionary = value
 	if state.is_empty() or not bool(state.get("visit_mode", false)):
 		return
-	if str(state.get("save_version", "")) == RELEASE_VERSION:
+	var project_version := str(ProjectSettings.get_setting("application/config/version", "0.4.5"))
+	if str(state.get("save_version", "")) == project_version:
 		return
-	state["save_version"] = RELEASE_VERSION
+	state["save_version"] = project_version
 	main.set("state", state)
