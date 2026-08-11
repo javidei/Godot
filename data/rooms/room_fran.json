@@ -1,0 +1,11 @@
+{
+  "id": "room_fran",
+  "owners": ["smokey", "carmen"],
+  "background_id": "habitacion_fran",
+  "background_path": "res://assets/backgrounds/fondo-habitacion-fran.png",
+  "music_id": "fran_electronica",
+  "music_path": "res://assets/audio/music/fran-electronica.ogg",
+  "music_volume": 1.0,
+  "music_loop": true,
+  "enabled": true
+}
