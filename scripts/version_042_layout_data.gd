@@ -1,18 +1,25 @@
 extends "res://scripts/version_042_layout_patch.gd"
 
+const DataAccess = preload("res://scripts/data_access.gd")
+
 
 func _apply_carmen_height() -> void:
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return
 	var views_value: Variant = main.get("character_views")
 	if typeof(views_value) != TYPE_DICTIONARY:
 		return
 	var views: Dictionary = views_value
 	var viewport_size := get_viewport().get_visible_rect().size
 	var portrait := viewport_size.y > viewport_size.x
-	for character_id in DataManager.get_character_ids(false):
+	var ids: Array = dm.call("get_character_ids", false)
+	for raw_id in ids:
+		var character_id := str(raw_id)
 		var view := views.get(character_id) as TextureRect
 		if view == null:
 			continue
-		var visual := DataManager.get_character_visual(character_id)
+		var visual: Dictionary = dm.call("get_character_visual", character_id)
 		var raw_shift: Variant = visual.get("height_shift", {})
 		if typeof(raw_shift) != TYPE_DICTIONARY:
 			continue
