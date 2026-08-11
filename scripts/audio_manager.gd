@@ -19,6 +19,7 @@ var effects_volume := 1.0
 var music_muted := false
 var effects_muted := false
 var current_music_id := ""
+var music_suspended := false
 
 
 static func refresh_configuration() -> void:
@@ -52,6 +53,8 @@ func _ready() -> void:
 
 
 func play_background_music(background_id: String) -> bool:
+	if music_suspended:
+		return not current_music_id.is_empty() and music_player != null and music_player.playing
 	var dm: Variant = DataAccess.dm()
 	var music_id := str(dm.call("get_music_for_background", background_id)) if dm != null else ""
 	if music_id.is_empty():
@@ -66,11 +69,13 @@ func play_music(sound_id: String) -> bool:
 	if music_player == null:
 		return false
 	music_player.stop()
-	current_music_id = sound_id
+	current_music_id = ""
 	var stream := _load_music(sound_id)
 	if stream == null:
+		music_player.stream = null
 		return false
 	_enable_loop(stream)
+	current_music_id = sound_id
 	music_player.stream = stream
 	music_player.play()
 	return true
@@ -80,6 +85,20 @@ func stop_music() -> void:
 	current_music_id = ""
 	if music_player != null:
 		music_player.stop()
+
+
+func suspend_music() -> void:
+	music_suspended = true
+	_apply_audio_settings()
+
+
+func resume_music() -> void:
+	music_suspended = false
+	_apply_audio_settings()
+
+
+func is_music_suspended() -> bool:
+	return music_suspended
 
 
 func adjust_music_volume(delta: float) -> void:
@@ -247,7 +266,7 @@ func _enable_loop(stream: AudioStream) -> void:
 
 
 func _apply_audio_settings() -> void:
-	_apply_bus_settings("Music", get_music_output_linear(), music_muted)
+	_apply_bus_settings("Music", get_music_output_linear(), music_muted or music_suspended)
 	_apply_bus_settings("SFX", effects_volume, effects_muted)
 	_apply_bus_settings("UI", effects_volume, effects_muted)
 

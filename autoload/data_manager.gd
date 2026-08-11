@@ -452,8 +452,6 @@ func _validate_data() -> void:
 			_record_error("La habitación '%s' no tiene un fondo válido: %s" % [room_id, background_path])
 		if not music_path.is_empty() and not ResourceLoader.exists(music_path):
 			_record_error("La habitación '%s' no tiene una canción válida: %s" % [room_id, music_path])
-
-
 func _validate_question_bundle(character_id: String) -> void:
 	var bundle := get_question_bundle(character_id)
 	var questions: Array = bundle.get("questions", [])

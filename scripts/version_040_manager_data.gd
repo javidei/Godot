@@ -146,17 +146,18 @@ func _apply_room_audio() -> void:
 	var track_muted := bool(track_mutes.get(current_track, false))
 	var global_volume := float(audio_manager.call("get_music_output_linear"))
 	var global_muted := bool(audio_manager.call("is_music_muted"))
+	var suspended := bool(audio_manager.call("is_music_suspended"))
 	if room_label != null:
 		room_label.text = "%d%%" % roundi(track_volume * 100.0)
 	if room_mute != null:
 		room_mute.text = "On" if track_muted else "Mute"
-	var signature := "%s|%s|%.3f|%s|%.3f|%s" % [current_track, character_id, track_volume, str(track_muted), global_volume, str(global_muted)]
+	var signature := "%s|%s|%.3f|%s|%.3f|%s|%s" % [current_track, character_id, track_volume, str(track_muted), global_volume, str(global_muted), str(suspended)]
 	if signature == last_audio_signature:
 		return
 	var bus := AudioServer.get_bus_index("Music")
 	if bus >= 0:
 		AudioServer.set_bus_volume_db(bus, linear_to_db(maxf(global_volume * track_volume, 0.0001)))
-		AudioServer.set_bus_mute(bus, global_muted or track_muted or track_volume <= 0.0)
+		AudioServer.set_bus_mute(bus, suspended or global_muted or track_muted or track_volume <= 0.0)
 	last_audio_signature = signature
 
 

@@ -59,6 +59,14 @@ func _run() -> void:
 	if visit_panel.get_parent() != visit_center:
 		_fail("El selector de visitas no está centrado")
 		return
+	var dialogue_panel := main.get("dialogue_panel") as PanelContainer
+	var hud_panel := hud_patch.get("hud_panel") as PanelContainer
+	if dialogue_panel == null or hud_panel == null:
+		_fail("No se pueden comprobar los paneles inferiores del juego")
+		return
+	if dialogue_panel.visible or hud_panel.visible:
+		_fail("El selector de visitas deja visibles los paneles inferiores del juego")
+		return
 
 	var original_player: Dictionary = player.duplicate(true)
 	state["player"] = {"id": "custom_test", "name": "Custom Test"}
@@ -103,6 +111,9 @@ func _run() -> void:
 	state = main.get("state")
 	if str(state.get("node_id", "")) != "ana_intro_01":
 		_fail("Elegir a Ana no abre su habitación")
+		return
+	if not dialogue_panel.visible or not hud_panel.visible:
+		_fail("Los paneles inferiores no reaparecen al cerrar el selector de visitas")
 		return
 
 	var room_panel := manager.get("room_panel") as PanelContainer
