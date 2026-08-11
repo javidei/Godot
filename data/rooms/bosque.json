@@ -1,0 +1,11 @@
+{
+  "id": "bosque",
+  "owners": [],
+  "background_id": "bosque",
+  "background_path": "res://assets/backgrounds/fondo-bosque.png",
+  "music_id": "bosque_misterioso",
+  "music_path": "res://assets/audio/music/bosque-misterioso.ogg",
+  "music_volume": 1.0,
+  "music_loop": true,
+  "enabled": true
+}
