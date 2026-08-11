@@ -1,7 +1,8 @@
 extends Node
 
-# Variables estáticas para conservar la API existente y permitir que los valores
-# procedan de game_config.json. Los literales son únicamente valores de rescate.
+const DataAccess = preload("res://scripts/data_access.gd")
+
+# Valores cargados desde game_config.json; los literales son solo rescate.
 static var DEFAULT_MUSIC_VOLUME: float = _config_float("default_music_volume", 0.3)
 static var DEFAULT_EFFECTS_VOLUME: float = _config_float("default_effects_volume", 1.0)
 static var VOLUME_STEP: float = _config_float("volume_step", 0.1)
@@ -28,8 +29,11 @@ static func refresh_configuration() -> void:
 
 
 static func _config_float(key: String, fallback: float) -> float:
-	DataManager.ensure_loaded()
-	var audio := DataManager.get_audio_defaults()
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return fallback
+	dm.call("ensure_loaded")
+	var audio: Dictionary = dm.call("get_audio_defaults")
 	return float(audio.get(key, fallback))
 
 
@@ -48,7 +52,8 @@ func _ready() -> void:
 
 
 func play_background_music(background_id: String) -> bool:
-	var music_id := DataManager.get_music_for_background(background_id)
+	var dm: Variant = DataAccess.dm()
+	var music_id := str(dm.call("get_music_for_background", background_id)) if dm != null else ""
 	if music_id.is_empty():
 		stop_music()
 		return false
@@ -131,7 +136,6 @@ func is_effects_muted() -> bool:
 	return effects_muted
 
 
-# Alias conservados para partidas/versiones antiguas.
 func adjust_volume(delta: float) -> void:
 	set_master_volume(maxf(music_volume, effects_volume) + delta)
 
@@ -162,11 +166,13 @@ func is_muted() -> bool:
 
 
 func music_for_background(background_id: String) -> String:
-	return DataManager.get_music_for_background(background_id)
+	var dm: Variant = DataAccess.dm()
+	return str(dm.call("get_music_for_background", background_id)) if dm != null else ""
 
 
 func path_for_music(music_id: String) -> String:
-	return DataManager.get_music_path(music_id)
+	var dm: Variant = DataAccess.dm()
+	return str(dm.call("get_music_path", music_id)) if dm != null else ""
 
 
 func play_sfx(sound_id: String) -> void:
@@ -203,7 +209,8 @@ func _make_player(player_name: String) -> AudioStreamPlayer:
 
 
 func _load_music(sound_id: String) -> AudioStream:
-	var path := DataManager.get_music_path(sound_id)
+	var dm: Variant = DataAccess.dm()
+	var path := str(dm.call("get_music_path", sound_id)) if dm != null else ""
 	if path.is_empty() or not ResourceLoader.exists(path):
 		push_warning("Canción no registrada o inexistente: %s -> %s" % [sound_id, path])
 		return null
@@ -254,7 +261,8 @@ func _apply_bus_settings(bus_name: String, volume: float, muted: bool) -> void:
 
 
 func _load_settings() -> void:
-	var settings := DataManager.get_settings()
+	var dm: Variant = DataAccess.dm()
+	var settings: Dictionary = dm.call("get_settings") if dm != null else {}
 	var audio: Dictionary = settings.get("audio", {})
 	music_volume = clampf(float(audio.get("music_volume", DEFAULT_MUSIC_VOLUME)), 0.0, 1.0)
 	effects_volume = clampf(float(audio.get("effects_volume", DEFAULT_EFFECTS_VOLUME)), 0.0, 1.0)
@@ -263,7 +271,10 @@ func _load_settings() -> void:
 
 
 func _save_settings() -> void:
-	DataManager.update_audio_settings({
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return
+	dm.call("update_audio_settings", {
 		"music_volume": music_volume,
 		"effects_volume": effects_volume,
 		"music_muted": music_muted,
