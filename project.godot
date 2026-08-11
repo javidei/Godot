@@ -1,12 +1,20 @@
-; Novela visual narrativa en Godot 4
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
 config_version=5
 
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.5.2"
-config/icon="res://assets/ui/menu-lineup.png"
+config/version="0.5.2.1"
 run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.7")
+config/icon="res://assets/ui/menu-lineup.png"
 
 [autoload]
 
