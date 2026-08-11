@@ -1,6 +1,8 @@
 extends RefCounted
 class_name DemoStory
 
+const DataAccess = preload("res://scripts/data_access.gd")
+
 const LEGACY_START_NODES: Array[String] = ["casa_01", "bar_01", "bosque_01"]
 const FEMININE_ORDINALS: Array[String] = [
 	"", "primera", "segunda", "tercera", "cuarta", "quinta", "sexta",
@@ -9,8 +11,7 @@ const FEMININE_ORDINALS: Array[String] = [
 	"decimoséptima", "decimoctava", "decimonovena", "vigésima"
 ]
 
-# Variables estáticas para conservar la API usada por el juego actual. La fuente
-# real ya no está en este script: se construyen desde DataManager.
+# Fachada compatible con la API histórica. La fuente real es DataManager/JSON.
 static var ENCOUNTER_ORDER: Array[String] = _load_encounter_order()
 static var ENCOUNTERS: Dictionary = _build_encounters()
 static var NODES: Dictionary = _build_nodes()
@@ -18,7 +19,10 @@ static var START: String = _default_start()
 
 
 static func refresh() -> void:
-	DataManager.ensure_loaded()
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return
+	dm.call("ensure_loaded")
 	ENCOUNTER_ORDER = _load_encounter_order()
 	ENCOUNTERS = _build_encounters()
 	NODES = _build_nodes()
@@ -26,6 +30,8 @@ static func refresh() -> void:
 
 
 static func game_title() -> String:
+	if ENCOUNTER_ORDER.is_empty():
+		refresh()
 	return title_for_character_count(ENCOUNTER_ORDER.size())
 
 
@@ -39,12 +45,20 @@ static func title_for_character_count(character_count: int) -> String:
 
 
 static func question_count(character_id: String) -> int:
-	return DataManager.get_questions(character_id).size()
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return 0
+	var questions: Array = dm.call("get_questions", character_id)
+	return questions.size()
 
 
 static func max_affinity_for_character(character_id: String) -> int:
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return 0
 	var total := 0
-	for raw_question in DataManager.get_questions(character_id):
+	var questions: Array = dm.call("get_questions", character_id)
+	for raw_question in questions:
 		if typeof(raw_question) != TYPE_DICTIONARY:
 			continue
 		var question := raw_question as Dictionary
@@ -81,6 +95,8 @@ static func is_final_feedback_node(node_id: String) -> bool:
 
 
 static func encounter_order_for_player(player_id: String) -> Array[String]:
+	if ENCOUNTER_ORDER.is_empty():
+		refresh()
 	var order: Array[String] = []
 	for character_id in ENCOUNTER_ORDER:
 		if character_id != player_id:
@@ -96,6 +112,8 @@ static func start_for_player(player_id: String) -> String:
 
 
 static func character_for_node(node_id: String) -> String:
+	if ENCOUNTER_ORDER.is_empty():
+		refresh()
 	for character_id in ENCOUNTER_ORDER:
 		if node_id.begins_with(character_id + "_"):
 			return character_id
@@ -114,15 +132,25 @@ static func resolve_for_player(node_id: String, player_id: String) -> String:
 
 
 static func _load_encounter_order() -> Array[String]:
-	DataManager.ensure_loaded()
-	return DataManager.get_character_ids(true)
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return []
+	dm.call("ensure_loaded")
+	var raw_ids: Array = dm.call("get_character_ids", true)
+	var result: Array[String] = []
+	for raw_id in raw_ids:
+		result.append(str(raw_id))
+	return result
 
 
 static func _build_encounters() -> Dictionary:
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return {}
 	var result: Dictionary = {}
 	for character_id in ENCOUNTER_ORDER:
-		var character := DataManager.get_character(character_id)
-		var questions_json := DataManager.get_questions(character_id)
+		var character: Dictionary = dm.call("get_character", character_id)
+		var questions_json: Array = dm.call("get_questions", character_id)
 		var compatibility_questions: Array = []
 		for raw_question in questions_json:
 			if typeof(raw_question) != TYPE_DICTIONARY:
@@ -156,10 +184,11 @@ static func _build_encounters() -> Dictionary:
 				"answers": (question.get("answers", []) as Array).duplicate(true),
 				"feedback": feedback.duplicate(true)
 			})
+		var intro: Array = dm.call("get_intro", character_id)
 		result[character_id] = {
-			"name": str(character.get("name", character_id.capitalize())),
-			"background": DataManager.get_character_background_id(character_id),
-			"intro": DataManager.get_intro(character_id),
+			"name": str(character.get("story_name", character.get("name", character_id.capitalize()))),
+			"background": str(dm.call("get_character_background_id", character_id)),
+			"intro": intro,
 			"questions": compatibility_questions
 		}
 	return result
@@ -189,13 +218,7 @@ static func _build_nodes() -> Dictionary:
 			var question_id := "%s_q%d" % [character_id, number]
 			var correct_feedback_id := "%s_q%d_correct" % [character_id, number]
 			var wrong_feedback_id := "%s_q%d_wrong" % [character_id, number]
-			var question_node := _single_character_node(
-				character_id,
-				display_name,
-				str(question.get("text", "")),
-				"",
-				"%s · PREGUNTA %d/%d" % [chapter, number, questions.size()]
-			)
+			var question_node := _single_character_node(character_id, display_name, str(question.get("text", "")), "", "%s · PREGUNTA %d/%d" % [chapter, number, questions.size()])
 			question_node.erase("next")
 			question_node["question_character"] = character_id
 			question_node["question_number"] = number
