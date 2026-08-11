@@ -1,0 +1,11 @@
+{
+  "id": "room_argentino",
+  "owners": ["argentino"],
+  "background_id": "habitacion_argentino",
+  "background_path": "res://assets/backgrounds/fondo-habitacion-argentino.png",
+  "music_id": "argentino_rock",
+  "music_path": "res://assets/audio/music/argentino-rock.ogg",
+  "music_volume": 1.0,
+  "music_loop": true,
+  "enabled": true
+}
