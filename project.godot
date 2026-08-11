@@ -10,7 +10,7 @@ run/main_scene="res://scenes/main.tscn"
 
 [autoload]
 
-DataManager="*res://autoload/data_manager.gd"
+DataManager="*res://autoload/data_manager_runtime.gd"
 
 [display]
 
