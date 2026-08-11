@@ -1,0 +1,27 @@
+{
+  "id": "sue",
+  "name": "Susana",
+  "display_name": "Sue",
+  "role": "principal",
+  "summary": "Directa · divertida · observadora · con carácter",
+  "playable": true,
+  "enabled": true,
+  "room": "room_sue",
+  "image": "res://assets/characters/sue/sue_a.png",
+  "music": "sue_fantasia",
+  "music_volume": 1.0,
+  "initial_friendship": 0,
+  "poses": {
+    "neutral": "res://assets/characters/sue/sue_a.png",
+    "happy": "res://assets/characters/sue/sue_b.png",
+    "laugh": "res://assets/characters/sue/sue_b.png",
+    "thoughtful": "res://assets/characters/sue/sue_c.png",
+    "chocolate": "res://assets/characters/sue/sue_b.png",
+    "expressive": "res://assets/characters/sue/sue_b.png",
+    "embarrassed": "res://assets/characters/sue/sue_c.png",
+    "annoyed": "res://assets/characters/sue/sue_b.png",
+    "teasing": "res://assets/characters/sue/sue_c.png"
+  },
+  "transition_intro": "Sue te abre la puerta a un rincón tranquilo entre plantas, fantasía y algo dulce esperando cerca.",
+  "transition_outro": "Sue te despide con una sonrisa tranquila. «La próxima vez trae algo dulce.»"
+}
