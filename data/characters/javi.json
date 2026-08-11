@@ -1,0 +1,27 @@
+{
+  "id": "javi",
+  "name": "Javi",
+  "display_name": "Javi",
+  "role": "principal",
+  "summary": "Sarcástico · curioso · tranquilo · cabezota",
+  "playable": true,
+  "enabled": true,
+  "room": "room_javi",
+  "image": "res://assets/characters/javi/javi_a.png",
+  "music": "javi_lofi_rock",
+  "music_volume": 1.0,
+  "initial_friendship": 0,
+  "poses": {
+    "neutral": "res://assets/characters/javi/javi_a.png",
+    "happy": "res://assets/characters/javi/javi_a.png",
+    "laugh": "res://assets/characters/javi/javi_a.png",
+    "thoughtful": "res://assets/characters/javi/javi_c.png",
+    "jagermeister": "res://assets/characters/javi/javi_b.png",
+    "expressive": "res://assets/characters/javi/javi_b.png",
+    "embarrassed": "res://assets/characters/javi/javi_b.png",
+    "annoyed": "res://assets/characters/javi/javi_b.png",
+    "teasing": "res://assets/characters/javi/javi_b.png"
+  },
+  "transition_intro": "Javi te recibe entre pantallas, guitarras y proyectos que nunca terminan de quedarse quietos.",
+  "transition_outro": "Javi sonríe y vuelve la vista a sus pantallas. «Nos vemos en la siguiente idea.»"
+}

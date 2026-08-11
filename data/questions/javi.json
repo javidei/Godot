@@ -1,0 +1,51 @@
+{
+  "character": "javi",
+  "intro": [
+    {"expression": "thoughtful", "text": "Soy Javi. Cuando se me mete un proyecto en la cabeza, puedo pasar horas dándole vueltas hasta que consigo verlo funcionar."},
+    {"expression": "happy", "text": "Con mis amigos suelo analizar cada plan, encontrarle alguna pega y, aun así, terminar apuntándome. Supongo que esa contradicción también dice bastante de mí."}
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Primera pregunta: ¿qué combinación de aficiones me representa mejor?",
+      "answers": [
+        {"text": "Videojuegos, informática y guitarra", "side": "left", "score": 1, "feedback": "correct"},
+        {"text": "Cine, pintura y moda", "side": "right", "score": 0, "feedback": "wrong"},
+        {"text": "Pokémon, Magic y rol", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "Senderismo, cocina y fotografía", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Exacto. Si hay un ordenador, un juego o una guitarra cerca, ya tienes tema conmigo.", "expression": "happy"},
+        "wrong": {"text": "No exactamente. Lo mío son los videojuegos, la informática y la guitarra. Y comer también cuenta.", "expression": "thoughtful"}
+      }
+    },
+    {
+      "id": "q2",
+      "text": "¿Qué frase es más probable que diga cuando algo no me cuadra?",
+      "answers": [
+        {"text": "Te lo dije.", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "Pero vamos a ver...", "side": "right", "score": 1, "feedback": "correct"},
+        {"text": "Confía en mí.", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "Ya estamos otra vez.", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Pero vamos a ver... esa era fácil, illo.", "expression": "happy"},
+        "wrong": {"text": "La respuesta era ‘Pero vamos a ver...’. Si después digo ‘illo’, ya no quedan dudas.", "expression": "thoughtful"}
+      }
+    },
+    {
+      "id": "q3",
+      "text": "Y la última: ¿cómo describirías mi forma de ser?",
+      "answers": [
+        {"text": "Sarcástico, curioso, tranquilo y cabezota", "side": "left", "score": 1, "feedback": "correct"},
+        {"text": "Serio, distante y nada curioso", "side": "right", "score": 0, "feedback": "wrong"},
+        {"text": "Impulsivo, imprevisible y despreocupado", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "Creativo, tímido y muy indeciso", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Me tienes bien calado. Sobre todo en lo de cabezota.", "expression": "happy"},
+        "wrong": {"text": "Casi. Soy sarcástico, curioso, tranquilo y bastante cabezota.", "expression": "thoughtful"}
+      }
+    }
+  ]
+}

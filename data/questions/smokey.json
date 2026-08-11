@@ -1,0 +1,51 @@
+{
+  "character": "smokey",
+  "intro": [
+    {"expression": "confident", "text": "Puedes llamarme Smokey. No soy muy de presentaciones formales; prefiero que una conversación empiece sola y termine en alguna historia memorable."},
+    {"expression": "laugh", "text": "A veces mis mejores recuerdos comienzan cuando nadie tenía demasiado claro qué iba a pasar. Si acabamos riéndonos, para mí el plan ya ha salido bien."}
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Empezamos fácil: ¿cómo me llamo fuera del apodo Smokey?",
+      "answers": [
+        {"text": "Jony", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "Fran", "side": "right", "score": 1, "feedback": "correct"},
+        {"text": "Javi", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "Juan", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Eso es: Fran. Aunque seguramente me oigas más veces Smokey.", "expression": "happy"},
+        "wrong": {"text": "Mi nombre es Fran. Smokey es el apodo que terminó ganando.", "expression": "thoughtful"}
+      }
+    },
+    {
+      "id": "q2",
+      "text": "¿Qué descripción encaja mejor con mi forma de actuar?",
+      "answers": [
+        {"text": "Despreocupado, impulsivo e imprevisible", "side": "left", "score": 1, "feedback": "correct"},
+        {"text": "Directo, observador y muy organizado", "side": "right", "score": 0, "feedback": "wrong"},
+        {"text": "Serio, tranquilo y enemigo de improvisar", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "Metódico, prudente y previsor", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Exacto. La improvisación también es un método, más o menos.", "expression": "happy"},
+        "wrong": {"text": "Soy despreocupado, impulsivo e imprevisible. Organizarlo todo no sería muy propio de mí.", "expression": "thoughtful"}
+      }
+    },
+    {
+      "id": "q3",
+      "text": "¿Qué frase encaja conmigo antes de explicar un plan?",
+      "answers": [
+        {"text": "Ya estamos...", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "¿Llegué tarde?", "side": "right", "score": 0, "feedback": "wrong"},
+        {"text": "Confía en mí. Tengo una idea.", "side": "left", "score": 1, "feedback": "correct"},
+        {"text": "Primero hacemos una lista.", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Confía en mí. Sabía que esa la acertabas.", "expression": "happy"},
+        "wrong": {"text": "Era ‘Confía en mí. Tengo una idea’. La próxima vez quizá convenga preguntar por la idea primero.", "expression": "thoughtful"}
+      }
+    }
+  ]
+}

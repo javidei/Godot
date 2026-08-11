@@ -1,0 +1,51 @@
+{
+  "character": "carmen",
+  "intro": [
+    {"expression": "neutral", "text": "Soy Carmen, aunque también puedes llamarme Carmela. Si alguien propone un plan con buena compañía, no suele costar mucho convencerme."},
+    {"expression": "neutral", "text": "Me gusta que la gente tenga algo propio y que una tarde cualquiera pueda acabar siendo una anécdota. Los planes demasiado serios no suelen durar mucho a mi alrededor."}
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "¿Qué estoy estudiando?",
+      "answers": [
+        {"text": "Informática", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "Bellas Artes", "side": "right", "score": 0, "feedback": "wrong"},
+        {"text": "Cine", "side": "left", "score": 1, "feedback": "correct"},
+        {"text": "Diseño gráfico", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Cine, correcto. Algún día todo esto podría acabar en una película.", "expression": "happy"},
+        "wrong": {"text": "Estudio Cine. Tendrás que prestar más atención a los créditos.", "expression": "thoughtful"}
+      }
+    },
+    {
+      "id": "q2",
+      "text": "Si vamos a comer en grupo, ¿qué detalle deberías recordar?",
+      "answers": [
+        {"text": "Soy vegetariana", "side": "left", "score": 1, "feedback": "correct"},
+        {"text": "No me gusta salir a comer", "side": "right", "score": 0, "feedback": "wrong"},
+        {"text": "Solo tomo postre", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "No tomo bebidas con gas", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Exacto: opción vegetariana y todos contentos.", "expression": "happy"},
+        "wrong": {"text": "Soy vegetariana. Avisar antes de pedir por todo el mundo siempre ayuda.", "expression": "thoughtful"}
+      }
+    },
+    {
+      "id": "q3",
+      "text": "¿Qué conjunto de detalles pega más conmigo?",
+      "answers": [
+        {"text": "Ropa colorida, aros y bromas", "side": "left", "score": 1, "feedback": "correct"},
+        {"text": "Gabardina negra y gafas oscuras", "side": "right", "score": 0, "feedback": "wrong"},
+        {"text": "Guitarra, informática y sarcasmo", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "Ropa deportiva, cocina y timidez", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Sí: color, aros y alguna broma por el camino.", "expression": "happy"},
+        "wrong": {"text": "Ropa colorida, aros y bromas. Esa es la mezcla más Carmela.", "expression": "thoughtful"}
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "ana",
+  "name": "Ana",
+  "display_name": "Ana",
+  "role": "secundario",
+  "summary": "Gótico · libros · vampiros · rol · fantasía",
+  "playable": true,
+  "enabled": true,
+  "room": "room_ana",
+  "image": "res://assets/characters/ana/ana.png",
+  "music": "ana_vampirica",
+  "music_volume": 1.0,
+  "initial_friendship": 0,
+  "poses": {
+    "neutral": "res://assets/characters/ana/ana.png"
+  },
+  "transition_intro": "Ana te invita a pasar a un rincón oscuro y acogedor, entre música, fantasía y un toque vampírico.",
+  "transition_outro": "Ana sonríe de lado al despedirse. «Puedes volver... si te atreves.»"
+}

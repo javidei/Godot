@@ -1,259 +1,37 @@
 extends RefCounted
 class_name DemoStory
 
-const START := "javi_intro_01"
+const DataAccess = preload("res://scripts/data_access.gd")
+
 const LEGACY_START_NODES: Array[String] = ["casa_01", "bar_01", "bosque_01"]
-
-const ENCOUNTER_ORDER: Array[String] = ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"]
-
 const FEMININE_ORDINALS: Array[String] = [
-	"",
-	"primera",
-	"segunda",
-	"tercera",
-	"cuarta",
-	"quinta",
-	"sexta",
-	"séptima",
-	"octava",
-	"novena",
-	"décima",
-	"undécima",
-	"duodécima",
-	"decimotercera",
-	"decimocuarta",
-	"decimoquinta",
-	"decimosexta",
-	"decimoséptima",
-	"decimoctava",
-	"decimonovena",
-	"vigésima"
+	"", "primera", "segunda", "tercera", "cuarta", "quinta", "sexta",
+	"séptima", "octava", "novena", "décima", "undécima", "duodécima",
+	"decimotercera", "decimocuarta", "decimoquinta", "decimosexta",
+	"decimoséptima", "decimoctava", "decimonovena", "vigésima"
 ]
 
-const ENCOUNTERS := {
-	"javi": {
-		"name": "Javi",
-		"background": "habitacion_javi",
-		"intro": [
-			{"expression": "thoughtful", "text": "Soy Javi. Cuando se me mete un proyecto en la cabeza, puedo pasar horas dándole vueltas hasta que consigo verlo funcionar."},
-			{"expression": "happy", "text": "Con mis amigos suelo analizar cada plan, encontrarle alguna pega y, aun así, terminar apuntándome. Supongo que esa contradicción también dice bastante de mí."}
-		],
-		"questions": [
-			{
-				"text": "Primera pregunta: ¿qué combinación de aficiones me representa mejor?",
-				"choices": ["Videojuegos, informática y guitarra", "Cine, pintura y moda", "Pokémon, Magic y rol", "Senderismo, cocina y fotografía"],
-				"correct": 0,
-				"correct_text": "Exacto. Si hay un ordenador, un juego o una guitarra cerca, ya tienes tema conmigo.",
-				"wrong_text": "No exactamente. Lo mío son los videojuegos, la informática y la guitarra. Y comer también cuenta."
-			},
-			{
-				"text": "¿Qué frase es más probable que diga cuando algo no me cuadra?",
-				"choices": ["Te lo dije.", "Pero vamos a ver...", "Confía en mí.", "Ya estamos otra vez."],
-				"correct": 1,
-				"correct_text": "Pero vamos a ver... esa era fácil, illo.",
-				"wrong_text": "La respuesta era ‘Pero vamos a ver...’. Si después digo ‘illo’, ya no quedan dudas."
-			},
-			{
-				"text": "Y la última: ¿cómo describirías mi forma de ser?",
-				"choices": ["Sarcástico, curioso, tranquilo y cabezota", "Serio, distante y nada curioso", "Impulsivo, imprevisible y despreocupado", "Creativo, tímido y muy indeciso"],
-				"correct": 0,
-				"correct_text": "Me tienes bien calado. Sobre todo en lo de cabezota.",
-				"wrong_text": "Casi. Soy sarcástico, curioso, tranquilo y bastante cabezota."
-			}
-		]
-	},
-	"sue": {
-		"name": "Sue",
-		"background": "habitacion_sue",
-		"intro": [
-			{"expression": "happy", "text": "Soy Sue. No necesito hacer mucho ruido para sentirme parte de un plan; me importa más que la gente a mi lado pueda ser ella misma."},
-			{"expression": "thoughtful", "text": "Me gusta que las cosas tengan identidad y no parezcan copiadas de todo lo demás. Con confianza, cualquier tarde corriente puede acabar teniendo algo especial."}
-		],
-		"questions": [
-			{
-				"text": "¿Qué me gusta hacer cuando tengo tiempo para mí?",
-				"choices": ["Pintar y leer fantasía", "Programar y tocar la guitarra", "Jugar a Magic y Pokémon", "Hacer senderismo y fotografía"],
-				"correct": 0,
-				"correct_text": "Sí. Dame pinturas o un buen libro de fantasía y ya tengo plan.",
-				"wrong_text": "Te lo dije: pintar y leer fantasía. Esa era la combinación correcta."
-			},
-			{
-				"text": "¿Qué estilo de ropa encaja más conmigo?",
-				"choices": ["Deportivo y clásico", "Gótico y urbano", "Colorido con aros grandes", "Elegante y barroco"],
-				"correct": 1,
-				"correct_text": "Correcto: gótico y urbano, según el día y las ganas.",
-				"wrong_text": "La respuesta era gótico y urbano. Ya estamos... hay que fijarse un poco más."
-			},
-			{
-				"text": "¿Qué descripción se acerca más a mi personalidad?",
-				"choices": ["Directa, divertida, observadora y con carácter", "Despreocupada, impulsiva e imprevisible", "Tranquila, sarcástica y cabezota", "Serena, tímida y muy reservada"],
-				"correct": 0,
-				"correct_text": "Bien. Me conoces mejor de lo que parecía.",
-				"wrong_text": "Soy directa, divertida, observadora y con carácter. Para la próxima ya lo sabes."
-			}
-		]
-	},
-	"smokey": {
-		"name": "Smokey",
-		"background": "habitacion_fran",
-		"intro": [
-			{"expression": "confident", "text": "Puedes llamarme Smokey. No soy muy de presentaciones formales; prefiero que una conversación empiece sola y termine en alguna historia memorable."},
-			{"expression": "laugh", "text": "A veces mis mejores recuerdos comienzan cuando nadie tenía demasiado claro qué iba a pasar. Si acabamos riéndonos, para mí el plan ya ha salido bien."}
-		],
-		"questions": [
-			{
-				"text": "Empezamos fácil: ¿cómo me llamo fuera del apodo Smokey?",
-				"choices": ["Jony", "Fran", "Javi", "Juan"],
-				"correct": 1,
-				"correct_text": "Eso es: Fran. Aunque seguramente me oigas más veces Smokey.",
-				"wrong_text": "Mi nombre es Fran. Smokey es el apodo que terminó ganando."
-			},
-			{
-				"text": "¿Qué descripción encaja mejor con mi forma de actuar?",
-				"choices": ["Despreocupado, impulsivo e imprevisible", "Directo, observador y muy organizado", "Serio, tranquilo y enemigo de improvisar", "Metódico, prudente y previsor"],
-				"correct": 0,
-				"correct_text": "Exacto. La improvisación también es un método, más o menos.",
-				"wrong_text": "Soy despreocupado, impulsivo e imprevisible. Organizarlo todo no sería muy propio de mí."
-			},
-			{
-				"text": "¿Qué frase encaja conmigo antes de explicar un plan?",
-				"choices": ["Ya estamos...", "¿Llegué tarde?", "Confía en mí. Tengo una idea.", "Primero hacemos una lista."],
-				"correct": 2,
-				"correct_text": "Confía en mí. Sabía que esa la acertabas.",
-				"wrong_text": "Era ‘Confía en mí. Tengo una idea’. La próxima vez quizá convenga preguntar por la idea primero."
-			}
-		]
-	},
-	"carmen": {
-		"name": "Carmen",
-		"background": "habitacion_fran",
-		"intro": [
-			{"expression": "neutral", "text": "Soy Carmen, aunque también puedes llamarme Carmela. Si alguien propone un plan con buena compañía, no suele costar mucho convencerme."},
-			{"expression": "neutral", "text": "Me gusta que la gente tenga algo propio y que una tarde cualquiera pueda acabar siendo una anécdota. Los planes demasiado serios no suelen durar mucho a mi alrededor."}
-		],
-		"questions": [
-			{
-				"text": "¿Qué estoy estudiando?",
-				"choices": ["Informática", "Bellas Artes", "Cine", "Diseño gráfico"],
-				"correct": 2,
-				"correct_text": "Cine, correcto. Algún día todo esto podría acabar en una película.",
-				"wrong_text": "Estudio Cine. Tendrás que prestar más atención a los créditos."
-			},
-			{
-				"text": "Si vamos a comer en grupo, ¿qué detalle deberías recordar?",
-				"choices": ["Soy vegetariana", "No me gusta salir a comer", "Solo tomo postre", "No tomo bebidas con gas"],
-				"correct": 0,
-				"correct_text": "Exacto: opción vegetariana y todos contentos.",
-				"wrong_text": "Soy vegetariana. Avisar antes de pedir por todo el mundo siempre ayuda."
-			},
-			{
-				"text": "¿Qué conjunto de detalles pega más conmigo?",
-				"choices": ["Ropa colorida, aros y bromas", "Gabardina negra y gafas oscuras", "Guitarra, informática y sarcasmo", "Ropa deportiva, cocina y timidez"],
-				"correct": 0,
-				"correct_text": "Sí: color, aros y alguna broma por el camino.",
-				"wrong_text": "Ropa colorida, aros y bromas. Esa es la mezcla más Carmela."
-			}
-		]
-	},
-	"jony": {
-		"name": "Jony",
-		"background": "habitacion_jony",
-		"intro": [
-			{"expression": "neutral", "text": "Soy Jony, o Jon si quieres ahorrar una letra. Al principio puedo parecer algo reservado, pero con el tema adecuado se me pasa bastante rápido."},
-			{"expression": "neutral", "text": "Cuando algo me interesa de verdad, puedo analizar hasta el último detalle y alargar la conversación más de la cuenta. Avisado quedas."}
-		],
-		"questions": [
-			{
-				"text": "¿A qué me dedico?",
-				"choices": ["Informática", "Cine", "Música", "Hostelería"],
-				"correct": 0,
-				"correct_text": "Correcto. Informático dentro y fuera de horario.",
-				"wrong_text": "Soy informático. Esa tendrás que recordarla para la próxima."
-			},
-			{
-				"text": "¿Qué dos juegos pueden darme conversación para rato?",
-				"choices": ["Ajedrez y dominó", "Pokémon y Magic", "Fútbol y tenis", "Rol y Warhammer"],
-				"correct": 1,
-				"correct_text": "Pokémon y Magic. Con eso has elegido una conversación larga.",
-				"wrong_text": "Pokémon y Magic. La próxima pregunta quizá necesite menos maná."
-			},
-			{
-				"text": "¿Qué comparto con Carmen a la hora de comer?",
-				"choices": ["Los dos somos vegetarianos", "Los dos evitamos los postres", "Los dos odiamos salir a comer", "Los dos pedimos siempre carne"],
-				"correct": 0,
-				"correct_text": "Eso es. Los dos somos vegetarianos.",
-				"wrong_text": "Carmen y yo somos vegetarianos. Esa era la coincidencia."
-			}
-		]
-	},
-	"ana": {
-		"name": "Ana",
-		"background": "habitacion_ana",
-		"intro": [
-			{"expression": "neutral", "text": "Soy Ana. No suelo contarlo todo de primeras; prefiero observar, coger confianza y decidir cuánto de mí enseño en cada momento."},
-			{"expression": "neutral", "text": "Las historias que dejan espacio para imaginar me atrapan con facilidad. Por dentro casi siempre está pasando bastante más de lo que cuento en voz alta."}
-		],
-		"questions": [
-			{
-				"text": "¿Qué estética encaja mejor conmigo?",
-				"choices": ["Gótica, witchy, vampírica y barroca", "Minimalista y deportiva", "Colorida y tropical", "Retro y futurista"],
-				"correct": 0,
-				"correct_text": "Sí. Si parece salido de una historia de vampiros, probablemente me interese.",
-				"wrong_text": "Lo mío es lo gótico, witchy, vampírico y barroco."
-			},
-			{
-				"text": "¿Qué grupo de aficiones es más mío?",
-				"choices": ["Cine, vapeo y ropa colorida", "Libros, rol, fantasía, pole dance y arte", "Informática, guitarra y videojuegos", "Música, cocina y senderismo"],
-				"correct": 1,
-				"correct_text": "Exacto. Ahí hay varias formas distintas de contar o vivir una historia.",
-				"wrong_text": "Libros, rol, fantasía, pole dance y arte. Esa era mi combinación."
-			},
-			{
-				"text": "¿Qué descripción se acerca más a mi personalidad?",
-				"choices": ["Sensible, impulsiva y a veces seria", "Despreocupada y siempre indiferente", "Tranquila, sarcástica y cabezota", "Extrovertida, paciente y muy práctica"],
-				"correct": 0,
-				"correct_text": "Sí. Has sabido mirar un poco más allá de la estética.",
-				"wrong_text": "Soy sensible, impulsiva y a veces seria. No todo se ve a primera vista."
-			}
-		]
-	},
-	"argentino": {
-		"name": "El Argentino",
-		"background": "habitacion_argentino",
-		"intro": [
-			{"expression": "neutral", "text": "No soy de soltar discursos largos sobre mí. Prefiero aparecer, escuchar un rato y hablar cuando tengo algo que merece la pena decir."},
-			{"expression": "neutral", "text": "Dentro del grupo suelo ir a mi ritmo. Puede que llegue con cara de saber exactamente qué ocurre, aunque muchas veces solo esté esperando a que alguien se decida."}
-		],
-		"questions": [
-			{
-				"text": "¿Qué suelo fumar cuando estoy con el grupo?",
-				"choices": ["Tabaco de liar", "Puros", "Cigarrillos mentolados", "No fumo"],
-				"correct": 0,
-				"correct_text": "Tabaco de liar, correcto. Esa sí era una pista fácil de ver.",
-				"wrong_text": "Suelo fumar tabaco de liar. La próxima vez fíjate en el cigarro."
-			},
-			{
-				"text": "¿Qué detalles forman mi aspecto más reconocible?",
-				"choices": ["Gabardina negra, gafas oscuras y tatuajes", "Ropa colorida, aros y gafas", "Estilo gótico urbano y pinturas", "Camisa rosa y un vaper"],
-				"correct": 0,
-				"correct_text": "Correcto. Una silueta bastante difícil de confundir.",
-				"wrong_text": "Gabardina negra, gafas oscuras y tatuajes. Esa es la imagen."
-			},
-			{
-				"text": "Cuando aparecí por primera vez, ¿qué pregunté?",
-				"choices": ["¿Ya habéis pedido de comer?", "¿Llegué tarde o todavía estáis decidiendo?", "¿Quién quiere jugar a Magic?", "¿Dónde está mi vaso?"],
-				"correct": 1,
-				"correct_text": "Exacto. Y, por supuesto, todavía seguían decidiendo.",
-				"wrong_text": "Pregunté si había llegado tarde o si todavía estaban decidiendo. Seguían decidiendo."
-			}
-		]
-	}
-}
-
+# Fachada compatible con la API histórica. La fuente real es DataManager/JSON.
+static var ENCOUNTER_ORDER: Array[String] = _load_encounter_order()
+static var ENCOUNTERS: Dictionary = _build_encounters()
 static var NODES: Dictionary = _build_nodes()
+static var START: String = _default_start()
+
+
+static func refresh() -> void:
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return
+	dm.call("ensure_loaded")
+	ENCOUNTER_ORDER = _load_encounter_order()
+	ENCOUNTERS = _build_encounters()
+	NODES = _build_nodes()
+	START = _default_start()
 
 
 static func game_title() -> String:
+	if ENCOUNTER_ORDER.is_empty():
+		refresh()
 	return title_for_character_count(ENCOUNTER_ORDER.size())
 
 
@@ -266,20 +44,164 @@ static func title_for_character_count(character_count: int) -> String:
 	return "Entre líneas: La %s silla" % _feminine_ordinal(chair_number)
 
 
-static func _feminine_ordinal(value: int) -> String:
-	if value < FEMININE_ORDINALS.size():
-		return FEMININE_ORDINALS[value]
-	return "%d.ª" % value
+static func question_count(character_id: String) -> int:
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return 0
+	var questions: Array = dm.call("get_questions", character_id)
+	return questions.size()
+
+
+static func max_affinity_for_character(character_id: String) -> int:
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return 0
+	var total := 0
+	var questions: Array = dm.call("get_questions", character_id)
+	for raw_question in questions:
+		if typeof(raw_question) != TYPE_DICTIONARY:
+			continue
+		var question := raw_question as Dictionary
+		var best := 0
+		var answers: Variant = question.get("answers", [])
+		if typeof(answers) == TYPE_ARRAY:
+			for raw_answer in answers as Array:
+				if typeof(raw_answer) != TYPE_DICTIONARY:
+					continue
+				best = maxi(best, int((raw_answer as Dictionary).get("score", 0)))
+		total += best
+	return total
+
+
+static func max_affinity_for_player(player_id: String) -> int:
+	var total := 0
+	for character_id in encounter_order_for_player(player_id):
+		total += max_affinity_for_character(character_id)
+	return total
+
+
+static func final_feedback_ids(character_id: String) -> Array[String]:
+	var count := question_count(character_id)
+	if count <= 0:
+		return []
+	return ["%s_q%d_correct" % [character_id, count], "%s_q%d_wrong" % [character_id, count]]
+
+
+static func is_final_feedback_node(node_id: String) -> bool:
+	var character_id := character_for_node(node_id)
+	if character_id.is_empty():
+		return false
+	return final_feedback_ids(character_id).has(node_id)
+
+
+static func encounter_order_for_player(player_id: String) -> Array[String]:
+	if ENCOUNTER_ORDER.is_empty():
+		refresh()
+	var order: Array[String] = []
+	for character_id in ENCOUNTER_ORDER:
+		if character_id != player_id:
+			order.append(character_id)
+	return order
+
+
+static func start_for_player(player_id: String) -> String:
+	var order := encounter_order_for_player(player_id)
+	if order.is_empty():
+		return "__END__"
+	return order[0] + "_intro_01"
+
+
+static func character_for_node(node_id: String) -> String:
+	if ENCOUNTER_ORDER.is_empty():
+		refresh()
+	for character_id in ENCOUNTER_ORDER:
+		if node_id.begins_with(character_id + "_"):
+			return character_id
+	return ""
+
+
+static func resolve_for_player(node_id: String, player_id: String) -> String:
+	if node_id.is_empty() or LEGACY_START_NODES.has(node_id):
+		return start_for_player(player_id)
+	if character_for_node(node_id) != player_id:
+		return node_id
+	var player_index := ENCOUNTER_ORDER.find(player_id)
+	if player_index >= 0 and player_index + 1 < ENCOUNTER_ORDER.size():
+		return ENCOUNTER_ORDER[player_index + 1] + "_intro_01"
+	return "__END__"
+
+
+static func _load_encounter_order() -> Array[String]:
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return []
+	dm.call("ensure_loaded")
+	var raw_ids: Array = dm.call("get_character_ids", true)
+	var result: Array[String] = []
+	for raw_id in raw_ids:
+		result.append(str(raw_id))
+	return result
+
+
+static func _build_encounters() -> Dictionary:
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return {}
+	var result: Dictionary = {}
+	for character_id in ENCOUNTER_ORDER:
+		var character: Dictionary = dm.call("get_character", character_id)
+		var questions_json: Array = dm.call("get_questions", character_id)
+		var compatibility_questions: Array = []
+		for raw_question in questions_json:
+			if typeof(raw_question) != TYPE_DICTIONARY:
+				continue
+			var question := raw_question as Dictionary
+			var labels: Array = []
+			var correct_index := 0
+			var best_score := -2147483648
+			var answers: Variant = question.get("answers", [])
+			if typeof(answers) == TYPE_ARRAY:
+				for answer_index in range((answers as Array).size()):
+					var raw_answer: Variant = (answers as Array)[answer_index]
+					if typeof(raw_answer) != TYPE_DICTIONARY:
+						continue
+					var answer := raw_answer as Dictionary
+					labels.append(str(answer.get("text", "")))
+					var score := int(answer.get("score", 0))
+					if score > best_score:
+						best_score = score
+						correct_index = answer_index
+			var feedback: Dictionary = question.get("feedback", {})
+			var correct_feedback: Dictionary = feedback.get("correct", {})
+			var wrong_feedback: Dictionary = feedback.get("wrong", {})
+			compatibility_questions.append({
+				"id": str(question.get("id", "")),
+				"text": str(question.get("text", "")),
+				"choices": labels,
+				"correct": correct_index,
+				"correct_text": str(correct_feedback.get("text", "¡Correcto!")),
+				"wrong_text": str(wrong_feedback.get("text", "No era esa.")),
+				"answers": (question.get("answers", []) as Array).duplicate(true),
+				"feedback": feedback.duplicate(true)
+			})
+		var intro: Array = dm.call("get_intro", character_id)
+		result[character_id] = {
+			"name": str(character.get("story_name", character.get("name", character_id.capitalize()))),
+			"background": str(dm.call("get_character_background_id", character_id)),
+			"intro": intro,
+			"questions": compatibility_questions
+		}
+	return result
 
 
 static func _build_nodes() -> Dictionary:
 	var nodes: Dictionary = {}
-
-	for character_index in range(ENCOUNTER_ORDER.size()):
+	var encounter_total := ENCOUNTER_ORDER.size()
+	for character_index in range(encounter_total):
 		var character_id: String = ENCOUNTER_ORDER[character_index]
-		var encounter: Dictionary = ENCOUNTERS[character_id]
+		var encounter: Dictionary = ENCOUNTERS.get(character_id, {})
 		var display_name := str(encounter.get("name", character_id.capitalize()))
-		var chapter := "ENCUENTRO %d/7 · %s" % [character_index + 1, display_name.to_upper()]
+		var chapter := "ENCUENTRO %d/%d · %s" % [character_index + 1, encounter_total, display_name.to_upper()]
 		var intro_lines: Array = encounter.get("intro", [])
 		for intro_index in range(intro_lines.size()):
 			var line: Dictionary = intro_lines[intro_index]
@@ -296,40 +218,42 @@ static func _build_nodes() -> Dictionary:
 			var question_id := "%s_q%d" % [character_id, number]
 			var correct_feedback_id := "%s_q%d_correct" % [character_id, number]
 			var wrong_feedback_id := "%s_q%d_wrong" % [character_id, number]
-			var question_node := _single_character_node(
-				character_id,
-				display_name,
-				str(question.get("text", "")),
-				"",
-				"%s · PREGUNTA %d/3" % [chapter, number]
-			)
+			var question_node := _single_character_node(character_id, display_name, str(question.get("text", "")), "", "%s · PREGUNTA %d/%d" % [chapter, number, questions.size()])
 			question_node.erase("next")
 			question_node["question_character"] = character_id
 			question_node["question_number"] = number
+			question_node["question_count"] = questions.size()
 			question_node["choices"] = []
-			var labels: Array = question.get("choices", [])
-			var correct_index := int(question.get("correct", 0))
-			for choice_index in range(labels.size()):
-				var is_correct := choice_index == correct_index
+			var answers: Array = question.get("answers", [])
+			for raw_answer in answers:
+				if typeof(raw_answer) != TYPE_DICTIONARY:
+					continue
+				var answer := raw_answer as Dictionary
+				var feedback_kind := str(answer.get("feedback", "wrong"))
+				var target := correct_feedback_id if feedback_kind == "correct" else wrong_feedback_id
 				var choice := {
-					"label": str(labels[choice_index]),
-					"next": correct_feedback_id if is_correct else wrong_feedback_id
+					"label": str(answer.get("text", "")),
+					"side": str(answer.get("side", "")),
+					"next": target
 				}
-				if is_correct:
-					choice["affinity"] = {character_id: 1}
+				var score := int(answer.get("score", 0))
+				if score != 0:
+					choice["affinity"] = {character_id: score}
 				question_node["choices"].append(choice)
 			nodes[question_id] = question_node
 
 			var following_id := _following_node(character_index, question_index, questions.size())
-			var correct_node := _single_character_node(character_id, display_name, str(question.get("correct_text", "¡Correcto!")), following_id, chapter)
-			correct_node["expressions"] = {character_id: "happy"}
+			var feedback: Dictionary = question.get("feedback", {})
+			var correct_data: Dictionary = feedback.get("correct", {})
+			var wrong_data: Dictionary = feedback.get("wrong", {})
+			var correct_node := _single_character_node(character_id, display_name, str(correct_data.get("text", question.get("correct_text", "¡Correcto!"))), following_id, chapter)
+			correct_node["expressions"] = {character_id: str(correct_data.get("expression", "happy"))}
 			correct_node["answer_result"] = "correct"
 			nodes[correct_feedback_id] = correct_node
-			var wrong_node := _single_character_node(character_id, display_name, str(question.get("wrong_text", "No era esa.")), following_id, chapter)
-			wrong_node["expressions"] = {character_id: "thoughtful"}
+			var wrong_node := _single_character_node(character_id, display_name, str(wrong_data.get("text", question.get("wrong_text", "No era esa."))), following_id, chapter)
+			wrong_node["expressions"] = {character_id: str(wrong_data.get("expression", "thoughtful"))}
 			wrong_node["answer_result"] = "wrong"
 			nodes[wrong_feedback_id] = wrong_node
-
 	return nodes
 
 
@@ -349,42 +273,21 @@ static func _single_character_node(character_id: String, speaker: String, text: 
 	return node
 
 
-static func _following_node(character_index: int, question_index: int, question_count: int) -> String:
-	if question_index + 1 < question_count:
+static func _following_node(character_index: int, question_index: int, question_count_value: int) -> String:
+	if question_index + 1 < question_count_value:
 		return "%s_q%d" % [ENCOUNTER_ORDER[character_index], question_index + 2]
 	if character_index + 1 < ENCOUNTER_ORDER.size():
 		return "%s_intro_01" % ENCOUNTER_ORDER[character_index + 1]
 	return "__END__"
 
 
-static func encounter_order_for_player(player_id: String) -> Array[String]:
-	var order: Array[String] = []
-	for character_id in ENCOUNTER_ORDER:
-		if character_id != player_id:
-			order.append(character_id)
-	return order
-
-
-static func start_for_player(player_id: String) -> String:
-	var order := encounter_order_for_player(player_id)
-	if order.is_empty():
+static func _default_start() -> String:
+	if ENCOUNTER_ORDER.is_empty():
 		return "__END__"
-	return order[0] + "_intro_01"
+	return ENCOUNTER_ORDER[0] + "_intro_01"
 
 
-static func character_for_node(node_id: String) -> String:
-	for character_id in ENCOUNTER_ORDER:
-		if node_id.begins_with(character_id + "_"):
-			return character_id
-	return ""
-
-
-static func resolve_for_player(node_id: String, player_id: String) -> String:
-	if node_id.is_empty() or LEGACY_START_NODES.has(node_id):
-		return start_for_player(player_id)
-	if character_for_node(node_id) != player_id:
-		return node_id
-	var player_index := ENCOUNTER_ORDER.find(player_id)
-	if player_index >= 0 and player_index + 1 < ENCOUNTER_ORDER.size():
-		return ENCOUNTER_ORDER[player_index + 1] + "_intro_01"
-	return "__END__"
+static func _feminine_ordinal(value: int) -> String:
+	if value >= 0 and value < FEMININE_ORDINALS.size():
+		return FEMININE_ORDINALS[value]
+	return "%d.ª" % value

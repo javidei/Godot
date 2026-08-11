@@ -1,80 +1,30 @@
 extends RefCounted
 
+const DataAccess = preload("res://scripts/data_access.gd")
 const MAX_CACHED_TEXTURES := 24
-const MENU_CHARACTERS := "res://assets/ui/menu-lineup.png"
-
-const BACKGROUNDS := {
-	"bosque": "res://assets/backgrounds/fondo-bosque.png",
-	"bar": "res://assets/backgrounds/fondo-bar.png",
-	"casa_asturias": "res://assets/backgrounds/fondo-casa-asturias.png",
-	"habitacion_ana": "res://assets/backgrounds/fondo-habitacion-ana.png",
-	"habitacion_argentino": "res://assets/backgrounds/fondo-habitacion-argentino.png",
-	"habitacion_fran": "res://assets/backgrounds/fondo-habitacion-fran.png",
-	"habitacion_sue": "res://assets/backgrounds/fondo-habitacion-sue.png",
-	"habitacion_jony": "res://assets/backgrounds/fondo-habitacion-jony.png",
-	"habitacion_javi": "res://assets/backgrounds/fondo-habitacion-javi.png"
-}
-
-const CHARACTER_POSES := {
-	"javi": {
-		"neutral": "res://assets/characters/javi/javi_a.png",
-		"happy": "res://assets/characters/javi/javi_a.png",
-		"laugh": "res://assets/characters/javi/javi_a.png",
-		"thoughtful": "res://assets/characters/javi/javi_c.png",
-		"jagermeister": "res://assets/characters/javi/javi_b.png",
-		"expressive": "res://assets/characters/javi/javi_b.png",
-		"embarrassed": "res://assets/characters/javi/javi_b.png",
-		"annoyed": "res://assets/characters/javi/javi_b.png",
-		"teasing": "res://assets/characters/javi/javi_b.png"
-	},
-	"sue": {
-		"neutral": "res://assets/characters/sue/sue_a.png",
-		"happy": "res://assets/characters/sue/sue_b.png",
-		"laugh": "res://assets/characters/sue/sue_b.png",
-		"thoughtful": "res://assets/characters/sue/sue_c.png",
-		"chocolate": "res://assets/characters/sue/sue_b.png",
-		"expressive": "res://assets/characters/sue/sue_b.png",
-		"embarrassed": "res://assets/characters/sue/sue_c.png",
-		"annoyed": "res://assets/characters/sue/sue_b.png",
-		"teasing": "res://assets/characters/sue/sue_c.png"
-	},
-	"smokey": {
-		"neutral": "res://assets/characters/smokey/smokey_a.png",
-		"confident": "res://assets/characters/smokey/smokey_a.png",
-		"happy": "res://assets/characters/smokey/smokey_a.png",
-		"laugh": "res://assets/characters/smokey/smokey_a.png",
-		"thoughtful": "res://assets/characters/smokey/smokey_b.png",
-		"vaping": "res://assets/characters/smokey/smokey_b.png",
-		"expressive": "res://assets/characters/smokey/smokey_a.png",
-		"embarrassed": "res://assets/characters/smokey/smokey_b.png",
-		"annoyed": "res://assets/characters/smokey/smokey_a.png",
-		"teasing": "res://assets/characters/smokey/smokey_b.png"
-	},
-	"carmen": {"neutral": "res://assets/characters/carmen/carmen.png"},
-	"jony": {"neutral": "res://assets/characters/jony/jony.png"},
-	"ana": {"neutral": "res://assets/characters/ana/ana.png"},
-	"argentino": {"neutral": "res://assets/characters/argentino/argentino.png"}
-}
 
 var _cache: Dictionary = {}
 var _cache_order: Array[String] = []
 
 
 func get_menu_characters() -> Texture2D:
-	return _load_texture(MENU_CHARACTERS)
+	var dm: Variant = DataAccess.dm()
+	return _load_texture(str(dm.call("get_menu_characters_path"))) if dm != null else null
 
 
 func get_background(background_id: String) -> Texture2D:
-	var path: String = str(BACKGROUNDS.get(background_id, ""))
+	var dm: Variant = DataAccess.dm()
+	var path := str(dm.call("get_background_path", background_id)) if dm != null else ""
+	if path.is_empty():
+		push_warning("Fondo sin ruta registrada en DataManager: " + background_id)
 	return _load_texture(path)
 
 
 func get_character(character: String, pose: String) -> Texture2D:
-	var poses: Dictionary = CHARACTER_POSES.get(character, {})
-	if poses.is_empty():
-		push_warning("Personaje sin recursos registrados: " + character)
-		return null
-	var path: String = str(poses.get(pose, poses.get("neutral", "")))
+	var dm: Variant = DataAccess.dm()
+	var path := str(dm.call("get_character_image_path", character, pose)) if dm != null else ""
+	if path.is_empty():
+		push_warning("Personaje/pose sin recurso registrado: %s / %s" % [character, pose])
 	return _load_texture(path)
 
 
@@ -95,12 +45,10 @@ func _load_texture(path: String) -> Texture2D:
 	if not ResourceLoader.exists(path):
 		push_warning("No existe el recurso local: " + path)
 		return null
-
 	var texture: Texture2D = ResourceLoader.load(path) as Texture2D
 	if texture == null:
 		push_warning("No se ha podido cargar la textura: " + path)
 		return null
-
 	_cache[path] = texture
 	_cache_order.append(path)
 	_trim_cache()

@@ -1,42 +1,12 @@
 extends Node
 
-const SETTINGS_PATH := "user://audio_settings.cfg"
-const SETTINGS_VERSION := 2
-const DEFAULT_MUSIC_VOLUME := 0.3
-const DEFAULT_EFFECTS_VOLUME := 1.0
-const VOLUME_STEP := 0.1
-# El 100 % visible de música equivale al 10 % de la escala lineal anterior.
-# Los efectos conservan su escala completa e independiente.
-const MUSIC_OUTPUT_MAX := 0.1
+const DataAccess = preload("res://scripts/data_access.gd")
 
-# Para añadir o cambiar canciones solo hay que:
-# 1. Copiar el .ogg en assets/audio/music/.
-# 2. Cambiar la ruta correspondiente en MUSIC_FILES.
-# 3. Asociar su identificador al fondo en BACKGROUND_MUSIC.
-# Se recomienda OGG porque funciona bien tanto en web como en escritorio.
-const MUSIC_FILES := {
-	"casa_asturias": "res://assets/audio/music/casa-asturias.ogg",
-	"bosque_misterioso": "res://assets/audio/music/bosque-misterioso.ogg",
-	"bar_nocturno": "res://assets/audio/music/bar-nocturno.ogg",
-	"ana_vampirica": "res://assets/audio/music/ana-vampirica.ogg",
-	"argentino_rock": "res://assets/audio/music/argentino-rock.ogg",
-	"fran_electronica": "res://assets/audio/music/fran-electronica.ogg",
-	"sue_fantasia": "res://assets/audio/music/sue-fantasia.ogg",
-	"jony_rock": "res://assets/audio/music/jony-rock.ogg",
-	"javi_lofi_rock": "res://assets/audio/music/javi-lofi-rock.ogg"
-}
-
-const BACKGROUND_MUSIC := {
-	"casa_asturias": "casa_asturias",
-	"bosque": "bosque_misterioso",
-	"bar": "bar_nocturno",
-	"habitacion_ana": "ana_vampirica",
-	"habitacion_argentino": "argentino_rock",
-	"habitacion_fran": "fran_electronica",
-	"habitacion_sue": "sue_fantasia",
-	"habitacion_jony": "jony_rock",
-	"habitacion_javi": "javi_lofi_rock"
-}
+# Valores cargados desde game_config.json; los literales son solo rescate.
+static var DEFAULT_MUSIC_VOLUME: float = _config_float("default_music_volume", 0.3)
+static var DEFAULT_EFFECTS_VOLUME: float = _config_float("default_effects_volume", 1.0)
+static var VOLUME_STEP: float = _config_float("volume_step", 0.1)
+static var MUSIC_OUTPUT_MAX: float = _config_float("music_output_max", 0.1)
 
 const SFX_FILES := {}
 const UI_FILES := {}
@@ -44,14 +14,33 @@ const UI_FILES := {}
 var music_player: AudioStreamPlayer
 var sfx_player: AudioStreamPlayer
 var ui_player: AudioStreamPlayer
-var music_volume := DEFAULT_MUSIC_VOLUME
-var effects_volume := DEFAULT_EFFECTS_VOLUME
+var music_volume := 0.3
+var effects_volume := 1.0
 var music_muted := false
 var effects_muted := false
 var current_music_id := ""
 
 
+static func refresh_configuration() -> void:
+	DEFAULT_MUSIC_VOLUME = _config_float("default_music_volume", 0.3)
+	DEFAULT_EFFECTS_VOLUME = _config_float("default_effects_volume", 1.0)
+	VOLUME_STEP = _config_float("volume_step", 0.1)
+	MUSIC_OUTPUT_MAX = _config_float("music_output_max", 0.1)
+
+
+static func _config_float(key: String, fallback: float) -> float:
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return fallback
+	dm.call("ensure_loaded")
+	var audio: Dictionary = dm.call("get_audio_defaults")
+	return float(audio.get(key, fallback))
+
+
 func _ready() -> void:
+	refresh_configuration()
+	music_volume = DEFAULT_MUSIC_VOLUME
+	effects_volume = DEFAULT_EFFECTS_VOLUME
 	_ensure_audio_bus("Music")
 	_ensure_audio_bus("SFX")
 	_ensure_audio_bus("UI")
@@ -63,7 +52,8 @@ func _ready() -> void:
 
 
 func play_background_music(background_id: String) -> bool:
-	var music_id := str(BACKGROUND_MUSIC.get(background_id, ""))
+	var dm: Variant = DataAccess.dm()
+	var music_id := str(dm.call("get_music_for_background", background_id)) if dm != null else ""
 	if music_id.is_empty():
 		stop_music()
 		return false
@@ -77,7 +67,7 @@ func play_music(sound_id: String) -> bool:
 		return false
 	music_player.stop()
 	current_music_id = sound_id
-	var stream := _load_registered(MUSIC_FILES, sound_id)
+	var stream := _load_music(sound_id)
 	if stream == null:
 		return false
 	_enable_loop(stream)
@@ -146,7 +136,6 @@ func is_effects_muted() -> bool:
 	return effects_muted
 
 
-# Alias de compatibilidad con la versión 0.3.7: afecta a ambos canales.
 func adjust_volume(delta: float) -> void:
 	set_master_volume(maxf(music_volume, effects_volume) + delta)
 
@@ -177,11 +166,13 @@ func is_muted() -> bool:
 
 
 func music_for_background(background_id: String) -> String:
-	return str(BACKGROUND_MUSIC.get(background_id, ""))
+	var dm: Variant = DataAccess.dm()
+	return str(dm.call("get_music_for_background", background_id)) if dm != null else ""
 
 
 func path_for_music(music_id: String) -> String:
-	return str(MUSIC_FILES.get(music_id, ""))
+	var dm: Variant = DataAccess.dm()
+	return str(dm.call("get_music_path", music_id)) if dm != null else ""
 
 
 func play_sfx(sound_id: String) -> void:
@@ -215,6 +206,15 @@ func _make_player(player_name: String) -> AudioStreamPlayer:
 	player.bus = player_name
 	add_child(player)
 	return player
+
+
+func _load_music(sound_id: String) -> AudioStream:
+	var dm: Variant = DataAccess.dm()
+	var path := str(dm.call("get_music_path", sound_id)) if dm != null else ""
+	if path.is_empty() or not ResourceLoader.exists(path):
+		push_warning("Canción no registrada o inexistente: %s -> %s" % [sound_id, path])
+		return null
+	return ResourceLoader.load(path) as AudioStream
 
 
 func _load_registered(registry: Dictionary, sound_id: String) -> AudioStream:
@@ -261,48 +261,38 @@ func _apply_bus_settings(bus_name: String, volume: float, muted: bool) -> void:
 
 
 func _load_settings() -> void:
-	var config := ConfigFile.new()
-	if config.load(SETTINGS_PATH) != OK:
-		return
-	var settings_version := int(config.get_value("audio", "settings_version", 1))
-	var legacy_muted := bool(config.get_value("audio", "muted", false))
-	if settings_version < SETTINGS_VERSION:
-		# La escala cambió en 0.3.9. Se aplica una sola vez el nuevo valor inicial
-		# para no reinterpretar un porcentaje antiguo como si ya fuera el nuevo.
-		music_volume = DEFAULT_MUSIC_VOLUME
-	else:
-		music_volume = clampf(float(config.get_value("audio", "music_volume", DEFAULT_MUSIC_VOLUME)), 0.0, 1.0)
-	effects_volume = clampf(float(config.get_value("audio", "effects_volume", DEFAULT_EFFECTS_VOLUME)), 0.0, 1.0)
-	music_muted = bool(config.get_value("audio", "music_muted", legacy_muted))
-	effects_muted = bool(config.get_value("audio", "effects_muted", legacy_muted))
-	if settings_version < SETTINGS_VERSION:
-		_save_settings()
+	var dm: Variant = DataAccess.dm()
+	var settings: Dictionary = dm.call("get_settings") if dm != null else {}
+	var audio: Dictionary = settings.get("audio", {})
+	music_volume = clampf(float(audio.get("music_volume", DEFAULT_MUSIC_VOLUME)), 0.0, 1.0)
+	effects_volume = clampf(float(audio.get("effects_volume", DEFAULT_EFFECTS_VOLUME)), 0.0, 1.0)
+	music_muted = bool(audio.get("music_muted", false))
+	effects_muted = bool(audio.get("effects_muted", false))
 
 
 func _save_settings() -> void:
-	var config := ConfigFile.new()
-	config.set_value("audio", "settings_version", SETTINGS_VERSION)
-	config.set_value("audio", "music_volume", music_volume)
-	config.set_value("audio", "effects_volume", effects_volume)
-	config.set_value("audio", "music_muted", music_muted)
-	config.set_value("audio", "effects_muted", effects_muted)
-	config.save(SETTINGS_PATH)
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return
+	dm.call("update_audio_settings", {
+		"music_volume": music_volume,
+		"effects_volume": effects_volume,
+		"music_muted": music_muted,
+		"effects_muted": effects_muted
+	})
 
 
 func _play_generated(player: AudioStreamPlayer, frequencies: Array, duration: float, volume: float) -> void:
 	if player == null or frequencies.is_empty():
 		return
-
 	var generator := AudioStreamGenerator.new()
 	generator.mix_rate = 44100.0
 	generator.buffer_length = max(0.25, duration + 0.08)
 	player.stream = generator
 	player.play()
-
 	var playback := player.get_stream_playback() as AudioStreamGeneratorPlayback
 	if playback == null:
 		return
-
 	var sample_count := int(generator.mix_rate * duration)
 	var frames := PackedVector2Array()
 	frames.resize(sample_count)

@@ -1,0 +1,12 @@
+{
+  "id": "bar",
+  "owners": [],
+  "background_id": "bar",
+  "background_path": "res://assets/backgrounds/fondo-bar.png",
+  "music_id": "bar_nocturno",
+  "music_path": "res://assets/audio/music/bar-nocturno.ogg",
+  "music_volume": 1.0,
+  "music_loop": true,
+  "music_optional": true,
+  "enabled": true
+}
