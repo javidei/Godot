@@ -53,18 +53,35 @@
         "Que le den demasiadas vueltas a algo"
       ],
       "comida": {
-        "favoritas": ["Carrilleras"],
-        "bebidas": ["Coca-Cola", "Jägermeister"]
+        "favoritas": [
+          "Carrilleras"
+        ],
+        "bebidas": [
+          "Coca-Cola",
+          "Jägermeister"
+        ]
       },
       "forma_de_hablar": {
-        "latiguillos": ["Pero vamos a ver...", "illo", "¿Qué cojones?"],
+        "latiguillos": [
+          "Pero vamos a ver...",
+          "illo",
+          "¿Qué cojones?"
+        ],
         "tono": "",
         "palabras_o_expresiones": [],
-        "notas": ["Cuando se frustra consigo mismo tiende a autoinsultarse."]
+        "notas": [
+          "Cuando se frustra consigo mismo tiende a autoinsultarse."
+        ]
       },
       "relaciones": [
-        {"personaje": "sue", "tipo": "pareja"},
-        {"personaje": "smokey", "tipo": "amigo cercano"}
+        {
+          "personaje": "sue",
+          "tipo": "pareja"
+        },
+        {
+          "personaje": "smokey",
+          "tipo": "amigo cercano"
+        }
       ],
       "apariencia": {
         "altura_aproximada_m": 1.74,
@@ -79,7 +96,12 @@
         "cosas_que_le_hacen_enfadarse": []
       },
       "procedencia": "Del mismo pueblo que Sue, Fran y Jony.",
-      "notas": ["Ve anime rara vez; no es uno de sus gustos principales."]
+      "notas": [
+        "Ve anime rara vez; no es uno de sus gustos principales."
+      ],
+      "estudios": [
+        "Ciclo de Informática orientado al desarrollo de webs y aplicaciones"
+      ]
     },
     {
       "id": "sue",
@@ -89,32 +111,77 @@
       "jugable": true,
       "imagen_por_defecto": "assets/personajes/sue.png",
       "personalidad": [
-        "Directa", "Divertida", "Observadora", "Con carácter", "Leal",
-        "Cariñosa con amigos y personas de confianza", "Responsable", "Muy empática",
+        "Directa",
+        "Divertida",
+        "Observadora",
+        "Con carácter",
+        "Leal",
+        "Cariñosa con amigos y personas de confianza",
+        "Responsable",
+        "Muy empática",
         "Tímida con desconocidos y al exponerse públicamente"
       ],
       "descripcion_personalidad": "Es especialmente empática y suele captar bien cómo se sienten los demás. Con sus amigos es cariñosa, pero con desconocidos le cuesta acercarse. Es responsable y termina lo que tiene que hacer, aunque a veces procrastina. Puede trabajar bien en grupo cuando se siente cómoda, pero la vergüenza pesa más cuando una actividad la obliga a ser el centro de atención.",
       "gustos": [
-        "Pintar", "Leer fantasía", "Videojuegos", "Fabledom", "Assassin's Creed", "Los Sims 4",
-        "Plantas", "Decorar la casa", "Decorar la casa con plantas", "Música en general", "Arte",
-        "Otoño", "Halloween", "Velas aromáticas", "Lluvia", "Cielos nublados", "Manualidades",
-        "Ir a IKEA", "Montaña", "Bosque", "Piscina", "Calistenia", "Natación", "Pasar tiempo con Javi"
+        "Pintar",
+        "Leer fantasía",
+        "Videojuegos",
+        "Fabledom",
+        "Assassin's Creed",
+        "Los Sims 4",
+        "Plantas",
+        "Decorar la casa",
+        "Decorar la casa con plantas",
+        "Música en general",
+        "Arte",
+        "Otoño",
+        "Halloween",
+        "Velas aromáticas",
+        "Lluvia",
+        "Cielos nublados",
+        "Manualidades",
+        "Ir a IKEA",
+        "Montaña",
+        "Bosque",
+        "Piscina",
+        "Calistenia",
+        "Natación",
+        "Pasar tiempo con Javi"
       ],
       "disgustos": [
-        "La gente pesada", "Que no la escuchen", "Ser el centro de atención",
-        "Que no se respeten los límites que pone", "El calor"
+        "La gente pesada",
+        "Que no la escuchen",
+        "Ser el centro de atención",
+        "Que no se respeten los límites que pone",
+        "El calor"
       ],
       "comida": {
         "favoritas": [
-          "Crepes con chocolate", "Pepito de lomo",
+          "Crepes con chocolate",
+          "Pepito de lomo",
           "Hamburguesa solo carne con patatas dentro y mucho ketchup",
-          "Pizza número 9 sin champiñones", "Avena"
+          "Pizza número 9 sin champiñones",
+          "Avena"
         ],
-        "bebidas": ["Baileys", "Tinto con limón", "Radler", "Agua"],
-        "notas": ["Cuando come suele pedir agua."]
+        "bebidas": [
+          "Baileys",
+          "Tinto con limón",
+          "Radler",
+          "Agua"
+        ],
+        "notas": [
+          "Cuando come suele pedir agua."
+        ]
       },
       "forma_de_hablar": {
-        "latiguillos": ["Joder", "Ya estamos...", "Te lo dije.", "Bueno...", "A ver...", "Qué pereza..."],
+        "latiguillos": [
+          "Joder",
+          "Ya estamos...",
+          "Te lo dije.",
+          "Bueno...",
+          "A ver...",
+          "Qué pereza..."
+        ],
         "tono": "Natural y directo; en confianza se suelta más. Cuando juega puede expresarse de forma mucho más intensa.",
         "palabras_o_expresiones": [],
         "contextos": {
@@ -122,60 +189,128 @@
         }
       },
       "relaciones": [
-        {"personaje": "javi", "tipo": "pareja"},
-        {"personaje": "smokey", "tipo": "amigo cercano"},
-        {"personaje": "carmen", "tipo": "amiga"},
-        {"personaje": "jony", "tipo": "amigo"},
-        {"personaje": "ana", "tipo": "amiga"},
-        {"personaje": "argentino", "tipo": "amigo"}
+        {
+          "personaje": "javi",
+          "tipo": "pareja"
+        },
+        {
+          "personaje": "smokey",
+          "tipo": "amigo cercano"
+        },
+        {
+          "personaje": "carmen",
+          "tipo": "amiga"
+        },
+        {
+          "personaje": "jony",
+          "tipo": "amigo"
+        },
+        {
+          "personaje": "ana",
+          "tipo": "amiga"
+        },
+        {
+          "personaje": "argentino",
+          "tipo": "amigo"
+        }
       ],
       "apariencia": {
         "altura_aproximada_m": 1.72,
         "descripcion": "",
-        "estilo_ropa": ["Casual", "Soft grunge", "Utility cargo", "Feminidad relajada", "Minimalismo alternativo"],
+        "estilo_ropa": [
+          "Casual",
+          "Soft grunge",
+          "Utility cargo",
+          "Feminidad relajada",
+          "Minimalismo alternativo"
+        ],
         "descripcion_estilo": "Combina prendas cómodas y funcionales con una estética alternativa. Mezcla influencias soft grunge y utility cargo con un punto femenino, minimalista y desenfadado.",
         "detalles_reconocibles": []
       },
       "comportamiento": {
-        "habitos": ["Regar o revisar sus plantas", "Practicar calistenia", "Nadar", "Leer", "Pintar", "Escuchar música", "Ver series", "Quedar con amigos"],
+        "habitos": [
+          "Regar o revisar sus plantas",
+          "Practicar calistenia",
+          "Nadar",
+          "Leer",
+          "Pintar",
+          "Escuchar música",
+          "Ver series",
+          "Quedar con amigos"
+        ],
         "manias": [
           "Morderse las uñas cuando está nerviosa",
           "Mover la pierna cuando está nerviosa",
           "Morderse los labios cuando está nerviosa, a veces hasta hacerse sangre"
         ],
         "miedos": [
-          "Alturas bajas, aproximadamente de uno a metro y medio", "La oscuridad", "Hablar en público",
-          "El propio miedo", "Las lagartijas, incluso aunque sean muy pequeñas"
+          "Alturas bajas, aproximadamente de uno a metro y medio",
+          "La oscuridad",
+          "Hablar en público",
+          "El propio miedo",
+          "Las lagartijas, incluso aunque sean muy pequeñas"
         ],
         "notas_miedos": [
           "Las alturas muy grandes no le afectan igual; puede estar en un rascacielos sin sentir el mismo miedo que a una altura baja.",
           "Tiene un miedo desproporcionado y cómico a las lagartijas pequeñas."
         ],
-        "cosas_que_le_hacen_enfadarse": ["Que no respeten los límites que pone", "Las injusticias"]
+        "cosas_que_le_hacen_enfadarse": [
+          "Que no respeten los límites que pone",
+          "Las injusticias"
+        ]
       },
-      "deportes": ["Calistenia", "Natación"],
+      "deportes": [
+        "Calistenia",
+        "Natación"
+      ],
       "habilidades_y_puntos_fuertes": [
-        "Empatía", "Poner orden en el grupo", "Mediar cuando hay tensiones", "Creatividad",
-        "Buena observadora", "Buen gusto estético", "Colaborar en equipo cuando se siente cómoda y hay confianza"
+        "Empatía",
+        "Poner orden en el grupo",
+        "Mediar cuando hay tensiones",
+        "Creatividad",
+        "Buena observadora",
+        "Buen gusto estético",
+        "Colaborar en equipo cuando se siente cómoda y hay confianza"
       ],
       "puntos_debiles": [
-        "Timidez", "Procrastina a veces cuando algo le impone o le da mucha pereza", "Da demasiadas vueltas a las cosas",
-        "Inseguridad en situaciones nuevas", "Perfeccionismo", "Se preocupa demasiado por las personas que quiere",
+        "Timidez",
+        "Procrastina a veces cuando algo le impone o le da mucha pereza",
+        "Da demasiadas vueltas a las cosas",
+        "Inseguridad en situaciones nuevas",
+        "Perfeccionismo",
+        "Se preocupa demasiado por las personas que quiere",
         "La vergüenza puede impedirle participar en actividades donde tenga que exponerse"
       ],
-      "objetivos_personales": ["Aprender a decir que no cuando no quiere hacer algo", "Poner y mantener límites personales"],
-      "valores_y_principios": [
-        "Honestidad", "Lealtad", "Respeto por los límites personales", "Tranquilidad y rechazo al drama innecesario",
-        "Cuidado de las personas que quiere", "Respeto y amor por la naturaleza", "Independencia personal y económica",
-        "Crear un hogar acogedor", "Sentido de la justicia muy fuerte"
+      "objetivos_personales": [
+        "Aprender a decir que no cuando no quiere hacer algo",
+        "Poner y mantener límites personales"
       ],
-      "motivaciones_y_suenos": ["Ser madre", "Tener un trabajo estable", "Ser independiente económicamente", "Tener una casa bonita"],
+      "valores_y_principios": [
+        "Honestidad",
+        "Lealtad",
+        "Respeto por los límites personales",
+        "Tranquilidad y rechazo al drama innecesario",
+        "Cuidado de las personas que quiere",
+        "Respeto y amor por la naturaleza",
+        "Independencia personal y económica",
+        "Crear un hogar acogedor",
+        "Sentido de la justicia muy fuerte"
+      ],
+      "motivaciones_y_suenos": [
+        "Ser madre",
+        "Tener un trabajo estable",
+        "Ser independiente económicamente",
+        "Tener una casa bonita"
+      ],
       "estudios": [
-        "Grado Medio de Informática", "Cocina y Repostería", "Administración y Finanzas",
-        "Actualmente estudia Diseño de Aplicaciones Web"
+        "Grado Medio de Informática",
+        "Cocina y Repostería",
+        "Administración y Finanzas",
+        "Actualmente estudia Desarrollo de Aplicaciones Web"
       ],
       "experiencia_laboral": [
-        "Hostelería mientras estudiaba", "Contabilidad en un hotel durante una temporada",
+        "Hostelería mientras estudiaba",
+        "Contabilidad en un hotel durante una temporada",
         "Actualmente trabaja temporalmente en una fábrica mientras estudia"
       ],
       "oposiciones_y_formacion_adicional": [
@@ -186,22 +321,58 @@
     {
       "id": "smokey",
       "nombre": "Fran",
-      "nombres_alternativos": ["Frank"],
+      "nombres_alternativos": [
+        "Frank"
+      ],
       "apodo": "Smokey",
       "rol": "principal",
       "jugable": true,
       "imagen_por_defecto": "assets/personajes/smokey.png",
-      "personalidad": ["Gracioso", "Despreocupado", "Risueño", "Buen amigo", "Leal", "Protector", "Cabezota", "Impulsivo", "De mecha corta"],
+      "personalidad": [
+        "Gracioso",
+        "Despreocupado",
+        "Risueño",
+        "Buen amigo",
+        "Leal",
+        "Protector",
+        "Cabezota",
+        "Impulsivo",
+        "De mecha corta"
+      ],
       "profesion_o_estudios": "Autónomo",
       "gustos": [
-        "Salir", "Música", "Música de estilos muy variados", "Bad Gyal", "Bad Bunny", "Megadeth", "Motörhead",
-        "Hacer bromas", "Vapear", "Comer", "Videojuegos", "League of Legends", "Jugar a videojuegos con Carmen",
-        "Ver cine indie con Carmen", "Camisas hawaianas", "Vestir de forma colorida", "Pintarse las uñas de colores"
+        "Salir",
+        "Música",
+        "Música de estilos muy variados",
+        "Bad Gyal",
+        "Bad Bunny",
+        "Megadeth",
+        "Motörhead",
+        "Hacer bromas",
+        "Vapear",
+        "Comer",
+        "Videojuegos",
+        "League of Legends",
+        "Jugar a videojuegos con Carmen",
+        "Ver cine indie con Carmen",
+        "Camisas hawaianas",
+        "Vestir de forma colorida",
+        "Pintarse las uñas de colores"
       ],
-      "disgustos": ["Aburrirse", "Los planes demasiado serios"],
+      "disgustos": [
+        "Aburrirse",
+        "Los planes demasiado serios"
+      ],
       "comida": {
-        "favoritas": ["Hamburguesa", "Patatas bravas", "Patatas huevonas"],
-        "bebidas": ["Victoria Málaga", "Tinto con limón"],
+        "favoritas": [
+          "Hamburguesa",
+          "Patatas bravas",
+          "Patatas huevonas"
+        ],
+        "bebidas": [
+          "Victoria Málaga",
+          "Tinto con limón"
+        ],
         "dieta": "Omnívoro",
         "notas": [
           "No es vegetariano.",
@@ -209,32 +380,75 @@
         ]
       },
       "forma_de_hablar": {
-        "latiguillos": ["Confía en mí.", "Tengo una idea.", "¡El diablo!"],
+        "latiguillos": [
+          "Confía en mí.",
+          "Tengo una idea.",
+          "¡El diablo!"
+        ],
         "tono": "",
         "palabras_o_expresiones": []
       },
       "relaciones": [
-        {"personaje": "carmen", "tipo": "pareja"},
-        {"personaje": "javi", "tipo": "amigo cercano"},
-        {"personaje": "sue", "tipo": "amiga cercana"}
+        {
+          "personaje": "carmen",
+          "tipo": "pareja"
+        },
+        {
+          "personaje": "javi",
+          "tipo": "amigo cercano"
+        },
+        {
+          "personaje": "sue",
+          "tipo": "amiga cercana"
+        }
       ],
       "apariencia": {
         "altura_aproximada_m": 1.76,
         "descripcion": "Actualmente lleva el pelo y la barba arreglados y apuesta por una imagen muy colorida. En la adolescencia solía vestir de negro, con el pelo largo y barba.",
-        "estilo_ropa": ["Muy colorido", "Camisas hawaianas"],
-        "detalles_reconocibles": ["Gafas", "Uñas pintadas de colores", "Tatuajes", "Pendientes de aro y otros pendientes", "Septum en la nariz"]
+        "estilo_ropa": [
+          "Muy colorido",
+          "Camisas hawaianas"
+        ],
+        "detalles_reconocibles": [
+          "Gafas",
+          "Uñas pintadas de colores",
+          "Tatuajes",
+          "Pendientes de aro y otros pendientes",
+          "Septum en la nariz"
+        ]
       },
       "comportamiento": {
-        "habitos": ["Vapear", "Le gusta levantarse temprano"],
+        "habitos": [
+          "Vapear",
+          "Le gusta levantarse temprano"
+        ],
         "manias": [
           "Juguetear constantemente con un mechero cuando está sentado hablando",
           "Se le cae el mechero al suelo con frecuencia mientras juguetea con él"
         ],
-        "miedos": ["Las arañas", "Las alturas"],
+        "miedos": [
+          "Las arañas",
+          "Las alturas"
+        ],
         "cosas_que_le_hacen_enfadarse": []
       },
-      "valores_y_principios": ["No simpatiza con las fuerzas y cuerpos de seguridad del Estado ni con el ámbito militar en general."],
-      "procedencia": "Del mismo pueblo que Javi, Sue y Jony."
+      "valores_y_principios": [
+        "No simpatiza con las fuerzas y cuerpos de seguridad del Estado ni con el ámbito militar en general."
+      ],
+      "procedencia": "Del mismo pueblo que Javi, Sue y Jony.",
+      "actividad_laboral_o_proyectos": [
+        {
+          "tipo": "Impresión y personalización de productos",
+          "descripcion": "Fran y Carmen realizan impresiones y personalizaciones sobre distintos productos.",
+          "productos": [
+            "Camisetas",
+            "Sudaderas",
+            "Tazas",
+            "Losas",
+            "Otros artículos y detalles personalizados"
+          ]
+        }
+      ]
     },
     {
       "id": "carmen",
@@ -243,20 +457,61 @@
       "rol": "secundario",
       "jugable": true,
       "imagen_por_defecto": "assets/personajes/carmen.png",
-      "personalidad": ["Graciosa"],
-      "gustos": ["Salir", "Hacer bromas", "Vapear", "Comer", "Vestir de forma colorida", "Pendientes y aros"],
-      "comida": {"favoritas": ["Patatas huevonas"], "bebidas": []},
+      "personalidad": [
+        "Graciosa"
+      ],
+      "gustos": [
+        "Salir",
+        "Hacer bromas",
+        "Vapear",
+        "Comer",
+        "Vestir de forma colorida",
+        "Pendientes y aros"
+      ],
+      "comida": {
+        "favoritas": [
+          "Patatas huevonas"
+        ],
+        "bebidas": []
+      },
       "profesion_o_estudios": "Estudiante de Cine",
       "dieta": "Vegetariana",
-      "relaciones": [{"personaje": "smokey", "tipo": "pareja"}],
+      "relaciones": [
+        {
+          "personaje": "smokey",
+          "tipo": "pareja"
+        }
+      ],
       "apariencia": {
         "altura_aproximada_m": "1.58-1.60",
         "descripcion": "Comparte con Fran un estilo muy colorido.",
-        "estilo_ropa": ["Muy colorido"],
-        "detalles_reconocibles": ["Gafas", "Tatuajes", "Le gustan mucho los aros y los pendientes", "No suele pintarse las uñas"]
+        "estilo_ropa": [
+          "Muy colorido"
+        ],
+        "detalles_reconocibles": [
+          "Gafas",
+          "Tatuajes",
+          "Le gustan mucho los aros y los pendientes",
+          "No suele pintarse las uñas"
+        ]
       },
-      "valores_y_principios": ["No simpatiza con las fuerzas y cuerpos de seguridad del Estado ni con el ámbito militar en general."],
-      "procedencia": "Es de otro pueblo distinto al de Javi, Sue, Fran y Jony."
+      "valores_y_principios": [
+        "No simpatiza con las fuerzas y cuerpos de seguridad del Estado ni con el ámbito militar en general."
+      ],
+      "procedencia": "Es de otro pueblo distinto al de Javi, Sue, Fran y Jony.",
+      "actividad_laboral_o_proyectos": [
+        {
+          "tipo": "Impresión y personalización de productos",
+          "descripcion": "Carmen y Fran realizan impresiones y personalizaciones sobre distintos productos.",
+          "productos": [
+            "Camisetas",
+            "Sudaderas",
+            "Tazas",
+            "Losas",
+            "Otros artículos y detalles personalizados"
+          ]
+        }
+      ]
     },
     {
       "id": "jony",
@@ -265,20 +520,45 @@
       "rol": "secundario",
       "jugable": true,
       "imagen_por_defecto": "assets/personajes/jony.png",
-      "personalidad": [],
-      "gustos": ["Pokémon", "Magic"],
-      "comida": {"favoritas": ["Patatas bravas"], "bebidas": []},
-      "profesion_o_estudios": "Informático",
+      "personalidad": [
+        "Bromista",
+        "Suele hacer chistes malos en cuanto tiene ocasión, especialmente juegos de palabras"
+      ],
+      "gustos": [
+        "Pokémon",
+        "Magic"
+      ],
+      "comida": {
+        "favoritas": [
+          "Patatas bravas"
+        ],
+        "bebidas": []
+      },
+      "profesion_o_estudios": "Informático; estudió Periodismo y posteriormente un ciclo de Informática orientado al desarrollo de webs y aplicaciones.",
       "dieta": "Vegetariano",
-      "relaciones": [{"personaje": "ana", "tipo": "pareja"}],
+      "relaciones": [
+        {
+          "personaje": "ana",
+          "tipo": "pareja"
+        }
+      ],
       "apariencia": {
         "altura_aproximada_m": 1.74,
         "descripcion": "",
         "estilo_ropa": "",
         "detalles_reconocibles": []
       },
-      "notas": ["Revisar y completar personalidad."],
-      "procedencia": "Del mismo pueblo que Javi, Sue y Fran."
+      "notas": [
+        "Revisar y completar personalidad."
+      ],
+      "procedencia": "Del mismo pueblo que Javi, Sue y Fran.",
+      "estudios": [
+        "Periodismo",
+        "Ciclo de Informática orientado al desarrollo de webs y aplicaciones"
+      ],
+      "experiencia_y_proyectos": [
+        "Escribió un libro a medias con un compañero a partir de su etapa o formación en Periodismo."
+      ]
     },
     {
       "id": "ana",
@@ -288,37 +568,70 @@
       "jugable": true,
       "imagen_por_defecto": "assets/personajes/ana.png",
       "personalidad": [
-        "Impulsiva", "Sensible", "Le gusta ser el centro de atención", "Seria",
-        "A veces le cuesta pillar el humor, el sarcasmo o la ironía", "Tiende a dejar algunas cosas a medias"
+        "Impulsiva",
+        "Sensible",
+        "Le gusta ser el centro de atención",
+        "Seria",
+        "A veces le cuesta pillar el humor, el sarcasmo o la ironía",
+        "Tiende a dejar algunas cosas a medias"
       ],
       "descripcion_personalidad": "Es muy sensible. Aunque le importan su casa, su trabajo y su pareja, las partidas de rol que organiza tienen un peso emocional especialmente fuerte porque requieren una preparación larga y solo organiza aproximadamente dos al año. Si algo falla en ellas puede afectarle mucho. Cuando algo le afecta, tiende a refugiarse especialmente en Jony. Suele entender mejor el sarcasmo y la ironía cuando vienen de él.",
       "gustos": [
-        "Estética gótica", "Estética witchy", "Estética vampírica", "Estética barroca y ornamentada",
-        "Accesorios llamativos y extravagantes", "Libros", "Vampiros", "Rol", "Literatura fantástica",
-        "Pole dance", "Disfrazarse", "Preparar vestuario y complementos para partidas de rol", "Arte",
+        "Estética gótica",
+        "Estética witchy",
+        "Estética vampírica",
+        "Estética barroca y ornamentada",
+        "Accesorios llamativos y extravagantes",
+        "Libros",
+        "Vampiros",
+        "Rol",
+        "Literatura fantástica",
+        "Pole dance",
+        "Disfrazarse",
+        "Preparar vestuario y complementos para partidas de rol",
+        "Arte",
         "Lugares y ambientes de estética oscura o funeraria"
       ],
-      "comida": {"favoritas": ["Patatas bravas"], "bebidas": []},
+      "comida": {
+        "favoritas": [
+          "Patatas bravas"
+        ],
+        "bebidas": []
+      },
       "dieta": "Vegetariana",
-      "deportes": ["Pole dance"],
-      "relaciones": [{"personaje": "jony", "tipo": "pareja"}],
+      "deportes": [
+        "Pole dance"
+      ],
+      "relaciones": [
+        {
+          "personaje": "jony",
+          "tipo": "pareja"
+        }
+      ],
       "apariencia": {
         "altura_aproximada_m": "1.58-1.60",
         "descripcion": "",
-        "estilo_ropa": ["Gótico marcado", "Witchy", "Vampírico", "Barroco", "Llamativo y poco sutil"],
+        "estilo_ropa": [
+          "Gótico marcado",
+          "Witchy",
+          "Vampírico",
+          "Barroco",
+          "Llamativo y poco sutil"
+        ],
         "descripcion_estilo": "Le gusta que su estética se note desde lejos y que llame la atención. Prefiere elementos góticos, witchy, vampíricos y barrocos muy visibles, con complementos extravagantes y ornamentados.",
         "detalles_reconocibles": [
           "Suele elegir accesorios que llamen la atención",
           "Tiene bastante ropa y complementos para disfraces y caracterizaciones de rol"
         ]
       },
-      "estudios_pendientes_de_confirmar": [
-        "Posible formación en Historia del Arte y posterior especialización en Restauración; dato pendiente de confirmar."
-      ],
       "experiencias_e_intereses": [
         "Ha viajado a Praga y disfrutó especialmente visitando cementerios y lugares acordes con su estética e intereses."
       ],
-      "procedencia": "Sevilla capital."
+      "procedencia": "Sevilla capital.",
+      "estudios": [
+        "Restauración",
+        "Ciclo de Informática orientado al desarrollo de webs y aplicaciones"
+      ]
     },
     {
       "id": "argentino",
@@ -328,24 +641,56 @@
       "jugable": true,
       "imagen_por_defecto": "assets/personajes/argentino.png",
       "edad_aproximada": 40,
-      "personalidad": ["Cabezota", "Seguro de sí mismo", "Ligón", "Leal", "Protector", "Calculador", "Competitivo", "Trabajador", "Bromista", "Dialogante"],
+      "personalidad": [
+        "Cabezota",
+        "Seguro de sí mismo",
+        "Ligón",
+        "Leal",
+        "Protector",
+        "Calculador",
+        "Competitivo",
+        "Trabajador",
+        "Bromista",
+        "Dialogante"
+      ],
       "descripcion_personalidad": "Suele mantener una expresión seria, pero le gusta mucho bromear. Cuando se enfada prefiere dialogar antes que enfrentarse. Tiene una imagen de tipo fuerte y seguro de sí mismo aunque su complexión sea delgada.",
       "gustos": [
-        "Rock de los años 80 y 90", "Metallica", "Coches clásicos", "Ford Mustang de 1968 y 1969", "Motos",
-        "Estética motera", "Estética pirata", "Reparar y fabricar cosas", "Videojuegos",
-        "Assassin's Creed IV: Black Flag", "Películas antiguas", "Películas de Bud Spencer y Terence Hill"
+        "Rock de los años 80 y 90",
+        "Metallica",
+        "Coches clásicos",
+        "Ford Mustang de 1968 y 1969",
+        "Motos",
+        "Estética motera",
+        "Estética pirata",
+        "Reparar y fabricar cosas",
+        "Videojuegos",
+        "Assassin's Creed IV: Black Flag",
+        "Películas antiguas",
+        "Películas de Bud Spencer y Terence Hill"
       ],
-      "disgustos": ["La injusticia"],
+      "disgustos": [
+        "La injusticia"
+      ],
       "comida": {
-        "favoritas": ["San Jacobo", "Secreto ibérico"],
-        "bebidas": ["Coca-Cola", "Birra"],
+        "favoritas": [
+          "San Jacobo",
+          "Secreto ibérico"
+        ],
+        "bebidas": [
+          "Coca-Cola",
+          "Birra"
+        ],
         "notas": [
           "Suele pedir Coca-Cola para acompañar la comida.",
           "Cuando habla de cerveza la llama 'birra', independientemente de la marca."
         ]
       },
       "forma_de_hablar": {
-        "latiguillos": ["Che", "Tío", "Viste"],
+        "latiguillos": [
+          "Che",
+          "Tío",
+          "Viste"
+        ],
         "tono": "Seguro, directo y dialogante; suele bromear pese a mantener una expresión facial seria.",
         "palabras_o_expresiones": [
           "Pero si eso te lo monto yo en un momento",
@@ -356,27 +701,48 @@
         "acento": "Conserva un acento argentino muy marcado cuando quiere; puede modularlo y marcarlo más o menos según el contexto."
       },
       "profesion_o_estudios": "Suele encadenar distintos trabajos; a veces trabaja de jornalero y también dedica mucho tiempo a reparar, montar o fabricar objetos.",
-      "habilidades": ["Reparar objetos", "Montar cosas", "Improvisar soluciones con materiales disponibles", "Trabajos manuales"],
+      "habilidades": [
+        "Reparar objetos",
+        "Montar cosas",
+        "Improvisar soluciones con materiales disponibles",
+        "Trabajos manuales"
+      ],
       "relaciones": [],
       "apariencia": {
         "altura_aproximada_m": 1.76,
         "complexion": "Delgado, aunque proyecta una imagen de fuerza.",
         "descripcion": "Hombre de unos 40 años, con poca densidad de pelo en la parte superior y laterales rapados, con un aspecto ligeramente militar. Lleva bigote poco denso, similar a varias semanas de crecimiento, y una perilla de aproximadamente 5-7 cm; no lleva barba en las mejillas.",
-        "estilo_ropa": ["Ropa oscura", "Camisetas con calaveras", "Camisetas con barcos pirata", "Vaqueros", "Zapatillas deportivas tipo tenis", "Botas de estilo cercano al rociero"],
+        "estilo_ropa": [
+          "Ropa oscura",
+          "Camisetas con calaveras",
+          "Camisetas con barcos pirata",
+          "Vaqueros",
+          "Zapatillas deportivas tipo tenis",
+          "Botas de estilo cercano al rociero"
+        ],
         "detalles_reconocibles": [
-          "Piercing en una ceja", "Una línea afeitada en una ceja, como una pequeña brecha", "Dos pendientes de aro en cada oreja",
-          "Perilla larga sin barba en las mejillas", "Suele llevar un cigarro de tabaco de liar en la boca", "Estética de motero con aire de pirata"
+          "Piercing en una ceja",
+          "Una línea afeitada en una ceja, como una pequeña brecha",
+          "Dos pendientes de aro en cada oreja",
+          "Perilla larga sin barba en las mejillas",
+          "Suele llevar un cigarro de tabaco de liar en la boca",
+          "Estética de motero con aire de pirata"
         ]
       },
       "comportamiento": {
         "habitos": [
-          "Fumar tabaco de liar", "Llevar habitualmente su paquete de tabaco de liar",
+          "Fumar tabaco de liar",
+          "Llevar habitualmente su paquete de tabaco de liar",
           "Tener con frecuencia un cigarro de tabaco de liar en la boca",
           "Reparar o intentar fabricar por sí mismo cosas que otros comprarían"
         ],
         "manias": [],
-        "miedos": ["Quedarse sin tabaco de liar"],
-        "cosas_que_le_hacen_enfadarse": ["La injusticia"]
+        "miedos": [
+          "Quedarse sin tabaco de liar"
+        ],
+        "cosas_que_le_hacen_enfadarse": [
+          "La injusticia"
+        ]
       },
       "secretos": [],
       "origen_y_acento": {
@@ -387,19 +753,56 @@
     }
   ],
   "lugares": [
-    {"id": "casa", "nombre": "Casa", "descripcion": "Lugar habitual donde los personajes pueden hablar y tomar decisiones.", "personajes_frecuentes": []},
-    {"id": "bar", "nombre": "Bar / cafetería", "descripcion": "Lugar donde se reúnen y ocurren conversaciones importantes o situaciones cómicas.", "personajes_frecuentes": []},
-    {"id": "parque", "nombre": "Parque", "descripcion": "Zona exterior para encuentros, conversaciones tranquilas y eventos.", "personajes_frecuentes": []},
-    {"id": "calle", "nombre": "Calle", "descripcion": "Escenario para desplazamientos, encuentros inesperados y eventos.", "personajes_frecuentes": []},
-    {"id": "discord_videojuegos", "nombre": "Discord / videojuegos", "descripcion": "Espacio virtual para conversaciones, partidas y eventos online.", "personajes_frecuentes": []},
-    {"id": "trabajo_estudios", "nombre": "Trabajo / estudios", "descripcion": "Escenarios variables según el protagonista elegido y su situación personal.", "personajes_frecuentes": []}
+    {
+      "id": "casa",
+      "nombre": "Casa",
+      "descripcion": "Lugar habitual donde los personajes pueden hablar y tomar decisiones.",
+      "personajes_frecuentes": []
+    },
+    {
+      "id": "bar",
+      "nombre": "Bar / cafetería",
+      "descripcion": "Lugar donde se reúnen y ocurren conversaciones importantes o situaciones cómicas.",
+      "personajes_frecuentes": []
+    },
+    {
+      "id": "parque",
+      "nombre": "Parque",
+      "descripcion": "Zona exterior para encuentros, conversaciones tranquilas y eventos.",
+      "personajes_frecuentes": []
+    },
+    {
+      "id": "calle",
+      "nombre": "Calle",
+      "descripcion": "Escenario para desplazamientos, encuentros inesperados y eventos.",
+      "personajes_frecuentes": []
+    },
+    {
+      "id": "discord_videojuegos",
+      "nombre": "Discord / videojuegos",
+      "descripcion": "Espacio virtual para conversaciones, partidas y eventos online.",
+      "personajes_frecuentes": []
+    },
+    {
+      "id": "trabajo_estudios",
+      "nombre": "Trabajo / estudios",
+      "descripcion": "Escenarios variables según el protagonista elegido y su situación personal.",
+      "personajes_frecuentes": []
+    }
   ],
   "jugabilidad": {
     "tipo": "Historia interactiva basada en decisiones",
     "flujo_inicio": {
       "pantalla_titulo": {
         "descripcion": "Pantalla inicial con el título del juego, fondo con los protagonistas y música principal.",
-        "opciones": ["Nueva partida", "Continuar", "Cargar partida", "Opciones", "Extras", "Salir"]
+        "opciones": [
+          "Nueva partida",
+          "Continuar",
+          "Cargar partida",
+          "Opciones",
+          "Extras",
+          "Salir"
+        ]
       },
       "nueva_partida": [
         "Elegir uno de los siete personajes jugables.",
@@ -409,19 +812,43 @@
       ],
       "hub_principal": {
         "descripcion": "Desde el hub principal el jugador puede acceder a distintos lugares y actividades. Las escenas disponibles dependen del protagonista, la hora o momento del día, el progreso narrativo y las decisiones anteriores.",
-        "accesos": ["Casa", "Bar / cafetería", "Parque", "Discord / videojuegos", "Trabajo / estudios", "Móvil"]
+        "accesos": [
+          "Casa",
+          "Bar / cafetería",
+          "Parque",
+          "Discord / videojuegos",
+          "Trabajo / estudios",
+          "Móvil"
+        ]
       },
       "bucle_principal": [
-        "Explorar localizaciones", "Hablar con los NPC", "Elegir respuestas", "Tomar decisiones",
-        "Modificar afinidades y relaciones", "Desbloquear eventos y escenas",
-        "Realizar actividades o minijuegos cuando corresponda", "Avanzar la historia"
+        "Explorar localizaciones",
+        "Hablar con los NPC",
+        "Elegir respuestas",
+        "Tomar decisiones",
+        "Modificar afinidades y relaciones",
+        "Desbloquear eventos y escenas",
+        "Realizar actividades o minijuegos cuando corresponda",
+        "Avanzar la historia"
       ]
     },
     "seleccion_personaje": {
       "personajes_existentes": true,
-      "personajes_jugables": ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"],
+      "personajes_jugables": [
+        "javi",
+        "sue",
+        "smokey",
+        "carmen",
+        "jony",
+        "ana",
+        "argentino"
+      ],
       "crear_personaje": true,
-      "opciones_creacion": ["Nombre", "Género", "Apariencia"],
+      "opciones_creacion": [
+        "Nombre",
+        "Género",
+        "Apariencia"
+      ],
       "regla_personaje_elegido": {
         "descripcion": "El personaje elegido pasa a representar al jugador durante esa partida. La historia debe reinterpretarse desde su punto de vista.",
         "mostrar_como_npc": false,
@@ -435,19 +862,45 @@
         "nota_implementacion": "Será necesario adaptar el código narrativo para excluir de cada escena al personaje seleccionado como NPC. Cuando ese personaje tuviera una intervención prevista, deberá convertirse en una acción, pensamiento, opción o respuesta del jugador según corresponda. Cada escena y rama narrativa debe poder funcionar con cualquiera de los siete personajes como protagonista."
       }
     },
-    "mapa": {"habilitado": true, "descripcion": "Mapa o hub sencillo desde el que elegir el lugar que visitar."},
+    "mapa": {
+      "habilitado": true,
+      "descripcion": "Mapa o hub sencillo desde el que elegir el lugar que visitar."
+    },
     "tiempo": {
       "habilitado": true,
-      "franjas": ["Mañana", "Tarde", "Noche"],
+      "franjas": [
+        "Mañana",
+        "Tarde",
+        "Noche"
+      ],
       "descripcion": "Las actividades y escenas pueden depender del momento del día. Determinadas acciones pueden consumir tiempo y modificar qué personajes o eventos están disponibles."
     },
     "movil": {
       "habilitado": true,
-      "funciones_previstas": ["Consultar relaciones", "Acceder a conversaciones o mensajes", "Consultar información útil de la partida"]
+      "funciones_previstas": [
+        "Consultar relaciones",
+        "Acceder a conversaciones o mensajes",
+        "Consultar información útil de la partida"
+      ]
     },
-    "dialogos": {"eleccion_respuestas": true, "decisiones": true, "afectan_relaciones": true, "afectan_historia": true},
-    "progreso": {"guardar_partida": true, "continuar_partida": true, "cargar_partida": true, "logros": true, "finales_multiples": true},
-    "extras": {"minijuegos": "Opcionales", "puzzles": "Opcionales", "escenas_secretas": true},
+    "dialogos": {
+      "eleccion_respuestas": true,
+      "decisiones": true,
+      "afectan_relaciones": true,
+      "afectan_historia": true
+    },
+    "progreso": {
+      "guardar_partida": true,
+      "continuar_partida": true,
+      "cargar_partida": true,
+      "logros": true,
+      "finales_multiples": true
+    },
+    "extras": {
+      "minijuegos": "Opcionales",
+      "puzzles": "Opcionales",
+      "escenas_secretas": true
+    },
     "personajes_secundarios": {
       "interactivos_inicialmente": false,
       "descripcion": "Aunque los siete personajes pueden elegirse como protagonista, los que tengan rol secundario pueden comenzar con interacciones más limitadas cuando actúan como NPC. Sus diálogos e interacciones podrán ampliarse posteriormente."
