@@ -1,5 +1,8 @@
 {
   "id": "room_argentino",
+  "display_name": "Habitación del Argentino",
+  "description": "Una habitación oscura de estética rockera y de garaje, con una scooter negra y roja y decoración relacionada con Metallica, coches clásicos y cultura de motor.",
+  "codex_visible": true,
   "owners": ["argentino"],
   "background_id": "habitacion_argentino",
   "background_path": "res://assets/backgrounds/fondo-habitacion-argentino.png",

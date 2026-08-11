@@ -9,7 +9,7 @@ El acceso en tiempo de ejecución está centralizado en `DataManager` (`res://au
 - `game_config.json`: orden de personajes, ajustes generales, rutas de guardado y localizaciones globales.
 - `characters/<id>.json`: identidad, estado habilitado, habitación, imagen/poses, música, volumen inicial, afinidad inicial y textos de transición.
 - `questions/<id>.json`: presentación, preguntas, cuatro respuestas, posición izquierda/derecha, puntuación y feedback.
-- `rooms/<id>.json`: fondo, canción, volumen base y propietarios de la habitación.
+- `rooms/<id>.json`: fondo, canción, volumen base, propietarios, nombre y descripción visual de la habitación.
 - `detalles-juego.json`: información ampliada usada por Extras/códice. `DataManager` la combina con los datos operativos de `characters/`.
 
 ## Modificar un personaje
@@ -63,6 +63,10 @@ Edita `data/rooms/<id>.json`:
 ```json
 {
   "id": "room_sue",
+  "display_name": "Habitación de Sue",
+  "description": "Descripción visual que aparece en Extras > Lugares.",
+  "codex_visible": true,
+  "owners": ["sue"],
   "background_id": "habitacion_sue",
   "background_path": "res://assets/backgrounds/fondo-habitacion-sue.png",
   "music_id": "sue_fantasia",
@@ -70,6 +74,8 @@ Edita `data/rooms/<id>.json`:
   "music_volume": 1.0
 }
 ```
+
+`display_name` y `description` alimentan directamente la galería de **Extras > Lugares**. La galería muestra las habitaciones asociadas a personajes activos y con propietarios; `codex_visible: false` permite ocultar una habitación del códice sin desactivarla en el juego.
 
 El volumen base también puede especificarse en el personaje con `music_volume`. Durante las pruebas, el regulador de la habitación crea una preferencia del usuario que se guarda en `user://settings.json`; los JSON originales de `res://` nunca se modifican.
 
