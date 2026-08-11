@@ -1,0 +1,11 @@
+{
+  "id": "room_sue",
+  "owners": ["sue"],
+  "background_id": "habitacion_sue",
+  "background_path": "res://assets/backgrounds/fondo-habitacion-sue.png",
+  "music_id": "sue_fantasia",
+  "music_path": "res://assets/audio/music/sue-fantasia.ogg",
+  "music_volume": 1.0,
+  "music_loop": true,
+  "enabled": true
+}
