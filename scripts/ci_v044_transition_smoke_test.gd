@@ -10,8 +10,8 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var project_version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if not project_version.begins_with("0.4."):
-		_fail("La prueba de transiciones requiere una versión 0.4.x")
+	if not (project_version.begins_with("0.4.") or project_version.begins_with("0.5.")):
+		_fail("La prueba de transiciones requiere una versión compatible")
 		return
 
 	var packed := load("res://scenes/main.tscn") as PackedScene
@@ -62,9 +62,6 @@ func _run() -> void:
 		_fail("La tarjeta de visita no está conectada al fundido narrativo")
 		return
 
-	# Usa la transición real para comprobar el instante en que la pantalla ya está
-	# negra y el texto espera al usuario. En ese momento aún no hemos entrado en
-	# la habitación, pero su música ya debe estar sonando.
 	transition.call("set_fast_mode", false)
 	card.emit_signal("pressed")
 	var waited := 0
@@ -114,7 +111,8 @@ func _run() -> void:
 	if not completed.has("ana") or not outros.has("ana"):
 		_fail("La despedida de Ana no queda registrada como completada y vista")
 		return
-	if not str(state.get("save_version", "")).begins_with("0.4."):
+	var save_version := str(state.get("save_version", ""))
+	if not (save_version.begins_with("0.4.") or save_version.begins_with("0.5.")):
 		_fail("El guardado pierde el versionado compatible tras las transiciones")
 		return
 
