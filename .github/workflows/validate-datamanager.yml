@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - refactor/datamanager-offline
+      - fix/extras-layout-places
   workflow_dispatch:
 
 permissions:
