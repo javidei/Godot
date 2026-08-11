@@ -1,0 +1,28 @@
+{
+  "id": "smokey",
+  "name": "Fran",
+  "display_name": "Smokey",
+  "role": "principal",
+  "summary": "Gracioso · despreocupado · impulsivo · imprevisible",
+  "playable": true,
+  "enabled": true,
+  "room": "room_fran",
+  "image": "res://assets/characters/smokey/smokey_a.png",
+  "music": "fran_electronica",
+  "music_volume": 1.0,
+  "initial_friendship": 0,
+  "poses": {
+    "neutral": "res://assets/characters/smokey/smokey_a.png",
+    "confident": "res://assets/characters/smokey/smokey_a.png",
+    "happy": "res://assets/characters/smokey/smokey_a.png",
+    "laugh": "res://assets/characters/smokey/smokey_a.png",
+    "thoughtful": "res://assets/characters/smokey/smokey_b.png",
+    "vaping": "res://assets/characters/smokey/smokey_b.png",
+    "expressive": "res://assets/characters/smokey/smokey_a.png",
+    "embarrassed": "res://assets/characters/smokey/smokey_b.png",
+    "annoyed": "res://assets/characters/smokey/smokey_a.png",
+    "teasing": "res://assets/characters/smokey/smokey_b.png"
+  },
+  "transition_intro": "Smokey te espera en una habitación llena de color, música y recuerdos que siempre acaban en anécdota.",
+  "transition_outro": "Smokey se ríe antes de despedirte. «La próxima charla tiene que acabar en otra historia memorable.»"
+}
