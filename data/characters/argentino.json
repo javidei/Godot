@@ -1,0 +1,20 @@
+{
+  "id": "argentino",
+  "name": "El Argentino",
+  "real_name": "Cristian Ariel",
+  "display_name": "El Argentino",
+  "role": "secundario",
+  "summary": "Gabardina negra · gafas oscuras · tatuajes",
+  "playable": true,
+  "enabled": true,
+  "room": "room_argentino",
+  "image": "res://assets/characters/argentino/argentino.png",
+  "music": "argentino_rock",
+  "music_volume": 1.0,
+  "initial_friendship": 0,
+  "poses": {
+    "neutral": "res://assets/characters/argentino/argentino.png"
+  },
+  "transition_intro": "El Argentino te recibe entre rock, humo y objetos que parecen guardar una historia propia.",
+  "transition_outro": "El Argentino se despide con calma. «Nos vemos, che. La próxima ronda queda pendiente.»"
+}
