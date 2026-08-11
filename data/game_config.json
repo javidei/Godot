@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "character_order": ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"],
+  "menu": {
+    "characters_image": "res://assets/ui/menu-lineup.png"
+  },
+  "audio": {
+    "default_music_volume": 0.3,
+    "default_effects_volume": 1.0,
+    "music_output_max": 0.1,
+    "volume_step": 0.1,
+    "track_step": 0.05
+  },
+  "save": {
+    "savegame": "user://savegame.json",
+    "settings": "user://settings.json",
+    "legacy_savegame": "user://godot_otome_save.json",
+    "legacy_audio_settings": "user://audio_settings.cfg",
+    "legacy_track_settings": "user://music_track_settings.cfg"
+  },
+  "locations": {
+    "casa": {
+      "name": "Casa",
+      "description": "Lugar habitual donde los personajes pueden hablar y tomar decisiones.",
+      "background": "casa_asturias",
+      "chapter": "PRÓLOGO · CASA"
+    },
+    "bar": {
+      "name": "Bar",
+      "description": "Lugar donde se reúnen y ocurren conversaciones importantes o situaciones cómicas.",
+      "background": "bar",
+      "chapter": "PRÓLOGO · BAR"
+    },
+    "bosque": {
+      "name": "Bosque",
+      "description": "Escenario natural para encuentros inesperados y eventos.",
+      "background": "bosque",
+      "chapter": "PRÓLOGO · BOSQUE"
+    }
+  }
+}
