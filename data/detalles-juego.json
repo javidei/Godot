@@ -70,7 +70,8 @@
         "tono": "",
         "palabras_o_expresiones": [],
         "notas": [
-          "Cuando se frustra consigo mismo tiende a autoinsultarse."
+          "Cuando se frustra consigo mismo tiende a autoinsultarse.",
+          "Puede hacer referencias ocasionales en sus diálogos a los duelos de insultos de The Secret of Monkey Island, especialmente cuando encajen de forma natural en una pulla o respuesta sarcástica."
         ]
       },
       "relaciones": [
@@ -101,7 +102,11 @@
       ],
       "estudios": [
         "Ciclo de Informática orientado al desarrollo de webs y aplicaciones"
-      ]
+      ],
+      "postura_sobre_ia": {
+        "posicion": "Más a favor que en contra",
+        "descripcion": "Ve la IA de forma pragmática: entiende sus problemas, pero considera que en el ámbito tecnológico y laboral toca adaptarse o quedarse atrás."
+      }
     },
     {
       "id": "sue",
@@ -316,7 +321,10 @@
       "oposiciones_y_formacion_adicional": [
         "Se preparó oposiciones para las Fuerzas Aéreas en un perfil administrativo o informático, pero no pudo continuar por problemas de salud."
       ],
-      "procedencia": "Del mismo pueblo que Javi, Fran y Jony."
+      "procedencia": "Del mismo pueblo que Javi, Fran y Jony.",
+      "postura_sobre_ia": {
+        "posicion": "Más a favor que en contra"
+      }
     },
     {
       "id": "smokey",
@@ -448,7 +456,10 @@
             "Otros artículos y detalles personalizados"
           ]
         }
-      ]
+      ],
+      "postura_sobre_ia": {
+        "posicion": "Neutral"
+      }
     },
     {
       "id": "carmen",
@@ -511,7 +522,10 @@
             "Otros artículos y detalles personalizados"
           ]
         }
-      ]
+      ],
+      "postura_sobre_ia": {
+        "posicion": "En contra"
+      }
     },
     {
       "id": "jony",
@@ -521,8 +535,12 @@
       "jugable": true,
       "imagen_por_defecto": "assets/personajes/jony.png",
       "personalidad": [
+        "Tranquilo",
+        "Serio",
+        "Sarcástico",
         "Bromista",
-        "Suele hacer chistes malos en cuanto tiene ocasión, especialmente juegos de palabras"
+        "Se emociona y habla mucho cuando domina o le interesa un tema",
+        "Desconecta con facilidad cuando un tema le aburre"
       ],
       "gustos": [
         "Pokémon",
@@ -548,9 +566,6 @@
         "estilo_ropa": "",
         "detalles_reconocibles": []
       },
-      "notas": [
-        "Revisar y completar personalidad."
-      ],
       "procedencia": "Del mismo pueblo que Javi, Sue y Fran.",
       "estudios": [
         "Periodismo",
@@ -558,7 +573,45 @@
       ],
       "experiencia_y_proyectos": [
         "Escribió un libro a medias con un compañero a partir de su etapa o formación en Periodismo."
-      ]
+      ],
+      "descripcion_personalidad": "Suele ser tranquilo, serio y sarcástico. Cuando la conversación entra en un tema que conoce bien se emociona, participa mucho y puede extenderse bastante explicándolo. Si el tema le aburre, tiende a desconectar y ponerse a mirar Twitter u otras cosas en el móvil.",
+      "forma_de_hablar": {
+        "latiguillos": [],
+        "tono": "Tranquilo, serio y sarcástico; se vuelve mucho más hablador y entusiasta cuando domina el tema.",
+        "humor": {
+          "tipo": "Juegos de palabras malos basados sobre todo en parecidos fonéticos.",
+          "descripcion": "Aprovecha palabras que aparecen de forma natural en una conversación para responder con otra palabra, nombre o concepto que suena parecido aunque no tenga relación con el tema.",
+          "forma_de_contarlos": "Los suelta con cara seria, sin remarcar el chiste ni reírse de su propia ocurrencia.",
+          "reaccion_habitual_del_grupo": [
+            "A veces lo pillan al instante y lo miran con cara de 'madre mía, Jony'.",
+            "A veces tardan unos segundos en entender el juego de palabras.",
+            "A veces se ríen, pero suelen remarcar lo malo que era el chiste."
+          ],
+          "con_quien": "Lo hace con todos los miembros del grupo por igual."
+        }
+      },
+      "comportamiento": {
+        "habitos": [
+          "Si una conversación le aburre, suele mirar Twitter u otras cosas en el móvil.",
+          "Suele pedir a Javi o a Fran que lleven o recojan a Ana y a él de la estación cuando tienen que coger el tren.",
+          "Suele pedir los favores relacionados con la estación casi a última hora."
+        ],
+        "forma_de_pedir_favores": "Tiene bastante normalizado pedir a Javi o a Fran los favores de la estación, aunque al pedirlos se nota algo de apuro.",
+        "puntualidad": "No suele llegar tarde.",
+        "reaccion_ante_imprevistos": "Suele tomarse con calma los retrasos, cambios de planes o problemas con trenes y horarios."
+      },
+      "dinamica_con_ana": {
+        "afecto": "Son cariñosos entre ellos también cuando están con el grupo.",
+        "bromas": "Jony hace bromas con Ana, pero no suelen ser bromas subidas de tono.",
+        "casa_en_reforma": "Actualmente están reformando una casa en el pueblo. Ana tiene más claras las ideas sobre cómo quiere la nueva casa y Jony suele dejarse llevar por sus decisiones."
+      },
+      "proyectos_actuales": [
+        "Reformar junto a Ana una casa en el pueblo."
+      ],
+      "postura_sobre_ia": {
+        "posicion": "En contra",
+        "descripcion": "No le gusta que se utilice IA en la empresa. Considera que, al usarla y alimentarla con el trabajo de los empleados, se está ayudando a entrenar una herramienta que puede terminar sustituyendo antes sus propios puestos de trabajo."
+      }
     },
     {
       "id": "ana",
@@ -631,6 +684,13 @@
       "estudios": [
         "Restauración",
         "Ciclo de Informática orientado al desarrollo de webs y aplicaciones"
+      ],
+      "postura_sobre_ia": {
+        "posicion": "En contra"
+      },
+      "proyectos_actuales": [
+        "Está reformando junto a Jony una casa en el pueblo.",
+        "Tiene más claras que Jony las ideas sobre cómo quiere la nueva casa y suele marcar la dirección de las decisiones de la reforma."
       ]
     },
     {
@@ -749,6 +809,9 @@
         "origen": "Argentina",
         "historia": "Vive en España desde antes o alrededor de la adolescencia.",
         "acento": "Sigue conservando un acento argentino muy marcado cuando quiere y puede modularlo de forma consciente."
+      },
+      "postura_sobre_ia": {
+        "posicion": "Neutral"
       }
     }
   ],
