@@ -1,5 +1,6 @@
 extends "res://scripts/character_select_manager.gd"
 
+const DataAccess = preload("res://scripts/data_access.gd")
 const DataStory = preload("res://scripts/story.gd")
 const RuntimeGameData = preload("res://scripts/game_data.gd")
 
@@ -7,6 +8,9 @@ const RuntimeGameData = preload("res://scripts/game_data.gd")
 func _start_game() -> void:
 	if pending_profile.is_empty():
 		_show_character_selection()
+		return
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
 		return
 	var player_id := str(pending_profile.get("id", "custom"))
 	var start_node: String = DataStory.start_for_player(player_id)
@@ -17,8 +21,10 @@ func _start_game() -> void:
 		"history": [{"system": "protagonist", "id": player_id}],
 		"player": pending_profile.duplicate(true)
 	}
-	for character_id in DataManager.get_character_ids(false):
-		new_state["affinity"][character_id] = DataManager.get_initial_friendship(character_id)
+	var ids: Array = dm.call("get_character_ids", false)
+	for raw_id in ids:
+		var character_id := str(raw_id)
+		new_state["affinity"][character_id] = int(dm.call("get_initial_friendship", character_id))
 		new_state["expressions"][character_id] = "neutral"
 	main.set("state", new_state)
 	flow_screen.visible = false
@@ -32,18 +38,23 @@ func _continue_with_migration() -> void:
 	if typeof(loaded) != TYPE_BOOL or not bool(loaded):
 		open_selection()
 		return
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return
 	var loaded_state: Dictionary = main.get("state")
 	if not loaded_state.has("player") or typeof(loaded_state["player"]) != TYPE_DICTIONARY:
-		var fallback_ids := DataManager.get_character_ids(true)
-		var fallback_id := "javi" if fallback_ids.has("javi") else (fallback_ids[0] if not fallback_ids.is_empty() else "custom")
+		var fallback_ids: Array = dm.call("get_character_ids", true)
+		var fallback_id := "javi" if fallback_ids.has("javi") else (str(fallback_ids[0]) if not fallback_ids.is_empty() else "custom")
 		loaded_state["player"] = RuntimeGameData.character_profile(fallback_id) if fallback_id != "custom" else {"id": "custom", "name": "Jugador", "display_name": "Jugador", "custom": true}
 	if not loaded_state.has("affinity") or typeof(loaded_state["affinity"]) != TYPE_DICTIONARY:
 		loaded_state["affinity"] = {}
 	if not loaded_state.has("expressions") or typeof(loaded_state["expressions"]) != TYPE_DICTIONARY:
 		loaded_state["expressions"] = {}
-	for character_id in DataManager.get_character_ids(false):
+	var ids: Array = dm.call("get_character_ids", false)
+	for raw_id in ids:
+		var character_id := str(raw_id)
 		if not loaded_state["affinity"].has(character_id):
-			loaded_state["affinity"][character_id] = DataManager.get_initial_friendship(character_id)
+			loaded_state["affinity"][character_id] = int(dm.call("get_initial_friendship", character_id))
 		if not loaded_state["expressions"].has(character_id):
 			loaded_state["expressions"][character_id] = "neutral"
 	var player: Dictionary = loaded_state["player"]
