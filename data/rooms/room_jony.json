@@ -1,5 +1,8 @@
 {
   "id": "room_jony",
+  "display_name": "Habitación de Jony",
+  "description": "Una habitación gaming de pared azul grisácea con escritorio de varios dispositivos, Nintendo Switch, cartas de Magic, figuras y peluches de Pokémon, referencias a Zelda y Mario, plantas, hardware antiguo y luces LED azules.",
+  "codex_visible": true,
   "owners": ["jony"],
   "background_id": "habitacion_jony",
   "background_path": "res://assets/backgrounds/fondo-habitacion-jony.png",
