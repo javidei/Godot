@@ -7,18 +7,20 @@ El subtítulo se calcula automáticamente con el número de personajes más una 
 ## Base actual
 
 - Recursos gráficos locales: no depende de `raw.githubusercontent.com` para fondos o personajes.
-- 8 fondos, 5 poses de cada protagonista y una pose inicial de cada personaje secundario.
+- 8 fondos, varias poses/expresiones de protagonistas y recursos por personaje configurables mediante datos.
 - Poses seleccionables desde los datos del diálogo y posiciones `left`, `center` y `right`.
 - Carga bajo demanda con caché acotada y precarga ligera de la siguiente escena.
 - Composición de novela visual sin `ColorRect` ni placeholders detrás de los personajes.
 - Foco sutil del personaje que habla, zoom, sacudida y onomatopeyas animadas.
 - Interfaz para ratón/táctil y composición alternativa en orientación vertical.
-- Guardado compatible en `user://godot_otome_save.json`.
-- AudioManager con canales separados para música y efectos/UI, volúmenes y silencios independientes y música en bucle asociada automáticamente a cada fondo.
-- La nueva partida empieza eligiendo protagonista, sin una selección de escenario intermedia.
-- Recorrido individual por el resto del grupo: el personaje elegido representa al jugador y no aparece como encuentro.
+- Guardado offline en `user://savegame.json` y preferencias en `user://settings.json`, con migración compatible desde archivos locales anteriores.
+- `DataManager` como Autoload para centralizar personajes, preguntas, habitaciones, música, configuración y acceso al progreso.
+- AudioManager con canales separados para música y efectos/UI, volúmenes y silencios independientes y música en bucle asociada a fondos/habitaciones mediante datos.
+- La nueva partida empieza eligiendo protagonista.
+- Recorrido libre por el resto del grupo: el personaje elegido representa al jugador y no aparece como encuentro.
 - Cuatro respuestas por pregunta en una cuadrícula táctil de dos columnas.
-- Afinidad independiente de `0/3` por personaje y resumen final de `0/18` puntos al elegir a alguien del grupo (`0/21` con un personaje personalizado).
+- Afinidad independiente por personaje y puntuaciones configurables desde los datos de preguntas.
+- Menú **Extras** con fichas de personajes, información del juego, habitaciones y créditos.
 
 ## Recursos
 
@@ -37,17 +39,29 @@ assets/
 └── ui/fonts/
 ```
 
-`scripts/asset_manager.gd` es el único catálogo de rutas de imágenes. Si más adelante se migra el almacenamiento a Supabase, el resto del motor no necesita conocer las rutas físicas.
+Los datos operativos están separados del código en `data/` y se consumen a través de `DataManager`. `scripts/asset_manager.gd` continúa siendo la capa encargada de cargar y cachear recursos visuales, pero las rutas configurables proceden de los JSON en lugar de estar dispersas por los scripts.
 
 Los PNG de personajes conservan su resolución original y transparencia. Los `TextureRect` usan filtrado lineal y `KEEP_ASPECT_CENTERED`: las imágenes grandes se reducen visualmente sin recomprimirlas ni sustituirlas por copias pequeñas. Para este rango de escala 2D no se fuerzan mipmaps, evitando crear copias innecesarias de la textura.
 
 El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la misma tipografía narrativa en web, móvil y escritorio. Su licencia se encuentra junto al archivo de fuente.
 
-## Diálogo
+## Datos y diálogo
 
-La versión Early Access `0.3.9` permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de la historia y el recorrido se adapta a los otros seis; si se crea un personaje nuevo, aparecen los siete. Cada encuentro contiene una presentación sin pistas directas, tres preguntas con cuatro opciones y una única respuesta correcta, además de una réplica inmediata. Ya no se elige escenario al comenzar: cada personaje carga directamente su fondo asociado. Javi, Sue, Jony, Ana y El Argentino usan sus habitaciones; Smokey y Carmen comparten la habitación de Fran. La pantalla principal conserva Casa Asturias. Los datos están centralizados en `scripts/story.gd` para poder sustituir preguntas o ampliar las presentaciones sin modificar la interfaz.
+La rama 0.5.x permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de las visitas y el recorrido se adapta al resto del grupo. Cada encuentro contiene una presentación, preguntas con cuatro opciones, puntuaciones configurables y una réplica inmediata.
 
-Una escena puede indicar recursos y composición sin crear escenas Godot nuevas:
+Los datos estáticos se organizan principalmente en:
+
+```text
+data/
+├── characters/
+├── questions/
+├── rooms/
+└── game_config.json
+```
+
+`DataManager` centraliza el acceso a estos JSON. Los scripts históricos como `story.gd` y los gestores de versiones conservan capas de compatibilidad para mantener escenas y partidas existentes mientras el origen de los datos permanece separado del código.
+
+Una escena puede seguir indicando recursos y composición sin crear escenas Godot nuevas:
 
 ```gdscript
 {
@@ -62,11 +76,22 @@ Los nombres de expresiones antiguos (`embarrassed`, `teasing`, `annoyed`, etc.) 
 
 ## Audio
 
-El menú separa los ajustes de **Música** y **Efectos de sonido**. Ambos se regulan en pasos del 10 % y pueden silenciarse de forma independiente. En una instalación nueva, la música empieza al 30 % y los efectos —incluidos los sonidos de interfaz— al 100 %. La escala de música está atenuada: su 100 % equivale al 10 % de la escala lineal anterior, por lo que el 30 % inicial equivale al 3 % anterior. Los efectos conservan su escala completa. Las cuatro preferencias se guardan en `user://audio_settings.cfg`; al actualizar desde una versión anterior, la música migra una sola vez al nuevo 30 %.
+El menú separa los ajustes de **Música** y **Efectos de sonido**. Ambos pueden regularse y silenciarse de forma independiente. Las preferencias persistentes se guardan en `user://settings.json`; al migrar desde versiones anteriores se conservan los antiguos archivos locales como respaldo.
 
-Cada uno de los nueve fondos registrados tiene un tema musical asignado en `scripts/audio_manager.gd`. Al cambiar el fondo, el tema correspondiente se carga una vez y continúa en bucle. Las rutas están preparadas para ficheros OGG dentro de `assets/audio/music/`; mientras un fichero no exista, el juego continúa en silencio sin errores. La guía y los nombres esperados están en `assets/audio/README.md`.
+Las habitaciones/personajes pueden configurar fondo, tema musical y volumen base desde sus JSON. Al cambiar de fondo, el tema correspondiente se carga y continúa en bucle. Si un fichero de audio configurado no existe, el juego continúa en silencio sin bloquear la ejecución.
 
 Los tonos `strum`, `clonk` y la confirmación de interfaz continúan generándose de forma procedural y no incorporan audio externo ni material con copyright.
+
+## Documentación del proyecto
+
+La planificación y seguimiento del proyecto se mantienen fuera del juego:
+
+- [Ideas y mejoras futuras](docs/IDEAS.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Problemas conocidos](docs/KNOWN_ISSUES.md)
+- [Changelog](docs/CHANGELOG.md)
+
+La filosofía es mover una propuesta de **Ideas → Roadmap → Changelog** cuando pasa de concepto a tarea decidida y finalmente a funcionalidad implementada. Los errores se gestionan de forma independiente en `KNOWN_ISSUES.md`.
 
 ## Web y estabilidad
 
