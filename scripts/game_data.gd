@@ -1,85 +1,30 @@
 extends RefCounted
 class_name GameData
 
-const CHARACTER_ORDER: Array[String] = ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"]
+# Fachada de compatibilidad: los scripts existentes pueden seguir usando
+# GameData.CHARACTERS / CHARACTER_ORDER mientras la fuente real es JSON.
+static var CHARACTER_ORDER: Array[String] = _load_character_order()
+static var CHARACTERS: Dictionary = _load_characters()
+static var LOCATIONS: Dictionary = _load_locations()
+static var LOCATION_ORDER: Array[String] = _load_location_order()
 
-const CHARACTERS := {
-	"javi": {
-		"name": "Javi",
-		"alias": "Javi",
-		"role": "principal",
-		"summary": "Sarcástico · curioso · tranquilo · cabezota"
-	},
-	"sue": {
-		"name": "Susana",
-		"alias": "Sue",
-		"role": "principal",
-		"summary": "Directa · divertida · observadora · con carácter"
-	},
-	"smokey": {
-		"name": "Fran",
-		"alias": "Smokey",
-		"role": "principal",
-		"summary": "Gracioso · despreocupado · impulsivo · imprevisible"
-	},
-	"carmen": {
-		"name": "Carmen",
-		"alias": "Carmela",
-		"role": "secundario",
-		"summary": "Graciosa · estudiante de Cine · vegetariana"
-	},
-	"jony": {
-		"name": "Jony",
-		"alias": "Jon",
-		"role": "secundario",
-		"summary": "Informático · Pokémon · Magic · vegetariano"
-	},
-	"ana": {
-		"name": "Ana",
-		"alias": "Ana",
-		"role": "secundario",
-		"summary": "Gótico · libros · vampiros · rol · fantasía"
-	},
-	"argentino": {
-		"name": "El Argentino",
-		"alias": "El Argentino",
-		"role": "secundario",
-		"summary": "Gabardina negra · gafas oscuras · tatuajes"
-	}
-}
 
-const LOCATION_ORDER: Array[String] = ["casa", "bar", "bosque"]
-
-const LOCATIONS := {
-	"casa": {
-		"name": "Casa",
-		"description": "Lugar habitual donde los personajes pueden hablar y tomar decisiones.",
-		"background": "casa_asturias",
-		"chapter": "PRÓLOGO · CASA"
-	},
-	"bar": {
-		"name": "Bar",
-		"description": "Lugar donde se reúnen y ocurren conversaciones importantes o situaciones cómicas.",
-		"background": "bar",
-		"chapter": "PRÓLOGO · BAR"
-	},
-	"bosque": {
-		"name": "Bosque",
-		"description": "Escenario natural para encuentros inesperados y eventos.",
-		"background": "bosque",
-		"chapter": "PRÓLOGO · BOSQUE"
-	}
-}
+static func refresh() -> void:
+	DataManager.ensure_loaded()
+	CHARACTER_ORDER = _load_character_order()
+	CHARACTERS = _load_characters()
+	LOCATIONS = _load_locations()
+	LOCATION_ORDER = _load_location_order()
 
 
 static func character_profile(character_id: String) -> Dictionary:
-	var data: Dictionary = CHARACTERS.get(character_id, {})
+	var data := DataManager.get_character(character_id)
 	if data.is_empty():
 		return {}
 	return {
 		"id": character_id,
 		"name": str(data.get("name", character_id)),
-		"display_name": str(data.get("alias", data.get("name", character_id))),
+		"display_name": str(data.get("display_name", data.get("name", character_id))),
 		"gender": "",
 		"appearance": "",
 		"role": str(data.get("role", "principal")),
@@ -88,8 +33,10 @@ static func character_profile(character_id: String) -> Dictionary:
 
 
 static func display_name(character_id: String) -> String:
-	var data: Dictionary = CHARACTERS.get(character_id, {})
-	return str(data.get("alias", data.get("name", character_id.capitalize())))
+	var data := DataManager.get_character(character_id)
+	if data.is_empty():
+		return character_id.capitalize()
+	return str(data.get("display_name", data.get("name", character_id.capitalize())))
 
 
 static func location_name(location_id: String) -> String:
@@ -100,3 +47,37 @@ static func location_name(location_id: String) -> String:
 static func location_chapter(location_id: String) -> String:
 	var data: Dictionary = LOCATIONS.get(location_id, {})
 	return str(data.get("chapter", "PRÓLOGO"))
+
+
+static func _load_character_order() -> Array[String]:
+	DataManager.ensure_loaded()
+	return DataManager.get_character_ids(true)
+
+
+static func _load_characters() -> Dictionary:
+	DataManager.ensure_loaded()
+	var result: Dictionary = {}
+	for character_id in DataManager.get_character_ids(false):
+		var data := DataManager.get_character(character_id)
+		result[character_id] = {
+			"name": str(data.get("name", character_id.capitalize())),
+			"alias": str(data.get("display_name", data.get("name", character_id.capitalize()))),
+			"role": str(data.get("role", "principal")),
+			"summary": str(data.get("summary", "")),
+			"enabled": bool(data.get("enabled", true)),
+			"playable": bool(data.get("playable", true)),
+			"room": str(data.get("room", "")),
+			"initial_friendship": int(data.get("initial_friendship", 0))
+		}
+	return result
+
+
+static func _load_locations() -> Dictionary:
+	return DataManager.get_locations()
+
+
+static func _load_location_order() -> Array[String]:
+	var result: Array[String] = []
+	for key in LOCATIONS.keys():
+		result.append(str(key))
+	return result
