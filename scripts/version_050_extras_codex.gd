@@ -34,8 +34,6 @@ var current_character_id := ""
 
 
 func _ready() -> void:
-	# Version045 reorganiza primero el menú. Este parche entra después y añade
-	# Extras, manteniendo Salir como la última opción del bloque principal.
 	for _i in range(24):
 		await get_tree().process_frame
 	main = get_parent() as Control
@@ -92,29 +90,26 @@ func _patch_main_menu() -> void:
 	exit_button = menu_content.find_child("ExitGameButton", true, false) as Button
 	version_label = menu_content.find_child("VersionLabel", true, false) as Label
 
-	if extras_button == null:
-		extras_button = main.call("_make_button", "Extras", false) as Button
-		extras_button.name = "ExtrasButton050"
-		extras_button.tooltip_text = "Personajes, información, lugares y créditos"
-		extras_button.custom_minimum_size = Vector2(0, 56)
-		extras_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		extras_button.add_theme_font_size_override("font_size", 16)
-		extras_button.pressed.connect(_open_extras)
+	extras_button = main.call("_make_button", "Extras", false) as Button
+	extras_button.name = "ExtrasButton050"
+	extras_button.tooltip_text = "Personajes, información, lugares y créditos"
+	extras_button.custom_minimum_size = Vector2(0, 56)
+	extras_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	extras_button.add_theme_font_size_override("font_size", 16)
+	extras_button.pressed.connect(_open_extras)
 
 	if secondary_row != null:
-		if extras_button.get_parent() != secondary_row:
-			secondary_row.add_child(extras_button)
+		secondary_row.add_child(extras_button)
 		if fullscreen_button != null and fullscreen_button.get_parent() != secondary_row:
 			fullscreen_button.reparent(secondary_row)
 		if exit_button != null and exit_button.get_parent() == secondary_row:
 			exit_button.reparent(menu_content)
 
-	if exit_spacer == null:
-		exit_spacer = Control.new()
-		exit_spacer.name = "ExitSpacer050"
-		exit_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		exit_spacer.custom_minimum_size = Vector2(0, 10)
-		menu_content.add_child(exit_spacer)
+	exit_spacer = Control.new()
+	exit_spacer.name = "ExitSpacer050"
+	exit_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	exit_spacer.custom_minimum_size = Vector2(0, 8)
+	menu_content.add_child(exit_spacer)
 
 	if exit_button != null:
 		exit_button.custom_minimum_size = Vector2(0, 58)
@@ -127,17 +122,14 @@ func _patch_main_menu() -> void:
 func _reorder_menu_bottom() -> void:
 	if menu_content == null:
 		return
-	var anchor_index := 0
-	if secondary_row != null:
-		anchor_index = secondary_row.get_index() + 1
-	if exit_spacer != null:
-		menu_content.move_child(exit_spacer, anchor_index)
-		anchor_index += 1
+	var index := secondary_row.get_index() + 1 if secondary_row != null else menu_content.get_child_count()
+	menu_content.move_child(exit_spacer, index)
+	index += 1
 	if exit_button != null:
-		menu_content.move_child(exit_button, anchor_index)
-		anchor_index += 1
+		menu_content.move_child(exit_button, index)
+		index += 1
 	if version_label != null:
-		menu_content.move_child(version_label, anchor_index)
+		menu_content.move_child(version_label, index)
 
 
 func _build_extras_screen() -> void:
@@ -287,10 +279,10 @@ func _show_home() -> void:
 	grid.add_theme_constant_override("v_separation", 16)
 	box.add_child(grid)
 
-	_add_extra_option(grid, "Personajes", "Fichas del grupo", _show_characters, "CharactersOption050")
-	_add_extra_option(grid, "Información del juego", "Historia, tono y jugabilidad", _show_game_info, "GameInfoOption050")
-	_add_extra_option(grid, "Lugares", "Escenarios registrados en el JSON", _show_places, "PlacesOption050")
-	_add_extra_option(grid, "Créditos", "Autoría y datos del proyecto", _show_credits, "CreditsOption050")
+	_add_extra_option(grid, "Personajes", "Fichas del grupo", Callable(self, "_show_characters"), "CharactersOption050")
+	_add_extra_option(grid, "Información del juego", "Historia, tono y jugabilidad", Callable(self, "_show_game_info"), "GameInfoOption050")
+	_add_extra_option(grid, "Lugares", "Escenarios registrados en el JSON", Callable(self, "_show_places"), "PlacesOption050")
+	_add_extra_option(grid, "Créditos", "Autoría y datos del proyecto", Callable(self, "_show_credits"), "CreditsOption050")
 
 
 func _add_extra_option(parent: GridContainer, title: String, subtitle: String, callback: Callable, node_name: String) -> void:
@@ -339,10 +331,10 @@ func _show_characters() -> void:
 		card.pressed.connect(_show_character.bind(id))
 		grid.add_child(card)
 
-		var root := Control.new()
-		root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		card.add_child(root)
+		var card_root := Control.new()
+		card_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		card_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		card.add_child(card_root)
 
 		var portrait := TextureRect.new()
 		portrait.name = "CharacterCardPortrait"
@@ -351,10 +343,10 @@ func _show_characters() -> void:
 		portrait.anchor_right = 0.96
 		portrait.anchor_bottom = 0.78
 		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CONTAINED
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		portrait.texture = _character_texture(id)
-		root.add_child(portrait)
+		card_root.add_child(portrait)
 
 		var footer := ColorRect.new()
 		footer.anchor_left = 0.0
@@ -363,7 +355,7 @@ func _show_characters() -> void:
 		footer.anchor_bottom = 1.0
 		footer.color = Color(0.02, 0.014, 0.012, 0.90)
 		footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		root.add_child(footer)
+		card_root.add_child(footer)
 
 		var label := Label.new()
 		label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -416,7 +408,7 @@ func _show_character(character_id: String) -> void:
 	portrait.custom_minimum_size = Vector2(0, 430)
 	portrait.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CONTAINED
+	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.texture = _character_texture(character_id)
 	portrait_box.add_child(portrait)
 
@@ -467,9 +459,8 @@ func _show_character(character_id: String) -> void:
 		if key_string in ["id", "nombre", "apodo", "rol", "jugable", "imagen_por_defecto"]:
 			continue
 		var value: Variant = person[key]
-		if _is_empty_value(value):
-			continue
-		_add_data_section(details, key_string, value)
+		if not _is_empty_value(value):
+			_add_data_section(details, key_string, value)
 
 	var nav := HBoxContainer.new()
 	nav.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -491,13 +482,16 @@ func _cycle_character(direction: int) -> void:
 	var index := 0
 	for i in range(characters.size()):
 		var item: Variant = characters[i]
-		if typeof(item) == TYPE_DICTIONARY and str((item as Dictionary).get("id", "")) == current_character_id:
-			index = i
-			break
+		if typeof(item) == TYPE_DICTIONARY:
+			var person: Dictionary = item
+			if str(person.get("id", "")) == current_character_id:
+				index = i
+				break
 	index = posmod(index + direction, characters.size())
 	var next_item: Variant = characters[index]
 	if typeof(next_item) == TYPE_DICTIONARY:
-		_show_character(str((next_item as Dictionary).get("id", "")))
+		var next_person: Dictionary = next_item
+		_show_character(str(next_person.get("id", "")))
 
 
 func _show_game_info() -> void:
@@ -517,9 +511,10 @@ func _show_places() -> void:
 	_set_header("Lugares", "Escenarios registrados en detalles-juego.json")
 	_clear_page()
 	var details := _make_scroll_details()
-	var places: Variant = data.get("lugares", [])
-	if typeof(places) != TYPE_ARRAY:
+	var places_value: Variant = data.get("lugares", [])
+	if typeof(places_value) != TYPE_ARRAY:
 		return
+	var places: Array = places_value
 	for item in places:
 		if typeof(item) != TYPE_DICTIONARY:
 			continue
@@ -539,7 +534,8 @@ func _show_credits() -> void:
 	_set_header("Créditos", "Quién está detrás de La Octava Silla")
 	_clear_page()
 	var details := _make_scroll_details()
-	var credits: Dictionary = data.get("creditos", {})
+	var credits_value: Variant = data.get("creditos", {})
+	var credits: Dictionary = credits_value if typeof(credits_value) == TYPE_DICTIONARY else {}
 	if credits.is_empty():
 		credits = {
 			"creador": "Javi Díaz",
@@ -571,11 +567,11 @@ func _add_data_section(parent: VBoxContainer, key: String, value: Variant) -> vo
 	if typeof(value) == TYPE_DICTIONARY:
 		var dictionary: Dictionary = value
 		for child_key in dictionary.keys():
-			if _is_empty_value(dictionary[child_key]):
-				continue
-			_add_nested_value(parent, str(child_key), dictionary[child_key], 1)
+			if not _is_empty_value(dictionary[child_key]):
+				_add_nested_value(parent, str(child_key), dictionary[child_key], 1)
 	elif typeof(value) == TYPE_ARRAY:
-		_add_array_value(parent, key, value as Array, 0)
+		var values: Array = value
+		_add_array_value(parent, key, values, 0)
 	else:
 		_add_body_label(parent, _format_scalar(value))
 
@@ -591,10 +587,10 @@ func _add_nested_value(parent: VBoxContainer, key: String, value: Variant, depth
 				_add_nested_value(parent, str(child_key), dictionary[child_key], depth + 1)
 	elif typeof(value) == TYPE_ARRAY:
 		_add_subtitle(parent, _humanize(key), depth)
-		_add_array_value(parent, key, value as Array, depth)
+		var values: Array = value
+		_add_array_value(parent, key, values, depth)
 	else:
-		var line := "%s: %s" % [_humanize(key), _format_scalar(value)]
-		_add_body_label(parent, line, depth)
+		_add_body_label(parent, "%s: %s" % [_humanize(key), _format_scalar(value)], depth)
 
 
 func _add_array_value(parent: VBoxContainer, key: String, values: Array, depth: int) -> void:
@@ -613,7 +609,7 @@ func _add_array_value(parent: VBoxContainer, key: String, values: Array, depth: 
 			_add_body_label(parent, "\n".join(relation_lines), depth)
 		return
 
-	var scalar_lines := PackedStringArray()
+	var lines := PackedStringArray()
 	for item in values:
 		if typeof(item) == TYPE_DICTIONARY:
 			var dictionary: Dictionary = item
@@ -622,11 +618,11 @@ func _add_array_value(parent: VBoxContainer, key: String, values: Array, depth: 
 				if not _is_empty_value(dictionary[child_key]):
 					parts.append("%s: %s" % [_humanize(str(child_key)), _format_scalar(dictionary[child_key])])
 			if not parts.is_empty():
-				scalar_lines.append("• " + " · ".join(parts))
+				lines.append("• " + " · ".join(parts))
 		elif not _is_empty_value(item):
-			scalar_lines.append("• " + _format_scalar(item))
-	if not scalar_lines.is_empty():
-		_add_body_label(parent, "\n".join(scalar_lines), depth)
+			lines.append("• " + _format_scalar(item))
+	if not lines.is_empty():
+		_add_body_label(parent, "\n".join(lines), depth)
 
 
 func _add_section_title(parent: VBoxContainer, text: String) -> void:
@@ -671,7 +667,8 @@ func _is_empty_value(value: Variant) -> bool:
 		TYPE_STRING, TYPE_STRING_NAME:
 			return str(value).strip_edges().is_empty()
 		TYPE_ARRAY:
-			return (value as Array).is_empty()
+			var array_value: Array = value
+			return array_value.is_empty()
 		TYPE_DICTIONARY:
 			var dictionary: Dictionary = value
 			if dictionary.is_empty():
@@ -688,8 +685,7 @@ func _format_scalar(value: Variant) -> String:
 		TYPE_BOOL:
 			return "Sí" if bool(value) else "No"
 		TYPE_FLOAT:
-			var number := float(value)
-			return "%.2f" % number
+			return "%.2f" % float(value)
 		TYPE_DICTIONARY:
 			var dictionary: Dictionary = value
 			var parts := PackedStringArray()
@@ -698,8 +694,9 @@ func _format_scalar(value: Variant) -> String:
 					parts.append("%s: %s" % [_humanize(str(key)), _format_scalar(dictionary[key])])
 			return " · ".join(parts)
 		TYPE_ARRAY:
+			var array_value: Array = value
 			var parts := PackedStringArray()
-			for item in value as Array:
+			for item in array_value:
 				if not _is_empty_value(item):
 					parts.append(_format_scalar(item))
 			return ", ".join(parts)
@@ -709,21 +706,18 @@ func _format_scalar(value: Variant) -> String:
 
 func _humanize(key: String) -> String:
 	var text := key.replace("_", " ").strip_edges()
-	if text.is_empty():
-		return key
-	return text.capitalize()
+	return key if text.is_empty() else text.capitalize()
 
 
 func _person_display_name(person: Dictionary) -> String:
 	var alias := str(person.get("apodo", ""))
-	if not alias.is_empty():
-		return alias
-	return str(person.get("nombre", person.get("id", "Personaje")))
+	return alias if not alias.is_empty() else str(person.get("nombre", person.get("id", "Personaje")))
 
 
 func _character_display_from_id(character_id: String) -> String:
 	if character_index.has(character_id):
-		return _person_display_name(character_index[character_id] as Dictionary)
+		var person: Dictionary = character_index[character_id]
+		return _person_display_name(person)
 	return character_id.capitalize()
 
 
@@ -747,8 +741,8 @@ func _queue_layout() -> void:
 func _apply_layout() -> void:
 	if codex_panel == null:
 		return
-	var size := get_viewport().get_visible_rect().size
-	var portrait := size.y > size.x
+	var viewport_size := get_viewport().get_visible_rect().size
+	var portrait := viewport_size.y > viewport_size.x
 	if portrait:
 		codex_panel.anchor_left = 0.025
 		codex_panel.anchor_top = 0.025
@@ -767,4 +761,4 @@ func _apply_layout() -> void:
 	if current_page == "characters":
 		var grid := page_host.find_child("CharacterCodexGrid050", true, false) as GridContainer
 		if grid != null:
-			grid.columns = 2 if portrait or size.x < 1050.0 else 4
+			grid.columns = 2 if portrait or viewport_size.x < 1050.0 else 4
