@@ -23,7 +23,7 @@ static func character_profile(character_id: String) -> Dictionary:
 		return {}
 	return {
 		"id": character_id,
-		"name": str(data.get("name", character_id)),
+		"name": str(data.get("real_name", data.get("name", character_id))),
 		"display_name": str(data.get("display_name", data.get("name", character_id))),
 		"gender": "",
 		"appearance": "",
@@ -60,7 +60,7 @@ static func _load_characters() -> Dictionary:
 	for character_id in DataManager.get_character_ids(false):
 		var data := DataManager.get_character(character_id)
 		result[character_id] = {
-			"name": str(data.get("name", character_id.capitalize())),
+			"name": str(data.get("real_name", data.get("name", character_id.capitalize()))),
 			"alias": str(data.get("display_name", data.get("name", character_id.capitalize()))),
 			"role": str(data.get("role", "principal")),
 			"summary": str(data.get("summary", "")),
