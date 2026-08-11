@@ -1,6 +1,6 @@
 extends RefCounted
 
-const DATA_MANAGER_SCRIPT := preload("res://autoload/data_manager.gd")
+const DATA_MANAGER_SCRIPT := preload("res://autoload/data_manager_runtime.gd")
 
 static var _fallback: Node
 
