@@ -44,8 +44,9 @@ func reload_all() -> void:
 	_question_bundles = _load_json_directory(QUESTIONS_DIR, "character")
 	_rooms = _load_json_directory(ROOMS_DIR, "id")
 	_rebuild_room_indexes()
-	_validate_data()
+	# Los getters públicos ya pueden usarse durante la validación sin recargar.
 	_loaded = true
+	_validate_data()
 	_revision += 1
 	_settings_cache = {}
 	_migrate_legacy_save_if_needed()
@@ -111,7 +112,8 @@ func get_character(character_id: String) -> Dictionary:
 	var room := get_room(str(character.get("room", "")))
 	if not character.has("music") or str(character.get("music", "")).is_empty():
 		character["music"] = str(room.get("music_id", ""))
-	if not character.has("music_volume") or typeof(character.get("music_volume")) not in [TYPE_FLOAT, TYPE_INT]:
+	var music_volume_type := typeof(character.get("music_volume", null))
+	if music_volume_type != TYPE_FLOAT and music_volume_type != TYPE_INT:
 		character["music_volume"] = float(room.get("music_volume", 1.0))
 	if not character.has("image") or str(character.get("image", "")).is_empty():
 		var poses: Variant = character.get("poses", {})
@@ -168,7 +170,8 @@ func get_character_music_id(character_id: String) -> String:
 func get_character_music_volume(character_id: String) -> float:
 	var character := get_character(character_id)
 	var value: Variant = character.get("music_volume", null)
-	if typeof(value) in [TYPE_FLOAT, TYPE_INT]:
+	var value_type := typeof(value)
+	if value_type == TYPE_FLOAT or value_type == TYPE_INT:
 		return clampf(float(value), 0.0, 1.0)
 	return clampf(float(get_room_for_character(character_id).get("music_volume", 1.0)), 0.0, 1.0)
 
@@ -192,11 +195,13 @@ func get_question_bundle(character_id: String) -> Dictionary:
 
 
 func get_questions(character_id: String) -> Array:
-	return get_question_bundle(character_id).get("questions", []).duplicate(true)
+	var bundle := get_question_bundle(character_id)
+	return (bundle.get("questions", []) as Array).duplicate(true)
 
 
 func get_intro(character_id: String) -> Array:
-	return get_question_bundle(character_id).get("intro", []).duplicate(true)
+	var bundle := get_question_bundle(character_id)
+	return (bundle.get("intro", []) as Array).duplicate(true)
 
 
 func get_room(room_id: String) -> Dictionary:
@@ -426,24 +431,41 @@ func _rebuild_room_indexes() -> void:
 func _validate_data() -> void:
 	if _game_config.is_empty():
 		_record_error("game_config.json está vacío o no se ha podido leer")
-	for character_id in _characters.keys():
-		var character: Dictionary = _characters[character_id]
+	for raw_character_id in _characters.keys():
+		var character_id := str(raw_character_id)
+		var character: Dictionary = _characters[raw_character_id]
 		var room_id := str(character.get("room", ""))
 		if room_id.is_empty() or not _rooms.has(room_id):
-			_record_error("El personaje '%s' referencia una habitación inexistente: %s" % [str(character_id), room_id])
+			_record_error("El personaje '%s' referencia una habitación inexistente: %s" % [character_id, room_id])
 		if not _question_bundles.has(character_id):
-			_record_error("El personaje '%s' no tiene archivo de preguntas" % str(character_id))
-		var image_path := get_character_image_path(str(character_id), "neutral")
+			_record_error("El personaje '%s' no tiene archivo de preguntas" % character_id)
+		var image_path := get_character_image_path(character_id, "neutral")
 		if image_path.is_empty() or not ResourceLoader.exists(image_path):
-			_record_error("El personaje '%s' no tiene una imagen neutral válida: %s" % [str(character_id), image_path])
-	for room_id in _rooms.keys():
-		var room: Dictionary = _rooms[room_id]
+			_record_error("El personaje '%s' no tiene una imagen neutral válida: %s" % [character_id, image_path])
+		_validate_question_bundle(character_id)
+	for raw_room_id in _rooms.keys():
+		var room_id := str(raw_room_id)
+		var room: Dictionary = _rooms[raw_room_id]
 		var background_path := str(room.get("background_path", ""))
 		var music_path := str(room.get("music_path", ""))
 		if background_path.is_empty() or not ResourceLoader.exists(background_path):
-			_record_error("La habitación '%s' no tiene un fondo válido: %s" % [str(room_id), background_path])
+			_record_error("La habitación '%s' no tiene un fondo válido: %s" % [room_id, background_path])
 		if not music_path.is_empty() and not ResourceLoader.exists(music_path):
-			_record_error("La habitación '%s' no tiene una canción válida: %s" % [str(room_id), music_path])
+			_record_error("La habitación '%s' no tiene una canción válida: %s" % [room_id, music_path])
+
+
+func _validate_question_bundle(character_id: String) -> void:
+	var bundle := get_question_bundle(character_id)
+	var questions: Array = bundle.get("questions", [])
+	for index in range(questions.size()):
+		var raw_question: Variant = questions[index]
+		if typeof(raw_question) != TYPE_DICTIONARY:
+			_record_error("Pregunta %d de '%s' no es un objeto JSON" % [index + 1, character_id])
+			continue
+		var question := raw_question as Dictionary
+		var answers: Variant = question.get("answers", [])
+		if typeof(answers) != TYPE_ARRAY or (answers as Array).size() != 4:
+			_record_error("Pregunta %d de '%s' debe tener exactamente cuatro respuestas" % [index + 1, character_id])
 
 
 func _record_error(message: String) -> void:
@@ -468,6 +490,9 @@ func _load_json_directory(directory_path: String, id_key: String) -> Dictionary:
 		var document_id := str(document.get(id_key, fallback_id))
 		if document_id.is_empty():
 			_record_error("El archivo '%s' no define '%s'" % [path, id_key])
+			continue
+		if result.has(document_id):
+			_record_error("Identificador de datos duplicado '%s' en %s" % [document_id, path])
 			continue
 		result[document_id] = document
 	return result
