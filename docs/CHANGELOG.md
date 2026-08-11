@@ -12,6 +12,22 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.5.11]
+
+### Changed
+
+- Sustituida la restauración de la posición mediante `seek` por continuidad real: al volver al menú la canción de la habitación sigue reproduciéndose silenciada y recupera su volumen al continuar la partida.
+
+### Fixed
+
+- El control de volumen específico de cada habitación respeta el silencio temporal del menú y no puede reactivar la música mientras este permanece visible.
+
+## [0.5.10]
+
+### Fixed
+
+- Al volver desde una habitación al menú principal, la partida guarda la canción y su posición exacta para que **Continuar** reanude la reproducción desde ese punto en lugar de empezar desde el principio.
+
 ## [0.5.9]
 
 ### Changed

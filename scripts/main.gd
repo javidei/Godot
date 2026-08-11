@@ -636,6 +636,7 @@ func _neutral_expressions() -> Dictionary:
 
 
 func _show_menu() -> void:
+	audio_manager.suspend_music()
 	_set_background("casa_asturias")
 	menu_screen.visible = true
 	game_screen.visible = false
@@ -678,6 +679,7 @@ func _load_game_from_button() -> void:
 
 
 func _go_to(node_id: String, add_to_history: bool = true) -> void:
+	audio_manager.resume_music()
 	_clear_choices()
 	var resolved_node_id := Story.resolve_for_player(node_id, _player_character_id())
 	if resolved_node_id == "__END__":
