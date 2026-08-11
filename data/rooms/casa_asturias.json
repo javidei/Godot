@@ -3,9 +3,10 @@
   "owners": [],
   "background_id": "casa_asturias",
   "background_path": "res://assets/backgrounds/fondo-casa-asturias.png",
-  "music_id": "",
-  "music_path": "",
+  "music_id": "casa_asturias",
+  "music_path": "res://assets/audio/music/casa-asturias.ogg",
   "music_volume": 1.0,
   "music_loop": true,
+  "music_optional": true,
   "enabled": true
 }
