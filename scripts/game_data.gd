@@ -1,8 +1,9 @@
 extends RefCounted
 class_name GameData
 
-# Fachada de compatibilidad: los scripts existentes pueden seguir usando
-# GameData.CHARACTERS / CHARACTER_ORDER mientras la fuente real es JSON.
+const DataAccess = preload("res://scripts/data_access.gd")
+
+# Fachada de compatibilidad: la fuente real está en DataManager/JSON.
 static var CHARACTER_ORDER: Array[String] = _load_character_order()
 static var CHARACTERS: Dictionary = _load_characters()
 static var LOCATIONS: Dictionary = _load_locations()
@@ -10,7 +11,10 @@ static var LOCATION_ORDER: Array[String] = _load_location_order()
 
 
 static func refresh() -> void:
-	DataManager.ensure_loaded()
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return
+	dm.call("ensure_loaded")
 	CHARACTER_ORDER = _load_character_order()
 	CHARACTERS = _load_characters()
 	LOCATIONS = _load_locations()
@@ -18,7 +22,10 @@ static func refresh() -> void:
 
 
 static func character_profile(character_id: String) -> Dictionary:
-	var data := DataManager.get_character(character_id)
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return {}
+	var data: Dictionary = dm.call("get_character", character_id)
 	if data.is_empty():
 		return {}
 	return {
@@ -33,7 +40,10 @@ static func character_profile(character_id: String) -> Dictionary:
 
 
 static func display_name(character_id: String) -> String:
-	var data := DataManager.get_character(character_id)
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return character_id.capitalize()
+	var data: Dictionary = dm.call("get_character", character_id)
 	if data.is_empty():
 		return character_id.capitalize()
 	return str(data.get("display_name", data.get("name", character_id.capitalize())))
@@ -50,15 +60,27 @@ static func location_chapter(location_id: String) -> String:
 
 
 static func _load_character_order() -> Array[String]:
-	DataManager.ensure_loaded()
-	return DataManager.get_character_ids(true)
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return []
+	dm.call("ensure_loaded")
+	var raw_ids: Array = dm.call("get_character_ids", true)
+	var result: Array[String] = []
+	for raw_id in raw_ids:
+		result.append(str(raw_id))
+	return result
 
 
 static func _load_characters() -> Dictionary:
-	DataManager.ensure_loaded()
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return {}
+	dm.call("ensure_loaded")
 	var result: Dictionary = {}
-	for character_id in DataManager.get_character_ids(false):
-		var data := DataManager.get_character(character_id)
+	var raw_ids: Array = dm.call("get_character_ids", false)
+	for raw_id in raw_ids:
+		var character_id := str(raw_id)
+		var data: Dictionary = dm.call("get_character", character_id)
 		result[character_id] = {
 			"name": str(data.get("real_name", data.get("name", character_id.capitalize()))),
 			"alias": str(data.get("display_name", data.get("name", character_id.capitalize()))),
@@ -73,7 +95,10 @@ static func _load_characters() -> Dictionary:
 
 
 static func _load_locations() -> Dictionary:
-	return DataManager.get_locations()
+	var dm: Variant = DataAccess.dm()
+	if dm == null:
+		return {}
+	return dm.call("get_locations") as Dictionary
 
 
 static func _load_location_order() -> Array[String]:
