@@ -89,7 +89,7 @@ jobs:
           fi
           grep -q "SMOKE OK:" character-smoke.log
 
-      - name: Smoke test de mecánicas 0.4.x
+      - name: Smoke test de mecánicas heredadas 0.4.x
         run: |
           set +e
           godot --headless --path . --script res://scripts/ci_v040_smoke_test.gd > v040-smoke.log 2>&1
@@ -97,7 +97,7 @@ jobs:
           set -e
           cat v040-smoke.log
           if [ "$STATUS" -ne 0 ] || grep -Eqi "V040 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v040-smoke.log; then
-            echo "La validación específica de la rama 0.4.x ha fallado; no se exportará."
+            echo "La validación de mecánicas heredadas ha fallado; no se exportará."
             exit 1
           fi
           grep -q "V040 OK:" v040-smoke.log
@@ -140,6 +140,19 @@ jobs:
             exit 1
           fi
           grep -q "V045 OK:" v045-smoke.log
+
+      - name: Smoke test de Extras y códice 0.5.x
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v050_extras_codex_test.gd > v050-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat v050-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V050 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v050-smoke.log; then
+            echo "La validación de Extras y del códice ha fallado; no se exportará."
+            exit 1
+          fi
+          grep -q "V050 OK:" v050-smoke.log
 
       - name: Export Web y validar GDScript
         run: |
