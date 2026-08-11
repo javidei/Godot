@@ -4,9 +4,13 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.5.0"
+config/version="0.5.1"
 config/icon="res://assets/ui/menu-lineup.png"
 run/main_scene="res://scenes/main.tscn"
+
+[autoload]
+
+DataManager="*res://autoload/data_manager.gd"
 
 [display]
 
