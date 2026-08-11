@@ -11,10 +11,12 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	print("DATAMANAGER STEP 1: localizar Autoload")
 	data_manager = root.get_node_or_null("DataManager")
 	if data_manager == null:
 		_fail("El Autoload DataManager no está activo en /root/DataManager")
 		return
+	print("DATAMANAGER STEP 2: recargar JSON")
 	data_manager.call("reload_all")
 	GameData.refresh()
 	Story.refresh()
@@ -27,6 +29,7 @@ func _run() -> void:
 		_fail("DataManager ha detectado errores de datos: " + " | ".join(error_texts))
 		return
 
+	print("DATAMANAGER STEP 3: validar personajes/preguntas/habitaciones")
 	var character_ids: Array = data_manager.call("get_character_ids", true)
 	if character_ids.size() != 7:
 		_fail("Se esperaban siete personajes activos y hay %d" % character_ids.size())
@@ -55,6 +58,7 @@ func _run() -> void:
 				_fail("La pregunta %s no genera cuatro respuestas" % question_id)
 				return
 
+	print("DATAMANAGER STEP 4: validar user://")
 	if str(data_manager.call("get_save_path")) != "user://savegame.json":
 		_fail("La partida no apunta a user://savegame.json")
 		return
@@ -83,6 +87,7 @@ func _run() -> void:
 		_fail("settings.json no tiene una configuración de música válida")
 		return
 
+	print("DATAMANAGER STEP 5: instanciar escena")
 	var packed := load("res://scenes/main.tscn") as PackedScene
 	if packed == null:
 		_fail("No se puede cargar main.tscn")
@@ -92,6 +97,7 @@ func _run() -> void:
 	for _i in range(36):
 		await process_frame
 
+	print("DATAMANAGER STEP 6: validar managers/assets")
 	var assets: Variant = main.get("asset_manager")
 	var audio_manager: Variant = main.get("audio_manager")
 	if assets == null or audio_manager == null:
@@ -115,6 +121,7 @@ func _run() -> void:
 		_fail("Falta una capa de compatibilidad de la escena principal")
 		return
 
+	print("DATAMANAGER STEP 7: validar selección")
 	selection.call("open_selection")
 	await process_frame
 	var cards: Array = selection.get("character_cards") as Array
