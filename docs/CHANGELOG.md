@@ -12,6 +12,17 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.5.9]
+
+### Changed
+
+- Restaurado el fondo original de la habitación de Javi, incluido el contenido original de su monitor secundario.
+
+### Removed
+
+- Retirados la pantalla verde, el vídeo integrado, la homografía, los efectos de iluminación y toda su configuración y lógica asociadas.
+- Eliminados del proyecto el archivo de vídeo y el respaldo temporal, que dejó de ser necesario tras restaurar el fondo.
+
 ## [0.5.8]
 
 ### Added
