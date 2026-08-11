@@ -125,10 +125,10 @@ func _run() -> void:
 		_fail("Pulsar en una zona libre de la pantalla no avanza al siguiente diálogo")
 		return
 
-	print("MENU OK: distribución, Extras/Salir y avance por clic directo validados.")
+	print("V045 OK: distribución, Extras/Salir y avance por clic directo validados.")
 	quit(0)
 
 
 func _fail(message: String) -> void:
-	push_error("MENU FAIL: " + message)
+	push_error("V045 FAIL: " + message)
 	quit(1)
