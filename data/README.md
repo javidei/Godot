@@ -8,7 +8,7 @@ El acceso en tiempo de ejecución está centralizado en `DataManager` (`res://au
 
 - `game_config.json`: orden de personajes, ajustes generales, rutas de guardado y localizaciones globales.
 - `characters/<id>.json`: identidad, estado habilitado, habitación, imagen/poses, música, volumen inicial, afinidad inicial y textos de transición.
-- `questions/<id>.json`: presentación, preguntas, cuatro respuestas, posición izquierda/derecha, puntuación y feedback.
+- `questions/<id>.json`: presentación, preguntas, cuatro respuestas, posición izquierda/derecha, puntuación y diálogo de reacción.
 - `rooms/<id>.json`: fondo, canción, volumen base, propietarios, nombre y descripción visual de la habitación.
 - `detalles-juego.json`: información ampliada usada por Extras/códice. `DataManager` la combina con los datos operativos de `characters/`.
 
@@ -33,9 +33,11 @@ Edita `data/characters/<id>.json`. Los campos operativos principales son:
 
 `enabled: false` lo retira de la selección y del recorrido jugable sin borrar sus datos.
 
-## Modificar preguntas
+## Modificar preguntas y conversaciones
 
-Edita `data/questions/<id>.json`. Cada personaje contiene `intro` y `questions`. Cada pregunta debe tener cuatro respuestas:
+Edita `data/questions/<id>.json`. Cada personaje contiene `intro` y `questions`. Cada pregunta debe seguir teniendo exactamente cuatro respuestas, pero las reacciones ya no están limitadas a `correct` y `wrong`: cada respuesta puede apuntar a su propia clave de `feedback`.
+
+El formato clásico continúa siendo válido:
 
 ```json
 {
@@ -54,7 +56,47 @@ Edita `data/questions/<id>.json`. Cada personaje contiene `intro` y `questions`.
 }
 ```
 
-La puntuación máxima ya no está fijada a 3 en el nuevo resumen: se calcula a partir de los valores `score` de los JSON.
+También se puede dar una reacción diferente a cada opción y encadenar varias líneas:
+
+```json
+{
+  "id": "q1",
+  "text": "¿Qué haces?",
+  "answers": [
+    {"text": "Opción A", "side": "left", "score": 1, "feedback": "respuesta_a"},
+    {"text": "Opción B", "side": "right", "score": 0, "feedback": "respuesta_b"},
+    {"text": "Opción C", "side": "left", "score": 0, "feedback": "respuesta_c"},
+    {"text": "Opción D", "side": "right", "score": 0, "feedback": "respuesta_d"}
+  ],
+  "feedback": {
+    "respuesta_a": [
+      {"speaker_id": "jony", "text": "Primera línea."},
+      {"speaker": "Narrador", "speaker_id": "", "text": "Una pausa o acción narrativa."}
+    ],
+    "respuesta_b": {"speaker_id": "jony", "text": "Otra reacción."},
+    "respuesta_c": {"speaker_id": "jony", "text": "Otra reacción."},
+    "respuesta_d": {"speaker_id": "jony", "text": "Otra reacción."}
+  },
+  "after": [
+    {"speaker_id": "jony", "text": "Este diálogo ocurre después de cualquiera de las cuatro respuestas."}
+  ]
+}
+```
+
+Las líneas de `intro`, `feedback` y `after` admiten metadatos narrativos opcionales:
+
+- `speaker_id`: id del personaje que habla. Si se omite, habla el personaje visitado.
+- `speaker`: nombre literal que se mostrará; sirve también para `Narrador`.
+- `show`: personajes visibles en la escena.
+- `positions`: posiciones de los personajes visibles (`left`, `center`, `right`).
+- `focus`: personaje que recibe el foco visual o `all`.
+- `expression`: pose/expresión del personaje que habla.
+- `expressions`: cambios de expresión para varios personajes.
+- `exclude_players`: protagonistas para los que esa línea se omite; útil para que un personaje no aparezca como NPC cuando lo controla el jugador.
+- `include_players`: limita la línea a protagonistas concretos.
+- `effect`: efecto narrativo compatible con el sistema de escenas.
+
+`after` permite introducir pausas, remates, monólogos o pequeños diálogos comunes antes de pasar a la siguiente pregunta. La puntuación máxima se calcula a partir del mayor `score` disponible en cada pregunta, por lo que no está fijada a tres puntos de forma interna.
 
 ## Modificar una habitación o canción
 
@@ -90,7 +132,7 @@ Para un personaje estándar no debería ser necesario añadir lógica específic
 5. Añade `nuevo_id` a `character_order` en `data/game_config.json` si quieres controlar su posición exacta; si no aparece allí, `DataManager` lo añade después de los ids configurados.
 6. Opcionalmente añade su información ampliada a `data/detalles-juego.json` para el códice.
 
-`main_data_driven.gd` crea automáticamente un slot visual para ids nuevos y Story genera introducciones, preguntas y nodos de feedback a partir de los datos.
+`main_data_driven.gd` crea automáticamente un slot visual para ids nuevos y Story genera introducciones, preguntas, reacciones y secuencias posteriores a partir de los datos.
 
 ## Datos del usuario
 

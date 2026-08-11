@@ -1,51 +1,138 @@
 {
   "character": "jony",
   "intro": [
-    {"expression": "neutral", "text": "Soy Jony, o Jon si quieres ahorrar una letra. Al principio puedo parecer algo reservado, pero con el tema adecuado se me pasa bastante rápido."},
-    {"expression": "neutral", "text": "Cuando algo me interesa de verdad, puedo analizar hasta el último detalle y alargar la conversación más de la cuenta. Avisado quedas."}
+    {
+      "speaker": "Narrador",
+      "speaker_id": "",
+      "text": "Jony está sentado con el móvil en la mano. Lo bloquea cuando te ve entrar.",
+      "show": ["jony"],
+      "focus": "jony"
+    },
+    {
+      "speaker_id": "jony",
+      "expression": "neutral",
+      "text": "Ey. Si vienes a hablar de algo que controlo, ponte cómodo. Si no... seguramente termine mirando el móvil. No es personal."
+    },
+    {
+      "speaker": "Narrador",
+      "speaker_id": "",
+      "text": "Ana asoma desde el pasillo antes de salir.",
+      "show": ["jony"],
+      "focus": "jony",
+      "exclude_players": ["ana"]
+    },
+    {
+      "speaker_id": "ana",
+      "text": "Jon, me voy un momento. Acuérdate de mirar lo de la casa.",
+      "show": ["jony"],
+      "focus": "all",
+      "exclude_players": ["ana"]
+    },
+    {
+      "speaker_id": "jony",
+      "text": "Sí. La reforma.",
+      "exclude_players": ["ana"]
+    },
+    {
+      "speaker_id": "jony",
+      "text": "Aunque llamarlo reforma tiene bastante sentido: estamos intentando que la casa vuelva a tener forma. Re-forma.",
+      "exclude_players": ["ana"]
+    },
+    {
+      "speaker": "Narrador",
+      "speaker_id": "",
+      "text": "Silencio. Desde el pasillo no llega ninguna respuesta. Jony mantiene exactamente la misma cara.",
+      "show": ["jony"],
+      "focus": "jony",
+      "exclude_players": ["ana"]
+    },
+    {
+      "speaker_id": "ana",
+      "text": "Madre mía, Jon.",
+      "show": ["jony"],
+      "focus": "all",
+      "exclude_players": ["ana"]
+    },
+    {
+      "speaker_id": "jony",
+      "text": "Era técnicamente correcto.",
+      "exclude_players": ["ana"]
+    }
   ],
   "questions": [
     {
       "id": "q1",
-      "text": "¿A qué me dedico?",
+      "text": "Vamos con una fácil. Ana y yo tenemos tren mañana. Son casi las doce de la noche y todavía no he dicho nada. ¿Qué mensaje mío te resultaría menos sorprendente?",
       "answers": [
-        {"text": "Informática", "side": "left", "score": 1, "feedback": "correct"},
-        {"text": "Cine", "side": "right", "score": 0, "feedback": "wrong"},
-        {"text": "Música", "side": "left", "score": 0, "feedback": "wrong"},
-        {"text": "Hostelería", "side": "right", "score": 0, "feedback": "wrong"}
+        {"text": "Javi, Fran... ¿alguno puede llevarnos mañana a la estación? Perdón por avisar ahora.", "side": "left", "score": 1, "feedback": "station_real"},
+        {"text": "Ya he reservado un taxi con tres días de antelación.", "side": "right", "score": 0, "feedback": "station_taxi"},
+        {"text": "Saldremos dos horas antes e iremos andando con las maletas.", "side": "left", "score": 0, "feedback": "station_walk"},
+        {"text": "No digo nada. A las siete aparezco delante de tu casa con las maletas.", "side": "right", "score": 0, "feedback": "station_ambush"}
       ],
       "feedback": {
-        "correct": {"text": "Correcto. Informático dentro y fuera de horario.", "expression": "happy"},
-        "wrong": {"text": "Soy informático. Esa tendrás que recordarla para la próxima.", "expression": "thoughtful"}
-      }
+        "station_real": [
+          {"speaker_id": "jony", "text": "Sí. Bastante realista. Yo diría que avisar antes de dormir todavía cuenta como margen."},
+          {"speaker": "Narrador", "speaker_id": "", "text": "Lo dice completamente serio.", "show": ["jony"], "focus": "jony"}
+        ],
+        "station_taxi": {"speaker_id": "jony", "text": "Tres días de antelación. Has creado a Jony Premium, con planificación incluida."},
+        "station_walk": {"speaker_id": "jony", "text": "Andando. Con maletas. Eso ya no es un favor, es una peregrinación."},
+        "station_ambush": {"speaker_id": "jony", "text": "No, hombre. Algo de apuro me da. Al menos mando el mensaje antes de presentarme con las maletas."}
+      },
+      "after": [
+        {"speaker": "Narrador", "speaker_id": "", "text": "Jony desbloquea el móvil, mira Twitter durante un segundo y vuelve a bloquearlo.", "show": ["jony"], "focus": "jony"},
+        {"speaker_id": "jony", "text": "Por cierto, si me escribís y tardo en contestar... seguramente esté mirando Twitter mientras tengo Twitter abierto. Es una habilidad."}
+      ]
     },
     {
       "id": "q2",
-      "text": "¿Qué dos juegos pueden darme conversación para rato?",
+      "text": "Con la casa pasa lo contrario: Ana tiene bastante claro lo que quiere y yo suelo dejarme llevar. Si aparecen quince muestras de color para una pared, ¿qué estrategia me pega más?",
       "answers": [
-        {"text": "Ajedrez y dominó", "side": "left", "score": 0, "feedback": "wrong"},
-        {"text": "Pokémon y Magic", "side": "right", "score": 1, "feedback": "correct"},
-        {"text": "Fútbol y tenis", "side": "left", "score": 0, "feedback": "wrong"},
-        {"text": "Rol y Warhammer", "side": "right", "score": 0, "feedback": "wrong"}
+        {"text": "Elegir una al azar para terminar rápido.", "side": "left", "score": 0, "feedback": "color_random"},
+        {"text": "Decir «la que tú veas» y confiar en que Ana lo tiene más claro.", "side": "right", "score": 1, "feedback": "color_trust"},
+        {"text": "Hacer una comparativa en Excel con RGB, precio y reflectancia.", "side": "left", "score": 0, "feedback": "color_excel"},
+        {"text": "Mirar el móvil hasta que la pared se pinte sola.", "side": "right", "score": 0, "feedback": "color_mobile"}
       ],
       "feedback": {
-        "correct": {"text": "Pokémon y Magic. Con eso has elegido una conversación larga.", "expression": "happy"},
-        "wrong": {"text": "Pokémon y Magic. La próxima pregunta quizá necesite menos maná.", "expression": "thoughtful"}
-      }
+        "color_random": {"speaker_id": "jony", "text": "Eso es jugarte la convivencia a una ruleta de pintura. Tampoco hace falta."},
+        "color_trust": {"speaker_id": "jony", "text": "Exacto. Ella tiene una imagen en la cabeza. Yo tengo una opinión fuerte sobre dónde debería ir el router. Reparto de competencias."},
+        "color_excel": {"speaker_id": "jony", "text": "Soy informático, no una consultora de paredes."},
+        "color_mobile": {"speaker_id": "jony", "text": "Tentador. Pero al final hay que levantar la vista antes de que te planten un verde quirófano."}
+      },
+      "after": [
+        {"speaker": "Narrador", "speaker_id": "", "text": "Ana vuelve a asomarse desde el pasillo.", "show": ["jony"], "focus": "jony", "exclude_players": ["ana"]},
+        {"speaker_id": "ana", "text": "Jon, por cierto, he encontrado otras dos opciones para el salón.", "show": ["jony"], "focus": "all", "exclude_players": ["ana"]},
+        {"speaker_id": "jony", "text": "Perfecto. Tú me las enseñas y yo digo que la segunda.", "exclude_players": ["ana"]},
+        {"speaker_id": "ana", "text": "Todavía no te he dicho cuáles son.", "show": ["jony"], "focus": "all", "exclude_players": ["ana"]},
+        {"speaker_id": "jony", "text": "Estoy optimizando.", "exclude_players": ["ana"]},
+        {"speaker": "Narrador", "speaker_id": "", "text": "Desde el pasillo se oye a Ana reírse por lo bajo.", "show": ["jony"], "focus": "jony", "exclude_players": ["ana"]}
+      ]
     },
     {
       "id": "q3",
-      "text": "¿Qué comparto con Carmen a la hora de comer?",
+      "text": "Y ahora una que sí me toca las narices. En la empresa nos meten IA para trabajar más rápido y a mí no me convence nada. ¿Qué me responderías?",
       "answers": [
-        {"text": "Los dos somos vegetarianos", "side": "left", "score": 1, "feedback": "correct"},
-        {"text": "Los dos evitamos los postres", "side": "right", "score": 0, "feedback": "wrong"},
-        {"text": "Los dos odiamos salir a comer", "side": "left", "score": 0, "feedback": "wrong"},
-        {"text": "Los dos pedimos siempre carne", "side": "right", "score": 0, "feedback": "wrong"}
+        {"text": "Te entiendo: si la alimentamos con nuestro trabajo, puede acabar facilitando que reduzcan nuestros propios puestos.", "side": "left", "score": 1, "feedback": "ai_agree"},
+        {"text": "Es adaptarse o caer; si la empresa la va a usar, prefiero aprender a usarla bien.", "side": "right", "score": 0, "feedback": "ai_javi"},
+        {"text": "No te preocupes, la IA jamás va a sustituir trabajo real.", "side": "left", "score": 0, "feedback": "ai_never"},
+        {"text": "Yo la metería en absolutamente todo y que decida ella.", "side": "right", "score": 0, "feedback": "ai_everything"}
       ],
       "feedback": {
-        "correct": {"text": "Eso es. Los dos somos vegetarianos.", "expression": "happy"},
-        "wrong": {"text": "Carmen y yo somos vegetarianos. Esa era la coincidencia.", "expression": "thoughtful"}
-      }
+        "ai_agree": {"speaker_id": "jony", "text": "Eso. No me molesta la tecnología por existir. Me molesta ayudar a entrenar la herramienta que mañana pueden usar para decir que hacen falta menos personas."},
+        "ai_javi": {"speaker_id": "jony", "text": "Esa respuesta tiene muchísimo olor a Javi. Y entiendo el argumento: si va a llegar igualmente, saber usarla tiene sentido. Pero sigo sin estar encantado con entrenar a mi posible sustituto."},
+        "ai_never": {"speaker_id": "jony", "text": "Eso es bastante fe. Ojalá tengas razón, pero yo no apostaría mi nómina a ello."},
+        "ai_everything": [
+          {"speaker_id": "jony", "text": "Bien. Voy a dejar que una IA mire Twitter por mí mientras otra mantiene esta conversación."},
+          {"speaker_id": "jony", "text": "Así ganamos todos."}
+        ]
+      },
+      "after": [
+        {"speaker": "Narrador", "speaker_id": "", "text": "La conversación queda en silencio un instante.", "show": ["jony"], "focus": "jony"},
+        {"speaker_id": "jony", "text": "Bueno. Tema ligero. ¿Pokémon o Magic?"},
+        {"speaker": "Narrador", "speaker_id": "", "text": "Cometes el error de mostrar interés.", "show": ["jony"], "focus": "jony"},
+        {"speaker_id": "jony", "text": "Vale, pues mira..."},
+        {"speaker": "Narrador", "speaker_id": "", "text": "Veinte minutos después.", "show": ["jony"], "focus": "jony"},
+        {"speaker_id": "jony", "text": "...y por eso depende muchísimo de la situación. ¿Ves? Esto sí es un tema."}
+      ]
     }
   ]
 }

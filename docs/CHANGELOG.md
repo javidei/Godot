@@ -12,6 +12,21 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.5.12]
+
+### Added
+
+- Soporte data-driven para que cada una de las cuatro respuestas pueda tener una réplica diferente, incluyendo secuencias de varias líneas.
+- Bloques `after` para añadir pausas, remates, monólogos y pequeños diálogos después de una respuesta antes de continuar con la siguiente pregunta.
+- Metadatos narrativos opcionales para identificar hablante, personajes visibles, foco, posiciones y líneas excluidas según el protagonista.
+
+### Changed
+
+- Reescrita la visita de Jony como una conversación más natural con situaciones sobre los favores para ir a la estación, la reforma de su casa con Ana, su postura sobre el uso de IA en la empresa y su tendencia a alargarse cuando domina un tema.
+- Añadidos el humor seco y los juegos de palabras de Jony, junto con pausas y reacciones específicas para cada respuesta.
+- Actualizados el resumen y los textos de entrada y despedida de Jony.
+- Documentado el nuevo formato narrativo en `data/README.md` manteniendo compatibilidad con el esquema clásico `correct`/`wrong`.
+
 ## [0.5.11]
 
 ### Changed

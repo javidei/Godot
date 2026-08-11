@@ -3,7 +3,7 @@
   "name": "Jony",
   "display_name": "Jon",
   "role": "secundario",
-  "summary": "Informático · Pokémon · Magic · vegetariano",
+  "summary": "Informático · Periodismo · Pokémon · Magic · humor seco",
   "playable": true,
   "enabled": true,
   "room": "room_jony",
@@ -14,6 +14,6 @@
   "poses": {
     "neutral": "res://assets/characters/jony/jony.png"
   },
-  "transition_intro": "Jony te recibe entre videojuegos, libros y estanterías donde siempre hay algo nuevo que comentar.",
-  "transition_outro": "Jony levanta el libro a modo de despedida. «La próxima vez seguimos por donde lo hemos dejado.»"
+  "transition_intro": "Jony te recibe con el móvil en la mano. Parece tranquilo; solo hace falta mencionar el tema adecuado para que la conversación se alargue bastante.",
+  "transition_outro": "Jony desbloquea el móvil al despedirse. «Si mañana os escribo por lo de la estación, técnicamente sigo avisando con tiempo.»"
 }
