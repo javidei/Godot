@@ -1,0 +1,27 @@
+{
+  "id": "carmen",
+  "name": "Carmen",
+  "display_name": "Carmela",
+  "role": "secundario",
+  "summary": "Graciosa · estudiante de Cine · vegetariana",
+  "playable": true,
+  "enabled": true,
+  "room": "room_fran",
+  "image": "res://assets/characters/carmen/carmen.png",
+  "music": "fran_electronica",
+  "music_volume": 1.0,
+  "initial_friendship": 0,
+  "poses": {
+    "neutral": "res://assets/characters/carmen/carmen.png"
+  },
+  "visual": {
+    "height_shift": {
+      "portrait_ratio": 0.075,
+      "landscape_ratio": 0.10,
+      "min": 52.0,
+      "max": 78.0
+    }
+  },
+  "transition_intro": "Carmen aparece entre colores vivos, humor y una energía difícil de ignorar.",
+  "transition_outro": "Carmen se despide todavía riéndose. «Venga, no tardes tanto la próxima vez.»"
+}
