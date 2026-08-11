@@ -126,7 +126,7 @@ jobs:
       - name: Regresión de Extras 0.5.x
         run: |
           set +e
-          timeout 45s godot --headless --path . --script res://scripts/ci_v050_extras_smoke_test.gd > extras-smoke.log 2>&1
+          timeout 45s godot --headless --path . --script res://scripts/ci_v050_extras_codex_test.gd > extras-smoke.log 2>&1
           STATUS=$?
           set -e
           cat extras-smoke.log
