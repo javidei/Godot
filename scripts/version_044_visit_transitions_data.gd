@@ -1,12 +1,18 @@
 extends "res://scripts/version_044_visit_transitions.gd"
 
+const DataAccess = preload("res://scripts/data_access.gd")
 const DataStory = preload("res://scripts/story.gd")
 
 
+func _dm() -> Variant:
+	return DataAccess.dm()
+
+
 func _ensure_story_patches() -> void:
+	var dm: Variant = _dm()
 	for character_id in DataStory.ENCOUNTER_ORDER:
 		var outro_id := _outro_node_id(character_id)
-		var background_id := DataManager.get_character_background_id(character_id)
+		var background_id := str(dm.call("get_character_background_id", character_id)) if dm != null else ""
 		DataStory.NODES[outro_id] = {
 			"speaker": "",
 			"text": "",
@@ -22,7 +28,8 @@ func _ensure_story_patches() -> void:
 
 func _play_intro(character_id: String) -> void:
 	transition_active = true
-	var message := DataManager.get_transition_text(character_id, "intro")
+	var dm: Variant = _dm()
+	var message := str(dm.call("get_transition_text", character_id, "intro")) if dm != null else ""
 	if message.is_empty():
 		message = "Una nueva visita está a punto de comenzar."
 	_prepare_text(character_id, message)
@@ -47,7 +54,8 @@ func _play_intro(character_id: String) -> void:
 func _start_character_music(character_id: String) -> void:
 	if audio_manager == null:
 		return
-	var background_id := DataManager.get_character_background_id(character_id)
+	var dm: Variant = _dm()
+	var background_id := str(dm.call("get_character_background_id", character_id)) if dm != null else ""
 	if background_id.is_empty():
 		return
 	audio_manager.call("play_background_music", background_id)
@@ -66,7 +74,8 @@ func _play_outro(character_id: String) -> void:
 		main.call("_go_to", VISIT_NODE, false)
 		transition_active = false
 		return
-	var message := DataManager.get_transition_text(character_id, "outro")
+	var dm: Variant = _dm()
+	var message := str(dm.call("get_transition_text", character_id, "outro")) if dm != null else ""
 	if message.is_empty():
 		message = "La visita termina por ahora."
 	_prepare_text(character_id, message)
@@ -88,7 +97,8 @@ func _play_outro(character_id: String) -> void:
 
 
 func _prepare_text(character_id: String, message: String) -> void:
-	var data := DataManager.get_character(character_id)
+	var dm: Variant = _dm()
+	var data: Dictionary = dm.call("get_character", character_id) if dm != null else {}
 	var display_name := str(data.get("display_name", data.get("name", character_id.capitalize())))
 	name_label.text = display_name.to_upper()
 	message_label.text = message
