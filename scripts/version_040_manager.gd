@@ -266,6 +266,7 @@ func _open_selector(state: Dictionary) -> void:
 		child.queue_free()
 	for character_id in available:
 		visit_grid.add_child(_make_visit_card(character_id))
+	_set_game_interface_visible(false)
 	visit_overlay.visible = true
 	_apply_layout()
 
@@ -399,6 +400,18 @@ func _leave_to_menu() -> void:
 func _hide_selector() -> void:
 	if visit_overlay != null:
 		visit_overlay.visible = false
+	_set_game_interface_visible(true)
+
+
+func _set_game_interface_visible(is_visible: bool) -> void:
+	if main == null:
+		return
+	var dialogue := main.get("dialogue_panel") as PanelContainer
+	if dialogue != null:
+		dialogue.visible = is_visible
+	var hud := main.find_child("GameHudPanel043", true, false) as PanelContainer
+	if hud != null:
+		hud.visible = is_visible
 
 
 func _player_id(state: Dictionary) -> String:

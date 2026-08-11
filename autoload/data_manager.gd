@@ -212,6 +212,12 @@ func get_room(room_id: String) -> Dictionary:
 	return (raw as Dictionary).duplicate(true)
 
 
+func get_room_for_background(background_id: String) -> Dictionary:
+	ensure_loaded()
+	var room_id := str(_rooms_by_background.get(background_id, ""))
+	return get_room(room_id)
+
+
 func get_background_path(background_id: String) -> String:
 	ensure_loaded()
 	var room_id := str(_rooms_by_background.get(background_id, ""))
@@ -452,6 +458,26 @@ func _validate_data() -> void:
 			_record_error("La habitación '%s' no tiene un fondo válido: %s" % [room_id, background_path])
 		if not music_path.is_empty() and not ResourceLoader.exists(music_path):
 			_record_error("La habitación '%s' no tiene una canción válida: %s" % [room_id, music_path])
+		var raw_screen_video: Variant = room.get("screen_video", {})
+		if typeof(raw_screen_video) == TYPE_DICTIONARY and not (raw_screen_video as Dictionary).is_empty():
+			var screen_video := raw_screen_video as Dictionary
+			var video_path := str(screen_video.get("path", ""))
+			var video_quad: Variant = screen_video.get("quad", [])
+			if video_path.is_empty() or not ResourceLoader.exists(video_path):
+				_record_error("La habitación '%s' no tiene un vídeo de pantalla válido: %s" % [room_id, video_path])
+			if typeof(video_quad) != TYPE_ARRAY or (video_quad as Array).size() != 4:
+				_record_error("La habitación '%s' no define una superficie de pantalla válida" % room_id)
+			else:
+				for raw_point in video_quad as Array:
+					if typeof(raw_point) != TYPE_ARRAY or (raw_point as Array).size() != 2:
+						_record_error("La habitación '%s' contiene un punto de pantalla inválido" % room_id)
+						break
+			var raw_source_size: Variant = screen_video.get("source_size", [16, 9])
+			if typeof(raw_source_size) != TYPE_ARRAY or (raw_source_size as Array).size() != 2 or float(raw_source_size[0]) <= 0.0 or float(raw_source_size[1]) <= 0.0:
+				_record_error("La habitación '%s' no define un tamaño de vídeo válido" % room_id)
+			var fit_mode := str(screen_video.get("fit_mode", "perspective"))
+			if fit_mode != "perspective" and fit_mode != "cover" and fit_mode != "contain":
+				_record_error("La habitación '%s' no define un modo de encaje de vídeo válido" % room_id)
 
 
 func _validate_question_bundle(character_id: String) -> void:

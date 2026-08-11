@@ -69,6 +69,20 @@ Edita `data/rooms/<id>.json`:
   "owners": ["sue"],
   "background_id": "habitacion_sue",
   "background_path": "res://assets/backgrounds/fondo-habitacion-sue.png",
+  "screen_video": {
+    "path": "res://assets/video/video-pantalla.ogv",
+    "quad": [[0.15, 0.38], [0.27, 0.38], [0.27, 0.51], [0.15, 0.51]],
+    "source_size": [320, 180],
+    "fit_mode": "perspective",
+    "brightness": 0.58,
+    "saturation": 0.72,
+    "warmth": 0.16,
+    "vignette": 0.22,
+    "scanlines": 0.025,
+    "glow": 0.07,
+    "loop": true,
+    "muted": true
+  },
   "music_id": "sue_fantasia",
   "music_path": "res://assets/audio/music/sue-fantasia.ogg",
   "music_volume": 1.0
@@ -76,6 +90,8 @@ Edita `data/rooms/<id>.json`:
 ```
 
 `display_name` y `description` alimentan directamente la galería de **Extras > Lugares**. La galería muestra las habitaciones asociadas a personajes activos y con propietarios; `codex_visible: false` permite ocultar una habitación del códice sin desactivarla en el juego.
+
+`screen_video` es opcional. `path` debe apuntar a un vídeo Ogg Theora (`.ogv`) y `quad` define las cuatro esquinas de la pantalla —superior izquierda, superior derecha, inferior derecha e inferior izquierda— normalizadas respecto al fondo. `source_size` conserva la proporción de origen y `fit_mode` permite proyectar el fotograma completo sobre el plano del monitor (`perspective`), rellenarlo con un recorte centrado (`cover`) o mostrarlo completo con bandas (`contain`). `brightness`, `saturation`, `warmth`, `vignette`, `scanlines` y `glow` integran visualmente la emisión del monitor con la habitación. La superficie se adapta al recorte de `STRETCH_KEEP_ASPECT_COVERED`, se activa solo en esa habitación y respeta `loop` y `muted`.
 
 El volumen base también puede especificarse en el personaje con `music_volume`. Durante las pruebas, el regulador de la habitación crea una preferencia del usuario que se guarda en `user://settings.json`; los JSON originales de `res://` nunca se modifican.
 

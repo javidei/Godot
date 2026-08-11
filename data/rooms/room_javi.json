@@ -6,6 +6,25 @@
   "owners": ["javi"],
   "background_id": "habitacion_javi",
   "background_path": "res://assets/backgrounds/fondo-habitacion-javi.png",
+  "screen_video": {
+    "path": "res://assets/video/la-leyenda-del-hombre-gato.ogv",
+    "quad": [
+      [0.1566986, 0.3760684],
+      [0.2727273, 0.3760684],
+      [0.2727273, 0.5096154],
+      [0.1566986, 0.5128205]
+    ],
+    "source_size": [320, 180],
+    "fit_mode": "perspective",
+    "brightness": 0.58,
+    "saturation": 0.72,
+    "warmth": 0.16,
+    "vignette": 0.22,
+    "scanlines": 0.025,
+    "glow": 0.07,
+    "loop": true,
+    "muted": true
+  },
   "music_id": "javi_lofi_rock",
   "music_path": "res://assets/audio/music/javi-lofi-rock.ogg",
   "music_volume": 1.0,
