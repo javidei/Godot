@@ -1,0 +1,51 @@
+{
+  "character": "argentino",
+  "intro": [
+    {"expression": "neutral", "text": "No soy de soltar discursos largos sobre mí. Prefiero aparecer, escuchar un rato y hablar cuando tengo algo que merece la pena decir."},
+    {"expression": "neutral", "text": "Dentro del grupo suelo ir a mi ritmo. Puede que llegue con cara de saber exactamente qué ocurre, aunque muchas veces solo esté esperando a que alguien se decida."}
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "¿Qué suelo fumar cuando estoy con el grupo?",
+      "answers": [
+        {"text": "Tabaco de liar", "side": "left", "score": 1, "feedback": "correct"},
+        {"text": "Puros", "side": "right", "score": 0, "feedback": "wrong"},
+        {"text": "Cigarrillos mentolados", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "No fumo", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Tabaco de liar, correcto. Esa sí era una pista fácil de ver.", "expression": "happy"},
+        "wrong": {"text": "Suelo fumar tabaco de liar. La próxima vez fíjate en el cigarro.", "expression": "thoughtful"}
+      }
+    },
+    {
+      "id": "q2",
+      "text": "¿Qué detalles forman mi aspecto más reconocible?",
+      "answers": [
+        {"text": "Gabardina negra, gafas oscuras y tatuajes", "side": "left", "score": 1, "feedback": "correct"},
+        {"text": "Ropa colorida, aros y gafas", "side": "right", "score": 0, "feedback": "wrong"},
+        {"text": "Estilo gótico urbano y pinturas", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "Camisa rosa y un vaper", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Correcto. Una silueta bastante difícil de confundir.", "expression": "happy"},
+        "wrong": {"text": "Gabardina negra, gafas oscuras y tatuajes. Esa es la imagen.", "expression": "thoughtful"}
+      }
+    },
+    {
+      "id": "q3",
+      "text": "Cuando aparecí por primera vez, ¿qué pregunté?",
+      "answers": [
+        {"text": "¿Ya habéis pedido de comer?", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "¿Llegué tarde o todavía estáis decidiendo?", "side": "right", "score": 1, "feedback": "correct"},
+        {"text": "¿Quién quiere jugar a Magic?", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "¿Dónde está mi vaso?", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Exacto. Y, por supuesto, todavía seguían decidiendo.", "expression": "happy"},
+        "wrong": {"text": "Pregunté si había llegado tarde o si todavía estaban decidiendo. Seguían decidiendo.", "expression": "thoughtful"}
+      }
+    }
+  ]
+}
