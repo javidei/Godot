@@ -10,8 +10,8 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var project_version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if not project_version.begins_with("0.4."):
-		_fail("La versión del proyecto no pertenece a la rama 0.4.x")
+	if not (project_version.begins_with("0.4.") or project_version.begins_with("0.5.")):
+		_fail("La versión del proyecto no pertenece a una rama compatible")
 		return
 
 	var packed := load("res://scenes/main.tscn") as PackedScene
@@ -28,7 +28,7 @@ func _run() -> void:
 	var hud_patch := main.get_node_or_null("Version043HudPatch")
 	var selection_manager := main.get_node_or_null("CharacterSelectManager")
 	if manager == null or layout_patch == null or hud_patch == null or selection_manager == null:
-		_fail("No están disponibles los gestores principales de la rama 0.4.x")
+		_fail("No están disponibles los gestores principales heredados de la rama 0.4.x")
 		return
 	if main.get_node_or_null("Version046RoomAudioPatch") != null:
 		_fail("Sigue activo el parche incorrecto de tres botones de audio en habitaciones")
@@ -60,7 +60,6 @@ func _run() -> void:
 		_fail("El selector de visitas no está centrado")
 		return
 
-	# Valida el caso 4 + 3 y el centrado de la última fila.
 	var original_player: Dictionary = player.duplicate(true)
 	state["player"] = {"id": "custom_test", "name": "Custom Test"}
 	state["completed_characters"] = []
@@ -98,7 +97,6 @@ func _run() -> void:
 		_fail("Carmen no está desplazada hacia abajo para reflejar su menor altura")
 		return
 
-	# Entra directamente en una habitación para validar el HUD real.
 	manager.call("_select_visit", "ana")
 	for _i in range(6):
 		await process_frame
@@ -143,7 +141,7 @@ func _run() -> void:
 		_fail("Ana no se marca como visita completada")
 		return
 
-	print("V040 OK: visitas 4+3 centradas, Carmen más baja y volumen de música inferior restaurado.")
+	print("V040 OK: mecánicas heredadas, visitas 4+3, Carmen y volumen de habitación validados.")
 	quit(0)
 
 
