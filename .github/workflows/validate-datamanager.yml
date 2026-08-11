@@ -56,6 +56,85 @@ jobs:
           fi
           grep -q "DATAMANAGER OK:" datamanager.log
 
+      - name: Regresión histórica de personajes y escenas
+        run: |
+          PROJECT_VERSION=$(sed -n 's/^config\/version="\([^"]*\)"/\1/p' project.godot | head -n 1)
+          test -n "$PROJECT_VERSION"
+          sed -i -E "s/0\.[0-9]+\.[0-9]+/${PROJECT_VERSION}/g" scripts/ci_character_smoke_test.gd
+          sed -i 's/menu_content.anchor_right - menu_content.anchor_left < 0.48/menu_content.anchor_right - menu_content.anchor_left > 0.50/' scripts/ci_character_smoke_test.gd
+          cp scenes/main.tscn /tmp/main-datamanager.tscn
+          sed -i '/\[node name="Version040Manager"/,+1d' scenes/main.tscn
+          set +e
+          timeout 45s godot --headless --path . --script res://scripts/ci_character_smoke_test.gd > character-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat character-smoke.log
+          cp /tmp/main-datamanager.tscn scenes/main.tscn
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SMOKE FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" character-smoke.log; then
+            exit 1
+          fi
+          grep -q "SMOKE OK:" character-smoke.log
+
+      - name: Regresión de visitas 0.4.x
+        run: |
+          set +e
+          timeout 45s godot --headless --path . --script res://scripts/ci_v040_smoke_test.gd > v040-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat v040-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V040 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v040-smoke.log; then
+            exit 1
+          fi
+          grep -q "V040 OK:" v040-smoke.log
+
+      - name: Regresión de transiciones
+        run: |
+          set +e
+          timeout 60s godot --headless --path . --script res://scripts/ci_v044_transition_smoke_test.gd > v044-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat v044-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V044 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v044-smoke.log; then
+            exit 1
+          fi
+          grep -q "V044 OK:" v044-smoke.log
+
+      - name: Regresión de HUD
+        run: |
+          set +e
+          timeout 45s godot --headless --path . --script res://scripts/ci_hud_smoke_test.gd > hud-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat hud-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "HUD FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" hud-smoke.log; then
+            exit 1
+          fi
+          grep -q "HUD OK:" hud-smoke.log
+
+      - name: Regresión de menú e interacción
+        run: |
+          set +e
+          timeout 45s godot --headless --path . --script res://scripts/ci_v045_menu_input_smoke_test.gd > menu-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat menu-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "MENU FAIL:|V045 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" menu-smoke.log; then
+            exit 1
+          fi
+          grep -Eq "MENU OK:|V045 OK:" menu-smoke.log
+
+      - name: Regresión de Extras 0.5.x
+        run: |
+          set +e
+          timeout 45s godot --headless --path . --script res://scripts/ci_v050_extras_smoke_test.gd > extras-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat extras-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V050 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" extras-smoke.log; then
+            exit 1
+          fi
+          grep -q "V050 OK:" extras-smoke.log
+
       - name: Exportar Web sin publicar
         run: |
           rm -rf /tmp/datamanager-web
