@@ -1,5 +1,6 @@
 extends RefCounted
 
+const DataAccess = preload("res://scripts/data_access.gd")
 const MAX_CACHED_TEXTURES := 24
 
 var _cache: Dictionary = {}
@@ -7,18 +8,21 @@ var _cache_order: Array[String] = []
 
 
 func get_menu_characters() -> Texture2D:
-	return _load_texture(DataManager.get_menu_characters_path())
+	var dm: Variant = DataAccess.dm()
+	return _load_texture(str(dm.call("get_menu_characters_path"))) if dm != null else null
 
 
 func get_background(background_id: String) -> Texture2D:
-	var path := DataManager.get_background_path(background_id)
+	var dm: Variant = DataAccess.dm()
+	var path := str(dm.call("get_background_path", background_id)) if dm != null else ""
 	if path.is_empty():
 		push_warning("Fondo sin ruta registrada en DataManager: " + background_id)
 	return _load_texture(path)
 
 
 func get_character(character: String, pose: String) -> Texture2D:
-	var path := DataManager.get_character_image_path(character, pose)
+	var dm: Variant = DataAccess.dm()
+	var path := str(dm.call("get_character_image_path", character, pose)) if dm != null else ""
 	if path.is_empty():
 		push_warning("Personaje/pose sin recurso registrado: %s / %s" % [character, pose])
 	return _load_texture(path)
