@@ -1,7 +1,12 @@
 extends "res://scripts/version_040_manager.gd"
 
+const DataAccess = preload("res://scripts/data_access.gd")
 const DataStory = preload("res://scripts/story.gd")
 const RuntimeGameData = preload("res://scripts/game_data.gd")
+
+
+func _dm() -> Variant:
+	return DataAccess.dm()
 
 
 func _patch_story() -> void:
@@ -34,7 +39,8 @@ func _mark_completed(previous_node: String, state: Dictionary) -> void:
 
 
 func _background_for_character(character_id: String) -> String:
-	var background_id := DataManager.get_character_background_id(character_id)
+	var dm: Variant = _dm()
+	var background_id := str(dm.call("get_character_background_id", character_id)) if dm != null else ""
 	return "casa_asturias" if background_id.is_empty() else background_id
 
 
@@ -89,7 +95,8 @@ func _build_room_audio() -> void:
 	room_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	row.add_child(room_label)
 
-	var audio_defaults := DataManager.get_audio_defaults()
+	var dm: Variant = _dm()
+	var audio_defaults: Dictionary = dm.call("get_audio_defaults") if dm != null else {}
 	var step := clampf(float(audio_defaults.get("track_step", 0.05)), 0.01, 1.0)
 	for data in [["-", -step], ["+", step]]:
 		var button := main.call("_make_small_button", data[0]) as Button
@@ -106,11 +113,15 @@ func _build_room_audio() -> void:
 func _adjust_track(delta: float) -> void:
 	if current_track.is_empty():
 		return
+	var dm: Variant = _dm()
+	if dm == null:
+		return
 	var state: Dictionary = main.get("state")
 	var character_id := DataStory.character_for_node(str(state.get("node_id", "")))
-	var default_volume := DataManager.get_music_default_volume(current_track, character_id)
+	var default_volume := float(dm.call("get_music_default_volume", current_track, character_id))
 	var value := float(track_volumes.get(current_track, default_volume))
-	var step := clampf(float(DataManager.get_audio_defaults().get("track_step", 0.05)), 0.01, 1.0)
+	var audio_defaults: Dictionary = dm.call("get_audio_defaults")
+	var step := clampf(float(audio_defaults.get("track_step", 0.05)), 0.01, 1.0)
 	track_volumes[current_track] = clampf(snappedf(value + delta, step), 0.0, 1.0)
 	_save_track_settings()
 	last_audio_signature = ""
@@ -129,7 +140,8 @@ func _apply_room_audio() -> void:
 		room_panel.visible = game != null and game.visible and in_room and not current_track.is_empty()
 	if current_track.is_empty():
 		return
-	var default_volume := DataManager.get_music_default_volume(current_track, character_id)
+	var dm: Variant = _dm()
+	var default_volume := float(dm.call("get_music_default_volume", current_track, character_id)) if dm != null else 1.0
 	var track_volume := float(track_volumes.get(current_track, default_volume))
 	var track_muted := bool(track_mutes.get(current_track, false))
 	var global_volume := float(audio_manager.call("get_music_output_linear"))
@@ -151,7 +163,8 @@ func _apply_room_audio() -> void:
 func _load_track_settings() -> void:
 	track_volumes.clear()
 	track_mutes.clear()
-	var tracks := DataManager.get_track_settings()
+	var dm: Variant = _dm()
+	var tracks: Dictionary = dm.call("get_track_settings") if dm != null else {}
 	for raw_id in tracks.keys():
 		var music_id := str(raw_id)
 		var raw_entry: Variant = tracks[raw_id]
@@ -165,4 +178,6 @@ func _load_track_settings() -> void:
 
 
 func _save_track_settings() -> void:
-	DataManager.set_track_settings(track_volumes, track_mutes)
+	var dm: Variant = _dm()
+	if dm != null:
+		dm.call("set_track_settings", track_volumes, track_mutes)
