@@ -137,6 +137,23 @@ func _chapter_for_node(node_id: String, node: Dictionary) -> String:
 	return chapter
 
 
+func _render_choices(choices: Array) -> void:
+	_clear_choices()
+	var minimum_height := 112.0 if portrait_layout else 94.0
+	for choice in choices:
+		var button := _make_button(str(choice.get("label", "Elegir")), false)
+		button.custom_minimum_size = Vector2(0, minimum_height)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		button.clip_text = true
+		button.add_theme_font_size_override("font_size", 16)
+		button.add_theme_constant_override("line_spacing", 2)
+		button.pressed.connect(_choose.bind(choice))
+		choices_box.add_child(button)
+	choices_box.visible = true
+
+
 func _choose(choice: Dictionary) -> void:
 	var dm: Variant = _dm()
 	var affinity: Dictionary = choice.get("affinity", {})
