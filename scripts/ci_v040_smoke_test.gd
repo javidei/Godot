@@ -10,7 +10,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var project_version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if not (project_version.begins_with("0.4.") or project_version.begins_with("0.5.")):
+	if not (project_version.begins_with("0.4.") or project_version.begins_with("0.5.") or project_version.begins_with("0.6.")):
 		_fail("La versión del proyecto no pertenece a una rama compatible")
 		return
 
@@ -26,8 +26,9 @@ func _run() -> void:
 	var manager := main.get_node_or_null("Version040Manager")
 	var layout_patch := main.get_node_or_null("Version042LayoutPatch")
 	var hud_patch := main.get_node_or_null("Version043HudPatch")
+	var world_map := main.get_node_or_null("WorldMapManager")
 	var selection_manager := main.get_node_or_null("CharacterSelectManager")
-	if manager == null or layout_patch == null or hud_patch == null or selection_manager == null:
+	if manager == null or layout_patch == null or hud_patch == null or world_map == null or selection_manager == null:
 		_fail("No están disponibles los gestores principales heredados de la rama 0.4.x")
 		return
 	if main.get_node_or_null("Version046RoomAudioPatch") != null:
@@ -49,15 +50,13 @@ func _run() -> void:
 		_fail("Tras elegir protagonista no se abre el selector libre de visitas")
 		return
 
-	var visit_center := manager.get("visit_center") as CenterContainer
-	var visit_panel := manager.get("visit_panel") as PanelContainer
-	var visit_grid := manager.get("visit_grid") as GridContainer
-	var visit_rows := layout_patch.get("visit_rows") as VBoxContainer
-	if visit_center == null or visit_panel == null or visit_rows == null or visit_grid == null:
-		_fail("El selector visual de visitas no está disponible")
+	if not bool(world_map.call("is_open")):
+		_fail("El mapa del mundo no sustituye al selector histórico de visitas")
 		return
-	if visit_panel.get_parent() != visit_center:
-		_fail("El selector de visitas no está centrado")
+	var map_screen := main.find_child("WorldMapScreen", true, false) as Control
+	var map_texture := main.find_child("WorldMapTexture", true, false) as TextureRect
+	if map_screen == null or map_texture == null or map_texture.texture == null:
+		_fail("El mapa de Naranjal del Río no está visible tras elegir protagonista")
 		return
 	var dialogue_panel := main.get("dialogue_panel") as PanelContainer
 	var hud_panel := hud_patch.get("hud_panel") as PanelContainer
@@ -75,16 +74,25 @@ func _run() -> void:
 	manager.call("_open_selector", state)
 	for _i in range(4):
 		await process_frame
-	if visit_rows.get_child_count() != 2:
-		_fail("Siete visitas no se reparten en dos filas")
+	for character_id in ["javi", "sue", "smokey", "argentino"]:
+		if main.find_child("MapCharacter_" + character_id, true, false) == null:
+			_fail("Naranjal no contiene el marcador de " + character_id)
+			return
+	if main.find_child("MapShopMarker", true, false) == null:
+		_fail("Naranjal no contiene el acceso a la tienda")
 		return
-	var first_row := visit_rows.get_child(0) as HBoxContainer
-	var second_row := visit_rows.get_child(1) as HBoxContainer
-	if first_row == null or second_row == null or first_row.get_child_count() != 4 or second_row.get_child_count() != 3:
-		_fail("El selector no distribuye las visitas como 4 + 3")
-		return
-	if first_row.alignment != BoxContainer.ALIGNMENT_CENTER or second_row.alignment != BoxContainer.ALIGNMENT_CENTER:
-		_fail("Las filas de visitas no quedan centradas")
+	world_map.call("show_zone", "triana", false)
+	for _i in range(3):
+		await process_frame
+	for character_id in ["ana", "jony"]:
+		if main.find_child("MapCharacter_" + character_id, true, false) == null:
+			_fail("Triana no contiene el marcador de " + character_id)
+			return
+	world_map.call("show_zone", "monte_del_toro", false)
+	for _i in range(3):
+		await process_frame
+	if main.find_child("MapCharacter_carmen", true, false) == null:
+		_fail("Monte del Toro no contiene el marcador de Carmen")
 		return
 
 	state = main.get("state")
@@ -152,7 +160,7 @@ func _run() -> void:
 		_fail("Ana no se marca como visita completada")
 		return
 
-	print("V040 OK: mecánicas heredadas, visitas 4+3, Carmen y volumen de habitación validados.")
+	print("V040 OK: mecánicas heredadas, visitas por mapa, Carmen y volumen de habitación validados.")
 	quit(0)
 
 

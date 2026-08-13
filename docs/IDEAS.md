@@ -61,7 +61,7 @@ La base de esta arquitectura ya fue materializada en la migración a DataManager
 
 ## Economía, monedas y compras
 
-Se quiere incorporar una **moneda interna obtenible únicamente jugando**, sin conexión ni compras con dinero real, para poder adquirir objetos y extras dentro de la partida.
+La base 0.6 ya incorpora una **moneda interna obtenible únicamente jugando**, sin conexión ni compras con dinero real, para adquirir objetos y extras dentro de la partida. Las ideas siguientes amplían esa base.
 
 La economía debería premiar sobre todo **explorar, conocer a los personajes y descubrir contenido**, evitando convertir el juego en un sistema de grindeo.
 
@@ -110,14 +110,14 @@ Primeras propuestas de catálogo:
 
 El comportamiento exacto para elegir entre varias skins desbloqueadas podrá concretarse cuando se implemente el sistema; como mínimo deberán poder consultarse en la ficha del personaje y aplicarse visualmente en sus escenas.
 
-### Propuesta técnica inicial
+### Base técnica implementada
 
-- [ ] Guardar el saldo dentro de la partida local (`state`) para que cada save pueda tener su propia economía.
-- [ ] Mantener los objetos, coleccionables y cosméticos comprados como desbloqueos globales persistentes separados del saldo de cada partida.
-- [ ] Definir catálogo, precios y recompensas mediante JSON para poder balancearlos sin tocar código.
-- [ ] Registrar recompensas únicas ya cobradas mediante identificadores para evitar duplicados.
-- [ ] Crear más adelante una pantalla de tienda/inventario integrada con el mapa o con alguna localización/personaje.
-- [ ] Mostrar el saldo de forma discreta en la interfaz cuando exista una mecánica que permita gastarlo.
+- [x] Guardar el saldo dentro de la partida local (`state`) para que cada save pueda tener su propia economía.
+- [x] Mantener los objetos, coleccionables y cosméticos comprados como desbloqueos globales persistentes separados del saldo de cada partida.
+- [x] Definir catálogo, precios y recompensas mediante JSON para poder balancearlos sin tocar código.
+- [x] Registrar recompensas únicas ya cobradas mediante identificadores para evitar duplicados.
+- [x] Crear una pantalla de tienda/inventario integrada con una localización del mapa.
+- [x] Mostrar el saldo de forma discreta en la interfaz de la tienda.
 
 **Dirección recomendada:** empezar con una sola moneda y una economía sencilla. Primero recompensas por contenido narrativo + una tienda pequeña de extras; después añadir minijuegos, favores e inventario si realmente aportan al flujo del juego.
 
@@ -126,82 +126,21 @@ El comportamiento exacto para elegir entre varias skins desbloqueadas podrá con
 - [x] Mantener regulador individual del volumen de música de cada habitación.
 - [x] Poder configurar fondo, canción y volumen de cada habitación mediante datos.
 
-### ⭐ MAPA INTERACTIVO — evolución principal de navegación
+### ⭐ MAPA INTERACTIVO — implementado en 0.6.0
 
-Esta es una de las mejoras de navegación más importantes previstas a largo plazo.
+La evolución principal de navegación ya está implementada sobre el mapa de Naranjal del Río:
 
-Actualmente el flujo se basa principalmente en elegir a quién visitar y entrar en la habitación correspondiente. La intención es evolucionarlo hacia una **pantalla de mapa visual e interactiva** desde la que el jugador pueda decidir dónde ir.
-
-Ejemplo puramente conceptual:
-
-```text
-                         MAPA
-
-        [ Casa de Sue ]        [ Casa Smokey ]
-
-              [ Casa Jony ]      [ Tu casa ]
-
-        [ Casa Carmen ]        [ Casa Ana ]
-
-              [ Casa Argentino ]
-
-                         [ SALIR ]
-```
-
-La distribución final no tiene por qué parecerse a este esquema. El mapa deberá integrarse visualmente con el estilo gráfico de **Entre líneas**.
-
-Características a estudiar:
-
-- [ ] Localizaciones clicables.
-- [ ] Mostrar qué personaje vive en cada ubicación.
-- [ ] Entrar en la casa/habitación seleccionando su localización.
-- [ ] Indicar visualmente personajes ya visitados.
-- [ ] Indicar personajes pendientes.
-- [ ] Poder volver al mapa después de terminar las preguntas de un personaje.
-- [ ] Elegir libremente a quién visitar después.
-- [ ] Posibilidad de abandonar las visitas y volver al menú.
-- [ ] Poder bloquear/desbloquear localizaciones según progreso en el futuro.
-- [ ] Posibles localizaciones que no pertenezcan a un personaje.
-- [ ] Eventos especiales que puedan aparecer en determinadas zonas del mapa.
-- [ ] Cambios visuales del mapa según avance la partida.
-- [ ] Valorar animaciones sencillas al desplazarse o seleccionar una ubicación.
-- [ ] Mantener el sistema compatible con ratón y pantallas táctiles.
-
-Evolución conceptual del flujo:
-
-```text
-ACTUAL / BASE
-
-Seleccionar personaje jugador
-        ↓
-Seleccionar visita
-        ↓
-Habitación
-        ↓
-Conversación + preguntas
-        ↓
-Seleccionar siguiente visita
-```
-
-```text
-OBJETIVO FUTURO
-
-Seleccionar personaje jugador
-        ↓
-MAPA
-        ↓
-Elegir destino
-        ↓
-Casa / habitación del personaje
-        ↓
-Conversación + preguntas
-        ↓
-MAPA
-        ↓
-Elegir siguiente destino
-```
-
-**No implementar todavía el mapa únicamente por estar documentado aquí.** Debe pasar primero al roadmap cuando se decida comenzar su desarrollo y la migración deberá conservar el flujo actual mientras se construye.
+- [x] Localizaciones clicables con ratón y touch.
+- [x] Casas/personajes y tienda descritos por datos y coordenadas normalizadas.
+- [x] Estado visual visitado/pendiente y exclusión del protagonista.
+- [x] Retorno al mapa después de cada conversación y elección libre de la siguiente visita.
+- [x] Salida al menú sin dejar al jugador atrapado.
+- [x] Conexiones a Triana y Monte del Toro mediante pantallas temporales reutilizables.
+- [x] Compatibilidad responsive con ratón y controles táctiles.
+- [x] Localización no residencial: tienda de coleccionables y cosméticos.
+- [ ] Valorar localizaciones bloqueables/desbloqueables para historias futuras.
+- [ ] Valorar eventos especiales visibles sobre el mapa.
+- [ ] Valorar cambios ambientales o animaciones según avance la partida.
 
 ## Interfaz
 

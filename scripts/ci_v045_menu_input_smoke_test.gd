@@ -7,7 +7,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var project_version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if not (project_version.begins_with("0.4.") or project_version.begins_with("0.5.")):
+	if not (project_version.begins_with("0.4.") or project_version.begins_with("0.5.") or project_version.begins_with("0.6.")):
 		_fail("La prueba requiere una versión compatible de Entre líneas")
 		return
 
@@ -50,14 +50,14 @@ func _run() -> void:
 		return
 
 	if extras_patch != null:
-		if secondary.get_child_count() != 2:
+		if secondary.get_child_count() != 3:
 			_fail("Pantalla completa y Extras no están organizados en pareja")
 			return
 		var secondary_texts: Array[String] = []
 		for child in secondary.get_children():
 			if child is Button:
 				secondary_texts.append((child as Button).text)
-		if not secondary_texts.has("Pantalla completa") or not secondary_texts.has("Extras"):
+		if not secondary_texts.has("Pantalla completa") or not secondary_texts.has("Extras") or not secondary_texts.has("Ajustes"):
 			_fail("La segunda pareja no contiene Pantalla completa y Extras")
 			return
 

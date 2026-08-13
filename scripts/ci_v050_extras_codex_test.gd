@@ -7,7 +7,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var project_version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if not project_version.begins_with("0.5."):
+	if not (project_version.begins_with("0.5.") or project_version.begins_with("0.6.")):
 		_fail("La prueba de Extras requiere la rama 0.5.x")
 		return
 
@@ -61,9 +61,13 @@ func _run() -> void:
 		_fail("Volver debe usar texto limpio e icono SVG real")
 		return
 	var options_grid := extras_screen.find_child("ExtrasOptionsGrid050", true, false) as GridContainer
-	if options_grid == null or options_grid.get_child_count() != 4:
+	if options_grid == null or options_grid.get_child_count() != 7:
 		_fail("La portada de Extras no muestra Personajes, Información, Lugares y Créditos")
 		return
+	for option_name in ["CharactersOption050", "GameInfoOption050", "PlacesOption050", "AchievementsOption060", "StatisticsOption060", "CollectionOption060", "CreditsOption050"]:
+		if options_grid.get_node_or_null(option_name) == null:
+			_fail("Falta una categoria obligatoria en Extras: " + option_name)
+			return
 
 	extras.call("_show_characters")
 	for _i in range(3):

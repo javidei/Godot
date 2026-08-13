@@ -58,18 +58,11 @@ jobs:
 
       - name: Regresión histórica de personajes y escenas
         run: |
-          PROJECT_VERSION=$(sed -n 's/^config\/version="\([^"]*\)"/\1/p' project.godot | head -n 1)
-          test -n "$PROJECT_VERSION"
-          sed -i -E "s/0\.[0-9]+\.[0-9]+/${PROJECT_VERSION}/g" scripts/ci_character_smoke_test.gd
-          sed -i 's/menu_content.anchor_right - menu_content.anchor_left < 0.48/menu_content.anchor_right - menu_content.anchor_left > 0.50/' scripts/ci_character_smoke_test.gd
-          cp scenes/main.tscn /tmp/main-datamanager.tscn
-          sed -i '/\[node name="Version040Manager"/,+1d' scenes/main.tscn
           set +e
           timeout 45s godot --headless --path . --script res://scripts/ci_character_smoke_test.gd > character-smoke.log 2>&1
           STATUS=$?
           set -e
           cat character-smoke.log
-          cp /tmp/main-datamanager.tscn scenes/main.tscn
           if [ "$STATUS" -ne 0 ] || grep -Eqi "SMOKE FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" character-smoke.log; then
             exit 1
           fi
@@ -123,7 +116,7 @@ jobs:
           fi
           grep -Eq "MENU OK:|V045 OK:" menu-smoke.log
 
-      - name: Regresión de Extras 0.5.x
+      - name: Regresión de Extras 0.5/0.6
         run: |
           set +e
           timeout 45s godot --headless --path . --script res://scripts/ci_v050_extras_codex_test.gd > extras-smoke.log 2>&1
@@ -134,6 +127,18 @@ jobs:
             exit 1
           fi
           grep -q "V050 OK:" extras-smoke.log
+
+      - name: Mapa y progreso 0.6
+        run: |
+          set +e
+          timeout 70s godot --headless --path . --script res://scripts/ci_v060_progression_smoke_test.gd > v060-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat v060-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V060 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v060-smoke.log; then
+            exit 1
+          fi
+          grep -q "V060 OK:" v060-smoke.log
 
       - name: Exportar Web sin publicar
         run: |

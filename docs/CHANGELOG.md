@@ -12,6 +12,33 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.6.0] - 2026-08-13
+
+### Added
+
+- Mapa interactivo de Naranjal del Río basado en el PNG original incluido en `assets/maps/`, con marcadores normalizados, estado visitado y exclusión del protagonista.
+- Navegación data-driven a Triana y Monte del Toro mediante pantallas temporales reutilizables, transiciones negras y diez excusas aleatorias sin repetición inmediata.
+- Introducción breve de 2026 antes de seleccionar protagonista en una nueva partida.
+- Sistema de MONEDAS y recompensas únicas por partida, con reglas configurables e infraestructura para escenas, eventos, descubrimientos y actividades repetibles.
+- Tienda como localización del mapa, catálogo JSON de coleccionables/cosméticos y desbloqueos globales sin bloqueos narrativos.
+- Perfil global local con estadísticas, tiempo activo, plataforma/touch, desbloqueos y logros data-driven.
+- Páginas de Logros, Estadísticas y Colección dentro de Extras, además de notificaciones no bloqueantes.
+- Cinco sonidos de clic procedurales y opción desactivada, seleccionables y persistentes desde Ajustes.
+- Smoke test 0.6 para mapas, migraciones, economía, perfil, tienda, logros, estadísticas y sonidos.
+
+### Changed
+
+- El selector de visitas pasa a ser el mapa principal dentro del mismo flujo protagonista → destino → conversación → mapa.
+- Los datos de personajes distinguen residencia actual en Naranjal del Río, Triana o Monte del Toro de su procedencia biográfica.
+- El guardado y las preferencias incorporan schemas retrocompatibles; el progreso global se separa en `user://profile.json`.
+- Las antiguas escrituras de versión de los parches 0.4.x respetan ahora la versión actual del proyecto.
+
+### Fixed
+
+- Las recompensas únicas ya no pueden repetirse entrando y saliendo de una visita.
+- La alineación de marcadores se calcula sobre el rectángulo real del PNG sin deformarlo.
+- La reproducción de clic está centralizada para evitar listeners y sonidos duplicados.
+
 ## [0.5.12]
 
 ### Added

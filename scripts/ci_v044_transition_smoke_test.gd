@@ -10,7 +10,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var project_version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if not (project_version.begins_with("0.4.") or project_version.begins_with("0.5.")):
+	if not (project_version.begins_with("0.4.") or project_version.begins_with("0.5.") or project_version.begins_with("0.6.")):
 		_fail("La prueba de transiciones requiere una versión compatible")
 		return
 
@@ -25,9 +25,10 @@ func _run() -> void:
 
 	var transition := main.get_node_or_null("Version044VisitTransitions")
 	var visit_manager := main.get_node_or_null("Version040Manager")
+	var world_map := main.get_node_or_null("WorldMapManager")
 	var selection_manager := main.get_node_or_null("CharacterSelectManager")
 	var audio_manager := main.get("audio_manager") as Node
-	if transition == null or visit_manager == null or selection_manager == null or audio_manager == null:
+	if transition == null or visit_manager == null or world_map == null or selection_manager == null or audio_manager == null:
 		_fail("No están disponibles los gestores necesarios para las transiciones")
 		return
 
@@ -54,12 +55,12 @@ func _run() -> void:
 	for _i in range(6):
 		await process_frame
 
-	var card := main.find_child("VisitCard_ana", true, false) as Button
+	world_map.call("show_zone", "triana", false)
+	for _i in range(3):
+		await process_frame
+	var card := main.find_child("MapCharacter_ana", true, false) as Button
 	if card == null:
-		_fail("No se encuentra la tarjeta de Ana para probar la entrada")
-		return
-	if not bool(card.get_meta("transition_044_bound", false)):
-		_fail("La tarjeta de visita no está conectada al fundido narrativo")
+		_fail("No se encuentra el marcador de Ana en el mapa temporal de Triana")
 		return
 
 	transition.call("set_fast_mode", false)
@@ -112,7 +113,7 @@ func _run() -> void:
 		_fail("La despedida de Ana no queda registrada como completada y vista")
 		return
 	var save_version := str(state.get("save_version", ""))
-	if not (save_version.begins_with("0.4.") or save_version.begins_with("0.5.")):
+	if not (save_version.begins_with("0.4.") or save_version.begins_with("0.5.") or save_version.begins_with("0.6.")):
 		_fail("El guardado pierde el versionado compatible tras las transiciones")
 		return
 

@@ -48,6 +48,23 @@ o con una licencia que te permita incluirla y publicarla en el repositorio.
 
 ## Efectos
 
-Mientras no haya SFX definitivos, `strum`, `clonk` y la confirmación de interfaz se
+Mientras no haya SFX definitivos, `strum`, `clonk` y los clics de interfaz se
 generan de forma procedural. El diálogo puede reproducir un fichero registrado en
 `SFX_FILES` usando `"sfx": "nombre"`.
+
+## Clics de interfaz
+
+`AudioManager` conserva un único `AudioStreamPlayer` en el bus UI y enlaza botones
+de forma idempotente. El bus UI reutiliza exactamente el volumen y silencio de
+Efectos; no existe un regulador adicional. Los perfiles disponibles son:
+
+- Suave (`soft`)
+- Seco (`dry`)
+- Digital (`digital`)
+- Madera (`wood`)
+- Pop (`pop`)
+- Desactivado (`off`)
+
+La opción se cambia y previsualiza desde **Ajustes > Sonido de clic**. Se guarda
+como `audio.click_sound` en `user://settings.json` y se migra también el antiguo
+alias `click_sound_id` si estuviera presente.

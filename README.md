@@ -1,26 +1,29 @@
 # Entre líneas
 
-Novela visual en **Godot 4.7.1**, actualmente en **Early Access**, con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
+Novela visual en **Godot 4.7.1**, actualmente en **Early Access** y versión **0.6.0**, con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
 
 El subtítulo se calcula automáticamente con el número de personajes más una silla: los siete personajes actuales producen **«La octava silla»** y trece producirían **«La decimocuarta silla»**.
 
 ## Base actual
 
 - Recursos gráficos locales: no depende de `raw.githubusercontent.com` para fondos o personajes.
-- 8 fondos, varias poses/expresiones de protagonistas y recursos por personaje configurables mediante datos.
+- Fondos narrativos locales, varias poses/expresiones y recursos por personaje configurables mediante datos.
 - Poses seleccionables desde los datos del diálogo y posiciones `left`, `center` y `right`.
 - Carga bajo demanda con caché acotada y precarga ligera de la siguiente escena.
 - Composición de novela visual sin `ColorRect` ni placeholders detrás de los personajes.
 - Foco sutil del personaje que habla, zoom, sacudida y onomatopeyas animadas.
 - Interfaz para ratón/táctil y composición alternativa en orientación vertical.
-- Guardado offline en `user://savegame.json` y preferencias en `user://settings.json`, con migración compatible desde archivos locales anteriores.
-- `DataManager` como Autoload para centralizar personajes, preguntas, habitaciones, música, configuración y acceso al progreso.
+- Guardado offline por partida en `user://savegame.json`, preferencias en `user://settings.json` y perfil acumulado en `user://profile.json`, con migración compatible desde archivos locales anteriores.
+- `DataManager` como Autoload para centralizar personajes, preguntas, habitaciones, mapas, economía, tienda, logros, configuración y persistencia.
 - AudioManager con canales separados para música y efectos/UI, volúmenes y silencios independientes y música en bucle asociada a fondos/habitaciones mediante datos.
-- La nueva partida empieza eligiendo protagonista.
-- Recorrido libre por el resto del grupo: el personaje elegido representa al jugador y no aparece como encuentro.
+- La nueva partida presenta brevemente el año 2026 antes de elegir protagonista.
+- Mapa interactivo de Naranjal del Río como centro del recorrido, con accesos temporales a Triana y Monte del Toro, tienda y retorno después de cada conversación.
+- Recorrido libre por el resto del grupo: el personaje elegido representa al jugador, no aparece como encuentro y los marcadores conservan el estado visitado.
+- MONEDAS y recompensas únicas por partida; coleccionables, cosméticos, estadísticas y logros en un perfil global local.
+- Ajuste global con cinco perfiles procedurales de clic más la opción desactivada, todos en el bus de Efectos/UI.
 - Cuatro respuestas por pregunta en una cuadrícula táctil de dos columnas.
 - Afinidad independiente por personaje y puntuaciones configurables desde los datos de preguntas.
-- Menú **Extras** con fichas de personajes, información del juego, habitaciones y créditos.
+- Menú **Extras** con fichas, lugares, logros, estadísticas acumuladas, colección y créditos.
 
 ## Recursos
 
@@ -36,7 +39,11 @@ assets/
 │   ├── ana/
 │   └── argentino/
 ├── audio/
-└── ui/fonts/
+├── maps/
+│   └── naranjal_del_rio.png
+└── ui/
+    ├── fonts/
+    └── icons/
 ```
 
 Los datos operativos están separados del código en `data/` y se consumen a través de `DataManager`. `scripts/asset_manager.gd` continúa siendo la capa encargada de cargar y cachear recursos visuales, pero las rutas configurables proceden de los JSON en lugar de estar dispersas por los scripts.
@@ -47,15 +54,19 @@ El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la
 
 ## Datos y diálogo
 
-La rama 0.5.x permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de las visitas y el recorrido se adapta al resto del grupo. Cada encuentro contiene una presentación, preguntas con cuatro opciones, puntuaciones configurables y una réplica inmediata.
+La versión 0.6.0 permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de las visitas y el mapa se adapta al resto del grupo. Cada encuentro contiene una presentación, preguntas con cuatro opciones, puntuaciones configurables y una réplica inmediata.
 
 Los datos estáticos se organizan principalmente en:
 
 ```text
 data/
+├── achievements.json
 ├── characters/
+├── economy.json
 ├── questions/
 ├── rooms/
+├── shop_catalog.json
+├── world_maps.json
 └── game_config.json
 ```
 
@@ -80,7 +91,7 @@ El menú separa los ajustes de **Música** y **Efectos de sonido**. Ambos pueden
 
 Las habitaciones/personajes pueden configurar fondo, tema musical y volumen base desde sus JSON. Al cambiar de fondo, el tema correspondiente se carga y continúa en bucle. Si un fichero de audio configurado no existe, el juego continúa en silencio sin bloquear la ejecución.
 
-Los tonos `strum`, `clonk` y la confirmación de interfaz continúan generándose de forma procedural y no incorporan audio externo ni material con copyright.
+Los tonos `strum`, `clonk` y los perfiles de clic **Suave**, **Seco**, **Digital**, **Madera** y **Pop** se generan de forma procedural y no incorporan audio externo ni material con copyright. **Desactivado** silencia solo los clics. La selección se previsualiza en Ajustes, se conserva globalmente y respeta el volumen/silencio de Efectos.
 
 ## Documentación del proyecto
 

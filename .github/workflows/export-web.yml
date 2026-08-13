@@ -68,21 +68,11 @@ jobs:
 
       - name: Smoke test histórico de personajes y escenas
         run: |
-          PROJECT_VERSION=$(sed -n 's/^config\/version="\([^"]*\)"/\1/p' project.godot | head -n 1)
-          test -n "$PROJECT_VERSION"
-          sed -i -E "s/0\.[0-9]+\.[0-9]+/${PROJECT_VERSION}/g" scripts/ci_character_smoke_test.gd
-          sed -i 's/menu_content.anchor_right - menu_content.anchor_left < 0.48/menu_content.anchor_right - menu_content.anchor_left > 0.50/' scripts/ci_character_smoke_test.gd
-
-          cp scenes/main.tscn /tmp/main-v040.tscn
-          sed -i '/version_040_manager.gd/d' scenes/main.tscn
-          sed -i '/\[node name="Version040Manager"/,+1d' scenes/main.tscn
-
           set +e
           godot --headless --path . --script res://scripts/ci_character_smoke_test.gd > character-smoke.log 2>&1
           STATUS=$?
           set -e
           cat character-smoke.log
-          cp /tmp/main-v040.tscn scenes/main.tscn
           if [ "$STATUS" -ne 0 ] || grep -Eqi "SMOKE FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" character-smoke.log; then
             echo "La prueba histórica de personajes ha fallado; no se exportará."
             exit 1
@@ -141,7 +131,7 @@ jobs:
           fi
           grep -q "V045 OK:" v045-smoke.log
 
-      - name: Smoke test de Extras y códice 0.5.x
+      - name: Smoke test de Extras y códice 0.5/0.6
         run: |
           set +e
           godot --headless --path . --script res://scripts/ci_v050_extras_codex_test.gd > v050-smoke.log 2>&1
@@ -153,6 +143,19 @@ jobs:
             exit 1
           fi
           grep -q "V050 OK:" v050-smoke.log
+
+      - name: Smoke test de mapa y progreso 0.6
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v060_progression_smoke_test.gd > v060-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat v060-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V060 FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v060-smoke.log; then
+            echo "La validación de mapa y progreso ha fallado; no se exportará."
+            exit 1
+          fi
+          grep -q "V060 OK:" v060-smoke.log
 
       - name: Export Web y validar GDScript
         run: |

@@ -29,33 +29,31 @@ La base de `DataManager`, los JSON de personajes/preguntas/habitaciones y el gua
 - [ ] Mejorar visualmente la selección de personaje.
 - [ ] Toda nueva pantalla o mecánica deberá diseñarse desde el principio para funcionar tanto en PC como en Android, incluyendo ratón, teclado y controles táctiles.
 
+## Implementado en 0.6.0
+
 ### Prólogo e inicio narrativo
 
-Antes de comenzar una nueva partida deberá mostrarse una introducción breve de tono narrativo que sitúe temporalmente la historia.
+- [x] Crear una introducción breve antes de la selección de protagonista que sitúa la historia desde 2026.
+- [x] Permitir continuar el prólogo mediante clic, toque o teclado con diseño adaptable a PC y Android.
 
-- [ ] Crear una pantalla/secuencia de prólogo antes de la selección o inicio efectivo de la partida.
-- [ ] Usar como punto de partida el texto/idea: **«Los hechos acontecieron desde 2026...»**, pendiente de redactar su versión narrativa definitiva.
-- [ ] Permitir continuar el prólogo mediante clic, toque o teclado.
-- [ ] Mantener el prólogo adaptable a PC y Android.
-- [ ] Valorar animaciones o transiciones suaves de texto sin ralentizar excesivamente el inicio de nuevas partidas.
+### Mapa y progreso local
+
+- [x] Evolucionar el selector de visitas al mapa visual de Naranjal del Río.
+- [x] Definir casas, tienda y conexiones con coordenadas normalizadas en JSON.
+- [x] Navegar `mapa → casa/habitación → conversación → mapa`.
+- [x] Representar estado visitado/no visitado sin ocultar revisitas.
+- [x] Añadir Triana y Monte del Toro mediante una vista temporal sustituible por futuros PNG.
+- [x] Separar MONEDAS/recompensas por partida de colección, logros y estadísticas globales.
+- [x] Añadir tienda en el mapa y progreso global consultable desde Extras.
+- [x] Centralizar sonidos de clic configurables en el sistema de audio existente.
 
 ## Más adelante
 
-### Economía, monedas y compras
+### Ampliaciones de economía, tienda y cosméticos
 
-La primera versión deberá ser sencilla: una única moneda llamada **Monedas**, representada mediante un icono de moneda. El saldo será propio de cada partida, mientras que los coleccionables, extras y cosméticos comprados serán desbloqueos globales que se conservarán al empezar partidas nuevas.
-
-- [ ] Añadir saldo de monedas al estado de cada partida y al sistema de guardado.
-- [ ] Mantener desbloqueos globales en un perfil persistente separado del save.
-- [ ] Definir recompensas mediante datos y registrar cuáles ya se han cobrado para evitar repetir recompensas únicas.
-- [ ] Empezar premiando contenido narrativo: primeras visitas, escenas nuevas, eventos especiales e hitos de exploración.
-- [ ] Añadir una fuente repetible sencilla de pocas monedas para evitar bloqueos económicos, con recompensa mucho menor que el contenido nuevo.
-- [ ] Diseñar un catálogo pequeño de coleccionables, extras, decoraciones y cosméticos mediante JSON.
-- [ ] Añadir inventario global de objetos comprados o desbloqueados.
-- [ ] Crear una primera interfaz de compra e inventario.
-- [ ] Situar la tienda como una localización del futuro mapa, en lugar de añadirla como botón independiente del menú principal.
-- [ ] Incorporar posteriormente favores, actividades y minijuegos opcionales como nuevas fuentes de moneda.
-- [ ] Evitar que la historia principal dependa de tener monedas; la economía debe ampliar contenido, personalización y exploración.
+- [ ] Añadir fuentes repetibles pequeñas de monedas mediante favores, actividades o minijuegos opcionales.
+- [ ] Ampliar el catálogo con decoraciones, extras y nuevas variantes cosméticas sin bloquear la historia principal.
+- [ ] Aplicar durante el gameplay las skins adquiridas, manteniendo su consulta en las fichas de personaje.
 
 #### Skins previstas para la tienda
 
@@ -65,59 +63,13 @@ La primera versión deberá ser sencilla: una única moneda llamada **Monedas**,
 - [ ] **Ana:** mascotas visuales, por ejemplo distintos gatos que aparezcan junto a ella.
 - [ ] **Javi, Sue y Argentino:** concepto pendiente de definir.
 - [ ] Mostrar la skin durante las escenas del personaje dentro del gameplay; no es necesario reflejarla en mapa ni menús generales.
-- [ ] Añadir a la ficha de información del personaje una pestaña **Skins** para consultar las variantes conseguidas y verlas en grande.
-- [ ] Mantener estas skins como desbloqueos globales adquiribles en la tienda.
+### Ampliaciones del mapa
 
-### Logros y estadísticas del jugador
-
-Crear un sistema local de progreso que registre acciones del jugador y permita desbloquear logros automáticamente a partir de estadísticas acumuladas.
-
-Los **logros, estadísticas, coleccionables y cosméticos serán globales al juego** y persistirán entre partidas. Las **monedas, afinidad y progreso narrativo serán propios de cada partida**.
-
-- [ ] Crear un perfil global persistente separado de las partidas guardadas.
-- [ ] Crear un registro persistente de estadísticas del jugador.
-- [ ] Contabilizar tiempo jugado evitando, cuando sea posible, sumar periodos largos con la pestaña/aplicación inactiva.
-- [ ] Registrar sesiones iniciadas y formato/plataforma utilizada, por ejemplo escritorio/PC y móvil/táctil cuando pueda detectarse de forma fiable.
-- [ ] Registrar visitas por personaje y por habitación/localización.
-- [ ] Registrar protagonistas utilizados y número de partidas con cada personaje.
-- [ ] Registrar conversaciones, decisiones, escenas/eventos únicos, monedas ganadas/gastadas y desbloqueos obtenidos.
-- [ ] Crear una pantalla de «Cosas que ha hecho el jugador» con estadísticas y curiosidades como personaje más visitado o ubicación favorita.
-- [ ] Crear logros por tiempo jugado, visitas, exploración, coleccionables, economía y otros hitos.
-- [ ] Mostrar una notificación al desbloquear un logro.
-- [ ] Crear una pantalla de logros con desbloqueados, pendientes y posibilidad de logros secretos.
-- [ ] Definir logros y umbrales mediante JSON para poder ampliarlos sin añadir lógica específica por cada logro.
-- [ ] Permitir que una misma estadística alimente varios logros, por ejemplo horas jugadas o número de visitas a un personaje.
-
-### Mapa interactivo
-
-El mapa será una evolución completa del actual selector de visitas y deberá convertirse en una **zona de mapa real e interactiva**, no en una simple colección de botones con fondos de habitaciones. Su desarrollo deberá permitir mantener funcional el flujo actual durante la transición.
-
-#### Geografía narrativa
-
-El mundo utilizará localizaciones ficticias inspiradas en lugares reales, evitando mostrar literalmente los nombres reales dentro de la historia.
-
-- [ ] Crear el **pueblo principal ficticio**, inspirado geográficamente en Palma del Río, como núcleo del mapa donde vive la mayor parte del grupo.
-- [ ] El nombre del pueblo principal deberá evocar elementos reconocibles de su inspiración, especialmente **las naranjas** y, de forma secundaria, referencias rurales como las ovejas.
-- [ ] Crear una **ciudad ficticia inspirada en Sevilla**, donde viven actualmente Jony y Ana.
-- [ ] Crear un **municipio ficticio inspirado en Montoro**, donde vive Carmen.
-- [ ] Mantener relaciones de distancia y desplazamiento narrativamente coherentes entre las tres zonas sin necesidad de reproducir kilómetros o cartografía real de forma exacta.
-- [ ] Permitir ampliar posteriormente el mundo con otras ciudades, viajes y localizaciones especiales.
-
-#### Navegación
-
-- [ ] Diseñar el concepto visual del mapa principal.
-- [ ] Definir las localizaciones iniciales dentro del pueblo principal.
-- [ ] Diseñar la navegación `mapa → casa/habitación`.
-- [ ] Representar estado visitado/no visitado.
-- [ ] Volver al mapa después de finalizar la visita de cada personaje.
-- [ ] Permitir regresar a una habitación ya visitada para descubrir nuevas escenas, personajes visitantes o eventos según el progreso.
-- [ ] Permitir que personajes puedan aparecer temporalmente en habitaciones/localizaciones de otros personajes.
-- [ ] Mantener elección libre del siguiente destino.
-- [ ] Permitir abandonar las visitas y regresar al menú.
-- [ ] Preparar el sistema para localizaciones bloqueables/desbloqueables.
-- [ ] Incluir localizaciones funcionales que no sean viviendas, empezando por la futura tienda.
-- [ ] Diseñar el mapa, zonas clicables y controles para funcionar correctamente con ratón en PC y mediante toque en Android.
-- [ ] Evitar objetivos clicables demasiado pequeños y contemplar layouts distintos para horizontal y vertical.
+- [ ] Incorporar mapas definitivos para Triana y Monte del Toro cuando existan sus assets.
+- [ ] Valorar localizaciones bloqueables/desbloqueables según progreso futuro.
+- [ ] Valorar eventos visuales y cambios ambientales del mapa según avance la historia.
+- [ ] Permitir personajes visitantes y nuevas localizaciones según el progreso.
+- [ ] Ampliar posteriormente el mundo con otras ciudades, viajes y localizaciones especiales.
 
 ### Personajes y amistad
 

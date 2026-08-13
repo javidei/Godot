@@ -10,7 +10,36 @@ El acceso en tiempo de ejecución está centralizado en `DataManager` (`res://au
 - `characters/<id>.json`: identidad, estado habilitado, habitación, imagen/poses, música, volumen inicial, afinidad inicial y textos de transición.
 - `questions/<id>.json`: presentación, preguntas, cuatro respuestas, posición izquierda/derecha, puntuación y diálogo de reacción.
 - `rooms/<id>.json`: fondo, canción, volumen base, propietarios, nombre y descripción visual de la habitación.
+- `world_maps.json`: localidades, fondo de mapa, residentes, marcadores normalizados, conexiones y excusas de mapas temporales.
+- `economy.json`: moneda, intervalos del contador de actividad y reglas configurables de recompensas únicas/repetibles.
+- `shop_catalog.json`: coleccionables y cosméticos, con nombre, descripción, categoría, precio, recurso opcional y estado `enabled`.
+- `achievements.json`: logros globales y sus condiciones data-driven sobre estadísticas.
 - `detalles-juego.json`: información ampliada usada por Extras/códice. `DataManager` la combina con los datos operativos de `characters/`.
+
+## Mapas y localidades
+
+`world_maps.json` tiene un `default_zone_id` y un diccionario `zones`. Un mapa real declara `map_asset`; una zona sin arte definitivo usa `temporary: true` y el mismo renderer genérico. Cambiar Triana o Monte del Toro a un mapa real no requiere crear un flujo paralelo.
+
+Las localizaciones sobre el PNG se colocan con coordenadas normalizadas entre 0 y 1:
+
+```json
+{
+  "id": "home_sue",
+  "type": "character",
+  "character_id": "sue",
+  "position": {"x": 0.53, "y": 0.34}
+}
+```
+
+Los controles son independientes de la imagen y se recalculan dentro del rectángulo que conserva su proporción. `current_residence` y `current_zone_id` en cada ficha describen la residencia actual; los datos biográficos de procedencia se conservan aparte.
+
+## Economía, tienda y logros
+
+Las reglas de `economy.json` resuelven un evento a un identificador de recompensa. Por ejemplo, `character_visited` produce `first_visit_<character_id>` y +15 MONEDAS una sola vez por partida. El saldo y `claimed_rewards` viven en el save; los valores antiguos ausentes migran a saldo 0 y diccionario vacío.
+
+La tienda solo admite las categorías `collectible` y `cosmetic`. Los precios se leen de `shop_catalog.json`; la historia principal no consulta compras ni introduce bloqueos narrativos. Los objetos comprados se escriben en el perfil global.
+
+Cada logro de `achievements.json` declara una o varias condiciones `{metric, operator, value}`. Varias definiciones pueden leer la misma métrica sin necesitar una función GDScript por logro.
 
 ## Modificar un personaje
 
@@ -138,6 +167,9 @@ Para un personaje estándar no debería ser necesario añadir lógica específic
 
 - Partida: `user://savegame.json`
 - Preferencias: `user://settings.json`
+- Perfil global: `user://profile.json`
+
+La partida contiene el protagonista, nodo narrativo, afinidad, expresiones, historial, zona actual, MONEDAS y recompensas cobradas. El perfil global, independiente de cualquier partida, contiene desbloqueos, logros y estadísticas acumuladas. Las preferencias contienen audio, pantalla completa y el perfil de sonido de clic.
 
 La primera ejecución de esta arquitectura intenta migrar automáticamente:
 

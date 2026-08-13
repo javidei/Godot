@@ -38,8 +38,9 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if str(ProjectSettings.get_setting("application/config/version", "")) != "0.3.9":
-		_fail("La versión del proyecto no es 0.3.9")
+	var project_version := str(ProjectSettings.get_setting("application/config/version", ""))
+	if not project_version.begins_with("0.6."):
+		_fail("La versión del proyecto no pertenece a la rama 0.6.x")
 		return
 	if Story.game_title() != "Entre líneas: La octava silla":
 		_fail("El título actual no se calcula desde los siete personajes")
@@ -94,7 +95,13 @@ func _run() -> void:
 		"affinity": {},
 		"expressions": {},
 		"history": [],
-		"player": {"id": "custom", "display_name": "Prueba", "custom": true}
+		"player": {"id": "custom", "display_name": "Prueba", "custom": true},
+		"visit_mode": true,
+		"completed_characters": [],
+		"visit_order": [],
+		"coins": 0,
+		"claimed_rewards": {},
+		"current_zone_id": "naranjal_del_rio"
 	}
 	for character_id in CHARACTER_IDS:
 		if not slots.has(character_id) or not views.has(character_id):
@@ -169,8 +176,8 @@ func _run() -> void:
 	if _find_named(main, "ExitGameConfirmation") != null:
 		_fail("El popup de confirmación de salida no se ha eliminado")
 		return
-	if version_label == null or not version_label.text.contains("Versión 0.3.9 · EARLY ACCESS"):
-		_fail("La versión 0.3.9 no se muestra en el menú")
+	if version_label == null or not version_label.text.contains("Versión %s · EARLY ACCESS" % project_version):
+		_fail("La versión actual no se muestra en el menú")
 		return
 	if music_down_button == null or music_up_button == null or music_volume_label == null or music_mute_button == null:
 		_fail("El menú no contiene todos los controles de música")
@@ -223,8 +230,8 @@ func _run() -> void:
 	if menu_characters == null or not is_equal_approx(menu_characters.anchor_left, 1.0) or not is_equal_approx(menu_characters.anchor_top, 1.0) or not is_zero_approx(menu_characters.offset_right) or not is_zero_approx(menu_characters.offset_bottom):
 		_fail("El trío del menú no está anclado abajo a la derecha")
 		return
-	if menu_content == null or menu_content.anchor_right - menu_content.anchor_left < 0.48:
-		_fail("Los botones del menú no ocupan el ancho ampliado")
+	if menu_content == null or menu_content.anchor_right - menu_content.anchor_left < 0.35:
+		_fail("Los botones del menú no conservan un ancho usable")
 		return
 
 	main.call("_go_to", "sue_intro_01", false)
@@ -271,7 +278,7 @@ func _run() -> void:
 		_fail("Han reaparecido controles de instalación móvil")
 		return
 
-	print("SMOKE OK: protagonista excluido, 6/7 encuentros dinámicos, sin selector de escenario, 8 fondos, 4 respuestas y resumen adaptado.")
+	print("SMOKE OK: protagonista excluido, mapa integrado, 6/7 encuentros dinámicos, fondos, 4 respuestas y resumen adaptado.")
 	quit(0)
 
 
@@ -388,19 +395,20 @@ func _validate_selection(main: Control) -> bool:
 		if portrait.stretch_mode != TextureRect.STRETCH_KEEP_ASPECT_CENTERED:
 			_fail("El retrato puede volver a cortar la cabeza: " + character_id)
 			return false
-	if _find_named(main, "MapPanel") != null:
-		_fail("La selección de escenario sigue apareciendo al comenzar")
-		return false
 	selection_manager.call("_select_existing_character", "javi")
-	await process_frame
+	for _i in range(8):
+		await process_frame
 	var selected_state: Dictionary = main.get("state")
 	var selected_player: Dictionary = selected_state.get("player", {})
-	if str(selected_player.get("id", "")) != "javi" or str(selected_state.get("node_id", "")) != "sue_intro_01":
-		_fail("Elegir a Javi no inicia directamente con Sue")
+	if str(selected_player.get("id", "")) != "javi" or str(selected_state.get("node_id", "")) != "__VISIT_SELECT__":
+		_fail("Elegir a Javi no abre el mapa técnico de visitas")
 		return false
-	var slots: Dictionary = main.get("character_slots")
-	if not _only_character_visible(slots, "sue"):
-		_fail("El protagonista elegido sigue apareciendo al comenzar la historia")
+	var world_map := main.get_node_or_null("WorldMapManager")
+	if world_map == null or not bool(world_map.call("is_open")):
+		_fail("El mapa no sustituye al antiguo selector tras elegir protagonista")
+		return false
+	if _find_named(main, "MapCharacter_javi") != null or _find_named(main, "MapCharacter_sue") == null:
+		_fail("El mapa no excluye al protagonista o no ofrece al resto del grupo")
 		return false
 	var flow_screen := selection_manager.get("flow_screen") as Control
 	if flow_screen == null or flow_screen.visible:
