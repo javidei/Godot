@@ -57,6 +57,17 @@ La primera versión deberá ser sencilla: una única moneda llamada **Monedas**,
 - [ ] Incorporar posteriormente favores, actividades y minijuegos opcionales como nuevas fuentes de moneda.
 - [ ] Evitar que la historia principal dependa de tener monedas; la economía debe ampliar contenido, personalización y exploración.
 
+#### Skins previstas para la tienda
+
+- [ ] **Fran / Smokey:** variaciones de camisa.
+- [ ] **Carmen:** distintos colores de pelo y posibilidad de algunas variantes de ropa.
+- [ ] **Jony:** mascotas visuales, por ejemplo distintos gatos que aparezcan junto a él.
+- [ ] **Ana:** mascotas visuales, por ejemplo distintos gatos que aparezcan junto a ella.
+- [ ] **Javi, Sue y Argentino:** concepto pendiente de definir.
+- [ ] Mostrar la skin durante las escenas del personaje dentro del gameplay; no es necesario reflejarla en mapa ni menús generales.
+- [ ] Añadir a la ficha de información del personaje una pestaña **Skins** para consultar las variantes conseguidas y verlas en grande.
+- [ ] Mantener estas skins como desbloqueos globales adquiribles en la tienda.
+
 ### Logros y estadísticas del jugador
 
 Crear un sistema local de progreso que registre acciones del jugador y permita desbloquear logros automáticamente a partir de estadísticas acumuladas.
