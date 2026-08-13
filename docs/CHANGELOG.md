@@ -16,6 +16,7 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 - Al volver a una habitación a medias, una frase de reencuentro configurable espera una pulsación y continúa exactamente donde se dejó.
 - Los coleccionables comprados con asset visual, incluido el Retrato del grupo, muestran su imagen en `Extras → Colección` y permiten abrirla en una vista grande.
 - El desbloqueo Retratos del grupo sustituye la alineación parcial del menú por dos artes completos incluidos en el repositorio: ilustración nocturna y pixel art.
+- La Colección distribuye complementos en tarjetas compactas de varias columnas y coloca los diseños de cada pack lado a lado cuando hay espacio.
 
 ### Fixed
 

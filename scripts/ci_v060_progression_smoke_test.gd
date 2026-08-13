@@ -530,6 +530,14 @@ func _validate_extras(main: Control, extras: Node) -> bool:
 	if page_host == null or not _tree_contains_text(page_host as Node, "Retratos del grupo"):
 		_fail("La Colección no consulta los desbloqueos globales")
 		return false
+	var collection_grid := main.find_child("CollectionGrid_collectible", true, false) as GridContainer
+	var art_grid := main.find_child("CollectionArtGrid_illustration_group", true, false) as GridContainer
+	var viewport_width := main.get_viewport().get_visible_rect().size.x
+	var expected_columns := 3 if viewport_width >= 1350.0 else (2 if viewport_width >= 720.0 else 1)
+	var expected_art_columns := 2 if viewport_width >= 900.0 else 1
+	if collection_grid == null or collection_grid.columns != expected_columns or art_grid == null or art_grid.columns != expected_art_columns:
+		_fail("La Colección no distribuye complementos y artes en cuadrículas compactas")
+		return false
 	var illustrated_preview := main.find_child("CollectionPreview_illustration_group_illustrated", true, false) as Button
 	var pixel_preview := main.find_child("CollectionPreview_illustration_group_pixel", true, false) as Button
 	var illustrated_image := main.find_child("CollectionImage_illustration_group_illustrated", true, false) as TextureRect
@@ -540,6 +548,11 @@ func _validate_extras(main: Control, extras: Node) -> bool:
 	if illustrated_image.texture_filter != CanvasItem.TEXTURE_FILTER_LINEAR or pixel_image.texture_filter != CanvasItem.TEXTURE_FILTER_NEAREST:
 		_fail("El pixel art no conserva píxeles nítidos o la ilustración pierde su filtrado suave")
 		return false
+	if expected_columns > 1:
+		var collection_card := main.find_child("CollectionCard_illustration_group", true, false) as PanelContainer
+		if collection_card == null or collection_card.size.x >= (page_host as Control).size.x * 0.75:
+			_fail("Las tarjetas de complementos siguen ocupando una línea completa")
+			return false
 	if main.find_child("CollectionLockedPreview_memory_naranjal_room", true, false) == null:
 		_fail("Un coleccionable pendiente revela su imagen antes de comprarlo")
 		return false

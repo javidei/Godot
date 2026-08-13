@@ -791,33 +791,44 @@ func _show_collection() -> void:
 
 func _add_collection_category(parent: VBoxContainer, title: String, category: String, items: Array[Dictionary], unlocked: Dictionary) -> void:
 	_add_section_title(parent, title)
+	var grid := GridContainer.new()
+	grid.name = "CollectionGrid_" + category
+	grid.columns = _collection_grid_columns()
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 12)
+	grid.add_theme_constant_override("v_separation", 12)
+	parent.add_child(grid)
 	var added := 0
 	for item in items:
 		if _collection_category(item) != category:
 			continue
-		_add_collection_card(parent, item, unlocked.has(str(item.get("id", ""))))
+		_add_collection_card(grid, item, unlocked.has(str(item.get("id", ""))))
 		added += 1
 	if added == 0:
 		var ids: Array = unlocked.keys()
 		ids.sort()
 		if ids.is_empty():
+			parent.remove_child(grid)
+			grid.queue_free()
 			_add_body_label(parent, "Aún no has desbloqueado elementos de esta categoría.")
 		else:
 			for raw_id in ids:
-				_add_collection_card(parent, {"id": str(raw_id), "name": _display_identifier(str(raw_id)), "description": "Desbloqueado globalmente."}, true)
+				_add_collection_card(grid, {"id": str(raw_id), "name": _display_identifier(str(raw_id)), "description": "Desbloqueado globalmente."}, true)
 
 
-func _add_collection_card(parent: VBoxContainer, item: Dictionary, unlocked: bool) -> void:
+func _add_collection_card(parent: Container, item: Dictionary, unlocked: bool) -> void:
 	var panel := PanelContainer.new()
+	panel.name = "CollectionCard_" + str(item.get("id", "item"))
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var border := GOLD if unlocked else Color(0.34, 0.29, 0.25, 0.70)
 	panel.add_theme_stylebox_override("panel", main.call("_panel_style", Color(0.045, 0.032, 0.025, 0.96), border, 1, 10))
 	parent.add_child(panel)
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 10)
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 8)
 	panel.add_child(margin)
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 4)
@@ -826,7 +837,7 @@ func _add_collection_card(parent: VBoxContainer, item: Dictionary, unlocked: boo
 	title.text = ("✓ " if unlocked else "○ ") + str(item.get("name", item.get("nombre", _display_identifier(str(item.get("id", "Elemento"))))))
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title.add_theme_color_override("font_color", GOLD if unlocked else TEXT_DIM)
-	title.add_theme_font_size_override("font_size", 17)
+	title.add_theme_font_size_override("font_size", 15)
 	box.add_child(title)
 	var description := str(item.get("description", item.get("descripcion", "")))
 	if not description.is_empty():
@@ -834,7 +845,7 @@ func _add_collection_card(parent: VBoxContainer, item: Dictionary, unlocked: boo
 		label.text = description
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		label.add_theme_color_override("font_color", TEXT_DIM)
-		label.add_theme_font_size_override("font_size", 14)
+		label.add_theme_font_size_override("font_size", 12)
 		box.add_child(label)
 	_add_collection_art(box, item, unlocked)
 	var status := Label.new()
@@ -851,7 +862,7 @@ func _add_collection_art(parent: VBoxContainer, item: Dictionary, unlocked: bool
 	if not unlocked:
 		var locked := PanelContainer.new()
 		locked.name = "CollectionLockedPreview_" + str(item.get("id", "item"))
-		locked.custom_minimum_size = Vector2(0, 96)
+		locked.custom_minimum_size = Vector2(0, 72)
 		locked.add_theme_stylebox_override("panel", main.call("_panel_style", Color(0.018, 0.014, 0.012, 0.96), Color(0.25, 0.22, 0.20, 0.85), 1, 8))
 		parent.add_child(locked)
 		var locked_label := Label.new()
@@ -861,6 +872,13 @@ func _add_collection_art(parent: VBoxContainer, item: Dictionary, unlocked: bool
 		locked_label.add_theme_color_override("font_color", Color("8e8275"))
 		locked.add_child(locked_label)
 		return
+	var art_grid := GridContainer.new()
+	art_grid.name = "CollectionArtGrid_" + str(item.get("id", "item"))
+	art_grid.columns = 2 if artworks.size() > 1 and get_viewport().get_visible_rect().size.x >= 900.0 else 1
+	art_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	art_grid.add_theme_constant_override("h_separation", 8)
+	art_grid.add_theme_constant_override("v_separation", 8)
+	parent.add_child(art_grid)
 	for artwork in artworks:
 		var asset_path := str(artwork.get("asset", "")).strip_edges()
 		if not ResourceLoader.exists(asset_path):
@@ -869,23 +887,27 @@ func _add_collection_art(parent: VBoxContainer, item: Dictionary, unlocked: bool
 		if texture == null:
 			continue
 		var artwork_name := str(artwork.get("name", item.get("name", "Coleccionable")))
+		var art_box := VBoxContainer.new()
+		art_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		art_box.add_theme_constant_override("separation", 3)
+		art_grid.add_child(art_box)
 		var artwork_label := Label.new()
 		artwork_label.text = artwork_name
 		artwork_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		artwork_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		artwork_label.add_theme_color_override("font_color", Color("f5d596"))
-		artwork_label.add_theme_font_size_override("font_size", 14)
-		parent.add_child(artwork_label)
+		artwork_label.add_theme_font_size_override("font_size", 12)
+		art_box.add_child(artwork_label)
 		var suffix := str(artwork.get("id", "")).strip_edges()
 		var node_id := str(item.get("id", "item")) + ("_" + suffix if not suffix.is_empty() else "")
 		var preview := main.call("_make_button", "", false) as Button
 		preview.name = "CollectionPreview_" + node_id
 		preview.tooltip_text = "Ver " + artwork_name + " a pantalla completa"
-		var compact := get_viewport().get_visible_rect().size.x < 760.0
-		preview.custom_minimum_size = Vector2(0, 150 if compact else 230)
+		preview.custom_minimum_size = Vector2(0, _collection_preview_height())
 		preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		preview.clip_contents = true
 		preview.pressed.connect(_show_collection_preview.bind(artwork, texture))
-		parent.add_child(preview)
+		art_box.add_child(preview)
 		var image := TextureRect.new()
 		image.name = "CollectionImage_" + node_id
 		image.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -921,6 +943,20 @@ func _collection_artworks(item: Dictionary) -> Array[Dictionary]:
 			"asset": asset_path
 		})
 	return result
+
+
+func _collection_grid_columns() -> int:
+	var width := get_viewport().get_visible_rect().size.x
+	if width >= 1350.0:
+		return 3
+	if width >= 720.0:
+		return 2
+	return 1
+
+
+func _collection_preview_height() -> float:
+	var width := get_viewport().get_visible_rect().size.x
+	return 130.0 if width >= 1350.0 else (110.0 if width >= 720.0 else 96.0)
 
 
 func _build_collection_preview() -> void:
@@ -1443,6 +1479,14 @@ func _apply_layout() -> void:
 	var extras_grid := page_host.find_child("ExtrasOptionsGrid050", true, false) as GridContainer if page_host != null else null
 	if extras_grid != null:
 		extras_grid.columns = 1 if viewport_size.x < 660.0 else 2
+	if page_host != null:
+		for node in page_host.find_children("CollectionGrid_*", "GridContainer", true, false):
+			(node as GridContainer).columns = _collection_grid_columns()
+		for node in page_host.find_children("CollectionArtGrid_*", "GridContainer", true, false):
+			var art_grid := node as GridContainer
+			art_grid.columns = 2 if art_grid.get_child_count() > 1 and viewport_size.x >= 900.0 else 1
+		for node in page_host.find_children("CollectionPreview_*", "Button", true, false):
+			(node as Button).custom_minimum_size.y = _collection_preview_height()
 	var click_grid := settings_screen.find_child("ClickSoundGrid060", true, false) as GridContainer if settings_screen != null else null
 	if click_grid != null:
 		click_grid.columns = 1 if viewport_size.x < 540.0 else (2 if portrait or viewport_size.x < 920.0 else 3)
