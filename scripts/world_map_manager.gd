@@ -9,8 +9,8 @@ const HEADER_HEIGHT := 66.0
 const MAP_BOTTOM_MARGIN := 12.0
 const MARKER_DESKTOP_SIZE := Vector2(164, 58)
 const MARKER_COMPACT_SIZE := Vector2(122, 48)
-const CONNECTION_DESKTOP_SIZE := Vector2(210, 76)
-const CONNECTION_COMPACT_SIZE := Vector2(154, 64)
+const CONNECTION_DESKTOP_SIZE := Vector2(286, 68)
+const CONNECTION_COMPACT_SIZE := Vector2(210, 58)
 const COIN_ICON_PATH := "res://assets/ui/icons/coin.svg"
 
 var main: Control
@@ -457,13 +457,14 @@ func _build_connections(zone: Dictionary) -> void:
 		if target.is_empty():
 			continue
 		var side := str(connection.get("side", "")).to_lower()
-		var label := str(connection.get("label", _zone_name(target)))
+		var compact := _is_compact()
+		var label := str(connection.get("compact_label", connection.get("label", _zone_name(target)))) if compact else str(connection.get("label", _zone_name(target)))
 		if side == "left" and not label.begins_with("←"):
 			label = "← " + label
 		elif side == "right" and not label.ends_with("→"):
 			label += " →"
 		var residents := _string_array(connection.get("residents", []))
-		if not residents.is_empty():
+		if bool(connection.get("show_residents", true)) and not residents.is_empty():
 			var names := PackedStringArray()
 			for resident_id in residents:
 				names.append(_character_name(resident_id))
@@ -515,13 +516,13 @@ func _place_connection(button: Button, side: String, index: int) -> void:
 		"left":
 			button.anchor_left = 0.0
 			button.anchor_right = 0.0
-			button.offset_left = 8.0
-			button.offset_right = 8.0 + button_size.x
+			button.offset_left = MAP_MARGIN
+			button.offset_right = MAP_MARGIN + button_size.x
 		"right":
 			button.anchor_left = 1.0
 			button.anchor_right = 1.0
-			button.offset_left = -8.0 - button_size.x
-			button.offset_right = -8.0
+			button.offset_left = -MAP_MARGIN - button_size.x
+			button.offset_right = -MAP_MARGIN
 		_:
 			button.anchor_left = 0.5
 			button.anchor_right = 0.5

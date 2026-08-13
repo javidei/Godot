@@ -261,17 +261,37 @@ func _validate_new_game_intro(main: Control, transitions: Node) -> bool:
 		_fail("Continuar reproduce incorrectamente la introducción de nueva partida")
 		return false
 	intro_callback_called = false
-	transitions.call("set_fast_mode", true)
+	transitions.call("set_fast_mode", false)
 	transitions.call("play_new_game_intro", Callable(self, "_on_intro_finished"))
-	for _i in range(12):
+	var waited := 0
+	while not bool(transitions.get("waiting_for_continue")) and waited < 180:
 		await process_frame
+		waited += 1
 	var name_label: Variant = transitions.get("name_label")
 	var message_label: Variant = transitions.get("message_label")
-	if not intro_callback_called or name_label == null or message_label == null:
-		_fail("La introducción de nueva partida no finaliza correctamente")
+	if intro_callback_called or not bool(transitions.get("waiting_for_continue")):
+		_fail("La introducción de nueva partida avanza sin interacción")
 		return false
-	if str(name_label.text) != "2026" or str(message_label.text) != "Los hechos acontecieron desde 2026.":
-		_fail("La introducción no conserva el texto exacto requerido")
+	if name_label == null or message_label == null or name_label.visible or not str(name_label.text).is_empty() or str(message_label.text) != "Los hechos acontecieron desde 2026.":
+		_fail("La introducción repite 2026 o no conserva la frase requerida")
+		return false
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.pressed = true
+	transitions.call("_on_transition_input", click)
+	waited = 0
+	while not intro_callback_called and waited < 180:
+		await process_frame
+		waited += 1
+	if not intro_callback_called:
+		_fail("Un clic no permite continuar la introducción")
+		return false
+	waited = 0
+	while bool(transitions.get("transition_active")) and waited < 180:
+		await process_frame
+		waited += 1
+	if bool(transitions.get("transition_active")):
+		_fail("La capa negra no termina de cerrarse después del clic")
 		return false
 	return true
 
@@ -399,11 +419,19 @@ func _validate_map_ui(main: Control, world_map: Node, transitions: Node, state: 
 	if main.find_child("MapCharacter_ana", true, false) == null or main.find_child("MapCharacter_jony", true, false) == null:
 		_fail("La pantalla temporal de Triana no permite visitar a Ana y Jony")
 		return false
+	var triana_return := main.find_child("WorldConnection_naranjal_del_rio", true, false) as Button
+	if triana_return == null or triana_return.anchor_left != 1.0 or triana_return.text.contains("\n") or not _button_inside_viewport(main.get_viewport(), triana_return):
+		_fail("El regreso desde Triana no queda contenido en el lateral derecho")
+		return false
 	world_map.call("show_zone", "monte_del_toro", false)
 	for _i in range(3):
 		await process_frame
-	if main.find_child("MapCharacter_carmen", true, false) == null or main.find_child("WorldConnection_naranjal_del_rio", true, false) == null:
+	var monte_return := main.find_child("WorldConnection_naranjal_del_rio", true, false) as Button
+	if main.find_child("MapCharacter_carmen", true, false) == null or monte_return == null:
 		_fail("Monte del Toro no permite visitar a Carmen y volver a Naranjal")
+		return false
+	if monte_return.anchor_left != 0.0 or monte_return.text.contains("\n") or not _button_inside_viewport(main.get_viewport(), monte_return):
+		_fail("El regreso desde Monte del Toro no queda contenido en el lateral izquierdo")
 		return false
 	var first_excuse := str(transitions.call("_pick_missing_map_excuse"))
 	var second_excuse := str(transitions.call("_pick_missing_map_excuse"))
@@ -414,6 +442,12 @@ func _validate_map_ui(main: Control, world_map: Node, transitions: Node, state: 
 	if not _validate_touch_transition(main.get_viewport(), transitions):
 		return false
 	return true
+
+
+func _button_inside_viewport(viewport: Viewport, button: Button) -> bool:
+	var viewport_rect := Rect2(Vector2.ZERO, viewport.get_visible_rect().size)
+	var button_rect := button.get_global_rect()
+	return viewport_rect.encloses(button_rect) and button_rect.size.x > 1.0 and button_rect.size.y > 1.0
 
 
 func _validate_extras(main: Control, extras: Node) -> bool:

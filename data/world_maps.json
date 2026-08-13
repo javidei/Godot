@@ -43,7 +43,7 @@
         {"id": "home_jony", "name": "Jony", "type": "character", "kind": "character", "character_id": "jony", "position": {"x": 0.64, "y": 0.5}}
       ],
       "connections": [
-        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "left", "label": "← VOLVER A NARANJAL DEL RÍO", "residents": ["javi", "sue", "smokey", "argentino"]}
+        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "right", "label": "VOLVER A NARANJAL DEL RÍO →", "compact_label": "NARANJAL →", "show_residents": false, "residents": ["javi", "sue", "smokey", "argentino"]}
       ]
     },
     "monte_del_toro": {
@@ -56,7 +56,7 @@
         {"id": "home_carmen", "name": "Carmen", "type": "character", "kind": "character", "character_id": "carmen", "position": {"x": 0.5, "y": 0.5}}
       ],
       "connections": [
-        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "right", "label": "VOLVER A NARANJAL DEL RÍO →", "residents": ["javi", "sue", "smokey", "argentino"]}
+        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "left", "label": "← VOLVER A NARANJAL DEL RÍO", "compact_label": "← NARANJAL", "show_residents": false, "residents": ["javi", "sue", "smokey", "argentino"]}
       ]
     }
   }

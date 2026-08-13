@@ -37,6 +37,8 @@ Las localizaciones sobre el PNG se colocan con coordenadas normalizadas entre 0 
 
 Los controles son independientes de la imagen y se recalculan dentro del rectángulo que conserva su proporción. `current_residence` y `current_zone_id` en cada ficha describen la residencia actual; los datos biográficos de procedencia se conservan aparte.
 
+Cada conexión declara su `side` y puede proporcionar `compact_label` para ventanas estrechas. `show_residents` permite conservar en los datos la población de destino sin añadir una segunda línea a enlaces de regreso que deben mantenerse compactos.
+
 ## Economía, tienda y logros
 
 Las reglas de `economy.json` resuelven un evento a un identificador de recompensa. Por ejemplo, `character_visited` produce `first_visit_<character_id>` y +15 MONEDAS una sola vez por partida. El saldo y `claimed_rewards` viven en el save; los valores antiguos ausentes migran a saldo 0 y diccionario vacío.

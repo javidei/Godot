@@ -3,7 +3,7 @@ extends "res://scripts/version_044_visit_transitions.gd"
 const DataAccess = preload("res://scripts/data_access.gd")
 const DataStory = preload("res://scripts/story.gd")
 
-const NEW_GAME_INTRO_TITLE := "2026"
+const NEW_GAME_INTRO_TITLE := ""
 const NEW_GAME_INTRO_TEXT := "Los hechos acontecieron desde 2026."
 
 var last_missing_map_excuse := ""
@@ -61,7 +61,7 @@ func play_new_game_intro(on_finished: Callable = Callable()) -> void:
 	play_generic_transition(
 		NEW_GAME_INTRO_TITLE,
 		NEW_GAME_INTRO_TEXT,
-		4.0,
+		0.0,
 		on_finished
 	)
 
@@ -72,7 +72,7 @@ func play_missing_map_transition(
 	on_midpoint: Callable = Callable()
 ) -> void:
 	var excuse := _pick_missing_map_excuse()
-	play_generic_transition(zone_name.to_upper(), excuse, 4.5, on_midpoint)
+	play_generic_transition(zone_name.to_upper(), excuse, 0.0, on_midpoint)
 
 
 func play_generic_transition(
@@ -89,6 +89,7 @@ func play_generic_transition(
 			on_midpoint.call()
 		return
 	transition_active = true
+	continue_requested = false
 	_prepare_generic_text(title, message)
 	overlay.visible = true
 	shade.modulate.a = 0.0
@@ -121,6 +122,7 @@ func _ensure_runtime_overlay() -> void:
 
 func _prepare_generic_text(title: String, message: String) -> void:
 	name_label.text = title
+	name_label.visible = not title.strip_edges().is_empty()
 	message_label.text = message
 	hint_label.text = "Pulsa o haz clic para continuar"
 
@@ -140,7 +142,6 @@ func _wait_for_continue_or_timeout(seconds: float) -> void:
 	if fast_mode:
 		await get_tree().process_frame
 		return
-	continue_requested = false
 	waiting_for_continue = true
 	var started_at := Time.get_ticks_msec()
 	while not continue_requested:
@@ -189,6 +190,7 @@ func _missing_map_excuses() -> Array[String]:
 
 func _play_intro(character_id: String) -> void:
 	transition_active = true
+	continue_requested = false
 	var dm: Variant = _dm()
 	var message := str(dm.call("get_transition_text", character_id, "intro")) if dm != null else ""
 	if message.is_empty():
@@ -226,6 +228,7 @@ func _play_outro(character_id: String) -> void:
 	if transition_active:
 		return
 	transition_active = true
+	continue_requested = false
 	pending_outro = ""
 	var state := _state()
 	_ensure_transition_arrays(state)
@@ -280,5 +283,6 @@ func _prepare_text(character_id: String, message: String) -> void:
 	var dm: Variant = _dm()
 	var data: Dictionary = dm.call("get_character", character_id) if dm != null else {}
 	var display_name := str(data.get("display_name", data.get("name", character_id.capitalize())))
+	name_label.visible = true
 	name_label.text = display_name.to_upper()
 	message_label.text = message

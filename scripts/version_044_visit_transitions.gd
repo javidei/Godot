@@ -81,7 +81,7 @@ func set_fast_mode(enabled: bool) -> void:
 
 
 func request_continue() -> void:
-	if waiting_for_continue:
+	if transition_active or waiting_for_continue:
 		continue_requested = true
 
 
@@ -102,6 +102,7 @@ func _build_overlay() -> void:
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
 	shade.gui_input.connect(_on_transition_input)
 	overlay.add_child(shade)
+	overlay.gui_input.connect(_on_transition_input)
 
 	var center := CenterContainer.new()
 	center.name = "TransitionCenter"
@@ -143,23 +144,39 @@ func _build_overlay() -> void:
 
 
 func _on_transition_input(event: InputEvent) -> void:
-	if not waiting_for_continue:
+	if not transition_active and not waiting_for_continue:
 		return
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		continue_requested = true
-		get_viewport().set_input_as_handled()
-	elif event is InputEventScreenTouch and event.pressed:
-		continue_requested = true
-		get_viewport().set_input_as_handled()
+	if _is_continue_event(event):
+		_accept_continue()
+
+
+func _input(event: InputEvent) -> void:
+	# Capturamos antes del reparto de GUI para que toda la pantalla negra sea una
+	# superficie interactiva, incluso durante los fundidos de entrada.
+	if (transition_active or waiting_for_continue) and _is_continue_event(event):
+		_accept_continue()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not waiting_for_continue:
+	if not transition_active and not waiting_for_continue:
 		return
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_SPACE or event.keycode == KEY_ENTER:
-			continue_requested = true
-			get_viewport().set_input_as_handled()
+	if _is_continue_event(event):
+		_accept_continue()
+
+
+func _is_continue_event(event: InputEvent) -> bool:
+	if event is InputEventMouseButton:
+		return event.button_index == MOUSE_BUTTON_LEFT and event.pressed
+	if event is InputEventScreenTouch:
+		return event.pressed
+	if event is InputEventKey:
+		return event.pressed and not event.echo and event.keycode in [KEY_SPACE, KEY_ENTER]
+	return false
+
+
+func _accept_continue() -> void:
+	continue_requested = true
+	get_viewport().set_input_as_handled()
 
 
 func _ensure_story_patches() -> void:
@@ -220,6 +237,7 @@ func _on_visit_selected(character_id: String) -> void:
 
 func _play_intro(character_id: String) -> void:
 	transition_active = true
+	continue_requested = false
 	_prepare_text(character_id, str(INTRO_TEXTS.get(character_id, "Una nueva visita está a punto de comenzar.")))
 	overlay.visible = true
 	shade.modulate.a = 0.0
@@ -275,6 +293,7 @@ func _play_outro(character_id: String) -> void:
 	if transition_active:
 		return
 	transition_active = true
+	continue_requested = false
 	pending_outro = ""
 	var state := _state()
 	_ensure_transition_arrays(state)
@@ -310,7 +329,6 @@ func _wait_for_continue() -> void:
 	if fast_mode:
 		await get_tree().process_frame
 		return
-	continue_requested = false
 	waiting_for_continue = true
 	while not continue_requested:
 		await get_tree().process_frame
@@ -321,6 +339,7 @@ func _wait_for_continue() -> void:
 func _prepare_text(character_id: String, message: String) -> void:
 	var data: Dictionary = GameData.CHARACTERS.get(character_id, {})
 	var display_name := str(data.get("alias", data.get("name", character_id.capitalize())))
+	name_label.visible = true
 	name_label.text = display_name.to_upper()
 	message_label.text = message
 

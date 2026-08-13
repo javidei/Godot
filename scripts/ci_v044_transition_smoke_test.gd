@@ -80,13 +80,16 @@ func _run() -> void:
 		_fail("La música de Ana no empieza durante su presentación en negro")
 		return
 
-	transition.call("request_continue")
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.pressed = true
+	transition.call("_on_transition_input", click)
 	waited = 0
 	while bool(transition.get("transition_active")) and waited < 180:
 		await process_frame
 		waited += 1
 	if bool(transition.get("transition_active")):
-		_fail("La presentación no termina después de continuar")
+		_fail("La presentación no termina después del clic")
 		return
 
 	state = main.get("state")

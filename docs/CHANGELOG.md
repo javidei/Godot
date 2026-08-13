@@ -12,6 +12,9 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+- Los regresos desde Triana y Monte del Toro aparecen ahora en laterales opuestos, con botones compactos que respetan los márgenes de pantalla.
+- La introducción temporal deja de repetir «2026» y las pantallas negras esperan una interacción real por clic, toque o teclado, incluso si se realiza durante el fundido.
+
 ## [0.6.1] - 2026-08-13
 
 ### Added
