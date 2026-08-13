@@ -58,6 +58,14 @@ func _run() -> void:
 				_fail("La pregunta %s no genera cuatro respuestas" % question_id)
 				return
 
+	var menu_music: Dictionary = data_manager.call("get_menu_music")
+	if str(menu_music.get("id", "")) != "menu" or str(menu_music.get("path", "")) != "res://assets/audio/music/menu.ogg":
+		_fail("La música del menú no está registrada en DataManager")
+		return
+	if float(menu_music.get("volume", 1.0)) > 0.4 or float(menu_music.get("fade_seconds", 0.0)) < 3.0 or not bool(menu_music.get("loop", false)):
+		_fail("La música del menú no conserva volumen bajo, fundido inicial y bucle")
+		return
+
 	print("DATAMANAGER STEP 4: validar user://")
 	if str(data_manager.call("get_save_path")) != "user://savegame.json":
 		_fail("La partida no apunta a user://savegame.json")
@@ -129,7 +137,7 @@ func _run() -> void:
 		_fail("La selección no conserva siete personajes más el personalizado")
 		return
 
-	print("DATAMANAGER OK: JSON estáticos, escena, preguntas, habitaciones, assets y user:// validados.")
+	print("DATAMANAGER OK: JSON estáticos, menú musical, escena, preguntas, habitaciones, assets y user:// validados.")
 	quit(0)
 
 

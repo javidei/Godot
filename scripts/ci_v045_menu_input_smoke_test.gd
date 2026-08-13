@@ -23,6 +23,7 @@ func _run() -> void:
 	var patch := main.get_node_or_null("Version045InteractionMenuPatch")
 	var extras_patch := main.get_node_or_null("Version050ExtrasCodex")
 	var menu_content := main.get("menu_content") as VBoxContainer
+	var audio_manager: Variant = main.get("audio_manager")
 	if patch == null or menu_content == null:
 		_fail("No está disponible el parche de interacción/menú")
 		return
@@ -32,6 +33,18 @@ func _run() -> void:
 	var secondary := menu_content.find_child("MenuSecondaryActions045", true, false) as HBoxContainer
 	if audio_row == null or primary == null or secondary == null:
 		_fail("No se han creado los bloques principales del menú")
+		return
+	var music_player: AudioStreamPlayer
+	if audio_manager != null:
+		music_player = audio_manager.get("menu_music_player") as AudioStreamPlayer
+	if audio_manager == null or music_player == null or str(audio_manager.get("current_menu_music_id")) != "menu" or not music_player.playing:
+		_fail("menu.ogg no comienza al entrar en el menú")
+		return
+	if not (music_player.stream is AudioStreamOggVorbis) or not (music_player.stream as AudioStreamOggVorbis).loop:
+		_fail("La música del menú no queda configurada en bucle")
+		return
+	if music_player.volume_db >= -0.1:
+		_fail("La música del menú entra de golpe, sin fundido inicial")
 		return
 	if primary.get_child_count() != 2:
 		_fail("Nueva partida y Continuar no están organizados en pareja")
@@ -98,6 +111,10 @@ func _run() -> void:
 	var menu_screen := main.get("menu_screen") as Control
 	game_screen.visible = true
 	menu_screen.visible = false
+	await process_frame
+	if str(audio_manager.get("current_menu_music_id")) == "menu" or music_player.playing:
+		_fail("La música del menú continúa al salir de él")
+		return
 
 	var callback := Callable(patch, "_on_game_screen_input")
 	if not game_screen.gui_input.is_connected(callback):
@@ -125,7 +142,13 @@ func _run() -> void:
 		_fail("Pulsar en una zona libre de la pantalla no avanza al siguiente diálogo")
 		return
 
-	print("V045 OK: distribución, Extras/Salir y avance por clic directo validados.")
+	main.call("_show_menu")
+	await process_frame
+	if str(audio_manager.get("current_menu_music_id")) != "menu" or not music_player.playing or music_player.volume_db >= -0.1:
+		_fail("La música no vuelve a empezar con fundido al regresar al menú")
+		return
+
+	print("V045 OK: distribución, música en bucle con fundido, Extras/Salir y avance por clic directo validados.")
 	quit(0)
 
 

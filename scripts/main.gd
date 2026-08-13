@@ -121,7 +121,9 @@ func _build_menu() -> void:
 	menu_screen = Control.new()
 	menu_screen.name = "MenuScreen"
 	menu_screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	menu_screen.visible = false
 	add_child(menu_screen)
+	menu_screen.visibility_changed.connect(_on_menu_visibility_changed)
 
 	menu_background = TextureRect.new()
 	menu_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -642,6 +644,15 @@ func _show_menu() -> void:
 	game_screen.visible = false
 	ending_screen.visible = false
 	continue_button.disabled = not FileAccess.file_exists(SAVE_PATH)
+
+
+func _on_menu_visibility_changed() -> void:
+	if audio_manager == null or menu_screen == null:
+		return
+	if menu_screen.visible:
+		audio_manager.play_menu_music()
+	else:
+		audio_manager.stop_menu_music()
 
 
 func _quit_game() -> void:

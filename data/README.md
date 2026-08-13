@@ -6,7 +6,7 @@ El acceso en tiempo de ejecución está centralizado en `DataManager` (`res://au
 
 ## Estructura
 
-- `game_config.json`: orden de personajes, ajustes generales, rutas de guardado y localizaciones globales.
+- `game_config.json`: orden de personajes, ajustes generales, música del menú, rutas de guardado y localizaciones globales.
 - `characters/<id>.json`: identidad, estado habilitado, habitación, imagen/poses, música, volumen inicial, afinidad inicial y textos de transición.
 - `questions/<id>.json`: presentación, preguntas, cuatro respuestas, posición izquierda/derecha, puntuación y diálogo de reacción.
 - `rooms/<id>.json`: fondo, canción, volumen base, propietarios, nombre y descripción visual de la habitación.
@@ -15,6 +15,10 @@ El acceso en tiempo de ejecución está centralizado en `DataManager` (`res://au
 - `shop_catalog.json`: coleccionables y cosméticos, con nombre, descripción, categoría, precio, recurso opcional y estado `enabled`.
 - `achievements.json`: logros globales y sus condiciones data-driven sobre estadísticas.
 - `detalles-juego.json`: información ampliada usada por Extras/códice. `DataManager` la combina con los datos operativos de `characters/`.
+
+La sección `menu` de `game_config.json` registra `menu.ogg`, su volumen bajo, el
+fundido de entrada y el bucle. `AudioManager` inicia y detiene ese tema siguiendo
+la visibilidad real de `MenuScreen`.
 
 ## Mapas y localidades
 

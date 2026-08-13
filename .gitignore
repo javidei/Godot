@@ -4,6 +4,7 @@
 # Exportaciones locales
 build/
 exports/
+web/*.import
 
 # Sistema / editor
 .DS_Store

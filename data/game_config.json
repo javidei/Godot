@@ -2,7 +2,12 @@
   "schema_version": 2,
   "character_order": ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"],
   "menu": {
-    "characters_image": "res://assets/ui/menu-lineup.png"
+    "characters_image": "res://assets/ui/menu-lineup.png",
+    "music_id": "menu",
+    "music_path": "res://assets/audio/music/menu.ogg",
+    "music_volume": 0.35,
+    "music_fade_seconds": 4.0,
+    "music_loop": true
   },
   "audio": {
     "default_music_volume": 0.3,

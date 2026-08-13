@@ -29,6 +29,7 @@ const CLICK_SOUND_OPTIONS: Array[Dictionary] = [
 const CLICK_BOUND_META := &"entre_lineas_click_bound"
 
 var music_player: AudioStreamPlayer
+var menu_music_player: AudioStreamPlayer
 var sfx_player: AudioStreamPlayer
 var ui_player: AudioStreamPlayer
 var music_volume := 0.3
@@ -36,7 +37,10 @@ var effects_volume := 1.0
 var music_muted := false
 var effects_muted := false
 var current_music_id := ""
+var current_menu_music_id := ""
 var music_suspended := false
+var current_music_gain := 1.0
+var music_fade_tween: Tween
 var click_sound_id := DEFAULT_CLICK_SOUND
 
 
@@ -61,9 +65,11 @@ func _ready() -> void:
 	music_volume = DEFAULT_MUSIC_VOLUME
 	effects_volume = DEFAULT_EFFECTS_VOLUME
 	_ensure_audio_bus("Music")
+	_ensure_audio_bus("MenuMusic")
 	_ensure_audio_bus("SFX")
 	_ensure_audio_bus("UI")
 	music_player = _make_player("Music")
+	menu_music_player = _make_player("MenuMusic")
 	sfx_player = _make_player("SFX")
 	ui_player = _make_player("UI")
 	_load_settings()
@@ -95,6 +101,7 @@ func play_music(sound_id: String) -> bool:
 	if music_player == null:
 		return false
 	music_player.stop()
+	music_player.volume_db = 0.0
 	current_music_id = ""
 	var stream := _load_music(sound_id)
 	if stream == null:
@@ -107,10 +114,75 @@ func play_music(sound_id: String) -> bool:
 	return true
 
 
+func play_menu_music() -> bool:
+	var dm: Variant = DataAccess.dm()
+	var menu_music: Dictionary = dm.call("get_menu_music") if dm != null and dm.has_method("get_menu_music") else {}
+	if menu_music.is_empty():
+		stop_menu_music()
+		return false
+	return _play_menu_music_configured(
+		str(menu_music.get("id", "menu")),
+		float(menu_music.get("fade_seconds", 4.0)),
+		float(menu_music.get("volume", 0.35)),
+		bool(menu_music.get("loop", true))
+	)
+
+
+func stop_menu_music() -> void:
+	var dm: Variant = DataAccess.dm()
+	var menu_music: Dictionary = dm.call("get_menu_music") if dm != null and dm.has_method("get_menu_music") else {}
+	var menu_music_id := str(menu_music.get("id", "menu"))
+	if current_menu_music_id != menu_music_id:
+		return
+	_cancel_music_fade()
+	current_menu_music_id = ""
+	current_music_gain = 1.0
+	if menu_music_player != null:
+		menu_music_player.stop()
+		menu_music_player.volume_db = 0.0
+	_apply_audio_settings()
+
+
+func _play_menu_music_configured(sound_id: String, fade_seconds: float, gain: float, should_loop: bool) -> bool:
+	if menu_music_player == null:
+		return false
+	_cancel_music_fade()
+	menu_music_player.stop()
+	menu_music_player.volume_db = 0.0
+	current_menu_music_id = ""
+	var stream := _load_music(sound_id)
+	if stream == null:
+		menu_music_player.stream = null
+		return false
+	if should_loop:
+		_enable_loop(stream)
+	current_menu_music_id = sound_id
+	current_music_gain = clampf(gain, 0.0, 1.0)
+	_apply_audio_settings()
+	menu_music_player.stream = stream
+	var safe_fade := maxf(0.0, fade_seconds)
+	if safe_fade > 0.0:
+		menu_music_player.volume_db = -60.0
+	menu_music_player.play()
+	if safe_fade > 0.0:
+		music_fade_tween = create_tween()
+		music_fade_tween.set_trans(Tween.TRANS_SINE)
+		music_fade_tween.set_ease(Tween.EASE_OUT)
+		music_fade_tween.tween_property(menu_music_player, "volume_db", 0.0, safe_fade)
+	return true
+
+
 func stop_music() -> void:
 	current_music_id = ""
 	if music_player != null:
 		music_player.stop()
+		music_player.volume_db = 0.0
+
+
+func _cancel_music_fade() -> void:
+	if music_fade_tween != null and music_fade_tween.is_valid():
+		music_fade_tween.kill()
+	music_fade_tween = null
 
 
 func suspend_music() -> void:
@@ -389,6 +461,7 @@ func _enable_loop(stream: AudioStream) -> void:
 
 func _apply_audio_settings() -> void:
 	_apply_bus_settings("Music", get_music_output_linear(), music_muted or music_suspended)
+	_apply_bus_settings("MenuMusic", get_music_output_linear() * current_music_gain, music_muted)
 	_apply_bus_settings("SFX", effects_volume, effects_muted)
 	_apply_bus_settings("UI", effects_volume, effects_muted)
 

@@ -7,6 +7,15 @@ de música equivale al 10 % de la escala lineal anterior; por tanto, el 30 % ini
 equivale al 3 % anterior. Los efectos y la interfaz mantienen su escala completa.
 Los botones − y + cambian cada canal en pasos del 10 %.
 
+## Música del menú
+
+`menu.ogg` es el tema exclusivo de la pantalla principal. Su ruta, volumen base y
+duración del fundido se declaran en `data/game_config.json`. Cada entrada al menú
+reinicia la canción, la hace subir suavemente durante cuatro segundos hasta el 35 %
+del ya reducido canal Music y la mantiene en bucle. Al ocultarse `MenuScreen`, el
+tema se detiene para no continuar en Extras, Ajustes, la selección de protagonista
+o la partida.
+
 ## Añadir la música de los escenarios
 
 La forma más sencilla es subir cada canción a `assets/audio/music/` manteniendo uno
@@ -27,19 +36,18 @@ de estos nombres:
 No hace falta modificar escenas ni diálogos. En el siguiente commit Godot importará
 los OGG y la música empezará a sonar en bucle cuando aparezca su fondo.
 
-Para usar nombres diferentes, edita solo las dos tablas del principio de
-`scripts/audio_manager.gd`: `MUSIC_FILES` guarda las rutas y `BACKGROUND_MUSIC`
-relaciona cada fondo con una canción.
+Para usar nombres diferentes, edita `music_id`, `music_path`, `music_volume` y
+`music_loop` en el JSON de la habitación correspondiente. El menú utiliza los
+campos equivalentes de la sección `menu` de `data/game_config.json`.
 
 Ejemplo:
 
 ```gdscript
-const MUSIC_FILES := {
-    "ana_vampirica": "res://assets/audio/music/mi-cancion-de-ana.ogg"
-}
-
-const BACKGROUND_MUSIC := {
-    "habitacion_ana": "ana_vampirica"
+{
+  "music_id": "ana_vampirica",
+  "music_path": "res://assets/audio/music/mi-cancion-de-ana.ogg",
+  "music_volume": 1.0,
+  "music_loop": true
 }
 ```
 

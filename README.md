@@ -1,6 +1,6 @@
 # Entre líneas
 
-Novela visual en **Godot 4.7.1**, actualmente en **Early Access** y versión **0.6.0**, con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
+Novela visual en **Godot 4.7.1**, actualmente en **Early Access** y versión **0.6.1**, con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
 
 El subtítulo se calcula automáticamente con el número de personajes más una silla: los siete personajes actuales producen **«La octava silla»** y trece producirían **«La decimocuarta silla»**.
 
@@ -15,7 +15,7 @@ El subtítulo se calcula automáticamente con el número de personajes más una 
 - Interfaz para ratón/táctil y composición alternativa en orientación vertical.
 - Guardado offline por partida en `user://savegame.json`, preferencias en `user://settings.json` y perfil acumulado en `user://profile.json`, con migración compatible desde archivos locales anteriores.
 - `DataManager` como Autoload para centralizar personajes, preguntas, habitaciones, mapas, economía, tienda, logros, configuración y persistencia.
-- AudioManager con canales separados para música y efectos/UI, volúmenes y silencios independientes y música en bucle asociada a fondos/habitaciones mediante datos.
+- AudioManager con canales separados para música y efectos/UI, volúmenes y silencios independientes, música de menú con entrada gradual y temas en bucle asociados mediante datos.
 - La nueva partida presenta brevemente el año 2026 antes de elegir protagonista.
 - Mapa interactivo de Naranjal del Río como centro del recorrido, con accesos temporales a Triana y Monte del Toro, tienda y retorno después de cada conversación.
 - Recorrido libre por el resto del grupo: el personaje elegido representa al jugador, no aparece como encuentro y los marcadores conservan el estado visitado.
@@ -54,7 +54,7 @@ El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la
 
 ## Datos y diálogo
 
-La versión 0.6.0 permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de las visitas y el mapa se adapta al resto del grupo. Cada encuentro contiene una presentación, preguntas con cuatro opciones, puntuaciones configurables y una réplica inmediata.
+La versión 0.6.1 permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de las visitas y el mapa se adapta al resto del grupo. Cada encuentro contiene una presentación, preguntas con cuatro opciones, puntuaciones configurables y una réplica inmediata.
 
 Los datos estáticos se organizan principalmente en:
 
@@ -88,6 +88,8 @@ Los nombres de expresiones antiguos (`embarrassed`, `teasing`, `annoyed`, etc.) 
 ## Audio
 
 El menú separa los ajustes de **Música** y **Efectos de sonido**. Ambos pueden regularse y silenciarse de forma independiente. Las preferencias persistentes se guardan en `user://settings.json`; al migrar desde versiones anteriores se conservan los antiguos archivos locales como respaldo.
+
+El tema `assets/audio/music/menu.ogg` comienza desde el principio cada vez que se entra al menú, sube suavemente durante cuatro segundos hasta un volumen deliberadamente bajo y permanece en bucle hasta abandonar esa pantalla.
 
 Las habitaciones/personajes pueden configurar fondo, tema musical y volumen base desde sus JSON. Al cambiar de fondo, el tema correspondiente se carga y continúa en bucle. Si un fichero de audio configurado no existe, el juego continúa en silencio sin bloquear la ejecución.
 

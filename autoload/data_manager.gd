@@ -101,6 +101,25 @@ func get_menu_characters_path() -> String:
 	return str((menu as Dictionary).get("characters_image", ""))
 
 
+func get_menu_music() -> Dictionary:
+	ensure_loaded()
+	var raw_menu: Variant = _game_config.get("menu", {})
+	if typeof(raw_menu) != TYPE_DICTIONARY:
+		return {}
+	var menu := raw_menu as Dictionary
+	var music_id := str(menu.get("music_id", "")).strip_edges()
+	var music_path := str(menu.get("music_path", "")).strip_edges()
+	if music_id.is_empty() or music_path.is_empty():
+		return {}
+	return {
+		"id": music_id,
+		"path": music_path,
+		"volume": clampf(float(menu.get("music_volume", 0.35)), 0.0, 1.0),
+		"fade_seconds": maxf(0.0, float(menu.get("music_fade_seconds", 4.0))),
+		"loop": bool(menu.get("music_loop", true))
+	}
+
+
 func get_character_ids(enabled_only: bool = true) -> Array[String]:
 	ensure_loaded()
 	var result: Array[String] = []
@@ -248,6 +267,9 @@ func get_music_for_background(background_id: String) -> String:
 
 func get_music_path(music_id: String) -> String:
 	ensure_loaded()
+	var menu_music := get_menu_music()
+	if str(menu_music.get("id", "")) == music_id:
+		return str(menu_music.get("path", ""))
 	var room_id := str(_rooms_by_music.get(music_id, ""))
 	return str(get_room(room_id).get("music_path", ""))
 
@@ -256,6 +278,9 @@ func get_music_default_volume(music_id: String, character_id: String = "") -> fl
 	if not character_id.is_empty() and get_character_music_id(character_id) == music_id:
 		return get_character_music_volume(character_id)
 	ensure_loaded()
+	var menu_music := get_menu_music()
+	if str(menu_music.get("id", "")) == music_id:
+		return float(menu_music.get("volume", 0.35))
 	var room_id := str(_rooms_by_music.get(music_id, ""))
 	return clampf(float(get_room(room_id).get("music_volume", 1.0)), 0.0, 1.0)
 
@@ -263,8 +288,13 @@ func get_music_default_volume(music_id: String, character_id: String = "") -> fl
 func get_all_music_ids() -> Array[String]:
 	ensure_loaded()
 	var result: Array[String] = []
+	var menu_music_id := str(get_menu_music().get("id", ""))
+	if not menu_music_id.is_empty():
+		result.append(menu_music_id)
 	for raw_id in _rooms_by_music.keys():
-		result.append(str(raw_id))
+		var music_id := str(raw_id)
+		if not result.has(music_id):
+			result.append(music_id)
 	return result
 
 
@@ -658,6 +688,7 @@ func _rebuild_room_indexes() -> void:
 func _validate_data() -> void:
 	if _game_config.is_empty():
 		_record_error("game_config.json está vacío o no se ha podido leer")
+	_validate_menu_music()
 	for raw_character_id in _characters.keys():
 		var character_id := str(raw_character_id)
 		var character: Dictionary = _characters[raw_character_id]
@@ -686,6 +717,15 @@ func _validate_data() -> void:
 	_validate_economy()
 	_validate_shop_catalog()
 	_validate_achievements()
+
+
+func _validate_menu_music() -> void:
+	var menu_music := get_menu_music()
+	if menu_music.is_empty():
+		return
+	var music_path := str(menu_music.get("path", ""))
+	if not ResourceLoader.exists(music_path):
+		_record_error("La música del menú no existe o no se ha importado: %s" % music_path)
 
 
 func _validate_world_maps() -> void:

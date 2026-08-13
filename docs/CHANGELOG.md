@@ -12,6 +12,16 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.6.1] - 2026-08-13
+
+### Added
+
+- Tema `menu.ogg` para la pantalla principal, reproducido en bucle a volumen bajo.
+
+### Changed
+
+- La música del menú entra mediante un fundido de cuatro segundos, se detiene al salir y vuelve a comenzar gradualmente en cada regreso.
+
 ## [0.6.0] - 2026-08-13
 
 ### Added
