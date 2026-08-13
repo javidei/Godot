@@ -866,11 +866,18 @@ func _purchase_item(item: Dictionary) -> void:
 		if typeof(returned_state) == TYPE_DICTIONARY:
 			state = returned_state as Dictionary
 	if success:
+		if _collection_category_for_shop(item) == "collectible":
+			message += " Puedes verlo en Extras → Colección."
 		_set_state(state, true)
 		_open_shop(false)
 		_set_shop_status(message, false)
 	else:
 		_set_shop_status(message, true)
+
+
+func _collection_category_for_shop(item: Dictionary) -> String:
+	var category := str(item.get("category", "")).to_lower().strip_edges()
+	return "collectible" if category in ["collectible", "collectibles", "coleccionable", "coleccionables"] else category
 
 
 func _call_purchase(item_id: String, item: Dictionary, state: Dictionary) -> Variant:

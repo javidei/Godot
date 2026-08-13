@@ -14,6 +14,7 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 ### Changed
 
 - Al volver a una habitación a medias, una frase de reencuentro configurable espera una pulsación y continúa exactamente donde se dejó.
+- Los coleccionables comprados con asset visual, incluido el Retrato del grupo, muestran su imagen en `Extras → Colección` y permiten abrirla en una vista grande.
 
 ### Fixed
 

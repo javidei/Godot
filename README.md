@@ -20,7 +20,7 @@ El subtítulo se calcula automáticamente con el número de personajes más una 
 - Mapa interactivo de Naranjal del Río como centro del recorrido, con accesos temporales a Triana y Monte del Toro, tienda y retorno durante o después de cada conversación.
 - Cada habitación permite volver al mapa sin perder el avance; al regresar, una breve pantalla de reencuentro retoma el diálogo en el punto exacto guardado para ese personaje.
 - Recorrido libre por el resto del grupo: el personaje elegido representa al jugador, no aparece como encuentro y los marcadores conservan el estado visitado.
-- MONEDAS y recompensas únicas por partida; coleccionables, cosméticos, estadísticas y logros en un perfil global local.
+- MONEDAS y recompensas únicas por partida; coleccionables visibles y ampliables desde `Extras → Colección`, cosméticos, estadísticas y logros en un perfil global local.
 - Ajuste global con cinco perfiles procedurales de clic más la opción desactivada, todos en el bus de Efectos/UI.
 - Cuatro respuestas por pregunta en una cuadrícula táctil de dos columnas.
 - Afinidad independiente por personaje y puntuaciones configurables desde los datos de preguntas.

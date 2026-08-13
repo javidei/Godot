@@ -509,6 +509,22 @@ func _validate_extras(main: Control, extras: Node) -> bool:
 	if page_host == null or not _tree_contains_text(page_host as Node, "Retrato del grupo"):
 		_fail("La Colección no consulta los desbloqueos globales")
 		return false
+	var group_preview := main.find_child("CollectionPreview_illustration_group", true, false) as Button
+	var group_image := main.find_child("CollectionImage_illustration_group", true, false) as TextureRect
+	if group_preview == null or group_image == null or group_image.texture == null:
+		_fail("El Retrato del grupo comprado no se muestra visualmente en Colección")
+		return false
+	if main.find_child("CollectionLockedPreview_memory_naranjal_room", true, false) == null:
+		_fail("Un coleccionable pendiente revela su imagen antes de comprarlo")
+		return false
+	group_preview.emit_signal("pressed")
+	await process_frame
+	var fullscreen_preview := main.find_child("CollectionFullscreenPreview060", true, false) as Control
+	var fullscreen_image := main.find_child("CollectionFullscreenImage060", true, false) as TextureRect
+	if fullscreen_preview == null or not fullscreen_preview.visible or fullscreen_image == null or fullscreen_image.texture != group_image.texture:
+		_fail("El Retrato del grupo no se puede abrir en una vista grande")
+		return false
+	extras.call("_close_collection_preview")
 	extras.call("_show_character", "ana")
 	for _i in range(5):
 		await process_frame

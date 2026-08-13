@@ -52,6 +52,9 @@ var settings_screen: Control
 var settings_panel: PanelContainer
 var click_option_buttons: Dictionary = {}
 var click_selection_label: Label
+var collection_preview_overlay: Control
+var collection_preview_texture: TextureRect
+var collection_preview_title: Label
 
 
 func _load_data() -> void:
@@ -66,6 +69,7 @@ func _load_data() -> void:
 func _build_extras_screen() -> void:
 	super()
 	_configure_nav_button(back_button, "Volver", ARROW_LEFT_ICON_PATH, false)
+	_build_collection_preview()
 	_build_settings_screen()
 
 
@@ -133,6 +137,9 @@ func _show_home() -> void:
 
 
 func _go_back() -> void:
+	if collection_preview_overlay != null and collection_preview_overlay.visible:
+		_close_collection_preview()
+		return
 	match current_page:
 		"character_detail":
 			_show_characters()
@@ -140,6 +147,11 @@ func _go_back() -> void:
 			_show_home()
 		_:
 			_close_extras()
+
+
+func _close_extras() -> void:
+	_close_collection_preview()
+	super()
 
 
 func _show_character(character_id: String) -> void:
@@ -824,11 +836,123 @@ func _add_collection_card(parent: VBoxContainer, item: Dictionary, unlocked: boo
 		label.add_theme_color_override("font_color", TEXT_DIM)
 		label.add_theme_font_size_override("font_size", 14)
 		box.add_child(label)
+	_add_collection_art(box, item, unlocked)
 	var status := Label.new()
-	status.text = "DESBLOQUEADO GLOBALMENTE" if unlocked else "PENDIENTE · disponible en la tienda"
+	status.text = "DESBLOQUEADO · pulsa la imagen para verla completa" if unlocked and not str(item.get("asset", "")).is_empty() else ("DESBLOQUEADO GLOBALMENTE" if unlocked else "PENDIENTE · disponible en la tienda")
 	status.add_theme_color_override("font_color", GOLD if unlocked else Color("aa9c8a"))
 	status.add_theme_font_size_override("font_size", 12)
 	box.add_child(status)
+
+
+func _add_collection_art(parent: VBoxContainer, item: Dictionary, unlocked: bool) -> void:
+	var asset_path := str(item.get("asset", "")).strip_edges()
+	if asset_path.is_empty():
+		return
+	if not unlocked:
+		var locked := PanelContainer.new()
+		locked.name = "CollectionLockedPreview_" + str(item.get("id", "item"))
+		locked.custom_minimum_size = Vector2(0, 96)
+		locked.add_theme_stylebox_override("panel", main.call("_panel_style", Color(0.018, 0.014, 0.012, 0.96), Color(0.25, 0.22, 0.20, 0.85), 1, 8))
+		parent.add_child(locked)
+		var locked_label := Label.new()
+		locked_label.text = "VISTA PREVIA BLOQUEADA"
+		locked_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		locked_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		locked_label.add_theme_color_override("font_color", Color("8e8275"))
+		locked.add_child(locked_label)
+		return
+	if not ResourceLoader.exists(asset_path):
+		return
+	var texture := ResourceLoader.load(asset_path) as Texture2D
+	if texture == null:
+		return
+	var preview := main.call("_make_button", "", false) as Button
+	preview.name = "CollectionPreview_" + str(item.get("id", "item"))
+	preview.tooltip_text = "Ver " + str(item.get("name", "coleccionable")) + " a pantalla completa"
+	var compact := get_viewport().get_visible_rect().size.x < 760.0
+	preview.custom_minimum_size = Vector2(0, 150 if compact else 230)
+	preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	preview.clip_contents = true
+	preview.pressed.connect(_show_collection_preview.bind(item, texture))
+	parent.add_child(preview)
+	var image := TextureRect.new()
+	image.name = "CollectionImage_" + str(item.get("id", "item"))
+	image.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	image.offset_left = 5.0
+	image.offset_top = 5.0
+	image.offset_right = -5.0
+	image.offset_bottom = -5.0
+	image.texture = texture
+	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	preview.add_child(image)
+
+
+func _build_collection_preview() -> void:
+	if extras_screen == null or collection_preview_overlay != null:
+		return
+	collection_preview_overlay = Control.new()
+	collection_preview_overlay.name = "CollectionFullscreenPreview060"
+	collection_preview_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	collection_preview_overlay.z_index = 40
+	collection_preview_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	collection_preview_overlay.visible = false
+	extras_screen.add_child(collection_preview_overlay)
+	var shade := ColorRect.new()
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(0.008, 0.006, 0.005, 0.94)
+	shade.mouse_filter = Control.MOUSE_FILTER_STOP
+	collection_preview_overlay.add_child(shade)
+	var panel := PanelContainer.new()
+	panel.name = "CollectionFullscreenPanel060"
+	panel.anchor_left = 0.05
+	panel.anchor_top = 0.05
+	panel.anchor_right = 0.95
+	panel.anchor_bottom = 0.95
+	panel.add_theme_stylebox_override("panel", main.call("_panel_style", Color(0.025, 0.018, 0.015, 0.99), GOLD, 2, 14))
+	collection_preview_overlay.add_child(panel)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	panel.add_child(margin)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 10)
+	margin.add_child(box)
+	collection_preview_title = Label.new()
+	collection_preview_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	collection_preview_title.add_theme_color_override("font_color", GOLD)
+	collection_preview_title.add_theme_font_size_override("font_size", 22)
+	box.add_child(collection_preview_title)
+	collection_preview_texture = TextureRect.new()
+	collection_preview_texture.name = "CollectionFullscreenImage060"
+	collection_preview_texture.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	collection_preview_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	collection_preview_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	collection_preview_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(collection_preview_texture)
+	var close := main.call("_make_button", "Cerrar", false) as Button
+	close.name = "CollectionFullscreenClose060"
+	close.custom_minimum_size = Vector2(0, 50)
+	close.pressed.connect(_close_collection_preview)
+	box.add_child(close)
+
+
+func _show_collection_preview(item: Dictionary, texture: Texture2D) -> void:
+	if collection_preview_overlay == null or collection_preview_texture == null:
+		return
+	collection_preview_title.text = str(item.get("name", "Coleccionable")).to_upper()
+	collection_preview_texture.texture = texture
+	collection_preview_overlay.visible = true
+
+
+func _close_collection_preview() -> void:
+	if collection_preview_overlay != null:
+		collection_preview_overlay.visible = false
+	if collection_preview_texture != null:
+		collection_preview_texture.texture = null
 
 
 func _add_empty_panel(parent: VBoxContainer, text: String) -> void:
