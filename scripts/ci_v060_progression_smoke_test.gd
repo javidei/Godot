@@ -2,6 +2,8 @@ extends SceneTree
 
 const MAP_PATH := "res://assets/maps/naranjal_del_rio.png"
 const COIN_ICON_PATH := "res://assets/ui/icons/coin.svg"
+const GROUP_ART_ILLUSTRATED := "res://assets/collectibles/group_portrait_illustrated.png"
+const GROUP_ART_PIXEL := "res://assets/collectibles/group_portrait_pixel.png"
 
 var data_manager: Node
 var intro_callback_called := false
@@ -206,6 +208,25 @@ func _validate_world_data() -> bool:
 		if not ["collectible", "cosmetic"].has(str(item.get("category", ""))):
 			_fail("La tienda contiene una categoría narrativa no permitida")
 			return false
+	var group_pack: Dictionary = {}
+	for raw_item in shop_items:
+		if str((raw_item as Dictionary).get("id", "")) == "illustration_group":
+			group_pack = raw_item as Dictionary
+			break
+	var group_artworks: Array = group_pack.get("artworks", [])
+	if group_artworks.size() != 2 or str(group_pack.get("asset", "")) != GROUP_ART_ILLUSTRATED:
+		_fail("Retratos del grupo no desbloquea exactamente los dos diseños adjuntos")
+		return false
+	var expected_art_paths := [GROUP_ART_ILLUSTRATED, GROUP_ART_PIXEL]
+	for path in expected_art_paths:
+		if not FileAccess.file_exists(path) or not ResourceLoader.exists(path):
+			_fail("Falta un diseño físico del Retrato del grupo: " + path)
+			return false
+	var illustrated := load(GROUP_ART_ILLUSTRATED) as Texture2D
+	var pixel := load(GROUP_ART_PIXEL) as Texture2D
+	if illustrated == null or illustrated.get_width() != 1672 or illustrated.get_height() != 941 or pixel == null or pixel.get_width() != 1536 or pixel.get_height() != 1024:
+		_fail("Los dos diseños del grupo no conservan sus dimensiones originales")
+		return false
 	var ana_cosmetics: Array = data_manager.call("get_character_cosmetics", "ana", true)
 	var jony_cosmetics: Array = data_manager.call("get_character_cosmetics", "jony", true)
 	if ana_cosmetics.size() < 2 or jony_cosmetics.size() < 2:
@@ -506,23 +527,34 @@ func _validate_extras(main: Control, extras: Node) -> bool:
 	extras.call("_show_collection")
 	for _i in range(2):
 		await process_frame
-	if page_host == null or not _tree_contains_text(page_host as Node, "Retrato del grupo"):
+	if page_host == null or not _tree_contains_text(page_host as Node, "Retratos del grupo"):
 		_fail("La Colección no consulta los desbloqueos globales")
 		return false
-	var group_preview := main.find_child("CollectionPreview_illustration_group", true, false) as Button
-	var group_image := main.find_child("CollectionImage_illustration_group", true, false) as TextureRect
-	if group_preview == null or group_image == null or group_image.texture == null:
-		_fail("El Retrato del grupo comprado no se muestra visualmente en Colección")
+	var illustrated_preview := main.find_child("CollectionPreview_illustration_group_illustrated", true, false) as Button
+	var pixel_preview := main.find_child("CollectionPreview_illustration_group_pixel", true, false) as Button
+	var illustrated_image := main.find_child("CollectionImage_illustration_group_illustrated", true, false) as TextureRect
+	var pixel_image := main.find_child("CollectionImage_illustration_group_pixel", true, false) as TextureRect
+	if illustrated_preview == null or pixel_preview == null or illustrated_image == null or pixel_image == null or illustrated_image.texture == null or pixel_image.texture == null:
+		_fail("La compra no muestra los dos diseños del grupo en Colección")
+		return false
+	if illustrated_image.texture_filter != CanvasItem.TEXTURE_FILTER_LINEAR or pixel_image.texture_filter != CanvasItem.TEXTURE_FILTER_NEAREST:
+		_fail("El pixel art no conserva píxeles nítidos o la ilustración pierde su filtrado suave")
 		return false
 	if main.find_child("CollectionLockedPreview_memory_naranjal_room", true, false) == null:
 		_fail("Un coleccionable pendiente revela su imagen antes de comprarlo")
 		return false
-	group_preview.emit_signal("pressed")
+	illustrated_preview.emit_signal("pressed")
 	await process_frame
 	var fullscreen_preview := main.find_child("CollectionFullscreenPreview060", true, false) as Control
 	var fullscreen_image := main.find_child("CollectionFullscreenImage060", true, false) as TextureRect
-	if fullscreen_preview == null or not fullscreen_preview.visible or fullscreen_image == null or fullscreen_image.texture != group_image.texture:
-		_fail("El Retrato del grupo no se puede abrir en una vista grande")
+	if fullscreen_preview == null or not fullscreen_preview.visible or fullscreen_image == null or fullscreen_image.texture != illustrated_image.texture:
+		_fail("El diseño ilustrado del grupo no se puede abrir en una vista grande")
+		return false
+	extras.call("_close_collection_preview")
+	pixel_preview.emit_signal("pressed")
+	await process_frame
+	if not fullscreen_preview.visible or fullscreen_image.texture != pixel_image.texture or fullscreen_image.texture == illustrated_image.texture:
+		_fail("El diseño pixel art no se abre como segundo arte independiente")
 		return false
 	extras.call("_close_collection_preview")
 	extras.call("_show_character", "ana")

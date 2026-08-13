@@ -40,6 +40,9 @@ assets/
 │   ├── ana/
 │   └── argentino/
 ├── audio/
+├── collectibles/
+│   ├── group_portrait_illustrated.png
+│   └── group_portrait_pixel.png
 ├── maps/
 │   └── naranjal_del_rio.png
 └── ui/

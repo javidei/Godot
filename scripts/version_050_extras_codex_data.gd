@@ -838,15 +838,15 @@ func _add_collection_card(parent: VBoxContainer, item: Dictionary, unlocked: boo
 		box.add_child(label)
 	_add_collection_art(box, item, unlocked)
 	var status := Label.new()
-	status.text = "DESBLOQUEADO · pulsa la imagen para verla completa" if unlocked and not str(item.get("asset", "")).is_empty() else ("DESBLOQUEADO GLOBALMENTE" if unlocked else "PENDIENTE · disponible en la tienda")
+	status.text = "DESBLOQUEADO · pulsa cada imagen para verla completa" if unlocked and not _collection_artworks(item).is_empty() else ("DESBLOQUEADO GLOBALMENTE" if unlocked else "PENDIENTE · disponible en la tienda")
 	status.add_theme_color_override("font_color", GOLD if unlocked else Color("aa9c8a"))
 	status.add_theme_font_size_override("font_size", 12)
 	box.add_child(status)
 
 
 func _add_collection_art(parent: VBoxContainer, item: Dictionary, unlocked: bool) -> void:
-	var asset_path := str(item.get("asset", "")).strip_edges()
-	if asset_path.is_empty():
+	var artworks := _collection_artworks(item)
+	if artworks.is_empty():
 		return
 	if not unlocked:
 		var locked := PanelContainer.new()
@@ -855,38 +855,72 @@ func _add_collection_art(parent: VBoxContainer, item: Dictionary, unlocked: bool
 		locked.add_theme_stylebox_override("panel", main.call("_panel_style", Color(0.018, 0.014, 0.012, 0.96), Color(0.25, 0.22, 0.20, 0.85), 1, 8))
 		parent.add_child(locked)
 		var locked_label := Label.new()
-		locked_label.text = "VISTA PREVIA BLOQUEADA"
+		locked_label.text = "%d DISEÑO%s DE ARTE BLOQUEADO%s" % [artworks.size(), "" if artworks.size() == 1 else "S", "" if artworks.size() == 1 else "S"]
 		locked_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		locked_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		locked_label.add_theme_color_override("font_color", Color("8e8275"))
 		locked.add_child(locked_label)
 		return
-	if not ResourceLoader.exists(asset_path):
-		return
-	var texture := ResourceLoader.load(asset_path) as Texture2D
-	if texture == null:
-		return
-	var preview := main.call("_make_button", "", false) as Button
-	preview.name = "CollectionPreview_" + str(item.get("id", "item"))
-	preview.tooltip_text = "Ver " + str(item.get("name", "coleccionable")) + " a pantalla completa"
-	var compact := get_viewport().get_visible_rect().size.x < 760.0
-	preview.custom_minimum_size = Vector2(0, 150 if compact else 230)
-	preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	preview.clip_contents = true
-	preview.pressed.connect(_show_collection_preview.bind(item, texture))
-	parent.add_child(preview)
-	var image := TextureRect.new()
-	image.name = "CollectionImage_" + str(item.get("id", "item"))
-	image.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	image.offset_left = 5.0
-	image.offset_top = 5.0
-	image.offset_right = -5.0
-	image.offset_bottom = -5.0
-	image.texture = texture
-	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	image.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	preview.add_child(image)
+	for artwork in artworks:
+		var asset_path := str(artwork.get("asset", "")).strip_edges()
+		if not ResourceLoader.exists(asset_path):
+			continue
+		var texture := ResourceLoader.load(asset_path) as Texture2D
+		if texture == null:
+			continue
+		var artwork_name := str(artwork.get("name", item.get("name", "Coleccionable")))
+		var artwork_label := Label.new()
+		artwork_label.text = artwork_name
+		artwork_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		artwork_label.add_theme_color_override("font_color", Color("f5d596"))
+		artwork_label.add_theme_font_size_override("font_size", 14)
+		parent.add_child(artwork_label)
+		var suffix := str(artwork.get("id", "")).strip_edges()
+		var node_id := str(item.get("id", "item")) + ("_" + suffix if not suffix.is_empty() else "")
+		var preview := main.call("_make_button", "", false) as Button
+		preview.name = "CollectionPreview_" + node_id
+		preview.tooltip_text = "Ver " + artwork_name + " a pantalla completa"
+		var compact := get_viewport().get_visible_rect().size.x < 760.0
+		preview.custom_minimum_size = Vector2(0, 150 if compact else 230)
+		preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		preview.clip_contents = true
+		preview.pressed.connect(_show_collection_preview.bind(artwork, texture))
+		parent.add_child(preview)
+		var image := TextureRect.new()
+		image.name = "CollectionImage_" + node_id
+		image.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		image.offset_left = 5.0
+		image.offset_top = 5.0
+		image.offset_right = -5.0
+		image.offset_bottom = -5.0
+		image.texture = texture
+		image.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST if str(artwork.get("filter", "")).to_lower() == "nearest" else CanvasItem.TEXTURE_FILTER_LINEAR
+		image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		preview.add_child(image)
+
+
+func _collection_artworks(item: Dictionary) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var raw: Variant = item.get("artworks", [])
+	if typeof(raw) == TYPE_ARRAY:
+		for value in raw as Array:
+			if typeof(value) != TYPE_DICTIONARY:
+				continue
+			var artwork := (value as Dictionary).duplicate(true)
+			if not str(artwork.get("asset", "")).strip_edges().is_empty():
+				result.append(artwork)
+	if not result.is_empty():
+		return result
+	var asset_path := str(item.get("asset", "")).strip_edges()
+	if not asset_path.is_empty():
+		result.append({
+			"id": "",
+			"name": str(item.get("name", item.get("nombre", "Coleccionable"))),
+			"asset": asset_path
+		})
+	return result
 
 
 func _build_collection_preview() -> void:
@@ -945,6 +979,7 @@ func _show_collection_preview(item: Dictionary, texture: Texture2D) -> void:
 		return
 	collection_preview_title.text = str(item.get("name", "Coleccionable")).to_upper()
 	collection_preview_texture.texture = texture
+	collection_preview_texture.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST if str(item.get("filter", "")).to_lower() == "nearest" else CanvasItem.TEXTURE_FILTER_LINEAR
 	collection_preview_overlay.visible = true
 
 

@@ -3,12 +3,25 @@
   "items": [
     {
       "id": "illustration_group",
-      "name": "Retrato del grupo",
-      "description": "Una ilustración para recordar a quienes ocupan las sillas.",
+      "name": "Retratos del grupo",
+      "description": "Dos diseños de arte con el grupo completo: ilustración nocturna y versión pixel art.",
       "category": "collectible",
       "category_name": "Coleccionable",
       "price": 30,
-      "asset": "res://assets/ui/menu-lineup.png",
+      "asset": "res://assets/collectibles/group_portrait_illustrated.png",
+      "artworks": [
+        {
+          "id": "illustrated",
+          "name": "Retrato nocturno ilustrado",
+          "asset": "res://assets/collectibles/group_portrait_illustrated.png"
+        },
+        {
+          "id": "pixel",
+          "name": "Retrato nocturno pixel art",
+          "asset": "res://assets/collectibles/group_portrait_pixel.png",
+          "filter": "nearest"
+        }
+      ],
       "enabled": true
     },
     {

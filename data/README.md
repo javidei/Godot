@@ -45,6 +45,8 @@ Las reglas de `economy.json` resuelven un evento a un identificador de recompens
 
 La tienda solo admite las categorías `collectible` y `cosmetic`. Los precios se leen de `shop_catalog.json`; la historia principal no consulta compras ni introduce bloqueos narrativos. Los objetos comprados se escriben en el perfil global.
 
+Un coleccionable puede incluir un único `asset` o un array `artworks` con varios diseños. Una sola compra desbloquea el conjunto completo y Extras presenta cada arte como una imagen ampliable independiente.
+
 Un cosmético puede asociarse a una o varias fichas sin crear lógica específica por personaje:
 
 ```json

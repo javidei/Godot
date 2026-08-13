@@ -835,6 +835,17 @@ func _validate_shop_catalog() -> void:
 			_record_error("Shop item '%s' has an unsupported category" % item_id)
 		if int(item.get("price", -1)) < 0:
 			_record_error("Shop item '%s' has an invalid price" % item_id)
+		var artworks: Variant = item.get("artworks", [])
+		if typeof(artworks) != TYPE_ARRAY:
+			_record_error("Shop item '%s' must define artworks as an array" % item_id)
+		else:
+			for raw_artwork in artworks as Array:
+				if typeof(raw_artwork) != TYPE_DICTIONARY:
+					_record_error("Shop item '%s' contains an invalid artwork" % item_id)
+					continue
+				var artwork_path := str((raw_artwork as Dictionary).get("asset", "")).strip_edges()
+				if artwork_path.is_empty() or not ResourceLoader.exists(artwork_path):
+					_record_error("Shop item '%s' points to a missing artwork: %s" % [item_id, artwork_path])
 		var character_ids: Variant = item.get("character_ids", [])
 		if typeof(character_ids) != TYPE_ARRAY:
 			_record_error("Shop item '%s' must define character_ids as an array" % item_id)
