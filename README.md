@@ -1,6 +1,6 @@
 # Entre líneas
 
-Novela visual en **Godot 4.7.1**, actualmente en **Early Access** y versión **0.6.1**, con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
+Novela visual en **Godot 4.7.1**, actualmente en **Early Access** y versión **0.6.2**, con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
 
 El subtítulo se calcula automáticamente con el número de personajes más una silla: los siete personajes actuales producen **«La octava silla»** y trece producirían **«La decimocuarta silla»**.
 
@@ -58,7 +58,7 @@ El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la
 
 ## Datos y diálogo
 
-La versión 0.6.1 permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de las visitas y el mapa se adapta al resto del grupo. Cada encuentro contiene una presentación, preguntas con cuatro opciones, puntuaciones configurables y una réplica inmediata. Las conversaciones pueden pausarse para visitar otra habitación y conservan un checkpoint independiente por personaje.
+La versión 0.6.2 permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de las visitas y el mapa se adapta al resto del grupo. Cada encuentro contiene una presentación, preguntas con cuatro opciones, puntuaciones configurables y una réplica inmediata. Las conversaciones pueden pausarse para visitar otra habitación y conservan un checkpoint independiente por personaje.
 
 Los datos estáticos se organizan principalmente en:
 

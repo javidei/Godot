@@ -8,6 +8,14 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [0.6.2] - 2026-08-13
+
+### Added
+
 - Pestaña permanente de Cosméticos en todas las fichas de personaje, conectada al perfil global, con skins y mascotas iniciales para Ana y Jony.
 - Botón `Mapa` dentro de las habitaciones y checkpoints independientes para pausar y retomar cada conversación.
 
@@ -23,6 +31,9 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 - Las tarjetas de selección de protagonista ya no reproducen dos sonidos de clic en una sola pulsación.
 - Los regresos desde Triana y Monte del Toro se integran abajo a la derecha de cada panel temporal y desaparecen de la cabecera para evitar duplicados.
 - La introducción temporal deja de repetir «2026» y las pantallas negras esperan una interacción real por clic, toque o teclado, incluso si se realiza durante el fundido.
+- La música del menú usa un reproductor y bus independientes, por lo que puede sonar mientras la pista de habitación continúa avanzando silenciada y se recupera al continuar.
+- El mapa data-driven oculta diálogo y HUD al abrirse y los restaura al entrar en una habitación, conservando la corrección de interfaz de la rama remota.
+- La integración conserva los perfiles narrativos ampliados y añade únicamente residencia y zona a los personajes de la versión 0.6.
 
 ## [0.6.1] - 2026-08-13
 

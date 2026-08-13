@@ -29,7 +29,7 @@ La base de `DataManager`, los JSON de personajes/preguntas/habitaciones y el gua
 - [ ] Mejorar visualmente la selección de personaje.
 - [ ] Toda nueva pantalla o mecánica deberá diseñarse desde el principio para funcionar tanto en PC como en Android, incluyendo ratón, teclado y controles táctiles.
 
-## Implementado en 0.6.0
+## Implementado en 0.6.x
 
 ### Prólogo e inicio narrativo
 
@@ -41,7 +41,7 @@ La base de `DataManager`, los JSON de personajes/preguntas/habitaciones y el gua
 - [x] Evolucionar el selector de visitas al mapa visual de Naranjal del Río.
 - [x] Definir casas, tienda y conexiones con coordenadas normalizadas en JSON.
 - [x] Navegar `mapa → casa/habitación → conversación → mapa`.
-- [x] Permitir salir de una conversación, visitar otra habitación y retomarla desde un checkpoint por personaje.
+- [x] Permitir salir de una conversación, visitar otra habitación y retomarla desde un checkpoint por personaje (0.6.2).
 - [x] Representar estado visitado/no visitado sin ocultar revisitas.
 - [x] Añadir Triana y Monte del Toro mediante una vista temporal sustituible por futuros PNG.
 - [x] Separar MONEDAS/recompensas por partida de colección, logros y estadísticas globales.
@@ -64,6 +64,7 @@ La base de `DataManager`, los JSON de personajes/preguntas/habitaciones y el gua
 - [ ] **Ana:** mascotas visuales, por ejemplo distintos gatos que aparezcan junto a ella.
 - [ ] **Javi, Sue y Argentino:** concepto pendiente de definir.
 - [ ] Mostrar la skin durante las escenas del personaje dentro del gameplay; no es necesario reflejarla en mapa ni menús generales.
+
 ### Ampliaciones del mapa
 
 - [ ] Incorporar mapas definitivos para Triana y Monte del Toro cuando existan sus assets.

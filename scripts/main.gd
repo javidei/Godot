@@ -701,6 +701,7 @@ func _load_game_from_button() -> void:
 
 
 func _go_to(node_id: String, add_to_history: bool = true) -> void:
+	audio_manager.stop_menu_music()
 	audio_manager.resume_music()
 	_clear_choices()
 	var resolved_node_id := Story.resolve_for_player(node_id, _player_character_id())

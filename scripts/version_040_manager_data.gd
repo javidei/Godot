@@ -39,6 +39,7 @@ func _open_selector(state: Dictionary) -> void:
 	main.set("state", state)
 	var world_map := _world_map_manager()
 	if world_map != null and world_map.has_method("open_selector"):
+		_set_game_interface_visible(false)
 		# El overlay histórico queda como latch técnico bajo el mapa (z 210 frente
 		# a z 220). El watcher original usa su visibilidad para no reabrir/recrear
 		# el selector cada frame; no recibe input ni llega a verse.
@@ -57,6 +58,7 @@ func _hide_selector() -> void:
 	var world_map := _world_map_manager()
 	if world_map != null and world_map.has_method("close_selector"):
 		world_map.call("close_selector")
+	_set_game_interface_visible(true)
 
 
 func _available_visits(state: Dictionary) -> Array[String]:
