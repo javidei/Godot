@@ -27,6 +27,17 @@ La base de `DataManager`, los JSON de personajes/preguntas/habitaciones y el gua
 - [ ] Revisar experiencia táctil/móvil de las pantallas principales y Extras.
 - [ ] Revisar comportamiento de pantalla completa en los entornos soportados.
 - [ ] Mejorar visualmente la selección de personaje.
+- [ ] Toda nueva pantalla o mecánica deberá diseñarse desde el principio para funcionar tanto en PC como en Android, incluyendo ratón, teclado y controles táctiles.
+
+### Prólogo e inicio narrativo
+
+Antes de comenzar una nueva partida deberá mostrarse una introducción breve de tono narrativo que sitúe temporalmente la historia.
+
+- [ ] Crear una pantalla/secuencia de prólogo antes de la selección o inicio efectivo de la partida.
+- [ ] Usar como punto de partida el texto/idea: **«Los hechos acontecieron desde 2026...»**, pendiente de redactar su versión narrativa definitiva.
+- [ ] Permitir continuar el prólogo mediante clic, toque o teclado.
+- [ ] Mantener el prólogo adaptable a PC y Android.
+- [ ] Valorar animaciones o transiciones suaves de texto sin ralentizar excesivamente el inicio de nuevas partidas.
 
 ## Más adelante
 
@@ -42,6 +53,7 @@ La primera versión deberá ser sencilla: una única moneda llamada **Monedas**,
 - [ ] Diseñar un catálogo pequeño de coleccionables, extras, decoraciones y cosméticos mediante JSON.
 - [ ] Añadir inventario global de objetos comprados o desbloqueados.
 - [ ] Crear una primera interfaz de compra e inventario.
+- [ ] Situar la tienda como una localización del futuro mapa, en lugar de añadirla como botón independiente del menú principal.
 - [ ] Incorporar posteriormente favores, actividades y minijuegos opcionales como nuevas fuentes de moneda.
 - [ ] Evitar que la historia principal dependa de tener monedas; la economía debe ampliar contenido, personalización y exploración.
 
@@ -49,6 +61,9 @@ La primera versión deberá ser sencilla: una única moneda llamada **Monedas**,
 
 Crear un sistema local de progreso que registre acciones del jugador y permita desbloquear logros automáticamente a partir de estadísticas acumuladas.
 
+Los **logros, estadísticas, coleccionables y cosméticos serán globales al juego** y persistirán entre partidas. Las **monedas, afinidad y progreso narrativo serán propios de cada partida**.
+
+- [ ] Crear un perfil global persistente separado de las partidas guardadas.
 - [ ] Crear un registro persistente de estadísticas del jugador.
 - [ ] Contabilizar tiempo jugado evitando, cuando sea posible, sumar periodos largos con la pestaña/aplicación inactiva.
 - [ ] Registrar sesiones iniciadas y formato/plataforma utilizada, por ejemplo escritorio/PC y móvil/táctil cuando pueda detectarse de forma fiable.
@@ -64,16 +79,34 @@ Crear un sistema local de progreso que registre acciones del jugador y permita d
 
 ### Mapa interactivo
 
-El mapa será una evolución del actual selector de visitas, no una reescritura inmediata del juego. Su desarrollo deberá permitir mantener funcional el flujo actual durante la transición.
+El mapa será una evolución completa del actual selector de visitas y deberá convertirse en una **zona de mapa real e interactiva**, no en una simple colección de botones con fondos de habitaciones. Su desarrollo deberá permitir mantener funcional el flujo actual durante la transición.
 
-- [ ] Diseñar el concepto visual del mapa.
-- [ ] Definir las localizaciones iniciales.
+#### Geografía narrativa
+
+El mundo utilizará localizaciones ficticias inspiradas en lugares reales, evitando mostrar literalmente los nombres reales dentro de la historia.
+
+- [ ] Crear el **pueblo principal ficticio**, inspirado geográficamente en Palma del Río, como núcleo del mapa donde vive la mayor parte del grupo.
+- [ ] El nombre del pueblo principal deberá evocar elementos reconocibles de su inspiración, especialmente **las naranjas** y, de forma secundaria, referencias rurales como las ovejas.
+- [ ] Crear una **ciudad ficticia inspirada en Sevilla**, donde viven actualmente Jony y Ana.
+- [ ] Crear un **municipio ficticio inspirado en Montoro**, donde vive Carmen.
+- [ ] Mantener relaciones de distancia y desplazamiento narrativamente coherentes entre las tres zonas sin necesidad de reproducir kilómetros o cartografía real de forma exacta.
+- [ ] Permitir ampliar posteriormente el mundo con otras ciudades, viajes y localizaciones especiales.
+
+#### Navegación
+
+- [ ] Diseñar el concepto visual del mapa principal.
+- [ ] Definir las localizaciones iniciales dentro del pueblo principal.
 - [ ] Diseñar la navegación `mapa → casa/habitación`.
 - [ ] Representar estado visitado/no visitado.
 - [ ] Volver al mapa después de finalizar la visita de cada personaje.
+- [ ] Permitir regresar a una habitación ya visitada para descubrir nuevas escenas, personajes visitantes o eventos según el progreso.
+- [ ] Permitir que personajes puedan aparecer temporalmente en habitaciones/localizaciones de otros personajes.
 - [ ] Mantener elección libre del siguiente destino.
 - [ ] Permitir abandonar las visitas y regresar al menú.
 - [ ] Preparar el sistema para localizaciones bloqueables/desbloqueables.
+- [ ] Incluir localizaciones funcionales que no sean viviendas, empezando por la futura tienda.
+- [ ] Diseñar el mapa, zonas clicables y controles para funcionar correctamente con ratón en PC y mediante toque en Android.
+- [ ] Evitar objetivos clicables demasiado pequeños y contemplar layouts distintos para horizontal y vertical.
 
 ### Personajes y amistad
 
