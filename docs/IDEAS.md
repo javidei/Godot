@@ -89,10 +89,31 @@ Las recompensas importantes deberían ser **de una sola vez** cuando corresponda
 - [ ] Mejoras puramente visuales del mapa o de la interfaz del jugador.
 - [ ] Valorar objetos que permitan iniciar actividades o eventos concretos, evitando que la historia principal dependa de tener dinero.
 
+### Skins y complementos visuales de personajes
+
+La tienda podrá incluir **skins y complementos puramente visuales** que modifiquen la apariencia del personaje durante sus escenas dentro del juego.
+
+- [ ] Las skins compradas/desbloqueadas deberán conservarse como progreso global y poder aplicarse al personaje correspondiente.
+- [ ] El cambio visual se mostrará en la representación del personaje durante el gameplay y sus conversaciones; no es necesario replicarlo en el mapa, selectores u otros menús generales.
+- [ ] Añadir en la pantalla de información de cada personaje una pestaña **Skins** con las apariencias conseguidas y una previsualización grande.
+- [ ] Mantener las skins y sus assets configurables mediante datos para poder ampliar el catálogo sin lógica específica por cada variante.
+
+Primeras propuestas de catálogo:
+
+- **Fran / Smokey:** variaciones de sus camisas, manteniendo al personaje igual y cambiando principalmente el diseño/color de la camisa.
+- **Carmen:** distintos colores de pelo, inspirados en que ha llevado el pelo teñido de varios colores; se podrán valorar también algunas variaciones de ropa.
+- **Jony:** complementos visuales en forma de mascotas, por ejemplo distintos gatos que puedan aparecer junto a él.
+- **Ana:** complementos visuales en forma de mascotas, por ejemplo distintos gatos que puedan aparecer junto a ella.
+- **Javi:** skins pendientes de definir.
+- **Sue:** skins pendientes de definir.
+- **Argentino:** skins pendientes de definir.
+
+El comportamiento exacto para elegir entre varias skins desbloqueadas podrá concretarse cuando se implemente el sistema; como mínimo deberán poder consultarse en la ficha del personaje y aplicarse visualmente en sus escenas.
+
 ### Propuesta técnica inicial
 
 - [ ] Guardar el saldo dentro de la partida local (`state`) para que cada save pueda tener su propia economía.
-- [ ] Crear un inventario local con identificadores de objetos comprados/desbloqueados.
+- [ ] Mantener los objetos, coleccionables y cosméticos comprados como desbloqueos globales persistentes separados del saldo de cada partida.
 - [ ] Definir catálogo, precios y recompensas mediante JSON para poder balancearlos sin tocar código.
 - [ ] Registrar recompensas únicas ya cobradas mediante identificadores para evitar duplicados.
 - [ ] Crear más adelante una pantalla de tienda/inventario integrada con el mapa o con alguna localización/personaje.
