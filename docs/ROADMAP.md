@@ -32,16 +32,35 @@ La base de `DataManager`, los JSON de personajes/preguntas/habitaciones y el gua
 
 ### Economía, monedas y compras
 
-La primera versión deberá ser sencilla: una única moneda local por partida obtenida jugando.
+La primera versión deberá ser sencilla: una única moneda llamada **Monedas**, representada mediante un icono de moneda. El saldo será propio de cada partida, mientras que los coleccionables, extras y cosméticos comprados serán desbloqueos globales que se conservarán al empezar partidas nuevas.
 
-- [ ] Añadir saldo de moneda al estado de la partida y al sistema de guardado.
+- [ ] Añadir saldo de monedas al estado de cada partida y al sistema de guardado.
+- [ ] Mantener desbloqueos globales en un perfil persistente separado del save.
 - [ ] Definir recompensas mediante datos y registrar cuáles ya se han cobrado para evitar repetir recompensas únicas.
 - [ ] Empezar premiando contenido narrativo: primeras visitas, escenas nuevas, eventos especiales e hitos de exploración.
-- [ ] Diseñar un catálogo pequeño de objetos y extras comprables mediante JSON.
-- [ ] Añadir inventario de objetos comprados o desbloqueados.
+- [ ] Añadir una fuente repetible sencilla de pocas monedas para evitar bloqueos económicos, con recompensa mucho menor que el contenido nuevo.
+- [ ] Diseñar un catálogo pequeño de coleccionables, extras, decoraciones y cosméticos mediante JSON.
+- [ ] Añadir inventario global de objetos comprados o desbloqueados.
 - [ ] Crear una primera interfaz de compra e inventario.
 - [ ] Incorporar posteriormente favores, actividades y minijuegos opcionales como nuevas fuentes de moneda.
 - [ ] Evitar que la historia principal dependa de tener monedas; la economía debe ampliar contenido, personalización y exploración.
+
+### Logros y estadísticas del jugador
+
+Crear un sistema local de progreso que registre acciones del jugador y permita desbloquear logros automáticamente a partir de estadísticas acumuladas.
+
+- [ ] Crear un registro persistente de estadísticas del jugador.
+- [ ] Contabilizar tiempo jugado evitando, cuando sea posible, sumar periodos largos con la pestaña/aplicación inactiva.
+- [ ] Registrar sesiones iniciadas y formato/plataforma utilizada, por ejemplo escritorio/PC y móvil/táctil cuando pueda detectarse de forma fiable.
+- [ ] Registrar visitas por personaje y por habitación/localización.
+- [ ] Registrar protagonistas utilizados y número de partidas con cada personaje.
+- [ ] Registrar conversaciones, decisiones, escenas/eventos únicos, monedas ganadas/gastadas y desbloqueos obtenidos.
+- [ ] Crear una pantalla de «Cosas que ha hecho el jugador» con estadísticas y curiosidades como personaje más visitado o ubicación favorita.
+- [ ] Crear logros por tiempo jugado, visitas, exploración, coleccionables, economía y otros hitos.
+- [ ] Mostrar una notificación al desbloquear un logro.
+- [ ] Crear una pantalla de logros con desbloqueados, pendientes y posibilidad de logros secretos.
+- [ ] Definir logros y umbrales mediante JSON para poder ampliarlos sin añadir lógica específica por cada logro.
+- [ ] Permitir que una misma estadística alimente varios logros, por ejemplo horas jugadas o número de visitas a un personaje.
 
 ### Mapa interactivo
 
