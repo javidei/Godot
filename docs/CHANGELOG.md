@@ -34,6 +34,7 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 - La música del menú usa un reproductor y bus independientes, por lo que puede sonar mientras la pista de habitación continúa avanzando silenciada y se recupera al continuar.
 - El mapa data-driven oculta diálogo y HUD al abrirse y los restaura al entrar en una habitación, conservando la corrección de interfaz de la rama remota.
 - La integración conserva los perfiles narrativos ampliados y añade únicamente residencia y zona a los personajes de la versión 0.6.
+- El smoke 0.6 abre realmente Extras antes de medir su cuadrícula, evitando un falso fallo headless causado por contenedores ocultos sin geometría calculada.
 
 ## [0.6.1] - 2026-08-13
 

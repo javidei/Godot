@@ -505,6 +505,9 @@ func _validate_extras(main: Control, extras: Node) -> bool:
 		if not extras.has_method(method_name):
 			_fail("Extras no expone la página " + method_name)
 			return false
+	extras.call("_open_extras")
+	for _i in range(2):
+		await process_frame
 	var settings_screen := main.find_child("SettingsScreen060", true, false) as Control
 	var settings_button := main.find_child("SettingsButton060", true, false) as Button
 	var click_grid := main.find_child("ClickSoundGrid060", true, false) as GridContainer
