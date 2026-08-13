@@ -17,8 +17,8 @@ El acceso en tiempo de ejecución está centralizado en `DataManager` (`res://au
 - `detalles-juego.json`: información ampliada usada por Extras/códice. `DataManager` la combina con los datos operativos de `characters/`.
 
 La sección `menu` de `game_config.json` registra `menu.ogg`, su volumen bajo, el
-fundido de entrada y el bucle. `AudioManager` inicia y detiene ese tema siguiendo
-la visibilidad real de `MenuScreen`.
+fundido de entrada y el bucle. `AudioManager` mantiene ese tema durante el ámbito
+formado por el menú, Extras y Ajustes, y lo detiene al comenzar la partida.
 
 ## Mapas y localidades
 

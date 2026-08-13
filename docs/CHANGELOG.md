@@ -20,7 +20,7 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Changed
 
-- La música del menú entra mediante un fundido de cuatro segundos, se detiene al salir y vuelve a comenzar gradualmente en cada regreso.
+- La música del menú entra mediante un fundido de cuatro segundos, continúa sin cortes por Extras/Ajustes y se detiene al comenzar la selección o la partida.
 
 ## [0.6.0] - 2026-08-13
 

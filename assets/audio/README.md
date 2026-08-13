@@ -12,9 +12,9 @@ Los botones − y + cambian cada canal en pasos del 10 %.
 `menu.ogg` es el tema exclusivo de la pantalla principal. Su ruta, volumen base y
 duración del fundido se declaran en `data/game_config.json`. Cada entrada al menú
 reinicia la canción, la hace subir suavemente durante cuatro segundos hasta el 35 %
-del ya reducido canal Music y la mantiene en bucle. Al ocultarse `MenuScreen`, el
-tema se detiene para no continuar en Extras, Ajustes, la selección de protagonista
-o la partida.
+del ya reducido canal Music y la mantiene en bucle. Extras y Ajustes pertenecen al
+mismo ámbito musical: entrar o volver desde ellos no detiene ni reinicia la pista.
+El tema termina al pasar a la selección de protagonista o a la partida.
 
 ## Añadir la música de los escenarios
 

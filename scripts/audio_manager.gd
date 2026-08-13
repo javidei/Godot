@@ -128,6 +128,13 @@ func play_menu_music() -> bool:
 	)
 
 
+func is_menu_music_playing() -> bool:
+	var dm: Variant = DataAccess.dm()
+	var menu_music: Dictionary = dm.call("get_menu_music") if dm != null and dm.has_method("get_menu_music") else {}
+	var menu_music_id := str(menu_music.get("id", "menu"))
+	return music_player != null and music_player.playing and current_music_id == menu_music_id
+
+
 func stop_menu_music() -> void:
 	var dm: Variant = DataAccess.dm()
 	var menu_music: Dictionary = dm.call("get_menu_music") if dm != null and dm.has_method("get_menu_music") else {}

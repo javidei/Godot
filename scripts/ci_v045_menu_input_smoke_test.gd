@@ -46,6 +46,34 @@ func _run() -> void:
 	if music_player.volume_db >= -0.1:
 		_fail("La música del menú entra de golpe, sin fundido inicial")
 		return
+	var original_fade: Variant = audio_manager.get("music_fade_tween")
+	if original_fade == null:
+		_fail("No se ha creado el fundido de la música del menú")
+		return
+	if extras_patch != null:
+		extras_patch.call("_open_extras")
+		await process_frame
+		await process_frame
+		if not bool(audio_manager.call("is_menu_music_playing")) or audio_manager.get("music_fade_tween") != original_fade:
+			_fail("La música se detiene o reinicia al entrar en Extras")
+			return
+		extras_patch.call("_close_extras")
+		await process_frame
+		if not bool(audio_manager.call("is_menu_music_playing")) or audio_manager.get("music_fade_tween") != original_fade:
+			_fail("La música se reinicia al volver de Extras")
+			return
+		if extras_patch.has_method("_open_settings") and extras_patch.has_method("_close_settings"):
+			extras_patch.call("_open_settings")
+			await process_frame
+			await process_frame
+			if not bool(audio_manager.call("is_menu_music_playing")) or audio_manager.get("music_fade_tween") != original_fade:
+				_fail("La música se detiene o reinicia al entrar en Ajustes")
+				return
+			extras_patch.call("_close_settings")
+			await process_frame
+			if not bool(audio_manager.call("is_menu_music_playing")) or audio_manager.get("music_fade_tween") != original_fade:
+				_fail("La música se reinicia al volver de Ajustes")
+				return
 	if primary.get_child_count() != 2:
 		_fail("Nueva partida y Continuar no están organizados en pareja")
 		return
@@ -148,7 +176,7 @@ func _run() -> void:
 		_fail("La música no vuelve a empezar con fundido al regresar al menú")
 		return
 
-	print("V045 OK: distribución, música en bucle con fundido, Extras/Salir y avance por clic directo validados.")
+	print("V045 OK: distribución, música continua en menú/Extras/Ajustes, bucle con fundido y avance por clic directo validados.")
 	quit(0)
 
 

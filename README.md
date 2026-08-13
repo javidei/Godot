@@ -89,7 +89,7 @@ Los nombres de expresiones antiguos (`embarrassed`, `teasing`, `annoyed`, etc.) 
 
 El menú separa los ajustes de **Música** y **Efectos de sonido**. Ambos pueden regularse y silenciarse de forma independiente. Las preferencias persistentes se guardan en `user://settings.json`; al migrar desde versiones anteriores se conservan los antiguos archivos locales como respaldo.
 
-El tema `assets/audio/music/menu.ogg` comienza desde el principio cada vez que se entra al menú, sube suavemente durante cuatro segundos hasta un volumen deliberadamente bajo y permanece en bucle hasta abandonar esa pantalla.
+El tema `assets/audio/music/menu.ogg` comienza desde el principio cada vez que se entra al menú, sube suavemente durante cuatro segundos hasta un volumen deliberadamente bajo y permanece en bucle al navegar por el menú, Extras y Ajustes. Se detiene al comenzar la selección de protagonista o la partida.
 
 Las habitaciones/personajes pueden configurar fondo, tema musical y volumen base desde sus JSON. Al cambiar de fondo, el tema correspondiente se carga y continúa en bucle. Si un fichero de audio configurado no existe, el juego continúa en silencio sin bloquear la ejecución.
 

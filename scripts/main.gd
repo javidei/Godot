@@ -647,12 +647,23 @@ func _show_menu() -> void:
 
 
 func _on_menu_visibility_changed() -> void:
+	call_deferred("_sync_menu_music_scope")
+
+
+func _sync_menu_music_scope() -> void:
 	if audio_manager == null or menu_screen == null:
 		return
-	if menu_screen.visible:
-		audio_manager.play_menu_music()
+	var keep_playing := menu_screen.visible or _is_visible_menu_subscreen("ExtrasScreen050") or _is_visible_menu_subscreen("SettingsScreen060")
+	if keep_playing:
+		if not audio_manager.is_menu_music_playing():
+			audio_manager.play_menu_music()
 	else:
 		audio_manager.stop_menu_music()
+
+
+func _is_visible_menu_subscreen(node_name: String) -> bool:
+	var screen := find_child(node_name, true, false) as Control
+	return screen != null and screen.visible
 
 
 func _quit_game() -> void:
