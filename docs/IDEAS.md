@@ -59,6 +59,47 @@ La base de esta arquitectura ya fue materializada en la migración a DataManager
 - [ ] Valorar estados de ánimo o expresiones que evolucionen según respuestas y progreso.
 - [ ] Ampliar el sistema de amistad y aprovecharlo para futuras mecánicas.
 
+## Economía, monedas y compras
+
+Se quiere incorporar una **moneda interna obtenible únicamente jugando**, sin conexión ni compras con dinero real, para poder adquirir objetos y extras dentro de la partida.
+
+La economía debería premiar sobre todo **explorar, conocer a los personajes y descubrir contenido**, evitando convertir el juego en un sistema de grindeo.
+
+### Cómo podría ganarse moneda
+
+- [ ] Recompensa pequeña al completar por primera vez una visita o conversación.
+- [ ] Recompensas por descubrir diálogos, eventos o escenas nuevas al volver a una habitación.
+- [ ] Recompensas por completar encuentros especiales entre varios personajes.
+- [ ] Bonificaciones por determinados hitos de amistad, sin obligar a escoger siempre una única respuesta «correcta».
+- [ ] Pequeñas actividades o minijuegos opcionales integrados con los personajes.
+- [ ] Objetivos o favores puntuales: llevar algo a alguien, encontrar un objeto, visitar una localización, ayudar en una situación, etc.
+- [ ] Logros o hitos de exploración: visitar todas las habitaciones, encontrar escenas ocultas, completar determinadas combinaciones de encuentros, etc.
+- [ ] Eventos especiales del mapa que puedan otorgar monedas u objetos.
+- [ ] Valorar recompensas únicas vinculadas a recuerdos/anécdotas del grupo para incentivar descubrir contenido narrativo.
+
+Las recompensas importantes deberían ser **de una sola vez** cuando correspondan a contenido único, para impedir que entrar y salir repetidamente de una habitación genere dinero infinito.
+
+### En qué podrían gastarse
+
+- [ ] Objetos decorativos para habitaciones.
+- [ ] Ropa, poses, expresiones o variantes cosméticas de personajes cuando tenga sentido.
+- [ ] Regalos para personajes que puedan desbloquear reacciones, diálogos o pequeñas escenas especiales.
+- [ ] Música, galería, ilustraciones, recuerdos o contenido extra desbloqueable.
+- [ ] Objetos coleccionables relacionados con los gustos y anécdotas de cada personaje.
+- [ ] Mejoras puramente visuales del mapa o de la interfaz del jugador.
+- [ ] Valorar objetos que permitan iniciar actividades o eventos concretos, evitando que la historia principal dependa de tener dinero.
+
+### Propuesta técnica inicial
+
+- [ ] Guardar el saldo dentro de la partida local (`state`) para que cada save pueda tener su propia economía.
+- [ ] Crear un inventario local con identificadores de objetos comprados/desbloqueados.
+- [ ] Definir catálogo, precios y recompensas mediante JSON para poder balancearlos sin tocar código.
+- [ ] Registrar recompensas únicas ya cobradas mediante identificadores para evitar duplicados.
+- [ ] Crear más adelante una pantalla de tienda/inventario integrada con el mapa o con alguna localización/personaje.
+- [ ] Mostrar el saldo de forma discreta en la interfaz cuando exista una mecánica que permita gastarlo.
+
+**Dirección recomendada:** empezar con una sola moneda y una economía sencilla. Primero recompensas por contenido narrativo + una tienda pequeña de extras; después añadir minijuegos, favores e inventario si realmente aportan al flujo del juego.
+
 ## Habitaciones y navegación
 
 - [x] Mantener regulador individual del volumen de música de cada habitación.
