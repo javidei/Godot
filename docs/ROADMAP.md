@@ -30,6 +30,19 @@ La base de `DataManager`, los JSON de personajes/preguntas/habitaciones y el gua
 
 ## Más adelante
 
+### Economía, monedas y compras
+
+La primera versión deberá ser sencilla: una única moneda local por partida obtenida jugando.
+
+- [ ] Añadir saldo de moneda al estado de la partida y al sistema de guardado.
+- [ ] Definir recompensas mediante datos y registrar cuáles ya se han cobrado para evitar repetir recompensas únicas.
+- [ ] Empezar premiando contenido narrativo: primeras visitas, escenas nuevas, eventos especiales e hitos de exploración.
+- [ ] Diseñar un catálogo pequeño de objetos y extras comprables mediante JSON.
+- [ ] Añadir inventario de objetos comprados o desbloqueados.
+- [ ] Crear una primera interfaz de compra e inventario.
+- [ ] Incorporar posteriormente favores, actividades y minijuegos opcionales como nuevas fuentes de moneda.
+- [ ] Evitar que la historia principal dependa de tener monedas; la economía debe ampliar contenido, personalización y exploración.
+
 ### Mapa interactivo
 
 El mapa será una evolución del actual selector de visitas, no una reescritura inmediata del juego. Su desarrollo deberá permitir mantener funcional el flujo actual durante la transición.
