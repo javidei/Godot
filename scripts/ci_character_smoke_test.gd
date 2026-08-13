@@ -278,7 +278,7 @@ func _run() -> void:
 		_fail("Han reaparecido controles de instalación móvil")
 		return
 
-	print("SMOKE OK: protagonista excluido, mapa integrado, 6/7 encuentros dinámicos, fondos, 4 respuestas y resumen adaptado.")
+	print("SMOKE OK: protagonista excluido, clic único, mapa integrado, 6/7 encuentros dinámicos, fondos, 4 respuestas y resumen adaptado.")
 	quit(0)
 
 
@@ -387,7 +387,7 @@ func _validate_selection(main: Control) -> bool:
 		_fail("La selección no conserva sus ocho tarjetas en cuatro columnas")
 		return false
 	for character_id in CHARACTER_IDS:
-		var card := _find_named(main, "Character_" + character_id)
+		var card := _find_named(main, "Character_" + character_id) as Button
 		var portrait := _find_texture_rect(card)
 		if portrait == null or portrait.texture == null or not portrait.is_visible_in_tree():
 			_fail("Retrato vacío en selección: " + character_id)
@@ -395,6 +395,13 @@ func _validate_selection(main: Control) -> bool:
 		if portrait.stretch_mode != TextureRect.STRETCH_KEEP_ASPECT_CENTERED:
 			_fail("El retrato puede volver a cortar la cabeza: " + character_id)
 			return false
+		if _count_selection_card_audio_callbacks(card, main) != 1:
+			_fail("La tarjeta de %s reproduce más de un clic por pulsación" % character_id)
+			return false
+	var custom_card := _find_named(main, "Character_Custom") as Button
+	if custom_card == null or _count_selection_card_audio_callbacks(custom_card, main) != 1:
+		_fail("La tarjeta de personaje personalizado no tiene un único clic")
+		return false
 	selection_manager.call("_select_existing_character", "javi")
 	for _i in range(8):
 		await process_frame
@@ -460,6 +467,24 @@ func _find_texture_rect(node: Node) -> TextureRect:
 		if found != null:
 			return found
 	return null
+
+
+func _count_selection_card_audio_callbacks(button: Button, main: Control) -> int:
+	if button == null:
+		return 0
+	var audio_manager: Variant = main.get("audio_manager")
+	var count := 0
+	for connection_value in button.pressed.get_connections():
+		if typeof(connection_value) != TYPE_DICTIONARY:
+			continue
+		var callback: Callable = (connection_value as Dictionary).get("callable", Callable())
+		if not callback.is_valid():
+			continue
+		if callback.get_object() == main and str(callback.get_method()) == "_play_ui_sound":
+			count += 1
+		elif callback.get_object() == audio_manager and str(callback.get_method()) == "_on_bound_button_pressed":
+			count += 1
+	return count
 
 
 func _fail(message: String) -> void:

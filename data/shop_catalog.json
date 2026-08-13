@@ -50,6 +50,54 @@
       "price": 70,
       "asset": "",
       "enabled": true
+    },
+    {
+      "id": "ana_skin_crimson_night",
+      "name": "Noche carmesí",
+      "description": "Una skin de estilo gótico en tonos carmesí para Ana.",
+      "category": "cosmetic",
+      "category_name": "Skin de Ana",
+      "cosmetic_type": "skin",
+      "character_ids": ["ana"],
+      "price": 65,
+      "asset": "",
+      "enabled": true
+    },
+    {
+      "id": "ana_pet_pocket_raven",
+      "name": "Cuervo de bolsillo",
+      "description": "Una mascota cosmética que acompaña a Ana en su ficha.",
+      "category": "cosmetic",
+      "category_name": "Mascota de Ana",
+      "cosmetic_type": "pet",
+      "character_ids": ["ana"],
+      "price": 80,
+      "asset": "",
+      "enabled": true
+    },
+    {
+      "id": "jony_skin_arcade_mode",
+      "name": "Modo arcade",
+      "description": "Una skin de inspiración retro y videojuego para Jony.",
+      "category": "cosmetic",
+      "category_name": "Skin de Jony",
+      "cosmetic_type": "skin",
+      "character_ids": ["jony"],
+      "price": 65,
+      "asset": "",
+      "enabled": true
+    },
+    {
+      "id": "jony_pet_pixel_slime",
+      "name": "Slime píxel",
+      "description": "Una pequeña mascota digital para acompañar a Jony.",
+      "category": "cosmetic",
+      "category_name": "Mascota de Jony",
+      "cosmetic_type": "pet",
+      "character_ids": ["jony"],
+      "price": 80,
+      "asset": "",
+      "enabled": true
     }
   ]
 }

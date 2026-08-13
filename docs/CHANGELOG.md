@@ -8,10 +8,13 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Added
 
+- Pestaña permanente de Cosméticos en todas las fichas de personaje, conectada al perfil global, con skins y mascotas iniciales para Ana y Jony.
+
 ### Changed
 
 ### Fixed
 
+- Las tarjetas de selección de protagonista ya no reproducen dos sonidos de clic en una sola pulsación.
 - Los regresos desde Triana y Monte del Toro aparecen ahora en laterales opuestos, con botones compactos que respetan los márgenes de pantalla.
 - La introducción temporal deja de repetir «2026» y las pantallas negras esperan una interacción real por clic, toque o teclado, incluso si se realiza durante el fundido.
 
@@ -47,7 +50,6 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 - Las antiguas escrituras de versión de los parches 0.4.x respetan ahora la versión actual del proyecto.
 
 ### Fixed
-
 - Las recompensas únicas ya no pueden repetirse entrando y saliendo de una visita.
 - La alineación de marcadores se calcula sobre el rectángulo real del PNG sin deformarlo.
 - La reproducción de clic está centralizada para evitar listeners y sonidos duplicados.

@@ -119,6 +119,11 @@ func _run() -> void:
 	if not collectibles.has("illustration_group") or not FileAccess.file_exists(str(data_manager.call("get_profile_path"))):
 		_fail("El perfil global no persiste en su fichero local independiente")
 		return
+	state["coins"] = 100
+	var cosmetic_purchase: Dictionary = progress.call("purchase", "ana_skin_crimson_night", state)
+	if not bool(cosmetic_purchase.get("success", false)) or not bool(progress.call("is_item_unlocked", "ana_skin_crimson_night", "cosmetic")):
+		_fail("Una skin de personaje no se compra como desbloqueo cosmético global")
+		return
 
 	progress.set("_pending_play_seconds", 2.0)
 	if not bool(progress.call("flush_active_time")):
@@ -146,7 +151,7 @@ func _run() -> void:
 	if not extras_are_valid:
 		return
 
-	print("V060 OK: mapa, PNG, migraciones, MONEDAS, recompensas, tienda, perfil, estadísticas, logros, Extras y clics validados.")
+	print("V060 OK: mapa, economía, tienda, cosméticos por personaje, perfil, Extras y clics validados.")
 	quit(0)
 
 
@@ -201,6 +206,11 @@ func _validate_world_data() -> bool:
 		if not ["collectible", "cosmetic"].has(str(item.get("category", ""))):
 			_fail("La tienda contiene una categoría narrativa no permitida")
 			return false
+	var ana_cosmetics: Array = data_manager.call("get_character_cosmetics", "ana", true)
+	var jony_cosmetics: Array = data_manager.call("get_character_cosmetics", "jony", true)
+	if ana_cosmetics.size() < 2 or jony_cosmetics.size() < 2:
+		_fail("Ana y Jony no tienen skins/mascotas asociadas desde el catálogo")
+		return false
 	return true
 
 
@@ -479,6 +489,32 @@ func _validate_extras(main: Control, extras: Node) -> bool:
 		await process_frame
 	if page_host == null or not _tree_contains_text(page_host as Node, "Retrato del grupo"):
 		_fail("La Colección no consulta los desbloqueos globales")
+		return false
+	extras.call("_show_character", "ana")
+	for _i in range(5):
+		await process_frame
+	var cosmetics_tab := main.find_child("CharacterCosmeticsTab060", true, false) as Button
+	if cosmetics_tab == null:
+		_fail("La ficha de Ana no conserva la pestaña de Cosméticos")
+		return false
+	cosmetics_tab.emit_signal("pressed")
+	await process_frame
+	var skin_card := main.find_child("CharacterCosmetic_ana_skin_crimson_night", true, false)
+	if skin_card == null or not _tree_contains_text(skin_card, "DESBLOQUEADO GLOBALMENTE"):
+		_fail("La ficha de Ana no refleja la skin comprada en el perfil global")
+		return false
+	extras.call("_show_character", "sue")
+	for _i in range(5):
+		await process_frame
+	cosmetics_tab = main.find_child("CharacterCosmeticsTab060", true, false) as Button
+	if cosmetics_tab == null:
+		_fail("Una ficha sin cosméticos pierde la pestaña informativa")
+		return false
+	cosmetics_tab.emit_signal("pressed")
+	await process_frame
+	var cosmetic_content := main.find_child("CharacterCosmeticsTabContent060", true, false)
+	if cosmetic_content == null or not _tree_contains_text(cosmetic_content, "todavía no tiene cosméticos"):
+		_fail("La ficha sin compras no informa de skins y mascotas futuras")
 		return false
 	return true
 

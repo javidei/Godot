@@ -393,6 +393,20 @@ func get_shop_item(item_id: String) -> Dictionary:
 	return {}
 
 
+func get_character_cosmetics(character_id: String, enabled_only: bool = true) -> Array:
+	var result: Array = []
+	if character_id.is_empty():
+		return result
+	for raw_item in get_shop_items(enabled_only):
+		var item := raw_item as Dictionary
+		if str(item.get("category", "")) != "cosmetic":
+			continue
+		var owners: Variant = item.get("character_ids", [])
+		if typeof(owners) == TYPE_ARRAY and (owners as Array).has(character_id):
+			result.append(item.duplicate(true))
+	return result
+
+
 func get_achievements_config() -> Dictionary:
 	ensure_loaded()
 	return _achievements.duplicate(true)
@@ -800,6 +814,18 @@ func _validate_shop_catalog() -> void:
 			_record_error("Shop item '%s' has an unsupported category" % item_id)
 		if int(item.get("price", -1)) < 0:
 			_record_error("Shop item '%s' has an invalid price" % item_id)
+		var character_ids: Variant = item.get("character_ids", [])
+		if typeof(character_ids) != TYPE_ARRAY:
+			_record_error("Shop item '%s' must define character_ids as an array" % item_id)
+			continue
+		for raw_character_id in character_ids as Array:
+			var character_id := str(raw_character_id)
+			if not _characters.has(character_id):
+				_record_error("Shop item '%s' points to an unknown character: %s" % [item_id, character_id])
+		if not (character_ids as Array).is_empty() and str(item.get("category", "")) != "cosmetic":
+			_record_error("Character item '%s' must use the cosmetic category" % item_id)
+		if not (character_ids as Array).is_empty() and str(item.get("cosmetic_type", "")).strip_edges().is_empty():
+			_record_error("Character cosmetic '%s' has no cosmetic_type" % item_id)
 
 
 func _validate_achievements() -> void:

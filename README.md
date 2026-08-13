@@ -23,7 +23,7 @@ El subtítulo se calcula automáticamente con el número de personajes más una 
 - Ajuste global con cinco perfiles procedurales de clic más la opción desactivada, todos en el bus de Efectos/UI.
 - Cuatro respuestas por pregunta en una cuadrícula táctil de dos columnas.
 - Afinidad independiente por personaje y puntuaciones configurables desde los datos de preguntas.
-- Menú **Extras** con fichas, lugares, logros, estadísticas acumuladas, colección y créditos.
+- Menú **Extras** con fichas —cada una con pestañas de datos y cosméticos—, lugares, logros, estadísticas acumuladas, colección y créditos.
 
 ## Recursos
 
@@ -71,6 +71,8 @@ data/
 ```
 
 `DataManager` centraliza el acceso a estos JSON. Los scripts históricos como `story.gd` y los gestores de versiones conservan capas de compatibilidad para mantener escenas y partidas existentes mientras el origen de los datos permanece separado del código.
+
+Todas las fichas de personaje incluyen una pestaña **Cosméticos**, incluso cuando todavía no tienen contenido. Las skins, mascotas y variantes asociadas desde la tienda aparecen allí y reflejan los desbloqueos del perfil global.
 
 Una escena puede seguir indicando recursos y composición sin crear escenas Godot nuevas:
 

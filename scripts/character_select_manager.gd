@@ -263,7 +263,7 @@ func _make_character_card(character_id: String) -> Button:
 	button.add_theme_stylebox_override("normal", _panel_style(Color(0.065, 0.043, 0.033, 0.95), Color(0.72, 0.51, 0.28, 0.55), 1, 14))
 	button.add_theme_stylebox_override("hover", _panel_style(Color(0.12, 0.073, 0.048, 0.98), Color("efc371"), 2, 14))
 	button.add_theme_stylebox_override("focus", _panel_style(Color(0.12, 0.073, 0.048, 0.98), Color("ffe0a0"), 2, 14))
-	button.pressed.connect(func(): main.call("_play_ui_sound"))
+	_bind_click_once(button)
 	button.pressed.connect(_select_existing_character.bind(character_id))
 
 	var margin := MarginContainer.new()
@@ -331,7 +331,7 @@ func _make_custom_card() -> Button:
 	button.add_theme_stylebox_override("normal", _panel_style(Color(0.055, 0.038, 0.033, 0.95), Color(0.55, 0.48, 0.40, 0.55), 1, 14))
 	button.add_theme_stylebox_override("hover", _panel_style(Color(0.11, 0.07, 0.05, 0.98), Color("efc371"), 2, 14))
 	button.add_theme_stylebox_override("focus", _panel_style(Color(0.11, 0.07, 0.05, 0.98), Color("ffe0a0"), 2, 14))
-	button.pressed.connect(func(): main.call("_play_ui_sound"))
+	_bind_click_once(button)
 	button.pressed.connect(_show_creation)
 
 	var box := VBoxContainer.new()
@@ -364,6 +364,14 @@ func _make_custom_card() -> Button:
 	info.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(info)
 	return button
+
+
+func _bind_click_once(button: BaseButton) -> void:
+	if main == null or button == null:
+		return
+	var manager: Variant = main.get("audio_manager")
+	if manager != null and manager.has_method("bind_click"):
+		manager.call("bind_click", button)
 
 
 func _character_portrait(character_id: String) -> Texture2D:

@@ -211,6 +211,7 @@ func _patch_character_detail_layout(character_id: String) -> void:
 		nav.reparent(root)
 		nav.custom_minimum_size = Vector2(0, 42)
 		nav.size_flags_vertical = Control.SIZE_SHRINK_END
+	_add_character_tabs(right, character_id)
 
 	portrait_panel.reparent(content)
 	right.reparent(content)
@@ -225,6 +226,116 @@ func _patch_character_detail_layout(character_id: String) -> void:
 
 	_configure_nav_button(previous, "Anterior", ARROW_LEFT_ICON_PATH, false)
 	_configure_nav_button(next, "Siguiente", ARROW_RIGHT_ICON_PATH, true)
+
+
+func _add_character_tabs(right: VBoxContainer, character_id: String) -> void:
+	var info_scroll := right.find_child("CharacterDetailsScroll050", false, false) as ScrollContainer
+	if info_scroll == null:
+		return
+	info_scroll.name = "CharacterInfoTabContent060"
+
+	var tabs := HBoxContainer.new()
+	tabs.name = "CharacterTabs060"
+	tabs.custom_minimum_size = Vector2(0, 46)
+	tabs.add_theme_constant_override("separation", 8)
+	right.add_child(tabs)
+	right.move_child(tabs, 0)
+
+	var info_button := main.call("_make_small_button", "Ficha") as Button
+	info_button.name = "CharacterInfoTab060"
+	info_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tabs.add_child(info_button)
+
+	var cosmetic_button := main.call("_make_small_button", "Cosméticos") as Button
+	cosmetic_button.name = "CharacterCosmeticsTab060"
+	cosmetic_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tabs.add_child(cosmetic_button)
+
+	var cosmetic_scroll := ScrollContainer.new()
+	cosmetic_scroll.name = "CharacterCosmeticsTabContent060"
+	cosmetic_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cosmetic_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	cosmetic_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	right.add_child(cosmetic_scroll)
+
+	var cosmetic_list := VBoxContainer.new()
+	cosmetic_list.name = "CharacterCosmeticsList060"
+	cosmetic_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cosmetic_list.add_theme_constant_override("separation", 10)
+	cosmetic_scroll.add_child(cosmetic_list)
+	_populate_character_cosmetics(cosmetic_list, character_id)
+
+	info_button.pressed.connect(_select_character_tab.bind("info", info_scroll, cosmetic_scroll, info_button, cosmetic_button))
+	cosmetic_button.pressed.connect(_select_character_tab.bind("cosmetics", info_scroll, cosmetic_scroll, info_button, cosmetic_button))
+	_select_character_tab("info", info_scroll, cosmetic_scroll, info_button, cosmetic_button)
+
+
+func _select_character_tab(tab_id: String, info_content: Control, cosmetic_content: Control, info_button: Button, cosmetic_button: Button) -> void:
+	var show_cosmetics := tab_id == "cosmetics"
+	info_content.visible = not show_cosmetics
+	cosmetic_content.visible = show_cosmetics
+	info_button.disabled = not show_cosmetics
+	cosmetic_button.disabled = show_cosmetics
+
+
+func _populate_character_cosmetics(parent: VBoxContainer, character_id: String) -> void:
+	var profile := _global_profile()
+	var unlocked := _id_set(profile.get("unlocked_cosmetics", []))
+	var items := _character_cosmetic_items(character_id)
+	var purchased_count := 0
+	for item in items:
+		if unlocked.has(str(item.get("id", ""))):
+			purchased_count += 1
+	_add_section_title(parent, "Cosméticos del personaje")
+	_add_body_label(parent, "Aquí aparecerán skins, mascotas y otros elementos visuales comprados en la tienda. Los desbloqueos pertenecen al perfil global.")
+	if items.is_empty():
+		_add_empty_panel(parent, "Este personaje todavía no tiene cosméticos disponibles. La pestaña permanecerá aquí para mostrar futuras skins, mascotas y otras compras.")
+		return
+	var summary := Label.new()
+	summary.name = "CharacterCosmeticsSummary060"
+	summary.text = "%d de %d comprados" % [purchased_count, items.size()]
+	summary.add_theme_color_override("font_color", GOLD)
+	summary.add_theme_font_size_override("font_size", 14)
+	parent.add_child(summary)
+	for item in items:
+		var item_id := str(item.get("id", ""))
+		var cosmetic_type := _cosmetic_type_label(str(item.get("cosmetic_type", "cosmetic")))
+		var display_item := item.duplicate(true)
+		display_item["name"] = "%s · %s" % [cosmetic_type.to_upper(), str(item.get("name", _display_identifier(item_id)))]
+		_add_collection_card(parent, display_item, unlocked.has(item_id))
+		var card := parent.get_child(parent.get_child_count() - 1)
+		card.name = "CharacterCosmetic_" + item_id
+
+
+func _character_cosmetic_items(character_id: String) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var dm: Variant = DataAccess.dm()
+	if dm != null and dm.has_method("get_character_cosmetics"):
+		var configured: Variant = dm.call("get_character_cosmetics", character_id, true)
+		if typeof(configured) == TYPE_ARRAY:
+			for raw_item in configured as Array:
+				if typeof(raw_item) == TYPE_DICTIONARY:
+					result.append((raw_item as Dictionary).duplicate(true))
+			return result
+	for item in _catalog_items():
+		if not bool(item.get("enabled", true)) or _collection_category(item) != "cosmetic":
+			continue
+		var owners: Variant = item.get("character_ids", [])
+		if typeof(owners) == TYPE_ARRAY and (owners as Array).has(character_id):
+			result.append(item.duplicate(true))
+	return result
+
+
+func _cosmetic_type_label(cosmetic_type: String) -> String:
+	match cosmetic_type.to_lower().strip_edges():
+		"skin", "outfit", "aspecto":
+			return "Skin"
+		"pet", "mascota", "companion":
+			return "Mascota"
+		"accessory", "accesorio":
+			return "Accesorio"
+		_:
+			return "Cosmético"
 
 
 func _configure_nav_button(button: Button, label: String, icon_path: String, icon_on_right: bool) -> void:

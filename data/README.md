@@ -12,7 +12,7 @@ El acceso en tiempo de ejecución está centralizado en `DataManager` (`res://au
 - `rooms/<id>.json`: fondo, canción, volumen base, propietarios, nombre y descripción visual de la habitación.
 - `world_maps.json`: localidades, fondo de mapa, residentes, marcadores normalizados, conexiones y excusas de mapas temporales.
 - `economy.json`: moneda, intervalos del contador de actividad y reglas configurables de recompensas únicas/repetibles.
-- `shop_catalog.json`: coleccionables y cosméticos, con nombre, descripción, categoría, precio, recurso opcional y estado `enabled`.
+- `shop_catalog.json`: coleccionables y cosméticos, con nombre, descripción, categoría, precio, recurso opcional y estado `enabled`. Los cosméticos de ficha usan además `character_ids` y `cosmetic_type`.
 - `achievements.json`: logros globales y sus condiciones data-driven sobre estadísticas.
 - `detalles-juego.json`: información ampliada usada por Extras/códice. `DataManager` la combina con los datos operativos de `characters/`.
 
@@ -44,6 +44,19 @@ Cada conexión declara su `side` y puede proporcionar `compact_label` para venta
 Las reglas de `economy.json` resuelven un evento a un identificador de recompensa. Por ejemplo, `character_visited` produce `first_visit_<character_id>` y +15 MONEDAS una sola vez por partida. El saldo y `claimed_rewards` viven en el save; los valores antiguos ausentes migran a saldo 0 y diccionario vacío.
 
 La tienda solo admite las categorías `collectible` y `cosmetic`. Los precios se leen de `shop_catalog.json`; la historia principal no consulta compras ni introduce bloqueos narrativos. Los objetos comprados se escriben en el perfil global.
+
+Un cosmético puede asociarse a una o varias fichas sin crear lógica específica por personaje:
+
+```json
+{
+  "id": "ana_pet_pocket_raven",
+  "category": "cosmetic",
+  "cosmetic_type": "pet",
+  "character_ids": ["ana"]
+}
+```
+
+Extras consulta esa asociación para las pestañas **Cosméticos**. La pestaña existe siempre y muestra un estado informativo si el personaje aún no tiene artículos configurados.
 
 Cada logro de `achievements.json` declara una o varias condiciones `{metric, operator, value}`. Varias definiciones pueden leer la misma métrica sin necesitar una función GDScript por logro.
 

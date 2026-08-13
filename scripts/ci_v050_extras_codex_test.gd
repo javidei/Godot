@@ -111,6 +111,31 @@ func _run() -> void:
 	if nav == null or nav.get_global_rect().end.y > codex_panel.get_global_rect().end.y + 2.0:
 		_fail("La navegación de personaje se sale por la parte inferior del panel")
 		return
+	var info_tab := detail_layout.find_child("CharacterInfoTab060", true, false) as Button
+	var cosmetics_tab := detail_layout.find_child("CharacterCosmeticsTab060", true, false) as Button
+	var cosmetics_content := detail_layout.find_child("CharacterCosmeticsTabContent060", true, false) as ScrollContainer
+	if info_tab == null or cosmetics_tab == null or cosmetics_content == null:
+		_fail("Todas las fichas deben conservar las pestañas Ficha y Cosméticos")
+		return
+	cosmetics_tab.emit_signal("pressed")
+	await process_frame
+	if not cosmetics_content.visible or not _tree_contains_text(cosmetics_content, "todavía no tiene cosméticos"):
+		_fail("Una ficha sin artículos no informa de futuros cosméticos")
+		return
+
+	extras.call("_show_character", "ana")
+	for _i in range(5):
+		await process_frame
+	var ana_tabs := extras_screen.find_child("CharacterTabs060", true, false) as HBoxContainer
+	var ana_cosmetics := extras_screen.find_child("CharacterCosmeticsTab060", true, false) as Button
+	if ana_tabs == null or ana_cosmetics == null:
+		_fail("La ficha de Ana pierde la pestaña de Cosméticos")
+		return
+	ana_cosmetics.emit_signal("pressed")
+	await process_frame
+	if extras_screen.find_child("CharacterCosmetic_ana_skin_crimson_night", true, false) == null or extras_screen.find_child("CharacterCosmetic_ana_pet_pocket_raven", true, false) == null:
+		_fail("La ficha de Ana no muestra su skin y su mascota configuradas")
+		return
 
 	extras.call("_show_places")
 	for _i in range(4):
@@ -167,7 +192,7 @@ func _run() -> void:
 		_fail("Información del juego no muestra el género")
 		return
 
-	print("V050 OK: Extras, navegación SVG, ficha contenida y galería alterna de habitaciones validados.")
+	print("V050 OK: Extras, fichas con pestañas cosméticas, navegación SVG y galería alterna validados.")
 	quit(0)
 
 
