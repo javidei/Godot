@@ -37,7 +37,7 @@ Las localizaciones sobre el PNG se colocan con coordenadas normalizadas entre 0 
 
 Los controles son independientes de la imagen y se recalculan dentro del rectángulo que conserva su proporción. `current_residence` y `current_zone_id` en cada ficha describen la residencia actual; los datos biográficos de procedencia se conservan aparte.
 
-Cada conexión declara su `side` y puede proporcionar `compact_label` para ventanas estrechas. `show_residents` permite conservar en los datos la población de destino sin añadir una segunda línea a enlaces de regreso que deben mantenerse compactos.
+Cada conexión declara su `side` y puede proporcionar `compact_label` para ventanas estrechas. Las pantallas temporales usan `bottom_right` para integrar el regreso en la esquina inferior del panel. `show_residents` permite conservar en los datos la población de destino sin añadir una segunda línea a enlaces que deben mantenerse compactos.
 
 ## Economía, tienda y logros
 

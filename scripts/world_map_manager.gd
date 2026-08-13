@@ -24,6 +24,7 @@ var header_panel: PanelContainer
 var header_title: Label
 var coins_label: Label
 var header_back_button: Button
+var header_back_spacer: Control
 var content_root: Control
 
 var map_canvas: Control
@@ -161,6 +162,13 @@ func _build_header() -> void:
 	header_back_button.pressed.connect(_on_header_back)
 	row.add_child(header_back_button)
 
+	header_back_spacer = Control.new()
+	header_back_spacer.name = "WorldMapBackSpacer"
+	header_back_spacer.custom_minimum_size = Vector2(132, 46)
+	header_back_spacer.visible = false
+	header_back_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(header_back_spacer)
+
 	header_title = Label.new()
 	header_title.name = "WorldMapTitle"
 	header_title.text = "NARANJAL DEL RÍO"
@@ -294,8 +302,7 @@ func _build_temporary_view(zone: Dictionary) -> void:
 	panel.anchor_left = 0.04 if compact else 0.12
 	panel.anchor_top = 0.03 if compact else 0.06
 	panel.anchor_right = 0.96 if compact else 0.88
-	# En vertical se reserva una banda inferior para la conexión de vuelta.
-	panel.anchor_bottom = 0.74 if compact else 0.94
+	panel.anchor_bottom = 0.94
 	panel.add_theme_stylebox_override(
 		"panel",
 		main.call("_panel_style", Color(0.025, 0.020, 0.018, 0.97), Color(0.65, 0.48, 0.25, 0.88), 2, 16)
@@ -342,6 +349,14 @@ func _build_temporary_view(zone: Dictionary) -> void:
 	grid.add_theme_constant_override("v_separation", 14)
 	scroll.add_child(grid)
 	_build_markers(zone, grid, true)
+
+	# La conexión de regreso se dibuja sobre el panel, en su esquina inferior.
+	# Este espacio evita que tape la última ficha aunque la lista necesite scroll.
+	var return_space := Control.new()
+	return_space.name = "TemporaryReturnSpace"
+	return_space.custom_minimum_size = Vector2(0, 66 if compact else 76)
+	return_space.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(return_space)
 
 
 func _build_markers(zone: Dictionary, parent: Control, list_layout: bool) -> void:
@@ -504,14 +519,27 @@ func _build_connections(zone: Dictionary) -> void:
 func _place_connection(button: Button, side: String, index: int) -> void:
 	var compact := _is_compact()
 	var button_size := CONNECTION_COMPACT_SIZE if compact else CONNECTION_DESKTOP_SIZE
+	button.custom_minimum_size = button_size
+	button.add_theme_font_size_override("font_size", 13 if compact else 15)
+	if side == "bottom_right":
+		var panel_right := 0.96 if compact else 0.88
+		var panel_bottom := 0.94
+		var inset := 12.0 if compact else 18.0
+		button.anchor_left = panel_right
+		button.anchor_right = panel_right
+		button.anchor_top = panel_bottom
+		button.anchor_bottom = panel_bottom
+		button.offset_left = -inset - button_size.x
+		button.offset_right = -inset
+		button.offset_top = -inset - button_size.y
+		button.offset_bottom = -inset
+		return
 	var temporary_compact := compact and bool(current_zone.get("temporary", false))
 	var y := (0.86 if temporary_compact else 0.38) + float(index) * (0.10 if temporary_compact else (0.13 if compact else 0.15))
 	button.anchor_top = y
 	button.anchor_bottom = y
 	button.offset_top = -button_size.y * 0.5
 	button.offset_bottom = button_size.y * 0.5
-	button.custom_minimum_size = button_size
-	button.add_theme_font_size_override("font_size", 13 if compact else 15)
 	match side:
 		"left":
 			button.anchor_left = 0.0
@@ -638,6 +666,8 @@ func _open_shop(record_visit: bool = true) -> void:
 	_clear_content()
 	_refresh_header()
 	header_title.text = "TIENDA"
+	header_back_button.visible = true
+	header_back_spacer.visible = false
 	header_back_button.text = "← Mapa"
 	if record_visit:
 		_record_event("location_visited", {"location_id": "shop", "zone_id": current_zone_id}, _state())
@@ -848,6 +878,9 @@ func _refresh_header() -> void:
 	if header_title == null:
 		return
 	header_title.text = str(current_zone.get("name", current_zone_id)).to_upper()
+	var temporary := bool(current_zone.get("temporary", false))
+	header_back_button.visible = not temporary
+	header_back_spacer.visible = temporary
 	header_back_button.text = "Menú" if current_zone_id == _default_zone_id() else "← Naranjal"
 	_refresh_coins()
 

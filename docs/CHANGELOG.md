@@ -15,7 +15,7 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 ### Fixed
 
 - Las tarjetas de selección de protagonista ya no reproducen dos sonidos de clic en una sola pulsación.
-- Los regresos desde Triana y Monte del Toro aparecen ahora en laterales opuestos, con botones compactos que respetan los márgenes de pantalla.
+- Los regresos desde Triana y Monte del Toro se integran abajo a la derecha de cada panel temporal y desaparecen de la cabecera para evitar duplicados.
 - La introducción temporal deja de repetir «2026» y las pantallas negras esperan una interacción real por clic, toque o teclado, incluso si se realiza durante el fundido.
 
 ## [0.6.1] - 2026-08-13

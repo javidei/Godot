@@ -430,8 +430,10 @@ func _validate_map_ui(main: Control, world_map: Node, transitions: Node, state: 
 		_fail("La pantalla temporal de Triana no permite visitar a Ana y Jony")
 		return false
 	var triana_return := main.find_child("WorldConnection_naranjal_del_rio", true, false) as Button
-	if triana_return == null or triana_return.anchor_left != 1.0 or triana_return.text.contains("\n") or not _button_inside_viewport(main.get_viewport(), triana_return):
-		_fail("El regreso desde Triana no queda contenido en el lateral derecho")
+	var temporary_panel := main.find_child("TemporaryZonePanel", true, false) as PanelContainer
+	var header_back := main.find_child("WorldMapBackButton", true, false) as Button
+	if triana_return == null or temporary_panel == null or header_back == null or header_back.visible or triana_return.text.contains("\n") or not _button_at_panel_bottom_right(temporary_panel, triana_return):
+		_fail("El regreso desde Triana no está abajo a la derecha o sigue duplicado en la cabecera")
 		return false
 	world_map.call("show_zone", "monte_del_toro", false)
 	for _i in range(3):
@@ -440,8 +442,9 @@ func _validate_map_ui(main: Control, world_map: Node, transitions: Node, state: 
 	if main.find_child("MapCharacter_carmen", true, false) == null or monte_return == null:
 		_fail("Monte del Toro no permite visitar a Carmen y volver a Naranjal")
 		return false
-	if monte_return.anchor_left != 0.0 or monte_return.text.contains("\n") or not _button_inside_viewport(main.get_viewport(), monte_return):
-		_fail("El regreso desde Monte del Toro no queda contenido en el lateral izquierdo")
+	temporary_panel = main.find_child("TemporaryZonePanel", true, false) as PanelContainer
+	if temporary_panel == null or header_back.visible or monte_return.text.contains("\n") or not _button_at_panel_bottom_right(temporary_panel, monte_return):
+		_fail("El regreso desde Monte del Toro no está abajo a la derecha o sigue duplicado en la cabecera")
 		return false
 	var first_excuse := str(transitions.call("_pick_missing_map_excuse"))
 	var second_excuse := str(transitions.call("_pick_missing_map_excuse"))
@@ -451,6 +454,13 @@ func _validate_map_ui(main: Control, world_map: Node, transitions: Node, state: 
 		return false
 	if not _validate_touch_transition(main.get_viewport(), transitions):
 		return false
+	if not await _click_button(main.get_viewport(), monte_return):
+		return false
+	for _i in range(12):
+		await process_frame
+	if str(world_map.get("current_zone_id")) != "naranjal_del_rio" or not header_back.visible:
+		_fail("El botón inferior no vuelve a Naranjal o no restaura su acceso al menú")
+		return false
 	return true
 
 
@@ -458,6 +468,12 @@ func _button_inside_viewport(viewport: Viewport, button: Button) -> bool:
 	var viewport_rect := Rect2(Vector2.ZERO, viewport.get_visible_rect().size)
 	var button_rect := button.get_global_rect()
 	return viewport_rect.encloses(button_rect) and button_rect.size.x > 1.0 and button_rect.size.y > 1.0
+
+
+func _button_at_panel_bottom_right(panel: Control, button: Button) -> bool:
+	var panel_rect := panel.get_global_rect()
+	var button_rect := button.get_global_rect()
+	return panel_rect.encloses(button_rect) and button_rect.get_center().y > panel_rect.get_center().y and panel_rect.end.x - button_rect.end.x <= 40.0 and panel_rect.end.y - button_rect.end.y <= 40.0
 
 
 func _validate_extras(main: Control, extras: Node) -> bool:
