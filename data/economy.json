@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "currency": {
+    "id": "coins",
+    "name": "MONEDAS",
+    "initial_balance": 0
+  },
+  "activity": {
+    "idle_timeout_seconds": 300.0,
+    "profile_flush_seconds": 30.0
+  },
+  "rewards": [
+    {
+      "id": "first_visit",
+      "event": "character_visited",
+      "id_template": "first_visit_{character_id}",
+      "amount": 15,
+      "unique": true,
+      "required_context": ["character_id"],
+      "context_equals": {"first_visit": true},
+      "enabled": true
+    },
+    {
+      "id": "scene_discovery",
+      "event": "scene_discovered",
+      "id_template": "scene_{scene_id}",
+      "amount": 20,
+      "unique": true,
+      "required_context": ["scene_id"],
+      "enabled": true
+    },
+    {
+      "id": "special_event",
+      "event": "special_event",
+      "id_template": "event_{event_id}",
+      "amount": 30,
+      "unique": true,
+      "required_context": ["event_id"],
+      "enabled": true
+    },
+    {
+      "id": "hidden_collectible",
+      "event": "hidden_collectible_found",
+      "id_template": "hidden_{collectible_id}",
+      "amount": 10,
+      "unique": true,
+      "required_context": ["collectible_id"],
+      "enabled": true
+    },
+    {
+      "id": "repeatable_activity",
+      "event": "repeatable_activity_completed",
+      "id_template": "activity_{activity_id}",
+      "amount_min": 3,
+      "amount_max": 5,
+      "unique": false,
+      "required_context": ["activity_id"],
+      "enabled": true
+    }
+  ]
+}

@@ -96,6 +96,7 @@
         "miedos": [],
         "cosas_que_le_hacen_enfadarse": []
       },
+      "residencia_actual": "Naranjal del Río",
       "procedencia": "Del mismo pueblo que Sue, Fran y Jony.",
       "notas": [
         "Ve anime rara vez; no es uno de sus gustos principales."
@@ -324,7 +325,9 @@
       "procedencia": "Del mismo pueblo que Javi, Fran y Jony.",
       "postura_sobre_ia": {
         "posicion": "Más a favor que en contra"
-      }
+      },
+      "residencia_actual": "Naranjal del Río",
+      "procedencia": "Del mismo pueblo que Javi, Fran y Jony."
     },
     {
       "id": "smokey",
@@ -443,6 +446,7 @@
       "valores_y_principios": [
         "No simpatiza con las fuerzas y cuerpos de seguridad del Estado ni con el ámbito militar en general."
       ],
+      "residencia_actual": "Naranjal del Río",
       "procedencia": "Del mismo pueblo que Javi, Sue y Jony.",
       "actividad_laboral_o_proyectos": [
         {
@@ -509,6 +513,7 @@
       "valores_y_principios": [
         "No simpatiza con las fuerzas y cuerpos de seguridad del Estado ni con el ámbito militar en general."
       ],
+      "residencia_actual": "Monte del Toro",
       "procedencia": "Es de otro pueblo distinto al de Javi, Sue, Fran y Jony.",
       "actividad_laboral_o_proyectos": [
         {
@@ -566,6 +571,7 @@
         "estilo_ropa": "",
         "detalles_reconocibles": []
       },
+      "residencia_actual": "Triana",
       "procedencia": "Del mismo pueblo que Javi, Sue y Fran.",
       "estudios": [
         "Periodismo",
@@ -680,6 +686,7 @@
       "experiencias_e_intereses": [
         "Ha viajado a Praga y disfrutó especialmente visitando cementerios y lugares acordes con su estética e intereses."
       ],
+      "residencia_actual": "Triana",
       "procedencia": "Sevilla capital.",
       "estudios": [
         "Restauración",
@@ -805,6 +812,7 @@
         ]
       },
       "secretos": [],
+      "residencia_actual": "Naranjal del Río",
       "origen_y_acento": {
         "origen": "Argentina",
         "historia": "Vive en España desde antes o alrededor de la adolescencia.",

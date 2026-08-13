@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "id": "illustration_group",
+      "name": "Retrato del grupo",
+      "description": "Una ilustración para recordar a quienes ocupan las sillas.",
+      "category": "collectible",
+      "category_name": "Coleccionable",
+      "price": 30,
+      "asset": "res://assets/ui/menu-lineup.png",
+      "enabled": true
+    },
+    {
+      "id": "memory_naranjal_room",
+      "name": "Recuerdo de Naranjal",
+      "description": "Una imagen del lugar donde empezaron muchas conversaciones.",
+      "category": "collectible",
+      "category_name": "Coleccionable",
+      "price": 45,
+      "asset": "res://assets/backgrounds/fondo-casa-asturias.png",
+      "enabled": true
+    },
+    {
+      "id": "map_naranjal_keepsake",
+      "name": "Mapa de Naranjal",
+      "description": "Una copia para la colección del mapa que guía las visitas.",
+      "category": "collectible",
+      "category_name": "Coleccionable",
+      "price": 60,
+      "asset": "res://assets/maps/naranjal_del_rio.png",
+      "enabled": true
+    },
+    {
+      "id": "cosmetic_warm_frame",
+      "name": "Marco cálido",
+      "description": "Una variante cosmética dorada para la colección.",
+      "category": "cosmetic",
+      "category_name": "Cosmético",
+      "price": 55,
+      "asset": "",
+      "enabled": true
+    },
+    {
+      "id": "cosmetic_river_blue",
+      "name": "Azul del río",
+      "description": "Una variante cosmética inspirada en el río de Naranjal.",
+      "category": "cosmetic",
+      "category_name": "Cosmético",
+      "price": 70,
+      "asset": "",
+      "enabled": true
+    }
+  ]
+}

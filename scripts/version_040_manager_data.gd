@@ -23,6 +23,54 @@ func _patch_story() -> void:
 				DataStory.NODES[feedback_id]["next"] = VISIT_NODE
 
 
+func _world_map_manager() -> Node:
+	if main == null:
+		return null
+	return main.get_node_or_null("WorldMapManager")
+
+
+func _open_selector(state: Dictionary) -> void:
+	_ensure_visit_state(state)
+	var dm: Variant = _dm()
+	if dm != null and dm.has_method("migrate_save_state"):
+		var migrated: Variant = dm.call("migrate_save_state", state)
+		if typeof(migrated) == TYPE_DICTIONARY:
+			state = migrated as Dictionary
+	main.set("state", state)
+	var world_map := _world_map_manager()
+	if world_map != null and world_map.has_method("open_selector"):
+		# El overlay histórico queda como latch técnico bajo el mapa (z 210 frente
+		# a z 220). El watcher original usa su visibilidad para no reabrir/recrear
+		# el selector cada frame; no recibe input ni llega a verse.
+		if visit_overlay != null:
+			visit_overlay.visible = true
+		world_map.call("open_selector", state)
+		return
+	# Rescate para escenas antiguas o pruebas que instancien el manager sin el
+	# nuevo renderer. Sigue permitiendo visitas y no elimina las completadas.
+	super(state)
+
+
+func _hide_selector() -> void:
+	if visit_overlay != null:
+		visit_overlay.visible = false
+	var world_map := _world_map_manager()
+	if world_map != null and world_map.has_method("close_selector"):
+		world_map.call("close_selector")
+
+
+func _available_visits(state: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	var player_id := _player_id(state)
+	for character_id in DataStory.ENCOUNTER_ORDER:
+		# Las visitas completadas continúan accesibles. El estado se representa en
+		# el mapa y las recompensas únicas evitan que una revisita genere monedas
+		# infinitas.
+		if character_id != player_id:
+			result.append(character_id)
+	return result
+
+
 func _mark_completed(previous_node: String, state: Dictionary) -> void:
 	if not DataStory.is_final_feedback_node(previous_node):
 		return

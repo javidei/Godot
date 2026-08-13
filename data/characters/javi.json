@@ -4,6 +4,8 @@
   "display_name": "Javi",
   "role": "principal",
   "summary": "Sarcástico · curioso · tranquilo · cabezota",
+  "current_residence": "Naranjal del Río",
+  "current_zone_id": "naranjal_del_rio",
   "playable": true,
   "enabled": true,
   "room": "room_javi",

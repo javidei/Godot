@@ -236,7 +236,8 @@ func _upgrade_save_version() -> void:
 	var state: Dictionary = value
 	if state.is_empty() or not bool(state.get("visit_mode", false)):
 		return
-	if str(state.get("save_version", "")) == RELEASE_VERSION:
+	var target_version := str(ProjectSettings.get_setting("application/config/version", RELEASE_VERSION))
+	if str(state.get("save_version", "")) == target_version:
 		return
-	state["save_version"] = RELEASE_VERSION
+	state["save_version"] = target_version
 	main.set("state", state)

@@ -5,6 +5,8 @@
   "display_name": "El Argentino",
   "role": "secundario",
   "summary": "Gabardina negra · gafas oscuras · tatuajes",
+  "current_residence": "Naranjal del Río",
+  "current_zone_id": "naranjal_del_rio",
   "playable": true,
   "enabled": true,
   "room": "room_argentino",

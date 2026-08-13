@@ -135,7 +135,7 @@ func _init_visit_state(state: Dictionary) -> void:
 	state["completed_characters"] = []
 	state["visit_order"] = []
 	state["visit_mode"] = true
-	state["save_version"] = RELEASE_VERSION
+	state["save_version"] = str(ProjectSettings.get_setting("application/config/version", RELEASE_VERSION))
 	main.set("state", state)
 
 
@@ -158,7 +158,7 @@ func _migrate_legacy_state(state: Dictionary) -> void:
 	state["completed_characters"] = completed
 	state["visit_order"] = visit_order
 	state["visit_mode"] = true
-	state["save_version"] = RELEASE_VERSION
+	state["save_version"] = str(ProjectSettings.get_setting("application/config/version", RELEASE_VERSION))
 	main.set("state", state)
 	main.call("_save_game", false)
 
@@ -169,7 +169,7 @@ func _ensure_visit_state(state: Dictionary) -> void:
 	if typeof(state.get("visit_order", [])) != TYPE_ARRAY:
 		state["visit_order"] = []
 	state["visit_mode"] = true
-	state["save_version"] = RELEASE_VERSION
+	state["save_version"] = str(ProjectSettings.get_setting("application/config/version", RELEASE_VERSION))
 
 
 func _mark_completed(previous_node: String, state: Dictionary) -> void:

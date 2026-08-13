@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "achievements": [
+    {"id": "play_1_hour", "name": "Una hora entre líneas", "description": "Juega durante una hora activa.", "secret": false, "enabled": true, "conditions": [{"metric": "total_play_seconds", "operator": "gte", "value": 3600}]},
+    {"id": "play_5_hours", "name": "Cinco horas de historias", "description": "Juega durante cinco horas activas.", "secret": false, "enabled": true, "conditions": [{"metric": "total_play_seconds", "operator": "gte", "value": 18000}]},
+    {"id": "play_10_hours", "name": "Habitante habitual", "description": "Juega durante diez horas activas.", "secret": false, "enabled": true, "conditions": [{"metric": "total_play_seconds", "operator": "gte", "value": 36000}]},
+    {"id": "first_visit", "name": "Llamando a la puerta", "description": "Visita por primera vez a un personaje.", "secret": false, "enabled": true, "conditions": [{"metric": "total_character_visits", "operator": "gte", "value": 1}]},
+    {"id": "ten_visits", "name": "Como en casa", "description": "Realiza diez visitas a personajes.", "secret": false, "enabled": true, "conditions": [{"metric": "total_character_visits", "operator": "gte", "value": 10}]},
+    {"id": "visit_everyone", "name": "La pandilla al completo", "description": "Visita a los siete personajes.", "secret": false, "enabled": true, "conditions": [{"metric": "characters_visited_unique", "operator": "gte", "value": 7}]},
+    {"id": "discover_5_scenes", "name": "Tirando del hilo", "description": "Descubre cinco escenas diferentes.", "secret": false, "enabled": true, "conditions": [{"metric": "scenes_discovered_unique", "operator": "gte", "value": 5}]},
+    {"id": "earn_100_coins", "name": "Primer puñado", "description": "Gana cien monedas en total.", "secret": false, "enabled": true, "conditions": [{"metric": "coins_earned", "operator": "gte", "value": 100}]},
+    {"id": "spend_100_coins", "name": "Monedas bien gastadas", "description": "Gasta cien monedas en total.", "secret": false, "enabled": true, "conditions": [{"metric": "coins_spent", "operator": "gte", "value": 100}]},
+    {"id": "first_purchase", "name": "Estrenando la tienda", "description": "Desbloquea tu primer extra.", "secret": false, "enabled": true, "conditions": [{"metric": "unlocked_items_total", "operator": "gte", "value": 1}]},
+    {"id": "three_collectibles", "name": "Coleccionista", "description": "Desbloquea tres coleccionables.", "secret": false, "enabled": true, "conditions": [{"metric": "unlocked_collectibles", "operator": "count_gte", "value": 3}]},
+    {"id": "explore_three_locations", "name": "De aquí para allá", "description": "Visita tres localizaciones diferentes.", "secret": false, "enabled": true, "conditions": [{"metric": "locations_visited_unique", "operator": "gte", "value": 3}]}
+  ]
+}

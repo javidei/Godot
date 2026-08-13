@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "character_order": ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"],
   "menu": {
     "characters_image": "res://assets/ui/menu-lineup.png"
@@ -9,11 +9,13 @@
     "default_effects_volume": 1.0,
     "music_output_max": 0.1,
     "volume_step": 0.1,
-    "track_step": 0.05
+    "track_step": 0.05,
+    "default_click_sound": "soft"
   },
   "save": {
     "savegame": "user://savegame.json",
     "settings": "user://settings.json",
+    "profile": "user://profile.json",
     "legacy_savegame": "user://godot_otome_save.json",
     "legacy_audio_settings": "user://audio_settings.cfg",
     "legacy_track_settings": "user://music_track_settings.cfg"

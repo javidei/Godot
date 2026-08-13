@@ -6,6 +6,8 @@
   "story_name": "Sue",
   "role": "principal",
   "summary": "Directa · divertida · observadora · con carácter",
+  "current_residence": "Naranjal del Río",
+  "current_zone_id": "naranjal_del_rio",
   "playable": true,
   "enabled": true,
   "room": "room_sue",

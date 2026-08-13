@@ -35,12 +35,19 @@ func _sync_dynamic_character_slots() -> void:
 
 
 func _fresh_state() -> Dictionary:
-	return {
+	var fresh := {
 		"node_id": DataStory.START,
 		"affinity": _empty_affinity(),
 		"expressions": _neutral_expressions(),
-		"history": []
+		"history": [],
+		"coins": 0,
+		"claimed_rewards": {},
+		"current_zone_id": "naranjal_del_rio"
 	}
+	var dm: Variant = _dm()
+	if dm != null and dm.has_method("migrate_save_state"):
+		return dm.call("migrate_save_state", fresh)
+	return fresh
 
 
 func _empty_affinity() -> Dictionary:
@@ -81,7 +88,9 @@ func _save_game(show_message: bool) -> void:
 		if show_message:
 			_show_toast("No se ha podido guardar")
 		return
-	state["save_version"] = str(ProjectSettings.get_setting("application/config/version", "0.5.1"))
+	if dm.has_method("migrate_save_state"):
+		state = dm.call("migrate_save_state", state)
+	state["save_version"] = str(ProjectSettings.get_setting("application/config/version", "0.6.0"))
 	if not bool(dm.call("save_game", state)):
 		if show_message:
 			_show_toast("No se ha podido guardar")
@@ -98,6 +107,8 @@ func _read_save() -> bool:
 	if loaded.is_empty():
 		return false
 	state = loaded
+	if dm.has_method("migrate_save_state"):
+		state = dm.call("migrate_save_state", state)
 	if not state.has("affinity") or typeof(state["affinity"]) != TYPE_DICTIONARY:
 		state["affinity"] = _empty_affinity()
 	if not state.has("expressions") or typeof(state["expressions"]) != TYPE_DICTIONARY:
@@ -121,6 +132,27 @@ func _read_save() -> bool:
 	for character in state["expressions"].keys():
 		_apply_expression(str(character), str(state["expressions"][character]))
 	return true
+
+
+func _go_to(node_id: String, add_to_history: bool = true) -> void:
+	super._go_to(node_id, add_to_history)
+	if state.is_empty() or not bool(state.get("visit_mode", false)):
+		return
+	var resolved_node_id := str(state.get("node_id", ""))
+	var scene_id := str(current_node.get("scene_id", ""))
+	# Cada introducción de habitación es una escena real y estable que el juego
+	# ya puede detectar. Los futuros nodos pueden declarar `scene_id` de forma
+	# explícita sin ampliar esta lógica.
+	if scene_id.is_empty() and resolved_node_id.ends_with("_intro_01"):
+		scene_id = resolved_node_id
+	if scene_id.is_empty():
+		return
+	var progress := get_node_or_null("ProgressManager")
+	if progress != null and progress.has_method("record_event"):
+		progress.call("record_event", "scene_discovered", {
+			"scene_id": scene_id,
+			"node_id": resolved_node_id
+		}, state)
 
 
 func _chapter_for_node(node_id: String, node: Dictionary) -> String:
@@ -165,7 +197,14 @@ func _choose(choice: Dictionary) -> void:
 		var display_name := str(encounter.get("name", str(character)))
 		var prefix := "+" if amount >= 0 else ""
 		_show_toast(display_name + " " + prefix + str(amount) + " afinidad")
-	state["history"].append({"choice": str(choice.get("label", ""))})
+	var choice_label := str(choice.get("label", ""))
+	state["history"].append({"choice": choice_label})
+	var progress := get_node_or_null("ProgressManager")
+	if progress != null and progress.has_method("record_event"):
+		progress.call("record_event", "decision_taken", {
+			"choice": choice_label,
+			"node_id": str(state.get("node_id", ""))
+		}, state)
 	_go_to(str(choice.get("next", "__END__")))
 
 

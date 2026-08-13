@@ -5,6 +5,8 @@
   "story_name": "Carmen",
   "role": "secundario",
   "summary": "Graciosa · estudiante de Cine · vegetariana",
+  "current_residence": "Monte del Toro",
+  "current_zone_id": "monte_del_toro",
   "playable": true,
   "enabled": true,
   "room": "room_fran",

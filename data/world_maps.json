@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "default_zone_id": "naranjal_del_rio",
+  "missing_map_excuses": [
+    "Los mapas de esta zona se perdieron en el bar. Nadie recuerda quién los llevaba.",
+    "Los mapas de esta zona se los ha comido una cabra del pueblo. Otra vez.",
+    "Mi perro se ha comido los mapas. Sí, esta vez la excusa es literalmente esa.",
+    "Los mapas acabaron en el río. Preguntar cómo solo empeora la historia.",
+    "El cartógrafo dijo “ahora vengo” y no hemos vuelto a saber nada de él.",
+    "Alguien utilizó los mapas para calzar una mesa que cojeaba.",
+    "Los mapas estaban aquí ayer. Eso es todo lo que podemos aportar a la investigación.",
+    "Estamos esperando a que alguien recuerde por qué demonios había que dibujar esta zona.",
+    "El mapa está siendo preparado por una persona que ha decidido dibujarlo con los codos. Va despacio.",
+    "Presupuesto para cartografía: 0 €. Presupuesto para excusas: sorprendentemente alto."
+  ],
+  "zones": {
+    "naranjal_del_rio": {
+      "id": "naranjal_del_rio",
+      "name": "Naranjal del Río",
+      "map_asset": "res://assets/maps/naranjal_del_rio.png",
+      "temporary": false,
+      "residents": ["javi", "sue", "smokey", "argentino"],
+      "locations": [
+        {"id": "home_javi", "name": "Javi", "type": "character", "kind": "character", "character_id": "javi", "position": {"x": 0.36, "y": 0.40}},
+        {"id": "home_sue", "name": "Sue", "type": "character", "kind": "character", "character_id": "sue", "position": {"x": 0.53, "y": 0.34}},
+        {"id": "home_smokey", "name": "Fran / Smokey", "type": "character", "kind": "character", "character_id": "smokey", "position": {"x": 0.40, "y": 0.68}},
+        {"id": "home_argentino", "name": "El Argentino", "type": "character", "kind": "character", "character_id": "argentino", "position": {"x": 0.57, "y": 0.76}},
+        {"id": "shop_naranjal", "name": "Tienda", "type": "shop", "kind": "shop", "position": {"x": 0.64, "y": 0.49}}
+      ],
+      "connections": [
+        {"id": "to_triana", "to": "triana", "target_zone_id": "triana", "side": "left", "label": "← TRIANA", "residents": ["ana", "jony"]},
+        {"id": "to_monte_del_toro", "to": "monte_del_toro", "target_zone_id": "monte_del_toro", "side": "right", "label": "MONTE DEL TORO →", "residents": ["carmen"]}
+      ]
+    },
+    "triana": {
+      "id": "triana",
+      "name": "Triana",
+      "map_asset": "",
+      "temporary": true,
+      "residents": ["ana", "jony"],
+      "locations": [
+        {"id": "home_ana", "name": "Ana", "type": "character", "kind": "character", "character_id": "ana", "position": {"x": 0.36, "y": 0.5}},
+        {"id": "home_jony", "name": "Jony", "type": "character", "kind": "character", "character_id": "jony", "position": {"x": 0.64, "y": 0.5}}
+      ],
+      "connections": [
+        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "left", "label": "← VOLVER A NARANJAL DEL RÍO", "residents": ["javi", "sue", "smokey", "argentino"]}
+      ]
+    },
+    "monte_del_toro": {
+      "id": "monte_del_toro",
+      "name": "Monte del Toro",
+      "map_asset": "",
+      "temporary": true,
+      "residents": ["carmen"],
+      "locations": [
+        {"id": "home_carmen", "name": "Carmen", "type": "character", "kind": "character", "character_id": "carmen", "position": {"x": 0.5, "y": 0.5}}
+      ],
+      "connections": [
+        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "right", "label": "VOLVER A NARANJAL DEL RÍO →", "residents": ["javi", "sue", "smokey", "argentino"]}
+      ]
+    }
+  }
+}

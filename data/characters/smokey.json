@@ -6,6 +6,8 @@
   "story_name": "Smokey",
   "role": "principal",
   "summary": "Gracioso · despreocupado · impulsivo · imprevisible",
+  "current_residence": "Naranjal del Río",
+  "current_zone_id": "naranjal_del_rio",
   "playable": true,
   "enabled": true,
   "room": "room_fran",

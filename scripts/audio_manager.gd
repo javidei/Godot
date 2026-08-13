@@ -2,6 +2,8 @@ extends Node
 
 const DataAccess = preload("res://scripts/data_access.gd")
 
+signal click_sound_changed(sound_id: String)
+
 # Valores cargados desde game_config.json; los literales son solo rescate.
 static var DEFAULT_MUSIC_VOLUME: float = _config_float("default_music_volume", 0.3)
 static var DEFAULT_EFFECTS_VOLUME: float = _config_float("default_effects_volume", 1.0)
@@ -10,6 +12,21 @@ static var MUSIC_OUTPUT_MAX: float = _config_float("music_output_max", 0.1)
 
 const SFX_FILES := {}
 const UI_FILES := {}
+
+# Los sonidos de interfaz son completamente procedurales: no necesitan assets ni
+# licencias externas. El orden de esta lista es también el orden del selector de
+# Ajustes, por lo que añadir un perfil nuevo solo requiere ampliar estos datos y
+# su forma de onda en _click_sample().
+const DEFAULT_CLICK_SOUND := "soft"
+const CLICK_SOUND_OPTIONS: Array[Dictionary] = [
+	{"id": "soft", "label": "Suave", "description": "Un toque corto y cálido."},
+	{"id": "dry", "label": "Seco", "description": "Un clic breve y preciso."},
+	{"id": "digital", "label": "Digital", "description": "Un pulso electrónico ascendente."},
+	{"id": "wood", "label": "Madera", "description": "Un golpe grave y orgánico."},
+	{"id": "pop", "label": "Pop", "description": "Una burbuja ligera y juguetona."},
+	{"id": "off", "label": "Desactivado", "description": "No reproduce sonidos al pulsar."}
+]
+const CLICK_BOUND_META := &"entre_lineas_click_bound"
 
 var music_player: AudioStreamPlayer
 var sfx_player: AudioStreamPlayer
@@ -20,6 +37,7 @@ var music_muted := false
 var effects_muted := false
 var current_music_id := ""
 var music_suspended := false
+var click_sound_id := DEFAULT_CLICK_SOUND
 
 
 static func refresh_configuration() -> void:
@@ -50,6 +68,14 @@ func _ready() -> void:
 	ui_player = _make_player("UI")
 	_load_settings()
 	_apply_audio_settings()
+	if not get_tree().node_added.is_connected(_on_tree_node_added):
+		get_tree().node_added.connect(_on_tree_node_added)
+	_bind_existing_buttons()
+
+
+func _exit_tree() -> void:
+	if get_tree() != null and get_tree().node_added.is_connected(_on_tree_node_added):
+		get_tree().node_added.disconnect(_on_tree_node_added)
 
 
 func play_background_music(background_id: String) -> bool:
@@ -207,9 +233,105 @@ func play_sfx(sound_id: String) -> void:
 
 
 func play_ui(sound_id: String = "confirm") -> void:
-	if _play_registered(ui_player, UI_FILES, sound_id):
+	# Los callers históricos usan "confirm". Se conserva esa API, pero ahora
+	# siempre resuelve al perfil elegido por el usuario.
+	if sound_id != "confirm" and sound_id != "click" and _play_registered(ui_player, UI_FILES, sound_id):
 		return
-	_play_generated(ui_player, [520.0, 760.0], 0.09, 0.045)
+	_play_click_profile(click_sound_id)
+
+
+func get_click_sound() -> String:
+	return click_sound_id
+
+
+func get_click_sound_label(sound_id: String = "") -> String:
+	var requested := click_sound_id if sound_id.is_empty() else _normalized_click_sound(sound_id)
+	for option in CLICK_SOUND_OPTIONS:
+		if str(option.get("id", "")) == requested:
+			return str(option.get("label", requested.capitalize()))
+	return requested.capitalize()
+
+
+func get_click_sound_options() -> Array[Dictionary]:
+	return CLICK_SOUND_OPTIONS.duplicate(true)
+
+
+func get_click_profiles() -> Array[Dictionary]:
+	return get_click_sound_options()
+
+
+func set_click_sound(sound_id: String, preview: bool = true) -> bool:
+	var normalized := _normalized_click_sound(sound_id)
+	if normalized == click_sound_id:
+		if preview:
+			preview_click(normalized)
+		return true
+	click_sound_id = normalized
+	_save_settings()
+	click_sound_changed.emit(click_sound_id)
+	if preview:
+		preview_click(click_sound_id)
+	return true
+
+
+func select_click_sound(sound_id: String, preview: bool = true) -> bool:
+	return set_click_sound(sound_id, preview)
+
+
+func preview_click(sound_id: String = "") -> void:
+	var requested := click_sound_id if sound_id.is_empty() else _normalized_click_sound(sound_id)
+	_play_click_profile(requested)
+
+
+func preview_click_sound(sound_id: String = "") -> void:
+	preview_click(sound_id)
+
+
+func bind_click(button: BaseButton) -> void:
+	if button == null or not is_instance_valid(button) or button.has_meta(CLICK_BOUND_META):
+		return
+	button.set_meta(CLICK_BOUND_META, true)
+	# _make_button() ya enruta el sonido a play_ui() mediante Main. Reconocer esa
+	# conexión mantiene exactamente un clic por pulsación. Los controles creados
+	# directamente (tarjetas, iconos o futuros mapas) sí se enlazan aquí.
+	if _button_routes_through_main(button):
+		return
+	button.pressed.connect(_on_bound_button_pressed.bind(button))
+
+
+func _on_tree_node_added(node: Node) -> void:
+	if node is BaseButton:
+		bind_click(node as BaseButton)
+
+
+func _bind_existing_buttons() -> void:
+	var root := get_tree().root
+	if root == null:
+		return
+	for node in root.find_children("*", "BaseButton", true, false):
+		bind_click(node as BaseButton)
+
+
+func _on_bound_button_pressed(button: BaseButton) -> void:
+	# Una conexión a Main puede añadirse después de que el nodo entre en el árbol.
+	# Se vuelve a comprobar al pulsar para seguir evitando audio duplicado.
+	if button != null and _button_routes_through_main(button):
+		return
+	play_ui("click")
+
+
+func _button_routes_through_main(button: BaseButton) -> bool:
+	for connection_value in button.pressed.get_connections():
+		if typeof(connection_value) != TYPE_DICTIONARY:
+			continue
+		var connection: Dictionary = connection_value
+		var callback_value: Variant = connection.get("callable", Callable())
+		if typeof(callback_value) != TYPE_CALLABLE:
+			continue
+		var callback: Callable = callback_value
+		if callback.is_valid() and str(callback.get_method()) == "_play_ui_sound":
+			return true
+	return false
 
 
 func _ensure_audio_bus(bus_name: String) -> void:
@@ -287,6 +409,7 @@ func _load_settings() -> void:
 	effects_volume = clampf(float(audio.get("effects_volume", DEFAULT_EFFECTS_VOLUME)), 0.0, 1.0)
 	music_muted = bool(audio.get("music_muted", false))
 	effects_muted = bool(audio.get("effects_muted", false))
+	click_sound_id = _normalized_click_sound(str(audio.get("click_sound", DEFAULT_CLICK_SOUND)))
 
 
 func _save_settings() -> void:
@@ -297,8 +420,97 @@ func _save_settings() -> void:
 		"music_volume": music_volume,
 		"effects_volume": effects_volume,
 		"music_muted": music_muted,
-		"effects_muted": effects_muted
+		"effects_muted": effects_muted,
+		"click_sound": click_sound_id
 	})
+
+
+func _normalized_click_sound(sound_id: String) -> String:
+	var candidate := sound_id.strip_edges().to_lower()
+	# Acepta tanto ids estables como las etiquetas visibles para facilitar
+	# migraciones manuales de settings.json.
+	var aliases := {
+		"suave": "soft",
+		"seco": "dry",
+		"digital": "digital",
+		"madera": "wood",
+		"pop": "pop",
+		"desactivado": "off",
+		"disabled": "off",
+		"none": "off"
+	}
+	if aliases.has(candidate):
+		candidate = str(aliases[candidate])
+	for option in CLICK_SOUND_OPTIONS:
+		if str(option.get("id", "")) == candidate:
+			return candidate
+	return DEFAULT_CLICK_SOUND
+
+
+func _play_click_profile(sound_id: String) -> void:
+	var profile := _normalized_click_sound(sound_id)
+	if profile == "off" or ui_player == null:
+		return
+	var duration := 0.065
+	match profile:
+		"dry":
+			duration = 0.038
+		"digital":
+			duration = 0.075
+		"wood":
+			duration = 0.095
+		"pop":
+			duration = 0.082
+	_play_generated_click(ui_player, profile, duration)
+
+
+func _play_generated_click(player: AudioStreamPlayer, profile: String, duration: float) -> void:
+	var generator := AudioStreamGenerator.new()
+	generator.mix_rate = 44100.0
+	generator.buffer_length = maxf(0.2, duration + 0.06)
+	player.stop()
+	player.stream = generator
+	player.play()
+	var playback := player.get_stream_playback() as AudioStreamGeneratorPlayback
+	if playback == null:
+		return
+	var sample_count := int(generator.mix_rate * duration)
+	var frames := PackedVector2Array()
+	frames.resize(sample_count)
+	for index in range(sample_count):
+		var time := float(index) / generator.mix_rate
+		var progress := float(index) / float(maxi(1, sample_count - 1))
+		var sample := _click_sample(profile, time, progress)
+		frames[index] = Vector2(sample, sample)
+	playback.push_buffer(frames)
+
+
+func _click_sample(profile: String, time: float, progress: float) -> float:
+	var attack := minf(1.0, progress * 32.0)
+	match profile:
+		"dry":
+			var dry_envelope := attack * pow(1.0 - progress, 5.2)
+			var dry_tick := sin(TAU * 1320.0 * time) + 0.45 * sin(TAU * 2430.0 * time)
+			return dry_tick * 0.052 * dry_envelope
+		"digital":
+			var digital_envelope := attack * pow(1.0 - progress, 2.7)
+			var sweep := lerpf(720.0, 1480.0, progress)
+			var digital_wave := sin(TAU * sweep * time)
+			digital_wave += 0.30 * sin(TAU * sweep * 2.0 * time)
+			return digital_wave * 0.047 * digital_envelope
+		"wood":
+			var wood_envelope := attack * pow(1.0 - progress, 3.4)
+			var body := sin(TAU * 185.0 * time) + 0.62 * sin(TAU * 296.0 * time)
+			var grain := sin(TAU * 1789.0 * time) * sin(TAU * 997.0 * time)
+			return (body * 0.046 + grain * 0.014) * wood_envelope
+		"pop":
+			var pop_envelope := attack * pow(1.0 - progress, 2.4)
+			var falling_frequency := lerpf(760.0, 245.0, progress)
+			return sin(TAU * falling_frequency * time) * 0.065 * pop_envelope
+		_:
+			var soft_envelope := attack * pow(1.0 - progress, 2.8)
+			var soft_wave := sin(TAU * 430.0 * time) + 0.45 * sin(TAU * 650.0 * time)
+			return soft_wave * 0.038 * soft_envelope
 
 
 func _play_generated(player: AudioStreamPlayer, frequencies: Array, duration: float, volume: float) -> void:

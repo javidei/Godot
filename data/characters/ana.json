@@ -4,6 +4,8 @@
   "display_name": "Ana",
   "role": "secundario",
   "summary": "Gótico · libros · vampiros · rol · fantasía",
+  "current_residence": "Triana",
+  "current_zone_id": "triana",
   "playable": true,
   "enabled": true,
   "room": "room_ana",
