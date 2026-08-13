@@ -27,6 +27,7 @@ func _run() -> void:
 	var room_panel := hud_patch.get("room_panel") as PanelContainer
 	var menu_button := hud_patch.get("menu_button") as Button
 	var fullscreen_button := hud_patch.get("fullscreen_button") as Button
+	var map_button := hud_patch.get("map_button") as Button
 	var save_button := hud_patch.get("save_button") as Button
 	var load_button := hud_patch.get("load_button") as Button
 
@@ -41,6 +42,9 @@ func _run() -> void:
 		return
 	if menu_button == null or fullscreen_button == null or menu_button.get_parent() != utility_row or fullscreen_button.get_parent() != utility_row:
 		_fail("Menú y pantalla completa no comparten la fila superior del HUD")
+		return
+	if map_button == null or map_button.get_parent() != utility_row or map_button.name != "ReturnToMapButton060":
+		_fail("El HUD no ofrece el retorno al mapa desde las habitaciones")
 		return
 	if save_button != null and save_button.visible:
 		_fail("Guardar manual sigue visible pese al autoguardado")
@@ -74,6 +78,9 @@ func _run() -> void:
 
 	if not room_panel.visible:
 		_fail("El control de música no aparece dentro de una habitación")
+		return
+	if not map_button.visible or map_button.text != "Mapa":
+		_fail("El retorno al mapa no es visible y reconocible dentro de una habitación")
 		return
 
 	var viewport_size := root.get_visible_rect().size

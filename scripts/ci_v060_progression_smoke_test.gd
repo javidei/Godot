@@ -232,6 +232,9 @@ func _validate_migrations() -> bool:
 	if int(migrated.get("schema_version", 0)) < 2 or str(migrated.get("current_zone_id", "")) != "naranjal_del_rio":
 		_fail("El save no recibe schema o localidad inicial")
 		return false
+	if int(migrated.get("schema_version", 0)) < 3 or typeof(migrated.get("conversation_checkpoints", null)) != TYPE_DICTIONARY:
+		_fail("El save antiguo no migra los puntos de continuación por personaje")
+		return false
 	var profile: Dictionary = data_manager.call("migrate_profile", {})
 	if int(profile.get("schema_version", 0)) < 1 or typeof(profile.get("statistics", null)) != TYPE_DICTIONARY:
 		_fail("El perfil global ausente no se crea con schema y estadísticas")

@@ -13,6 +13,11 @@
     "El mapa está siendo preparado por una persona que ha decidido dibujarlo con los codos. Va despacio.",
     "Presupuesto para cartografía: 0 €. Presupuesto para excusas: sorprendentemente alto."
   ],
+  "room_resume_messages": [
+    "¿Ya estás de vuelta? ¿Por dónde íbamos?",
+    "Has vuelto. Sigamos justo donde lo dejamos.",
+    "Qué rápido has regresado. Retomemos la conversación."
+  ],
   "zones": {
     "naranjal_del_rio": {
       "id": "naranjal_del_rio",

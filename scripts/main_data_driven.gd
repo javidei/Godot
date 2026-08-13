@@ -42,7 +42,8 @@ func _fresh_state() -> Dictionary:
 		"history": [],
 		"coins": 0,
 		"claimed_rewards": {},
-		"current_zone_id": "naranjal_del_rio"
+		"current_zone_id": "naranjal_del_rio",
+		"conversation_checkpoints": {}
 	}
 	var dm: Variant = _dm()
 	if dm != null and dm.has_method("migrate_save_state"):
@@ -83,6 +84,7 @@ func _show_menu() -> void:
 func _save_game(show_message: bool) -> void:
 	if state.is_empty():
 		return
+	_update_conversation_checkpoint(str(state.get("node_id", "")))
 	var dm: Variant = _dm()
 	if dm == null:
 		if show_message:
@@ -153,6 +155,22 @@ func _go_to(node_id: String, add_to_history: bool = true) -> void:
 			"scene_id": scene_id,
 			"node_id": resolved_node_id
 		}, state)
+
+
+func _update_conversation_checkpoint(node_id: String) -> void:
+	if not bool(state.get("visit_mode", false)):
+		return
+	if node_id.is_empty() or node_id.begins_with("__") or node_id.ends_with("_outro_044"):
+		return
+	var character_id := DataStory.character_for_node(node_id)
+	if character_id.is_empty() or not DataStory.NODES.has(node_id):
+		return
+	var raw: Variant = state.get("conversation_checkpoints", {})
+	var checkpoints: Dictionary = (raw as Dictionary).duplicate(true) if typeof(raw) == TYPE_DICTIONARY else {}
+	if str(checkpoints.get(character_id, "")) == node_id:
+		return
+	checkpoints[character_id] = node_id
+	state["conversation_checkpoints"] = checkpoints
 
 
 func _chapter_for_node(node_id: String, node: Dictionary) -> String:

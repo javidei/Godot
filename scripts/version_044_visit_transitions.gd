@@ -359,6 +359,11 @@ func _mark_intro_seen(character_id: String) -> void:
 func _complete_visit(character_id: String) -> void:
 	var state := _state()
 	_ensure_transition_arrays(state)
+	var raw_checkpoints: Variant = state.get("conversation_checkpoints", {})
+	if typeof(raw_checkpoints) == TYPE_DICTIONARY:
+		var checkpoints := (raw_checkpoints as Dictionary).duplicate(true)
+		checkpoints.erase(character_id)
+		state["conversation_checkpoints"] = checkpoints
 	var completed: Array = state.get("completed_characters", [])
 	var outros: Array = state.get("outro_transitions_seen", [])
 	var intros: Array = state.get("intro_transitions_seen", [])

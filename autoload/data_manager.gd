@@ -17,7 +17,7 @@ const LEGACY_SAVE_PATH := "user://godot_otome_save.json"
 const LEGACY_AUDIO_PATH := "user://audio_settings.cfg"
 const LEGACY_TRACK_PATH := "user://music_track_settings.cfg"
 
-const SAVE_SCHEMA_VERSION := 2
+const SAVE_SCHEMA_VERSION := 3
 const PROFILE_SCHEMA_VERSION := 1
 const DEFAULT_ZONE_ID := "naranjal_del_rio"
 
@@ -345,6 +345,18 @@ func get_missing_map_excuses() -> Array[String]:
 	return result
 
 
+func get_room_resume_messages() -> Array[String]:
+	ensure_loaded()
+	var result: Array[String] = []
+	var raw: Variant = _world_maps.get("room_resume_messages", [])
+	if typeof(raw) == TYPE_ARRAY:
+		for item in raw as Array:
+			var value := str(item).strip_edges()
+			if not value.is_empty():
+				result.append(value)
+	return result
+
+
 func get_economy_config() -> Dictionary:
 	ensure_loaded()
 	return _economy.duplicate(true)
@@ -543,6 +555,15 @@ func migrate_save_state(state: Dictionary) -> Dictionary:
 
 	var zone_id := str(result.get("current_zone_id", get_default_zone_id())).strip_edges()
 	result["current_zone_id"] = get_default_zone_id() if zone_id.is_empty() else zone_id
+	var raw_checkpoints: Variant = result.get("conversation_checkpoints", {})
+	var checkpoints: Dictionary = {}
+	if typeof(raw_checkpoints) == TYPE_DICTIONARY:
+		for raw_character_id in (raw_checkpoints as Dictionary).keys():
+			var character_id := str(raw_character_id).strip_edges()
+			var node_id := str((raw_checkpoints as Dictionary)[raw_character_id]).strip_edges()
+			if not character_id.is_empty() and not node_id.is_empty():
+				checkpoints[character_id] = node_id
+	result["conversation_checkpoints"] = checkpoints
 	return result
 
 

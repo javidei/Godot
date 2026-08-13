@@ -41,6 +41,7 @@ La base de `DataManager`, los JSON de personajes/preguntas/habitaciones y el gua
 - [x] Evolucionar el selector de visitas al mapa visual de Naranjal del Río.
 - [x] Definir casas, tienda y conexiones con coordenadas normalizadas en JSON.
 - [x] Navegar `mapa → casa/habitación → conversación → mapa`.
+- [x] Permitir salir de una conversación, visitar otra habitación y retomarla desde un checkpoint por personaje.
 - [x] Representar estado visitado/no visitado sin ocultar revisitas.
 - [x] Añadir Triana y Monte del Toro mediante una vista temporal sustituible por futuros PNG.
 - [x] Separar MONEDAS/recompensas por partida de colección, logros y estadísticas globales.

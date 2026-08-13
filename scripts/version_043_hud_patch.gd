@@ -1,7 +1,10 @@
 extends Node
 
+const Story = preload("res://scripts/story.gd")
+
 const RELEASE_VERSION := "0.4.5"
 const MUTE_ICON_PATH := "res://assets/ui/icons/mute.svg"
+const MAP_ICON_PATH := "res://assets/ui/icons/arrow-left.svg"
 const DESKTOP_BREAKPOINT := 1000.0
 
 var main: Control
@@ -13,6 +16,7 @@ var hud_box: VBoxContainer
 var utility_row: HBoxContainer
 var menu_button: Button
 var fullscreen_button: Button
+var map_button: Button
 var room_panel: PanelContainer
 var room_music_icon: TextureRect
 var room_label: Label
@@ -104,6 +108,14 @@ func _build_hud_panel() -> void:
 	if fullscreen_button != null:
 		fullscreen_button.reparent(utility_row)
 		_prepare_utility_button(fullscreen_button, "Pantalla completa / ventana")
+	map_button = main.call("_make_small_button", "") as Button
+	map_button.name = "ReturnToMapButton060"
+	map_button.icon = load(MAP_ICON_PATH) as Texture2D
+	map_button.pressed.connect(_return_to_map)
+	utility_row.add_child(map_button)
+	_prepare_utility_button(map_button, "Volver al mapa y continuar esta conversación más tarde")
+	map_button.text = "Mapa"
+	map_button.custom_minimum_size.x = 82.0
 
 
 func _prepare_utility_button(button: Button, tooltip: String) -> void:
@@ -180,6 +192,9 @@ func _enforce_hud_controls() -> void:
 	if fullscreen_button != null:
 		fullscreen_button.visible = true
 		fullscreen_button.text = ""
+	if map_button != null:
+		map_button.visible = _can_return_to_map()
+		map_button.text = "Mapa"
 	if room_mute != null:
 		room_mute.text = ""
 		room_mute.icon = load(MUTE_ICON_PATH) as Texture2D
@@ -207,11 +222,13 @@ func _apply_layout() -> void:
 		_set_rect(hud_panel, 0.758, 0.79, 0.975, 0.965)
 
 	if utility_row != null:
-		utility_row.add_theme_constant_override("separation", 22 if compact_landscape else 30)
+		utility_row.add_theme_constant_override("separation", 10 if compact_landscape else 16)
 	var utility_size := Vector2(40, 30) if compact_landscape else Vector2(44, 32)
 	for button in [menu_button, fullscreen_button]:
 		if button != null:
 			button.custom_minimum_size = utility_size
+	if map_button != null:
+		map_button.custom_minimum_size = Vector2(72 if compact_landscape else 82, utility_size.y)
 
 	var old_effects := main.find_child("HudEffectsRow043", true, false)
 	if old_effects != null:
@@ -227,6 +244,22 @@ func _set_rect(control: Control, left: float, top: float, right: float, bottom: 
 	control.offset_top = 0.0
 	control.offset_right = 0.0
 	control.offset_bottom = 0.0
+
+
+func _can_return_to_map() -> bool:
+	if game_screen == null or not game_screen.visible:
+		return false
+	var value: Variant = main.get("state")
+	if typeof(value) != TYPE_DICTIONARY:
+		return false
+	var node_id := str((value as Dictionary).get("node_id", ""))
+	return not Story.character_for_node(node_id).is_empty() and not node_id.ends_with("_outro_044")
+
+
+func _return_to_map() -> void:
+	var world_map := main.get_node_or_null("WorldMapManager") if main != null else null
+	if world_map != null and world_map.has_method("return_to_map_from_room"):
+		world_map.call("return_to_map_from_room")
 
 
 func _upgrade_save_version() -> void:

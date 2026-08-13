@@ -101,6 +101,66 @@ func _run() -> void:
 		_fail("La presentación de Ana no queda registrada como vista")
 		return
 
+	# Salir de una conversación no la reinicia: guarda el nodo por personaje,
+	# vuelve al mapa y exige una nueva pulsación antes de retomar exactamente ahí.
+	main.call("_go_to", "ana_q2", false)
+	for _i in range(3):
+		await process_frame
+	state = main.get("state")
+	var checkpoints: Dictionary = state.get("conversation_checkpoints", {})
+	if str(checkpoints.get("ana", "")) != "ana_q2":
+		_fail("El avance de Ana no queda guardado como punto de continuación")
+		return
+	world_map.call("return_to_map_from_room")
+	for _i in range(8):
+		await process_frame
+	state = main.get("state")
+	if str(state.get("node_id", "")) != VISIT_NODE or not bool(world_map.call("is_open")):
+		_fail("Volver desde la habitación no abre el mapa")
+		return
+	transition.call("set_fast_mode", true)
+	transition.call("begin_character_visit", "jony")
+	waited = 0
+	while bool(transition.get("transition_active")) and waited < 60:
+		await process_frame
+		waited += 1
+	main.call("_go_to", "jony_q1", false)
+	for _i in range(3):
+		await process_frame
+	state = main.get("state")
+	checkpoints = state.get("conversation_checkpoints", {})
+	if str(checkpoints.get("ana", "")) != "ana_q2" or str(checkpoints.get("jony", "")) != "jony_q1":
+		_fail("Visitar otra habitación sobrescribe el progreso pendiente de un personaje")
+		return
+	world_map.call("return_to_map_from_room")
+	for _i in range(8):
+		await process_frame
+
+	transition.call("set_fast_mode", false)
+	transition.call("begin_character_visit", "ana")
+	waited = 0
+	while not bool(transition.get("waiting_for_continue")) and waited < 180:
+		await process_frame
+		waited += 1
+	state = main.get("state")
+	var resume_message := str((transition.get("message_label") as Label).text)
+	if not bool(transition.get("waiting_for_continue")) or str(state.get("node_id", "")) != VISIT_NODE:
+		_fail("El reencuentro avanza solo antes de que el jugador pulse")
+		return
+	var configured_messages: Array = root.get_node("DataManager").call("get_room_resume_messages")
+	if not configured_messages.has(resume_message):
+		_fail("El reencuentro no usa una frase configurable")
+		return
+	transition.call("_on_transition_input", click)
+	waited = 0
+	while bool(transition.get("transition_active")) and waited < 180:
+		await process_frame
+		waited += 1
+	state = main.get("state")
+	if str(state.get("node_id", "")) != "ana_q2":
+		_fail("La visita retomada no continúa exactamente donde se dejó")
+		return
+
 	transition.call("set_fast_mode", true)
 	main.call("_go_to", "ana_outro_044", false)
 	for _i in range(18):
@@ -115,6 +175,10 @@ func _run() -> void:
 	if not completed.has("ana") or not outros.has("ana"):
 		_fail("La despedida de Ana no queda registrada como completada y vista")
 		return
+	checkpoints = state.get("conversation_checkpoints", {})
+	if checkpoints.has("ana"):
+		_fail("Una conversación completada conserva un punto de continuación obsoleto")
+		return
 	var save_version := str(state.get("save_version", ""))
 	if not (save_version.begins_with("0.4.") or save_version.begins_with("0.5.") or save_version.begins_with("0.6.")):
 		_fail("El guardado pierde el versionado compatible tras las transiciones")
@@ -125,7 +189,7 @@ func _run() -> void:
 		_fail("La capa negra no se oculta al terminar la transición")
 		return
 
-	print("V044 OK: música en negro, fundidos interactivos, presentación, despedida y persistencia validados.")
+	print("V044 OK: fundidos manuales, salida al mapa, reencuentro, continuación exacta y despedida validados.")
 	quit(0)
 
 

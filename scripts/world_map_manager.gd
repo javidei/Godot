@@ -1,6 +1,7 @@
 extends Node
 
 const DataAccess = preload("res://scripts/data_access.gd")
+const DataStory = preload("res://scripts/story.gd")
 
 const VISIT_NODE := "__VISIT_SELECT__"
 const DEFAULT_ZONE_FALLBACK := "naranjal_del_rio"
@@ -85,6 +86,21 @@ func close_selector() -> void:
 
 func is_open() -> bool:
 	return overlay != null and overlay.visible
+
+
+func return_to_map_from_room() -> void:
+	_resolve_dependencies()
+	var state := _state()
+	if state.is_empty() or main == null:
+		return
+	var node_id := str(state.get("node_id", ""))
+	if DataStory.character_for_node(node_id).is_empty() or node_id.ends_with("_outro_044"):
+		return
+	# MainDataDriven guarda el nodo actual como checkpoint en cada avance. Al ir
+	# al sentinel técnico no se reemplaza, por lo que cada personaje conserva su
+	# propia conversación aunque el jugador visite otra habitación entre medias.
+	main.call("_save_game", false)
+	main.call("_go_to", VISIT_NODE, false)
 
 
 func show_zone(zone_id: String, record_visit: bool = true) -> void:

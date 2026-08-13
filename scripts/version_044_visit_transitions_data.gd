@@ -7,6 +7,7 @@ const NEW_GAME_INTRO_TITLE := ""
 const NEW_GAME_INTRO_TEXT := "Los hechos acontecieron desde 2026."
 
 var last_missing_map_excuse := ""
+var last_room_resume_message := ""
 
 
 func _dm() -> Variant:
@@ -54,7 +55,67 @@ func _ensure_story_patches() -> void:
 func begin_character_visit(character_id: String) -> void:
 	if character_id.is_empty() or transition_active:
 		return
+	var checkpoint := _resume_checkpoint(character_id)
+	if not checkpoint.is_empty():
+		_begin_resumed_visit(character_id, checkpoint)
+		return
 	_on_visit_selected(character_id)
+
+
+func _resume_checkpoint(character_id: String) -> String:
+	var state := _state()
+	var raw: Variant = state.get("conversation_checkpoints", {})
+	if typeof(raw) != TYPE_DICTIONARY:
+		return ""
+	var node_id := str((raw as Dictionary).get(character_id, ""))
+	if node_id.is_empty() or node_id.ends_with("_outro_044"):
+		return ""
+	if not DataStory.NODES.has(node_id) or DataStory.character_for_node(node_id) != character_id:
+		return ""
+	return node_id
+
+
+func _begin_resumed_visit(character_id: String, node_id: String) -> void:
+	var state := _state()
+	_ensure_transition_arrays(state)
+	var order: Array = state.get("visit_order", [])
+	if not order.has(character_id):
+		order.append(character_id)
+	state["visit_order"] = order
+	main.set("state", state)
+	main.call("_save_game", false)
+	var dm: Variant = _dm()
+	var character: Dictionary = dm.call("get_character", character_id) if dm != null else {}
+	var title := str(character.get("display_name", character.get("name", character_id.capitalize()))).to_upper()
+	play_generic_transition(title, _pick_room_resume_message(), 0.0, Callable(self, "_resume_character_visit").bind(character_id, node_id))
+
+
+func _resume_character_visit(character_id: String, node_id: String) -> void:
+	_start_character_music(character_id)
+	if version_manager != null:
+		version_manager.call("_hide_selector")
+	main.call("_go_to", node_id, false)
+
+
+func _pick_room_resume_message() -> String:
+	var messages: Array[String] = []
+	var dm: Variant = _dm()
+	if dm != null and dm.has_method("get_room_resume_messages"):
+		var raw: Variant = dm.call("get_room_resume_messages")
+		if typeof(raw) == TYPE_ARRAY:
+			for item in raw as Array:
+				var message := str(item).strip_edges()
+				if not message.is_empty():
+					messages.append(message)
+	if messages.is_empty():
+		return "¿Ya estás de vuelta? ¿Por dónde íbamos?"
+	var candidates: Array[String] = []
+	for message in messages:
+		if message != last_room_resume_message or messages.size() == 1:
+			candidates.append(message)
+	var selected := str(candidates.pick_random()) if not candidates.is_empty() else messages[0]
+	last_room_resume_message = selected
+	return selected
 
 
 func play_new_game_intro(on_finished: Callable = Callable()) -> void:

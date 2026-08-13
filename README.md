@@ -17,7 +17,8 @@ El subtítulo se calcula automáticamente con el número de personajes más una 
 - `DataManager` como Autoload para centralizar personajes, preguntas, habitaciones, mapas, economía, tienda, logros, configuración y persistencia.
 - AudioManager con canales separados para música y efectos/UI, volúmenes y silencios independientes, música de menú con entrada gradual y temas en bucle asociados mediante datos.
 - La nueva partida presenta brevemente el año 2026 antes de elegir protagonista.
-- Mapa interactivo de Naranjal del Río como centro del recorrido, con accesos temporales a Triana y Monte del Toro, tienda y retorno después de cada conversación.
+- Mapa interactivo de Naranjal del Río como centro del recorrido, con accesos temporales a Triana y Monte del Toro, tienda y retorno durante o después de cada conversación.
+- Cada habitación permite volver al mapa sin perder el avance; al regresar, una breve pantalla de reencuentro retoma el diálogo en el punto exacto guardado para ese personaje.
 - Recorrido libre por el resto del grupo: el personaje elegido representa al jugador, no aparece como encuentro y los marcadores conservan el estado visitado.
 - MONEDAS y recompensas únicas por partida; coleccionables, cosméticos, estadísticas y logros en un perfil global local.
 - Ajuste global con cinco perfiles procedurales de clic más la opción desactivada, todos en el bus de Efectos/UI.
@@ -54,7 +55,7 @@ El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la
 
 ## Datos y diálogo
 
-La versión 0.6.1 permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de las visitas y el mapa se adapta al resto del grupo. Cada encuentro contiene una presentación, preguntas con cuatro opciones, puntuaciones configurables y una réplica inmediata.
+La versión 0.6.1 permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de las visitas y el mapa se adapta al resto del grupo. Cada encuentro contiene una presentación, preguntas con cuatro opciones, puntuaciones configurables y una réplica inmediata. Las conversaciones pueden pausarse para visitar otra habitación y conservan un checkpoint independiente por personaje.
 
 Los datos estáticos se organizan principalmente en:
 

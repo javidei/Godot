@@ -22,7 +22,7 @@ formado por el menú, Extras y Ajustes, y lo detiene al comenzar la partida.
 
 ## Mapas y localidades
 
-`world_maps.json` tiene un `default_zone_id` y un diccionario `zones`. Un mapa real declara `map_asset`; una zona sin arte definitivo usa `temporary: true` y el mismo renderer genérico. Cambiar Triana o Monte del Toro a un mapa real no requiere crear un flujo paralelo.
+`world_maps.json` tiene un `default_zone_id`, frases `room_resume_messages` y un diccionario `zones`. Un mapa real declara `map_asset`; una zona sin arte definitivo usa `temporary: true` y el mismo renderer genérico. Cambiar Triana o Monte del Toro a un mapa real no requiere crear un flujo paralelo.
 
 Las localizaciones sobre el PNG se colocan con coordenadas normalizadas entre 0 y 1:
 
@@ -188,7 +188,7 @@ Para un personaje estándar no debería ser necesario añadir lógica específic
 - Preferencias: `user://settings.json`
 - Perfil global: `user://profile.json`
 
-La partida contiene el protagonista, nodo narrativo, afinidad, expresiones, historial, zona actual, MONEDAS y recompensas cobradas. El perfil global, independiente de cualquier partida, contiene desbloqueos, logros y estadísticas acumuladas. Las preferencias contienen audio, pantalla completa y el perfil de sonido de clic.
+La partida contiene el protagonista, nodo narrativo, afinidad, expresiones, historial, zona actual, MONEDAS, recompensas cobradas y `conversation_checkpoints`, un diccionario de puntos de continuación independientes por personaje. El perfil global, independiente de cualquier partida, contiene desbloqueos, logros y estadísticas acumuladas. Las preferencias contienen audio, pantalla completa y el perfil de sonido de clic.
 
 La primera ejecución de esta arquitectura intenta migrar automáticamente:
 

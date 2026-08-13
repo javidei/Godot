@@ -9,8 +9,11 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 ### Added
 
 - Pestaña permanente de Cosméticos en todas las fichas de personaje, conectada al perfil global, con skins y mascotas iniciales para Ana y Jony.
+- Botón `Mapa` dentro de las habitaciones y checkpoints independientes para pausar y retomar cada conversación.
 
 ### Changed
+
+- Al volver a una habitación a medias, una frase de reencuentro configurable espera una pulsación y continúa exactamente donde se dejó.
 
 ### Fixed
 
