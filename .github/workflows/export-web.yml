@@ -144,6 +144,19 @@ jobs:
           fi
           grep -q "V050 OK:" v050-smoke.log
 
+      - name: Smoke test móvil de Extras 0.6.3
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v063_mobile_extras_smoke_test.gd > v063-mobile-extras.log 2>&1
+          STATUS=$?
+          set -e
+          cat v063-mobile-extras.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V063 MOBILE EXTRAS FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v063-mobile-extras.log; then
+            echo "La validación táctil e iconográfica de Extras ha fallado; no se exportará."
+            exit 1
+          fi
+          grep -q "V063 MOBILE EXTRAS OK:" v063-mobile-extras.log
+
       - name: Smoke test de mapa y progreso 0.6
         run: |
           set +e
