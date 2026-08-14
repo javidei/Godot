@@ -82,7 +82,7 @@ jobs:
       - name: Smoke test de mecánicas heredadas 0.4.x
         run: |
           set +e
-          godot --headless --path . --script res://scripts/ci_v040_smoke_test.gd > v040-smoke.log 2>&1
+          godot --headless --path . --script res://scripts/ci_v070_v040_smoke_test.gd > v040-smoke.log 2>&1
           STATUS=$?
           set -e
           cat v040-smoke.log
@@ -95,7 +95,7 @@ jobs:
       - name: Smoke test de transiciones narrativas
         run: |
           set +e
-          godot --headless --path . --script res://scripts/ci_v044_transition_smoke_test.gd > v044-smoke.log 2>&1
+          godot --headless --path . --script res://scripts/ci_v070_v044_transition_smoke_test.gd > v044-smoke.log 2>&1
           STATUS=$?
           set -e
           cat v044-smoke.log
@@ -121,7 +121,7 @@ jobs:
       - name: Smoke test de menú e interacción
         run: |
           set +e
-          godot --headless --path . --script res://scripts/ci_v045_menu_input_smoke_test.gd > v045-smoke.log 2>&1
+          godot --headless --path . --script res://scripts/ci_v070_v045_menu_input_smoke_test.gd > v045-smoke.log 2>&1
           STATUS=$?
           set -e
           cat v045-smoke.log
@@ -134,7 +134,7 @@ jobs:
       - name: Smoke test de Extras y códice 0.5/0.6
         run: |
           set +e
-          godot --headless --path . --script res://scripts/ci_v050_extras_codex_test.gd > v050-smoke.log 2>&1
+          godot --headless --path . --script res://scripts/ci_v070_v050_extras_codex_test.gd > v050-smoke.log 2>&1
           STATUS=$?
           set -e
           cat v050-smoke.log
