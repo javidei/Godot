@@ -38,9 +38,15 @@ func _run() -> void:
 	if grid == null or grid.get_child_count() == 0:
 		_fail("No se encuentra la cuadrícula de opciones de Extras")
 		return
+	if grid.columns < 3:
+		_fail("La portada de Extras no aprovecha varias columnas en escritorio")
+		return
 	var first_button := grid.get_child(0) as BaseButton
 	if first_button == null or first_button.mouse_filter != Control.MOUSE_FILTER_PASS:
 		_fail("Los botones dentro del scroll siguen bloqueando el gesto táctil")
+		return
+	if first_button.custom_minimum_size.y > 90.0:
+		_fail("Las opciones de Extras siguen usando tarjetas demasiado altas")
 		return
 
 	extras.call("_show_collection")
@@ -69,6 +75,13 @@ func _run() -> void:
 	extras.call("_show_achievements")
 	for _i in range(3):
 		await process_frame
+	var achievement_grid := page_host.find_child("AchievementsGrid066", true, false) as GridContainer
+	if achievement_grid == null:
+		_fail("Logros no usa la cuadrícula compacta responsive")
+		return
+	if achievement_grid.columns < 3:
+		_fail("Logros no muestra varias tarjetas por fila en escritorio")
+		return
 	var achievement_icon := page_host.find_child("AchievementStatusIcon063", true, false) as TextureRect
 	if achievement_icon == null or achievement_icon.texture == null:
 		_fail("Los logros no usan iconos SVG reales")
@@ -89,7 +102,7 @@ func _run() -> void:
 		_fail("Un sonido no seleccionado muestra el icono de selección")
 		return
 
-	print("V063 MOBILE EXTRAS OK: scroll táctil inmediato, eventos propagados e iconos SVG validados.")
+	print("V063 MOBILE EXTRAS OK: scroll táctil, iconos SVG y densidad responsive validados.")
 	quit(0)
 
 
