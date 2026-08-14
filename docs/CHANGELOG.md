@@ -12,6 +12,28 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.7.0] - 2026-08-14
+
+### Added
+
+- Sistema de hasta diez slots locales independientes bajo `user://save_slots/`, con índice del último slot utilizado.
+- Pantalla **Partidas** para revisar, cargar y borrar partidas guardadas, con confirmación explícita antes de eliminar un slot.
+- Selección de un slot vacío antes de iniciar una nueva partida, evitando sobrescrituras accidentales.
+- Resumen por slot con protagonista, porcentaje de progreso narrativo, localidad, visitas completadas, tiempo jugado, MONEDAS, fecha y versión del guardado.
+- Tiempo jugado específico por partida y autoguardado periódico de la partida activa.
+- Smoke test específico de 0.7 para validar diez slots, aislamiento entre partidas, carga, borrado y flujo de interfaz.
+
+### Changed
+
+- **Continuar** carga automáticamente el slot utilizado más recientemente.
+- El progreso narrativo, las MONEDAS, afinidad, checkpoints y posición permanecen separados por partida, mientras colección, cosméticos, logros y estadísticas siguen perteneciendo al perfil global.
+- Los guardados incorporan metadatos de versión y schema para facilitar futuras migraciones.
+
+### Fixed
+
+- Crear una nueva partida deja de reemplazar implícitamente el progreso de la partida anterior.
+- El antiguo guardado único `user://savegame.json` se migra automáticamente al Slot 1 cuando procede, sin borrar el archivo original de respaldo.
+
 ## [0.6.10] - 2026-08-14
 
 ### Changed
