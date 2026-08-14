@@ -2,18 +2,12 @@
 
 Este roadmap contiene únicamente mejoras que tenemos intención real de desarrollar. Puede reorganizarse conforme evolucione **Entre líneas** y no fija versiones ni fechas mientras no estén decididas.
 
-La base de `DataManager`, los JSON de personajes/preguntas/habitaciones y el guardado local único con autoguardado ya están implementados, por lo que no se mantienen aquí como tareas pendientes.
+La base de `DataManager`, los JSON de personajes/preguntas/habitaciones y el guardado local por slots con autoguardado ya están implementados, por lo que no se mantienen aquí como tareas pendientes.
 
 ## Próximas mejoras
 
 ### Sistema de guardado
 
-- [ ] Diseñar soporte para varias ranuras/slots locales.
-- [ ] Crear pantalla de selección y gestión de partidas.
-- [ ] Permitir iniciar una nueva partida seleccionando slot.
-- [ ] Permitir cargar un slot concreto.
-- [ ] Permitir borrar un slot.
-- [ ] Adaptar «Continuar» para cargar automáticamente el slot utilizado más recientemente.
 - [ ] Añadir importación/exportación de saves para mover una partida entre equipos.
 
 ### Sistema de datos
@@ -28,6 +22,22 @@ La base de `DataManager`, los JSON de personajes/preguntas/habitaciones y el gua
 - [ ] Revisar comportamiento de pantalla completa en los entornos soportados.
 - [ ] Mejorar visualmente la selección de personaje.
 - [ ] Toda nueva pantalla o mecánica deberá diseñarse desde el principio para funcionar tanto en PC como en Android, incluyendo ratón, teclado y controles táctiles.
+
+## Implementado en 0.7.x
+
+### Partidas guardadas
+
+- [x] Añadir hasta diez ranuras/slots locales independientes.
+- [x] Crear pantalla de selección y gestión de partidas compatible con PC y móvil.
+- [x] Permitir iniciar una nueva partida seleccionando previamente un slot vacío.
+- [x] Impedir que una nueva partida sobrescriba accidentalmente un slot ocupado.
+- [x] Permitir cargar un slot concreto desde `Partidas`.
+- [x] Permitir borrar un slot concreto mediante confirmación explícita.
+- [x] Adaptar `Continuar` para cargar automáticamente el slot utilizado más recientemente.
+- [x] Mostrar protagonista, porcentaje narrativo, localidad, personajes completados, tiempo de esa partida, MONEDAS, fecha y versión del guardado.
+- [x] Mantener MONEDAS/progreso narrativo por partida y colección/cosméticos/logros/estadísticas en el perfil global.
+- [x] Migrar automáticamente el antiguo `savegame.json` al Slot 1 sin borrar el archivo original de respaldo.
+- [x] Conservar un tiempo jugado específico de cada slot y autosalvar periódicamente la partida activa.
 
 ## Implementado en 0.6.x
 
