@@ -12,6 +12,23 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.6.3] - 2026-08-14
+
+### Added
+
+- Iconos SVG locales para estados de colección, logros conseguidos/pendientes/secretos y selección de sonido de clic.
+- Smoke test específico para validar la experiencia táctil de Extras y evitar regresiones de iconos tipográficos en Android.
+
+### Changed
+
+- Los `ScrollContainer` de Extras priorizan el gesto táctil inmediato y permiten que los botones internos propaguen el arrastre sin perder su pulsación normal.
+- Los controles puramente visuales dentro de páginas desplazables dejan de interceptar eventos táctiles.
+
+### Fixed
+
+- Corregido el desplazamiento con el dedo en Extras, que podía responder con mucho retardo al iniciar el gesto sobre textos, paneles o tarjetas.
+- Sustituidos los símbolos Unicode usados como iconos de colección, logros y selección de sonido, evitando glifos ausentes o caracteres extraños en Android.
+
 ## [0.6.2] - 2026-08-13
 
 ### Added
