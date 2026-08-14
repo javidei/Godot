@@ -28,8 +28,8 @@
       "locations": [
         {"id": "home_javi", "name": "Javi", "type": "character", "kind": "character", "character_id": "javi", "position": {"x": 0.36, "y": 0.40}},
         {"id": "home_sue", "name": "Sue", "type": "character", "kind": "character", "character_id": "sue", "position": {"x": 0.53, "y": 0.34}},
-        {"id": "home_smokey", "name": "Fran / Smokey", "type": "character", "kind": "character", "character_id": "smokey", "position": {"x": 0.40, "y": 0.68}},
-        {"id": "home_argentino", "name": "El Argentino", "type": "character", "kind": "character", "character_id": "argentino", "position": {"x": 0.57, "y": 0.76}},
+        {"id": "home_smokey", "name": "Fran / Smokey", "visit_label": "Visitar a Fran", "type": "character", "kind": "character", "character_id": "smokey", "position": {"x": 0.40, "y": 0.68}},
+        {"id": "home_argentino", "name": "El Argentino", "visit_label": "Visitar al Argentino", "type": "character", "kind": "character", "character_id": "argentino", "position": {"x": 0.57, "y": 0.76}},
         {"id": "shop_naranjal", "name": "Tienda", "type": "shop", "kind": "shop", "position": {"x": 0.64, "y": 0.49}}
       ],
       "connections": [
