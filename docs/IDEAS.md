@@ -26,24 +26,23 @@ El sistema de 10 slots, la pantalla de gestión, el borrado, la carga de cualqui
 
 ## Progresión narrativa por días
 
-- [ ] Dividir la historia en días o capítulos numerados que avancen al completar los objetivos de cada jornada.
-- [ ] Definir por datos qué visitas o acontecimientos son necesarios cada día; no todos los días exigirán visitar a todo el grupo.
-- [ ] Usar pantallas negras/transiciones narrativas para marcar claramente el cambio de día.
-- [ ] Permitir que algunos días empiecen con un encuentro o visita obligatoria y guionizada antes de devolver al jugador al mapa libre.
-- [ ] Hacer que diálogos, eventos, localizaciones y objetivos disponibles puedan depender del día actual.
+La base data-driven de jornadas ya forma parte de la versión 0.8.0: días numerados, objetivos variables, transición de jornada, Diario, persistencia por slot y eventos de apertura. El Día 1 exige recorrer al grupo, el Día 2 reduce las visitas obligatorias y el Día 3 introduce el primer puzle narrativo.
 
-Ejemplo de dirección: Día 1 presenta al grupo completo; Día 2 puede requerir solo varias visitas concretas; un día posterior puede comenzar directamente con un acontecimiento guionizado que abra una nueva mecánica.
+Quedan como posibles ampliaciones:
+
+- [ ] Permitir que determinados días arranquen directamente dentro de una habitación con una visita obligatoria y guionizada, no solo con un evento de apertura.
+- [ ] Añadir variantes de diálogos, escenas y disponibilidad de localizaciones condicionadas por el día actual.
+- [ ] Permitir objetivos diarios distintos de visitar personajes o resolver puzles: objetos, decisiones, afinidad o eventos de mapa.
 
 ## Puzles narrativos y minijuegos de pistas
 
-- [ ] Crear eventos especiales en determinados días que inicien un puzle o investigación narrativa.
-- [ ] Repartir pistas entre varias habitaciones o personajes concretos, indicando el siguiente destino de forma indirecta en lugar de dar siempre el nombre.
-- [ ] Permitir que cada pista revele una cifra, símbolo, palabra o fragmento necesario para resolver el acertijo final.
-- [ ] Mostrar al final una pantalla específica donde el jugador introduzca la solución, por ejemplo un código de cuatro o cinco cifras.
-- [ ] Permitir consecuencias distintas según se resuelva correctamente o no, sin bloquear necesariamente el progreso principal.
-- [ ] Mantener la definición del puzle, sus pistas, orden, personajes implicados y solución mediante datos para poder crear nuevos acertijos sin rehacer la lógica base.
+La infraestructura base también está implementada en 0.8.0: pistas data-driven, destinos indirectos, adaptación al protagonista, fragmentos persistentes, Diario de pistas, introducción manual de la solución, reintentos y recompensa por resolver el evento especial.
 
-Ejemplo de dirección: en un día concreto un personaje inicia el reto; el jugador debe interpretar pistas y visitar cuatro personajes o habitaciones para reunir partes de un código y escribir la solución al finalizar la jornada.
+Quedan como posibles ampliaciones:
+
+- [ ] Crear puzles con símbolos, palabras, orden variable, objetos o combinaciones distintas de un código numérico.
+- [ ] Añadir consecuencias narrativas más profundas al fallar o resolver un puzle de formas diferentes, sin convertirlos necesariamente en bloqueos de la historia principal.
+- [ ] Permitir pistas opcionales, señuelos y rutas alternativas para llegar a una misma solución.
 
 ## Narrativa y personajes
 
