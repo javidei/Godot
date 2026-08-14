@@ -12,6 +12,22 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.6.7] - 2026-08-14
+
+### Added
+
+- Nuevo icono SVG local para la tienda del mapa.
+
+### Changed
+
+- Los marcadores de personajes, las conexiones entre localidades y el acceso a la tienda usan iconos SVG reales en lugar de símbolos tipográficos.
+- Las flechas de viaje se alinean a izquierda o derecha según la dirección de la conexión, y los personajes muestran iconos distintos para pendiente y visitado.
+
+### Fixed
+
+- Eliminados del mapa los glifos Unicode que podían aparecer como cuadrados o caracteres extraños en Web y Android.
+- Los botones de retorno a Naranjal y a Mapa usan ahora la flecha SVG existente en vez del carácter `←`.
+
 ## [0.6.6] - 2026-08-14
 
 ### Changed
@@ -220,7 +236,7 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 - El flujo de generación copia sus resultados finales a `assets/generated/` con nombres descriptivos.
 - El MP4 original se convierte a Ogg Theora de `320x180`, `20 FPS` y aproximadamente `1,7 MB` para reducir el coste de reproducción.
-- La carpeta de variantes `assets/generated/` queda excluida de las exportaciones para no aumentar el tamaño del juego.
+- La carpeta de variantes `assets/generated/` queda excluida de las exportaciones para no aumentar su tamaño.
 
 ## [0.5.3]
 
