@@ -157,6 +157,19 @@ jobs:
           fi
           grep -q "V063 MOBILE EXTRAS OK:" v063-mobile-extras.log
 
+      - name: Smoke test de partidas guardadas 0.7
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v070_save_slots_smoke_test.gd > v070-save-slots.log 2>&1
+          STATUS=$?
+          set -e
+          cat v070-save-slots.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V070 SAVE SLOTS FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v070-save-slots.log; then
+            echo "La validación del sistema de partidas 0.7 ha fallado; no se exportará."
+            exit 1
+          fi
+          grep -q "V070 SAVE SLOTS OK:" v070-save-slots.log
+
       - name: Smoke test de mapa y progreso 0.6/0.6.9
         run: |
           set +e
