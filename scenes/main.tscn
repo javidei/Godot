@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/main_data_driven.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/ui_shell_manager.gd" id="2_ui_shell"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://scripts/progress_manager.gd" id="10_progress"]
 [ext_resource type="Script" path="res://scripts/version_067_world_map_icons.gd" id="11_world_map"]
 [ext_resource type="Script" path="res://scripts/version_065_menu_video.gd" id="12_menu_video"]
+[ext_resource type="Script" path="res://scripts/save_slots_manager.gd" id="13_save_slots"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -54,3 +55,6 @@ script = ExtResource("11_world_map")
 
 [node name="Version065MenuVideo" type="Node" parent="."]
 script = ExtResource("12_menu_video")
+
+[node name="SaveSlotsManager" type="Node" parent="."]
+script = ExtResource("13_save_slots")
