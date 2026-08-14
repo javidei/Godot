@@ -24,6 +24,27 @@ El sistema de 10 slots, la pantalla de gestión, el borrado, la carga de cualqui
 
 - [ ] Valorar una captura o imagen representativa de cada partida dentro de la pantalla de slots.
 
+## Progresión narrativa por días
+
+- [ ] Dividir la historia en días o capítulos numerados que avancen al completar los objetivos de cada jornada.
+- [ ] Definir por datos qué visitas o acontecimientos son necesarios cada día; no todos los días exigirán visitar a todo el grupo.
+- [ ] Usar pantallas negras/transiciones narrativas para marcar claramente el cambio de día.
+- [ ] Permitir que algunos días empiecen con un encuentro o visita obligatoria y guionizada antes de devolver al jugador al mapa libre.
+- [ ] Hacer que diálogos, eventos, localizaciones y objetivos disponibles puedan depender del día actual.
+
+Ejemplo de dirección: Día 1 presenta al grupo completo; Día 2 puede requerir solo varias visitas concretas; un día posterior puede comenzar directamente con un acontecimiento guionizado que abra una nueva mecánica.
+
+## Puzles narrativos y minijuegos de pistas
+
+- [ ] Crear eventos especiales en determinados días que inicien un puzle o investigación narrativa.
+- [ ] Repartir pistas entre varias habitaciones o personajes concretos, indicando el siguiente destino de forma indirecta en lugar de dar siempre el nombre.
+- [ ] Permitir que cada pista revele una cifra, símbolo, palabra o fragmento necesario para resolver el acertijo final.
+- [ ] Mostrar al final una pantalla específica donde el jugador introduzca la solución, por ejemplo un código de cuatro o cinco cifras.
+- [ ] Permitir consecuencias distintas según se resuelva correctamente o no, sin bloquear necesariamente el progreso principal.
+- [ ] Mantener la definición del puzle, sus pistas, orden, personajes implicados y solución mediante datos para poder crear nuevos acertijos sin rehacer la lógica base.
+
+Ejemplo de dirección: en un día concreto un personaje inicia el reto; el jugador debe interpretar pistas y visitar cuatro personajes o habitaciones para reunir partes de un código y escribir la solución al finalizar la jornada.
+
 ## Narrativa y personajes
 
 - [ ] Valorar estados de ánimo o expresiones que evolucionen y persistan según respuestas, amistad y progreso.
