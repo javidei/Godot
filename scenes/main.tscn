@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://scripts/version_045_interaction_menu_patch.gd" id="8_version_045"]
 [ext_resource type="Script" path="res://scripts/version_066_compact_extras_patch.gd" id="9_version_050"]
 [ext_resource type="Script" path="res://scripts/progress_manager.gd" id="10_progress"]
-[ext_resource type="Script" path="res://scripts/world_map_manager.gd" id="11_world_map"]
+[ext_resource type="Script" path="res://scripts/version_067_world_map_icons.gd" id="11_world_map"]
 [ext_resource type="Script" path="res://scripts/version_065_menu_video.gd" id="12_menu_video"]
 
 [node name="Main" type="Control"]
