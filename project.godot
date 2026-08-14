@@ -1,6 +1,6 @@
 ; Engine configuration file.
 ; It's best edited using the editor UI and not directly,
-; since the parameters that go here are not all obvious.
+; since the parameters that go here are not obvious.
 ;
 ; Format:
 ;   [section] ; section between []
@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.7.0"
+config/version="0.8.0"
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
 
 [autoload]
 
-DataManager="*res://autoload/data_manager_runtime.gd"
+DataManager="*res://autoload/data_manager_v080.gd"
 
 [display]
 
