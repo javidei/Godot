@@ -12,6 +12,17 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.6.5] - 2026-08-14
+
+### Added
+
+- `eclipse-menu.ogv` se reproduce como fondo animado del menú principal, en bucle y sin interferir con la música del menú.
+
+### Changed
+
+- El vídeo del menú conserva su proporción 16:9 mediante un contenedor en modo `cover`, con el fondo estático anterior como respaldo.
+- La capa oscura del menú se suaviza para dejar visible el eclipse sin perder legibilidad en los controles.
+
 ## [0.6.4] - 2026-08-14
 
 ### Changed
