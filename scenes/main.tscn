@@ -12,7 +12,7 @@
 [ext_resource type="Script" path="res://scripts/progress_manager.gd" id="10_progress"]
 [ext_resource type="Script" path="res://scripts/version_067_world_map_icons.gd" id="11_world_map"]
 [ext_resource type="Script" path="res://scripts/version_065_menu_video.gd" id="12_menu_video"]
-[ext_resource type="Script" path="res://scripts/save_slots_manager.gd" id="13_save_slots"]
+[ext_resource type="Script" path="res://scripts/version_070_save_slots_patch.gd" id="13_save_slots"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
