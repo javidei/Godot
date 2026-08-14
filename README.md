@@ -1,6 +1,6 @@
 # Entre líneas
 
-Novela visual en **Godot 4.7.1**, actualmente en **Early Access** y versión **0.6.2**, con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
+Novela visual en **Godot 4.7.1**, actualmente en **Early Access** y versión **0.7.0**, con Javi, Sue, Smokey, Carmen, Jony, Ana y El Argentino.
 
 El subtítulo se calcula automáticamente con el número de personajes más una silla: los siete personajes actuales producen **«La octava silla»** y trece producirían **«La decimocuarta silla»**.
 
@@ -13,7 +13,10 @@ El subtítulo se calcula automáticamente con el número de personajes más una 
 - Composición de novela visual sin `ColorRect` ni placeholders detrás de los personajes.
 - Foco sutil del personaje que habla, zoom, sacudida y onomatopeyas animadas.
 - Interfaz para ratón/táctil y composición alternativa en orientación vertical.
-- Guardado offline por partida en `user://savegame.json`, preferencias en `user://settings.json` y perfil acumulado en `user://profile.json`, con migración compatible desde archivos locales anteriores.
+- Guardado completamente offline con **10 slots locales** bajo `user://save_slots/`, migración automática del antiguo guardado único y autoguardado durante la partida.
+- Pantalla de **Partidas** para crear, cargar y borrar slots; cada partida muestra protagonista, progreso, localización, tiempo jugado, monedas y versión del save.
+- **Continuar** carga automáticamente el slot utilizado más recientemente.
+- Preferencias en `user://settings.json` y perfil acumulado en `user://profile.json`, separados del progreso de cada partida.
 - `DataManager` como Autoload para centralizar personajes, preguntas, habitaciones, mapas, economía, tienda, logros, configuración y persistencia.
 - AudioManager con canales separados para música y efectos/UI, volúmenes y silencios independientes, música de menú con entrada gradual y temas en bucle asociados mediante datos.
 - La nueva partida presenta brevemente el año 2026 antes de elegir protagonista.
@@ -22,6 +25,7 @@ El subtítulo se calcula automáticamente con el número de personajes más una 
 - Recorrido libre por el resto del grupo: el personaje elegido representa al jugador, no aparece como encuentro y los marcadores conservan el estado visitado.
 - MONEDAS y recompensas únicas por partida; coleccionables visibles y ampliables desde `Extras → Colección`, cosméticos, estadísticas y logros en un perfil global local.
 - Ajuste global con cinco perfiles procedurales de clic más la opción desactivada, todos en el bus de Efectos/UI.
+- Fondo animado de eclipse en el menú principal con imagen estática de respaldo.
 - Cuatro respuestas por pregunta en una cuadrícula táctil de dos columnas.
 - Afinidad independiente por personaje y puntuaciones configurables desde los datos de preguntas.
 - Menú **Extras** con fichas —cada una con pestañas de datos y cosméticos—, lugares, logros, estadísticas acumuladas, colección y créditos.
@@ -58,7 +62,7 @@ El título usa `DejaVuSerif-Bold.ttf`, incluido en el proyecto para conservar la
 
 ## Datos y diálogo
 
-La versión 0.6.2 permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de las visitas y el mapa se adapta al resto del grupo. Cada encuentro contiene una presentación, preguntas con cuatro opciones, puntuaciones configurables y una réplica inmediata. Las conversaciones pueden pausarse para visitar otra habitación y conservan un checkpoint independiente por personaje.
+La versión 0.7.0 permite elegir a Javi, Sue, Smokey, Carmen, Jony, Ana o El Argentino como protagonista. La persona elegida representa al jugador, queda fuera de las visitas y el mapa se adapta al resto del grupo. Cada encuentro contiene una presentación, preguntas con cuatro opciones, puntuaciones configurables y una réplica inmediata. Las conversaciones pueden pausarse para visitar otra habitación y conservan un checkpoint independiente por personaje.
 
 Los datos estáticos se organizan principalmente en:
 
@@ -91,6 +95,14 @@ Una escena puede seguir indicando recursos y composición sin crear escenas Godo
 
 Los nombres de expresiones antiguos (`embarrassed`, `teasing`, `annoyed`, etc.) siguen mapeados para no romper partidas guardadas existentes.
 
+## Guardado
+
+La versión 0.7.0 sustituye el guardado único como flujo principal por **10 slots locales**. Cada slot se almacena por separado dentro de `user://save_slots/` y un índice local conserva cuál fue la partida utilizada más recientemente.
+
+La pantalla **Partidas** permite revisar las diez ranuras, cargar cualquier partida existente y borrar una partida con confirmación. Al comenzar una nueva partida se elige primero una ranura vacía, evitando sobrescribir otra por accidente. El botón **Continuar** abre directamente la partida más reciente.
+
+Los saves anteriores en `user://savegame.json` se migran automáticamente al primer slot disponible previsto por la migración de 0.7. El sistema mantiene compatibilidad de schema y conserva por slot datos como protagonista, progreso, zona actual, tiempo jugado, monedas, versión y checkpoints de conversación.
+
 ## Audio
 
 El menú separa los ajustes de **Música** y **Efectos de sonido**. Ambos pueden regularse y silenciarse de forma independiente. Las preferencias persistentes se guardan en `user://settings.json`; al migrar desde versiones anteriores se conservan los antiguos archivos locales como respaldo.
@@ -112,9 +124,11 @@ La planificación y seguimiento del proyecto se mantienen fuera del juego:
 
 La filosofía es mover una propuesta de **Ideas → Roadmap → Changelog** cuando pasa de concepto a tarea decidida y finalmente a funcionalidad implementada. Los errores se gestionan de forma independiente en `KNOWN_ISSUES.md`.
 
+`IDEAS.md` no conserva funcionalidades terminadas y `ROADMAP.md` no se utiliza como histórico: una vez implementada una tarea, su registro definitivo queda en el changelog.
+
 ## Web y estabilidad
 
-La exportación Web usa `export_presets.cfg`. El workflow de GitHub Actions mantiene la validación que impide publicar si aparecen `SCRIPT ERROR`, `Parse Error` o `Failed to load script`, y comprueba `index.html`, `index.wasm` e `index.pck` antes de guardar la build.
+La exportación Web usa `export_presets.cfg`. El workflow de GitHub Actions mantiene validaciones que impiden publicar si aparecen `SCRIPT ERROR`, `Parse Error` o `Failed to load script`, y comprueba `index.html`, `index.wasm` e `index.pck` antes de guardar la build. La versión 0.7 añade además un smoke test específico para el sistema de partidas guardadas.
 
 Cada cambio en `main` se valida, exporta y publica directamente mediante GitHub Pages en:
 
