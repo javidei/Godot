@@ -17,16 +17,16 @@ func _add_character_marker(parent: Control, marker: Dictionary, ordinal: int, li
 		return true
 	var visited := bool(button.get_meta("visited", false))
 	var display_name := str(marker.get("label", marker.get("name", _character_name(character_id))))
-	button.text = "Visitar a " + display_name
+	var visit_label := str(marker.get("visit_label", "")).strip_edges()
+	button.text = visit_label if not visit_label.is_empty() else "Visitar a " + display_name
 	_configure_character_status(button, character_id, visited, list_layout)
 	return true
 
 
 func _configure_character_status(button: Button, character_id: String, visited: bool, list_layout: bool) -> void:
-	# Los iconos integrados de Button pueden desaparecer cuando el texto ocupa
-	# casi todo el ancho (Fran / Smokey y El Argentino eran los casos visibles).
-	# El estado se dibuja como un TextureRect independiente para reservarlo
-	# siempre, sin depender del cálculo interno texto+icono del botón.
+	# El estado se dibuja como un TextureRect independiente en la esquina superior
+	# izquierda. Así el check/círculo no compite con el texto ni desplaza nombres
+	# largos dentro de la tarjeta.
 	button.icon = null
 	button.clip_text = true
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -50,13 +50,13 @@ func _configure_character_status(button: Button, character_id: String, visited: 
 		status.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		status.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		status.anchor_left = 0.0
-		status.anchor_top = 0.5
+		status.anchor_top = 0.0
 		status.anchor_right = 0.0
-		status.anchor_bottom = 0.5
-		status.offset_left = 12.0
-		status.offset_top = -10.0
-		status.offset_right = 32.0
-		status.offset_bottom = 10.0
+		status.anchor_bottom = 0.0
+		status.offset_left = 8.0
+		status.offset_top = 7.0
+		status.offset_right = 24.0
+		status.offset_bottom = 23.0
 		status.z_index = 2
 		button.add_child(status)
 	var icon_path := MAP_STATUS_CHECK_ICON_PATH if visited else MAP_STATUS_PENDING_ICON_PATH
