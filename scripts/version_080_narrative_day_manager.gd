@@ -11,3 +11,32 @@ func _process(delta: float) -> void:
 	if project_version.begins_with("0.6."):
 		return
 	super(delta)
+
+
+func on_character_visit_completed(character_id: String) -> void:
+	super(character_id)
+	call_deferred("_refresh_open_map_status")
+
+
+func _commit_day_advance(day_id: int, next_day: int) -> void:
+	super(day_id, next_day)
+	call_deferred("_refresh_open_map_status")
+
+
+func _begin_arc_completion() -> void:
+	super()
+	call_deferred("_refresh_open_map_status")
+
+
+func _refresh_open_map_status() -> void:
+	# La visita vuelve al mapa antes de que el progreso diario se anote de forma
+	# diferida. Volvemos a renderizar la zona sin registrar otra entrada para que
+	# el check/pista cambie en el mismo instante y no se quede visualmente atrás.
+	if world_map_manager == null or not world_map_manager.has_method("is_open"):
+		return
+	if not bool(world_map_manager.call("is_open")) or not world_map_manager.has_method("show_zone"):
+		return
+	var zone_id := str(world_map_manager.get("current_zone_id"))
+	if zone_id.is_empty():
+		return
+	world_map_manager.call("show_zone", zone_id, false)
