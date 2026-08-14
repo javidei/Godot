@@ -69,7 +69,7 @@ jobs:
       - name: Smoke test histórico de personajes y escenas
         run: |
           set +e
-          godot --headless --path . --script res://scripts/ci_character_smoke_test.gd > character-smoke.log 2>&1
+          godot --headless --path . --script res://scripts/ci_v070_character_smoke_test.gd > character-smoke.log 2>&1
           STATUS=$?
           set -e
           cat character-smoke.log
@@ -170,7 +170,7 @@ jobs:
           fi
           grep -q "V070 SAVE SLOTS OK:" v070-save-slots.log
 
-      - name: Smoke test de mapa y progreso 0.6/0.6.9
+      - name: Smoke test de mapa y progreso 0.6/0.7
         run: |
           set +e
           godot --headless --path . --script res://scripts/ci_v069_progression_smoke_test.gd > v060-smoke.log 2>&1
