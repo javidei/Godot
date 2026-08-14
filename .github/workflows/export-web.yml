@@ -157,10 +157,10 @@ jobs:
           fi
           grep -q "V063 MOBILE EXTRAS OK:" v063-mobile-extras.log
 
-      - name: Smoke test de mapa y progreso 0.6
+      - name: Smoke test de mapa y progreso 0.6/0.6.9
         run: |
           set +e
-          godot --headless --path . --script res://scripts/ci_v060_progression_smoke_test.gd > v060-smoke.log 2>&1
+          godot --headless --path . --script res://scripts/ci_v069_progression_smoke_test.gd > v060-smoke.log 2>&1
           STATUS=$?
           set -e
           cat v060-smoke.log
