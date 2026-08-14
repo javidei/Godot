@@ -12,6 +12,17 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.6.8] - 2026-08-14
+
+### Added
+
+- Nuevo icono SVG específico de mapa para el botón de retorno desde las habitaciones.
+
+### Fixed
+
+- El botón `Mapa` de las habitaciones deja de reutilizar la flecha de navegación izquierda.
+- Corregida la alineación del icono del botón `Mapa` para que quede a la izquierda del texto y no se superponga visualmente sobre la palabra.
+
 ## [0.6.7] - 2026-08-14
 
 ### Added
