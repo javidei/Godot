@@ -64,6 +64,27 @@ func _build_connections(zone: Dictionary) -> void:
 		_apply_connection_icon(button, str(side_by_target.get(target, "")), target)
 
 
+func _place_connection(button: Button, side: String, index: int) -> void:
+	if side != "bottom_left":
+		super(button, side, index)
+		return
+	var compact := _is_compact()
+	var button_size := CONNECTION_COMPACT_SIZE if compact else CONNECTION_DESKTOP_SIZE
+	var panel_left := 0.04 if compact else 0.12
+	var panel_bottom := 0.94
+	var inset := 12.0 if compact else 18.0
+	button.custom_minimum_size = button_size
+	button.add_theme_font_size_override("font_size", 13 if compact else 15)
+	button.anchor_left = panel_left
+	button.anchor_right = panel_left
+	button.anchor_top = panel_bottom
+	button.anchor_bottom = panel_bottom
+	button.offset_left = inset
+	button.offset_right = inset + button_size.x
+	button.offset_top = -inset - button_size.y
+	button.offset_bottom = -inset
+
+
 func _refresh_header() -> void:
 	super()
 	if header_back_button == null or current_mode == "shop":
@@ -89,9 +110,14 @@ func _apply_connection_icon(button: Button, side: String, target: String) -> voi
 			_set_map_button_icon(button, MAP_ARROW_LEFT_ICON_PATH, HORIZONTAL_ALIGNMENT_LEFT)
 		"right":
 			_set_map_button_icon(button, MAP_ARROW_RIGHT_ICON_PATH, HORIZONTAL_ALIGNMENT_RIGHT)
-		"bottom_right":
+		"bottom_left":
 			if target == _default_zone_id():
 				_set_map_button_icon(button, MAP_ARROW_LEFT_ICON_PATH, HORIZONTAL_ALIGNMENT_LEFT)
+			else:
+				button.icon = null
+		"bottom_right":
+			if target == _default_zone_id():
+				_set_map_button_icon(button, MAP_ARROW_RIGHT_ICON_PATH, HORIZONTAL_ALIGNMENT_RIGHT)
 			else:
 				button.icon = null
 		_:
