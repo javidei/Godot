@@ -12,6 +12,14 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.6.9] - 2026-08-14
+
+### Changed
+
+- El retorno desde **Triana** a Naranjal del Río se mantiene abajo a la derecha y muestra una flecha SVG hacia la derecha.
+- El retorno desde **Monte del Toro** a Naranjal del Río pasa abajo a la izquierda y muestra una flecha SVG hacia la izquierda.
+- Las etiquetas de estas conexiones dejan de incluir flechas Unicode; la dirección se representa únicamente mediante iconos SVG.
+
 ## [0.6.8] - 2026-08-14
 
 ### Added
