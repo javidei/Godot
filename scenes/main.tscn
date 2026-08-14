@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scripts/main_data_driven.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/ui_shell_manager.gd" id="2_ui_shell"]
@@ -6,13 +6,14 @@
 [ext_resource type="Script" path="res://scripts/version_040_manager_data.gd" id="4_version_040"]
 [ext_resource type="Script" path="res://scripts/version_042_layout_data.gd" id="5_version_042"]
 [ext_resource type="Script" path="res://scripts/version_043_hud_patch.gd" id="6_version_043"]
-[ext_resource type="Script" path="res://scripts/version_044_visit_transitions_data.gd" id="7_version_044"]
+[ext_resource type="Script" path="res://scripts/version_080_visit_transitions.gd" id="7_version_044"]
 [ext_resource type="Script" path="res://scripts/version_045_interaction_menu_patch.gd" id="8_version_045"]
 [ext_resource type="Script" path="res://scripts/version_066_compact_extras_patch.gd" id="9_version_050"]
 [ext_resource type="Script" path="res://scripts/progress_manager.gd" id="10_progress"]
-[ext_resource type="Script" path="res://scripts/version_067_world_map_icons.gd" id="11_world_map"]
+[ext_resource type="Script" path="res://scripts/version_080_world_map_days.gd" id="11_world_map"]
 [ext_resource type="Script" path="res://scripts/version_065_menu_video.gd" id="12_menu_video"]
-[ext_resource type="Script" path="res://scripts/version_070_save_slots_patch.gd" id="13_save_slots"]
+[ext_resource type="Script" path="res://scripts/version_080_save_slots_patch.gd" id="13_save_slots"]
+[ext_resource type="Script" path="res://scripts/narrative_day_manager.gd" id="14_narrative_days"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -52,6 +53,9 @@ script = ExtResource("9_version_050")
 
 [node name="WorldMapManager" type="Node" parent="."]
 script = ExtResource("11_world_map")
+
+[node name="NarrativeDayManager" type="Node" parent="."]
+script = ExtResource("14_narrative_days")
 
 [node name="Version065MenuVideo" type="Node" parent="."]
 script = ExtResource("12_menu_video")
