@@ -4,7 +4,7 @@ const Story = preload("res://scripts/story.gd")
 
 const RELEASE_VERSION := "0.4.5"
 const MUTE_ICON_PATH := "res://assets/ui/icons/mute.svg"
-const MAP_ICON_PATH := "res://assets/ui/icons/arrow-left.svg"
+const MAP_ICON_PATH := "res://assets/ui/icons/map.svg"
 const DESKTOP_BREAKPOINT := 1000.0
 
 var main: Control
@@ -115,6 +115,9 @@ func _build_hud_panel() -> void:
 	utility_row.add_child(map_button)
 	_prepare_utility_button(map_button, "Volver al mapa y continuar esta conversación más tarde")
 	map_button.text = "Mapa"
+	map_button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	map_button.add_theme_constant_override("icon_max_width", 16)
+	map_button.add_theme_constant_override("h_separation", 6)
 	map_button.custom_minimum_size.x = 82.0
 
 
