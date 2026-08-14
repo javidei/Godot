@@ -1,23 +1,24 @@
 extends "res://scripts/ci_v060_progression_smoke_test.gd"
 
 # El smoke completo nació en 0.6 y conserva una guard clause histórica que
-# exige 0.6.x. En 0.7 seguimos validando exactamente esas mecánicas heredadas,
-# así que solo dentro de este proceso headless presentamos 0.6.9 al test base.
+# exige 0.6.x. Desde 0.7 seguimos validando exactamente esas mecánicas
+# heredadas, así que solo dentro de este proceso headless presentamos 0.6.9 al
+# test base aunque la versión real del juego ya sea 0.7 u 0.8.
 func _initialize() -> void:
 	var current_version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if current_version.begins_with("0.7."):
+	if current_version.begins_with("0.7.") or current_version.begins_with("0.8."):
 		ProjectSettings.set_setting("application/config/version", "0.6.9")
 	super()
 
 
-# En 0.7 Nueva partida ya no inicia el prólogo de forma inmediata: primero abre
-# el selector de slots y, tras elegir uno vacío, el CharacterSelectManager lanza
-# exactamente la misma introducción de 2026. Validamos ambos contratos.
+# Desde 0.7 Nueva partida ya no inicia el prólogo de forma inmediata: primero
+# abre el selector de slots y, tras elegir uno vacío, CharacterSelectManager
+# lanza exactamente la misma introducción de 2026. Validamos ambos contratos.
 func _validate_new_game_intro(main: Control, transitions: Node) -> bool:
 	var new_game := _find_button_with_text(main, "Nueva partida")
 	var continue_game := _find_button_with_text(main, "Continuar")
 	if new_game == null or not _button_has_callback(new_game, "open_new_game_slots"):
-		_fail("Nueva partida no está enlazada al selector de slots 0.7")
+		_fail("Nueva partida no está enlazada al selector de slots 0.7+")
 		return false
 	if continue_game == null or not _button_has_callback(continue_game, "continue_last_slot"):
 		_fail("Continuar no está enlazado al último slot utilizado")
