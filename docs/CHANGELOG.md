@@ -12,6 +12,14 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.6.6] - 2026-08-14
+
+### Changed
+
+- La portada de **Extras** distribuye sus accesos en una cuadrícula responsive de hasta cuatro columnas y reduce la altura de las tarjetas para mostrar más opciones sin tanto desplazamiento.
+- La página **Extras → Logros** pasa de una lista vertical de tarjetas a una cuadrícula responsive: hasta cuatro columnas en pantallas muy anchas, tres en escritorio estándar, dos en anchos intermedios y una en pantallas estrechas.
+- Las tarjetas de logros usan iconos, tipografías, márgenes y barras de progreso más compactos, manteniendo el scroll táctil y la legibilidad en móvil.
+
 ## [0.6.5] - 2026-08-14
 
 ### Added
