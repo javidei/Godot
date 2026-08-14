@@ -18,8 +18,50 @@ func _add_character_marker(parent: Control, marker: Dictionary, ordinal: int, li
 	var visited := bool(button.get_meta("visited", false))
 	var display_name := str(marker.get("label", marker.get("name", _character_name(character_id))))
 	button.text = "Visitar a " + display_name
-	_set_map_button_icon(button, MAP_STATUS_CHECK_ICON_PATH if visited else MAP_STATUS_PENDING_ICON_PATH)
+	_configure_character_status(button, character_id, visited, list_layout)
 	return true
+
+
+func _configure_character_status(button: Button, character_id: String, visited: bool, list_layout: bool) -> void:
+	# Los iconos integrados de Button pueden desaparecer cuando el texto ocupa
+	# casi todo el ancho (Fran / Smokey y El Argentino eran los casos visibles).
+	# El estado se dibuja como un TextureRect independiente para reservarlo
+	# siempre, sin depender del cálculo interno texto+icono del botón.
+	button.icon = null
+	button.clip_text = true
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+	if not list_layout:
+		var compact := _is_compact()
+		var base_size := MARKER_COMPACT_SIZE if compact else MARKER_DESKTOP_SIZE
+		var per_character := 5.8 if compact else 7.2
+		var max_width := 196.0 if compact else 232.0
+		var desired_width := clampf(58.0 + float(button.text.length()) * per_character, base_size.x, max_width)
+		button.custom_minimum_size = Vector2(desired_width, base_size.y)
+		button.offset_left = -desired_width * 0.5
+		button.offset_right = desired_width * 0.5
+
+	var status := button.get_node_or_null("MapStatusIcon_" + character_id) as TextureRect
+	if status == null:
+		status = TextureRect.new()
+		status.name = "MapStatusIcon_" + character_id
+		status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		status.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		status.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		status.anchor_left = 0.0
+		status.anchor_top = 0.5
+		status.anchor_right = 0.0
+		status.anchor_bottom = 0.5
+		status.offset_left = 12.0
+		status.offset_top = -10.0
+		status.offset_right = 32.0
+		status.offset_bottom = 10.0
+		status.z_index = 2
+		button.add_child(status)
+	var icon_path := MAP_STATUS_CHECK_ICON_PATH if visited else MAP_STATUS_PENDING_ICON_PATH
+	status.texture = ResourceLoader.load(icon_path) as Texture2D if ResourceLoader.exists(icon_path) else null
+	status.tooltip_text = "Visitado" if visited else "Pendiente"
 
 
 func _add_shop_marker(parent: Control, marker: Dictionary, ordinal: int, list_layout: bool) -> void:
