@@ -13,7 +13,7 @@
 [ext_resource type="Script" path="res://scripts/version_080_world_map_days.gd" id="11_world_map"]
 [ext_resource type="Script" path="res://scripts/version_065_menu_video.gd" id="12_menu_video"]
 [ext_resource type="Script" path="res://scripts/version_080_save_slots_patch.gd" id="13_save_slots"]
-[ext_resource type="Script" path="res://scripts/narrative_day_manager.gd" id="14_narrative_days"]
+[ext_resource type="Script" path="res://scripts/version_080_narrative_day_manager.gd" id="14_narrative_days"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
