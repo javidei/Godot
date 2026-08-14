@@ -12,6 +12,33 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.8.0] - 2026-08-14
+
+### Added
+
+- Sistema **data-driven de jornadas narrativas** con tres primeros días, títulos, aperturas, cierres y objetivos distintos por jornada.
+- **Diario de jornada** accesible desde el mapa con progreso del día, visitas obligatorias, pistas encontradas y pistas todavía pendientes.
+- Primer puzle narrativo, **El código de la octava silla**, con cuatro pistas repartidas entre personajes y una solución final introducida manualmente por el jugador.
+- Pistas indirectas que describen a quién visitar sin mostrar siempre su nombre, con selección de destinos adaptada al protagonista para no pedir al jugador que se visite a sí mismo.
+- Persistencia por slot del día actual, jornadas completadas, visitas de cada día, pistas recogidas, intentos de código y resolución del puzle.
+- Indicador de `DÍA N · X/Y` integrado en el mapa para consultar rápidamente el estado de la jornada.
+- Smoke test específico de 0.8 para validar migración, objetivos diarios variables, cuatro pistas únicas, código incorrecto/correcto, avance entre días y final del primer arco.
+
+### Changed
+
+- El **Día 1** funciona como reencuentro y requiere visitar a todo el grupo salvo al protagonista; el **Día 2** demuestra la nueva estructura exigiendo solo varias conversaciones concretas; el **Día 3** gira alrededor de una investigación y un código.
+- El porcentaje de progreso de una partida se calcula sobre los objetivos narrativos de los días disponibles, en lugar de depender únicamente de la primera ronda global de visitas.
+- Los marcadores del mapa distinguen entre objetivo obligatorio, pista pendiente/completada y visita opcional, y se refrescan al regresar de una habitación.
+- Los slots ocupados muestran el día actual, nombre de la jornada y objetivos completados además del tiempo y las MONEDAS.
+- Resolver el puzle se registra como evento especial del sistema de progresión y economía existente, manteniendo las recompensas únicas por partida.
+- El antiguo resumen de fin de visitas deja de representar el final de la progresión tras la primera ronda; el arco narrativo disponible termina después de completar las jornadas y el puzle.
+
+### Fixed
+
+- Los guardados 0.7 se migran al nuevo schema narrativo conservando las visitas ya completadas para que actualizar a 0.8 no obligue a repetir artificialmente el Día 1.
+- La lógica automática de jornadas se aísla durante los smoke tests heredados para no competir con las transiciones narrativas históricas que estos validan.
+- Los tests heredados de slots y mapa/progreso aceptan la rama 0.8 sin rebajar los contratos que protegen de versiones anteriores.
+
 ## [0.7.0] - 2026-08-14
 
 ### Added
@@ -245,7 +272,7 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Changed
 
-- El vídeo del monitor de Javi utiliza ahora una homografía calculada desde sus cuatro esquinas para reproducir la perspectiva real del plano.
+- El vídeo de la habitación de Javi utiliza ahora una homografía calculada desde sus cuatro esquinas para reproducir la perspectiva real del plano.
 - El fotograma completo se adapta al trapecio sin recortar los laterales; la deformación de perspectiva sustituye al anterior modo de relleno `cover`.
 
 ### Fixed
