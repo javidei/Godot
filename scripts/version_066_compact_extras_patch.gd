@@ -18,6 +18,18 @@ func _extras_grid_columns() -> int:
 	return 1
 
 
+func _add_extra_option(parent: GridContainer, title: String, subtitle: String, callback: Callable, node_name: String) -> void:
+	var button := main.call("_make_button", title + "\n" + subtitle, false) as Button
+	button.name = node_name
+	button.custom_minimum_size = Vector2(175, 82)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.size_flags_vertical = Control.SIZE_FILL
+	button.add_theme_font_size_override("font_size", 15)
+	button.pressed.connect(callback)
+	parent.add_child(button)
+	_bind_button_click(button)
+
+
 func _show_achievements() -> void:
 	current_page = "achievements"
 	current_character_id = ""
@@ -177,6 +189,7 @@ func _compact_home_options() -> void:
 			continue
 		var button := child as Button
 		button.custom_minimum_size = Vector2(175, 82)
+		button.size_flags_vertical = Control.SIZE_FILL
 		button.add_theme_font_size_override("font_size", 15)
 
 
