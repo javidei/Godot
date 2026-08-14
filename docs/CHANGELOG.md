@@ -12,6 +12,13 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.6.4] - 2026-08-14
+
+### Changed
+
+- Los siete personajes actuales pasan a tener rol `principal` tanto en sus JSON operativos como en `detalles-juego.json`.
+- Eliminada la distinción de personajes secundarios para el reparto actual; todos pueden ser protagonistas y personajes relevantes de la historia.
+
 ## [0.6.3] - 2026-08-14
 
 ### Added

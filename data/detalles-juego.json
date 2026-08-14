@@ -468,7 +468,7 @@
       "id": "carmen",
       "nombre": "Carmen",
       "apodo": "Carmela",
-      "rol": "secundario",
+      "rol": "principal",
       "jugable": true,
       "imagen_por_defecto": "assets/personajes/carmen.png",
       "personalidad": [
@@ -535,7 +535,7 @@
       "id": "jony",
       "nombre": "Jony",
       "apodo": "Jon",
-      "rol": "secundario",
+      "rol": "principal",
       "jugable": true,
       "imagen_por_defecto": "assets/personajes/jony.png",
       "personalidad": [
@@ -622,7 +622,7 @@
       "id": "ana",
       "nombre": "Ana",
       "apodo": "Ana",
-      "rol": "secundario",
+      "rol": "principal",
       "jugable": true,
       "imagen_por_defecto": "assets/personajes/ana.png",
       "personalidad": [
@@ -703,7 +703,7 @@
       "id": "argentino",
       "nombre": "Cristian Ariel",
       "apodo": "El Argentino",
-      "rol": "secundario",
+      "rol": "principal",
       "jugable": true,
       "imagen_por_defecto": "assets/personajes/argentino.png",
       "edad_aproximada": 40,
@@ -971,9 +971,9 @@
       "puzzles": "Opcionales",
       "escenas_secretas": true
     },
-    "personajes_secundarios": {
-      "interactivos_inicialmente": false,
-      "descripcion": "Aunque los siete personajes pueden elegirse como protagonista, los que tengan rol secundario pueden comenzar con interacciones más limitadas cuando actúan como NPC. Sus diálogos e interacciones podrán ampliarse posteriormente."
+    "personajes_actuales": {
+      "todos_principales": true,
+      "descripcion": "Los siete personajes actuales tienen rol principal y pueden actuar como protagonista o como personaje relevante de la historia según la partida."
     }
   },
   "tono": {

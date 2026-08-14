@@ -20,7 +20,7 @@
   "visual": {
     "height_shift": {
       "portrait_ratio": 0.075,
-      "landscape_ratio": 0.10,
+      "landscape_ratio": 0.1,
       "min": 52.0,
       "max": 78.0
     }
