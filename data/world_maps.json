@@ -33,8 +33,8 @@
         {"id": "shop_naranjal", "name": "Tienda", "type": "shop", "kind": "shop", "position": {"x": 0.64, "y": 0.49}}
       ],
       "connections": [
-        {"id": "to_triana", "to": "triana", "target_zone_id": "triana", "side": "left", "label": "← TRIANA", "residents": ["ana", "jony"]},
-        {"id": "to_monte_del_toro", "to": "monte_del_toro", "target_zone_id": "monte_del_toro", "side": "right", "label": "MONTE DEL TORO →", "residents": ["carmen"]}
+        {"id": "to_triana", "to": "triana", "target_zone_id": "triana", "side": "left", "label": "TRIANA", "residents": ["ana", "jony"]},
+        {"id": "to_monte_del_toro", "to": "monte_del_toro", "target_zone_id": "monte_del_toro", "side": "right", "label": "MONTE DEL TORO", "residents": ["carmen"]}
       ]
     },
     "triana": {
@@ -48,7 +48,7 @@
         {"id": "home_jony", "name": "Jony", "type": "character", "kind": "character", "character_id": "jony", "position": {"x": 0.64, "y": 0.5}}
       ],
       "connections": [
-        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "bottom_right", "label": "VOLVER A NARANJAL DEL RÍO →", "compact_label": "NARANJAL →", "show_residents": false, "residents": ["javi", "sue", "smokey", "argentino"]}
+        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "bottom_right", "label": "VOLVER A NARANJAL DEL RÍO", "compact_label": "NARANJAL", "show_residents": false, "residents": ["javi", "sue", "smokey", "argentino"]}
       ]
     },
     "monte_del_toro": {
@@ -61,7 +61,7 @@
         {"id": "home_carmen", "name": "Carmen", "type": "character", "kind": "character", "character_id": "carmen", "position": {"x": 0.5, "y": 0.5}}
       ],
       "connections": [
-        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "bottom_right", "label": "VOLVER A NARANJAL DEL RÍO →", "compact_label": "NARANJAL →", "show_residents": false, "residents": ["javi", "sue", "smokey", "argentino"]}
+        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "bottom_left", "label": "VOLVER A NARANJAL DEL RÍO", "compact_label": "NARANJAL", "show_residents": false, "residents": ["javi", "sue", "smokey", "argentino"]}
       ]
     }
   }
