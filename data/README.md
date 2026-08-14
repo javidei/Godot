@@ -7,7 +7,7 @@ El acceso en tiempo de ejecución está centralizado en `DataManager` (`res://au
 ## Estructura
 
 - `game_config.json`: orden de personajes, ajustes generales, música del menú, rutas de guardado y localizaciones globales.
-- `characters/<id>.json`: identidad, estado habilitado, habitación, imagen/poses, música, volumen inicial, afinidad inicial y textos de transición.
+- `characters/<id>.json`: identidad, rol, estado habilitado, habitación, imagen/poses, música, volumen inicial, afinidad inicial y textos de transición.
 - `questions/<id>.json`: presentación, preguntas, cuatro respuestas, posición izquierda/derecha, puntuación y diálogo de reacción.
 - `rooms/<id>.json`: fondo, canción, volumen base, propietarios, nombre y descripción visual de la habitación.
 - `world_maps.json`: localidades, fondo de mapa, residentes, marcadores normalizados, conexiones y excusas de mapas temporales.
@@ -15,6 +15,8 @@ El acceso en tiempo de ejecución está centralizado en `DataManager` (`res://au
 - `shop_catalog.json`: coleccionables y cosméticos, con nombre, descripción, categoría, precio, recurso opcional y estado `enabled`. Los cosméticos de ficha usan además `character_ids` y `cosmetic_type`.
 - `achievements.json`: logros globales y sus condiciones data-driven sobre estadísticas.
 - `detalles-juego.json`: información ampliada usada por Extras/códice. `DataManager` la combina con los datos operativos de `characters/`.
+
+Los siete personajes que forman actualmente el reparto tienen `role: "principal"`. No existe ningún personaje actual con rol secundario; todos pueden ser protagonistas y mantener relevancia narrativa cuando actúan como NPC.
 
 La sección `menu` de `game_config.json` registra `menu.ogg`, su volumen bajo, el
 fundido de entrada y el bucle. `AudioManager` mantiene ese tema durante el ámbito
@@ -72,6 +74,7 @@ Edita `data/characters/<id>.json`. Los campos operativos principales son:
   "name": "Sue",
   "real_name": "Susana",
   "display_name": "Sue",
+  "role": "principal",
   "room": "room_sue",
   "image": "res://assets/characters/sue/sue_a.png",
   "music": "sue_fantasia",
