@@ -62,7 +62,10 @@ func _run() -> void:
 	if manager_script == null:
 		_fail("No se puede cargar NarrativeDayManager")
 		return
-	var manager := manager_script.new()
+	var manager: Node = manager_script.new() as Node
+	if manager == null:
+		_fail("No se puede instanciar NarrativeDayManager")
+		return
 	manager.set("main", dummy)
 	manager.set("data_manager", dm)
 	manager.set("transition_manager", null)
@@ -127,7 +130,7 @@ func _run() -> void:
 		_fail("El progreso global no alcanza el 100% al completar el arco disponible")
 		return
 
-	print("V080 NARRATIVE DAYS OK: 3 días, objetivos variables, pistas, código, migración y progreso persistente validados.")	
+	print("V080 NARRATIVE DAYS OK: 3 días, objetivos variables, pistas, código, migración y progreso persistente validados.")
 	quit(0)
 
 
