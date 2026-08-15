@@ -6,6 +6,15 @@
   "story_name": "Smokey",
   "role": "principal",
   "summary": "Gracioso · despreocupado · impulsivo · imprevisible",
+  "gustos": [
+    "Nintendo Switch",
+    "Tomodachi Life",
+    "Animal Crossing",
+    "Jugar a videojuegos con Carmen"
+  ],
+  "notas_gustos": [
+    "Su perfil de juegos en Switch es distinto al de Jony; entre los títulos que le gustan están Tomodachi Life y Animal Crossing."
+  ],
   "current_residence": "Naranjal del Río",
   "current_zone_id": "naranjal_del_rio",
   "playable": true,
