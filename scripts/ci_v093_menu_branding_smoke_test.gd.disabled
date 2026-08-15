@@ -1,1 +1,0 @@
-# Archivo marcador sin ejecución automática. La validación real del cambio se hace en el workflow de exportación al cargar main.tscn y todos sus recursos.
