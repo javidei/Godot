@@ -102,7 +102,7 @@ func _run() -> void:
 		_fail("El botón Volver no cierra el primer plano")
 		return
 
-	# 0.8.3: el modo de pantalla completa debe estar activado como valor inicial.
+	# El modo de pantalla completa sigue siendo el valor inicial del juego.
 	if int(ProjectSettings.get_setting("display/window/size/mode", -1)) != 3:
 		_fail("El juego no arranca configurado en pantalla completa")
 		return
@@ -111,43 +111,48 @@ func _run() -> void:
 		_fail("No está activo el controlador de pantalla completa por defecto")
 		return
 
-	# Reproduce el fallo observado: la habitación se mutea y AudioManager vuelve
-	# a aplicar su configuración global durante el diálogo. El controlador 0.8.3
-	# debe restaurar el mute específico de la pista en el siguiente refresco.
+	# 0.8.4: ya no existe volumen ni mute por canción. Los controles visibles en
+	# una habitación deben modificar exactamente el mismo volumen general que el menú.
 	var version040 := main.get_node_or_null("Version040Manager")
 	var audio_manager: Variant = main.get("audio_manager")
 	if version040 == null or audio_manager == null:
-		_fail("No se puede validar el mute específico de habitación")
+		_fail("No se puede validar el volumen general desde la habitación")
 		return
-	var test_track := "ci_room_mute"
-	audio_manager.set("current_music_id", test_track)
-	audio_manager.set("music_muted", false)
-	audio_manager.set("music_suspended", false)
-	var mutes: Dictionary = version040.get("track_mutes")
-	var volumes: Dictionary = version040.get("track_volumes")
-	mutes[test_track] = true
-	volumes[test_track] = 1.0
-	version040.set("track_mutes", mutes)
-	version040.set("track_volumes", volumes)
-	var music_bus := AudioServer.get_bus_index("Music")
-	if music_bus < 0:
-		_fail("No existe el bus Music")
+	var room_mute: Variant = version040.get("room_mute")
+	var room_label: Variant = version040.get("room_label")
+	if room_mute is not Button or room_label is not Label:
+		_fail("Faltan los controles de volumen general en la habitación")
 		return
-	AudioServer.set_bus_mute(music_bus, false)
-	runtime.call("enforce_room_audio_now")
-	if not AudioServer.is_bus_mute(music_bus):
-		_fail("El mute de habitación no se aplica")
-		return
-	audio_manager.call("_apply_audio_settings")
-	if AudioServer.is_bus_mute(music_bus):
-		_fail("El smoke no pudo reproducir el refresco global que quitaba el mute")
-		return
-	runtime.call("enforce_room_audio_now")
-	if not AudioServer.is_bus_mute(music_bus):
-		_fail("El mute de habitación se pierde al continuar el diálogo")
+	if not (room_mute as Button).text.is_empty() or (room_mute as Button).icon == null:
+		_fail("El mute de habitación debe mostrarse solo como icono")
 		return
 
-	print("V081 JAVI MONITORS OK: zonas poligonales, fullscreen 0.8.3 y mute persistente validados.")
+	audio_manager.call("set_master_volume", 0.4)
+	version040.call("_apply_room_audio")
+	if int(audio_manager.call("get_music_volume_percent")) != 40 or int(audio_manager.call("get_effects_volume_percent")) != 40:
+		_fail("El volumen general no sincroniza música y efectos")
+		return
+	if not (room_label as Label).text.contains("40"):
+		_fail("La habitación no refleja el volumen general")
+		return
+
+	version040.call("_adjust_track", 0.1)
+	if int(audio_manager.call("get_music_volume_percent")) != 50 or int(audio_manager.call("get_effects_volume_percent")) != 50:
+		_fail("Modificar volumen desde la habitación no modifica el volumen general")
+		return
+
+	if bool(audio_manager.call("is_muted")):
+		audio_manager.call("toggle_mute")
+	version040.call("_toggle_track_mute")
+	if not bool(audio_manager.call("is_muted")) or not bool(audio_manager.call("is_music_muted")) or not bool(audio_manager.call("is_effects_muted")):
+		_fail("El botón de mute de la habitación no silencia todo el audio")
+		return
+	version040.call("_toggle_track_mute")
+	if bool(audio_manager.call("is_muted")):
+		_fail("El botón de mute de la habitación no reactiva todo el audio")
+		return
+
+	print("V081 JAVI MONITORS OK: zonas poligonales, fullscreen y audio general 0.8.4 validados.")
 	quit(0)
 
 
