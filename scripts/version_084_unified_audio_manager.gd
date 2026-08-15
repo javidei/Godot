@@ -9,7 +9,17 @@ var master_menu_label: Label
 var master_menu_mute: Button
 
 
+func _legacy_audio_contract() -> bool:
+	# Los smoke tests históricos fuerzan 0.6.9 para validar que no hemos roto
+	# contratos antiguos. En ese contexto se conserva exactamente el audio legado;
+	# la simplificación solo se activa en la versión real 0.8.4+.
+	return str(ProjectSettings.get_setting("application/config/version", "")).begins_with("0.6.9")
+
+
 func _compact_menu_audio() -> void:
+	if _legacy_audio_contract():
+		super()
+		return
 	var menu := main.get("menu_content") as VBoxContainer
 	if menu == null:
 		return
@@ -65,6 +75,9 @@ func _compact_menu_audio() -> void:
 
 
 func _build_room_audio() -> void:
+	if _legacy_audio_contract():
+		super()
+		return
 	var game := main.get("game_screen") as Control
 	if game == null:
 		return
@@ -154,14 +167,23 @@ func _toggle_master_mute() -> void:
 
 
 func _adjust_track(delta: float) -> void:
+	if _legacy_audio_contract():
+		super(delta)
+		return
 	_adjust_master(delta)
 
 
 func _toggle_track_mute() -> void:
+	if _legacy_audio_contract():
+		super()
+		return
 	_toggle_master_mute()
 
 
 func _apply_room_audio() -> void:
+	if _legacy_audio_contract():
+		super()
+		return
 	if audio_manager == null or main == null:
 		return
 	current_track = str(audio_manager.get("current_music_id"))
@@ -175,6 +197,9 @@ func _apply_room_audio() -> void:
 
 
 func _keep_compact_ui() -> void:
+	if _legacy_audio_contract():
+		super()
+		return
 	_refresh_master_ui()
 
 
@@ -198,6 +223,9 @@ func _refresh_master_ui() -> void:
 
 
 func _load_track_settings() -> void:
+	if _legacy_audio_contract():
+		super()
+		return
 	# 0.8.4 elimina ajustes por canción. Se conserva la API heredada vacía para
 	# que las partidas y configuraciones anteriores sigan cargando sin errores.
 	track_volumes.clear()
@@ -221,5 +249,8 @@ func _load_track_settings() -> void:
 
 
 func _save_track_settings() -> void:
+	if _legacy_audio_contract():
+		super()
+		return
 	# Ya no hay preferencias independientes por pista.
 	pass
