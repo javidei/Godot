@@ -2,7 +2,8 @@ extends "res://scripts/version_040_manager_data.gd"
 
 const Story084 = preload("res://scripts/story.gd")
 const DataAccess084 = preload("res://scripts/data_access.gd")
-const MASTER_MUTE_ICON_PATH := "res://assets/ui/icons/mute.svg"
+const MUTED_ICON_PATH := "res://assets/ui/icons/mute.svg"
+const UNMUTED_ICON_PATH := "res://assets/ui/icons/sound-on.svg"
 
 var master_menu_row: HBoxContainer
 var master_menu_label: Label
@@ -139,8 +140,13 @@ func _make_master_mute_button(button_name: String, minimum_size: Vector2) -> But
 	button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
 	button.add_theme_constant_override("icon_max_width", 18)
-	button.icon = load(MASTER_MUTE_ICON_PATH) as Texture2D
+	var muted := bool(audio_manager.call("is_muted")) if audio_manager != null else false
+	button.icon = _mute_state_icon(muted)
 	return button
+
+
+func _mute_state_icon(muted: bool) -> Texture2D:
+	return load(MUTED_ICON_PATH if muted else UNMUTED_ICON_PATH) as Texture2D
 
 
 func _master_step() -> float:
@@ -208,18 +214,19 @@ func _refresh_master_ui() -> void:
 		return
 	var percent := int(audio_manager.call("get_volume_percent"))
 	var muted := bool(audio_manager.call("is_muted"))
+	var state_icon := _mute_state_icon(muted)
 	if master_menu_label != null:
 		master_menu_label.text = "Volumen · %d %%" % percent
 	if master_menu_mute != null:
 		master_menu_mute.text = ""
 		master_menu_mute.tooltip_text = "Activar todo el audio" if muted else "Silenciar todo el audio"
-		master_menu_mute.icon = load(MASTER_MUTE_ICON_PATH) as Texture2D
+		master_menu_mute.icon = state_icon
 	if room_label != null:
 		room_label.text = "%d%%" % percent
 	if room_mute != null:
 		room_mute.text = ""
 		room_mute.tooltip_text = "Activar todo el audio" if muted else "Silenciar todo el audio"
-		room_mute.icon = load(MASTER_MUTE_ICON_PATH) as Texture2D
+		room_mute.icon = state_icon
 
 
 func _load_track_settings() -> void:
