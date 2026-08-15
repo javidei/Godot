@@ -38,10 +38,9 @@ func _run() -> void:
 
 	var save_manager := main.get_node_or_null("SaveSlotsManager")
 	var character_select := main.get_node_or_null("CharacterSelectManager")
-	var world_map := main.get_node_or_null("WorldMapManager")
 	var menu_screen := main.get("menu_screen") as Control
 	var continue_button := main.get("continue_button") as Button
-	if save_manager == null or character_select == null or world_map == null or menu_screen == null or continue_button == null:
+	if save_manager == null or character_select == null or menu_screen == null or continue_button == null:
 		main.queue_free()
 		_cleanup()
 		_fail("Faltan componentes del flujo real de partida")
@@ -75,17 +74,21 @@ func _run() -> void:
 		_fail("El primer guardado no conserva al protagonista")
 		return
 
-	# Reproduce el botón Menú del mapa, que es la salida normal durante una partida.
-	world_map.call("open_selector", main.get("state"))
-	await process_frame
-	world_map.call("_on_header_back")
+	# El botón Menú del HUD llama directamente a main._show_menu(). Antes de 0.9.1
+	# esa ruta no forzaba un guardado: comprobamos que el estado inmediatamente
+	# anterior a volver al menú queda persistido y que Continuar se reactiva.
+	var state: Dictionary = main.get("state")
+	state["coins"] = 321
+	state["current_zone_id"] = "naranjal_del_rio"
+	main.set("state", state)
+	main.call("_show_menu")
 	for _i in range(4):
 		await process_frame
 
 	if not menu_screen.visible:
 		main.queue_free()
 		_cleanup()
-		_fail("Volver desde el mapa no muestra el menú")
+		_fail("El botón del HUD no muestra el menú")
 		return
 	if not bool(dm.call("has_save")):
 		main.queue_free()
@@ -102,10 +105,16 @@ func _run() -> void:
 		_cleanup()
 		_fail("El slot iniciado no queda como última partida utilizada")
 		return
+	var returned_state: Dictionary = dm.call("load_save_slot", created_slot)
+	if int(returned_state.get("coins", -1)) != 321:
+		main.queue_free()
+		_cleanup()
+		_fail("Volver al menú desde el HUD no persiste el último estado de la partida")
+		return
 
 	main.queue_free()
 	_cleanup()
-	print("V091 SAVE RESUME OK: nueva partida, guardado inmediato, vuelta al menú y Continuar validados.")
+	print("V091 SAVE RESUME OK: slot inmediato, guardado al volver desde HUD y botón Continuar validados.")
 	quit(0)
 
 
