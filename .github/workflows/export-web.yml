@@ -183,6 +183,19 @@ jobs:
           fi
           grep -q "V080 NARRATIVE DAYS OK:" v080-narrative-days.log
 
+      - name: Smoke test de monitores de Javi 0.8.1
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v081_javi_monitor_smoke_test.gd > v081-javi-monitors.log 2>&1
+          STATUS=$?
+          set -e
+          cat v081-javi-monitors.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V081 JAVI MONITORS FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v081-javi-monitors.log; then
+            echo "La validación del primer plano interactivo de Javi ha fallado; no se exportará."
+            exit 1
+          fi
+          grep -q "V081 JAVI MONITORS OK:" v081-javi-monitors.log
+
       - name: Smoke test de mapa y progreso 0.6/0.7
         run: |
           set +e
