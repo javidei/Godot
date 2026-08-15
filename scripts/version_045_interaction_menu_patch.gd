@@ -74,7 +74,13 @@ func _handle_screen_advance(event: InputEvent) -> void:
 func _capture_menu_nodes() -> void:
 	if menu_content == null:
 		return
-	audio_row = menu_content.find_child("AudioCombinedControls040", true, false) as HBoxContainer
+	# 0.8.4 sustituyó el control combinado histórico por un único control de
+	# volumen general. Priorizamos esa fila nueva para que el reordenado del menú
+	# mantenga el título "VOLUMEN GENERAL" pegado a su selector. En versiones
+	# legacy/smoke tests seguimos usando la fila histórica como fallback.
+	audio_row = menu_content.find_child("MasterAudioControls084", true, false) as HBoxContainer
+	if audio_row == null:
+		audio_row = menu_content.find_child("AudioCombinedControls040", true, false) as HBoxContainer
 	audio_title = menu_content.find_child("AudioSettingsTitle", true, false) as Label
 	fullscreen_button = menu_content.find_child("MenuFullscreenButton", true, false) as Button
 	exit_button = menu_content.find_child("ExitGameButton", true, false) as Button
