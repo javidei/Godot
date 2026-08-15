@@ -13,6 +13,10 @@ func get_hit_polygon() -> PackedVector2Array:
 	return hit_polygon
 
 
+func contains_point(point: Vector2) -> bool:
+	return _has_point(point)
+
+
 func _has_point(point: Vector2) -> bool:
 	var count := hit_polygon.size()
 	if count < 3:
