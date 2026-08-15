@@ -47,6 +47,16 @@ func _run() -> void:
 		_fail("El fondo del primer plano no se carga como textura")
 		return
 
+	# El manager cierra correctamente el primer plano si la habitación deja de
+	# estar activa. El smoke debe simular el contexto real de una visita a Javi
+	# en lugar de abrirlo mientras Main sigue en la pantalla de menú.
+	var game_screen := main.get("game_screen") as Control
+	if game_screen == null:
+		_fail("No existe GameScreen")
+		return
+	game_screen.visible = true
+	main.set("current_background", "habitacion_javi")
+
 	manager.call("_open_closeup")
 	await process_frame
 	if not bool(manager.call("is_closeup_open")) or not (overlay as Control).visible:
