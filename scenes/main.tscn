@@ -1,21 +1,22 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/main_data_driven.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/ui_shell_manager.gd" id="2_ui_shell"]
-[ext_resource type="Script" path="res://scripts/character_select_manager_data.gd" id="3_character_select"]
-[ext_resource type="Script" path="res://scripts/version_084_unified_audio_manager.gd" id="4_version_040"]
+[ext_resource type="Script" path="res://scripts/version_090_character_select_manager.gd" id="3_character_select"]
+[ext_resource type="Script" path="res://scripts/version_090_unified_audio_manager.gd" id="4_version_040"]
 [ext_resource type="Script" path="res://scripts/version_042_layout_data.gd" id="5_version_042"]
 [ext_resource type="Script" path="res://scripts/version_043_hud_patch.gd" id="6_version_043"]
 [ext_resource type="Script" path="res://scripts/version_080_visit_transitions.gd" id="7_version_044"]
 [ext_resource type="Script" path="res://scripts/version_045_interaction_menu_patch.gd" id="8_version_045"]
 [ext_resource type="Script" path="res://scripts/version_084_compact_extras_patch.gd" id="9_version_050"]
 [ext_resource type="Script" path="res://scripts/progress_manager.gd" id="10_progress"]
-[ext_resource type="Script" path="res://scripts/version_080_world_map_days.gd" id="11_world_map"]
+[ext_resource type="Script" path="res://scripts/version_090_world_map_days.gd" id="11_world_map"]
 [ext_resource type="Script" path="res://scripts/version_065_menu_video.gd" id="12_menu_video"]
 [ext_resource type="Script" path="res://scripts/version_080_save_slots_patch.gd" id="13_save_slots"]
-[ext_resource type="Script" path="res://scripts/version_080_narrative_day_manager.gd" id="14_narrative_days"]
-[ext_resource type="Script" path="res://scripts/version_081_javi_monitor_closeup.gd" id="15_javi_monitors"]
+[ext_resource type="Script" path="res://scripts/version_090_narrative_day_manager.gd" id="14_narrative_days"]
+[ext_resource type="Script" path="res://scripts/version_090_javi_monitor_closeup.gd" id="15_javi_monitors"]
 [ext_resource type="Script" path="res://scripts/version_084_runtime_defaults.gd" id="16_runtime_defaults"]
+[ext_resource type="Script" path="res://scripts/version_090_story_runtime.gd" id="17_story_runtime"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -70,3 +71,6 @@ script = ExtResource("15_javi_monitors")
 
 [node name="Version083RuntimeDefaults" type="Node" parent="."]
 script = ExtResource("16_runtime_defaults")
+
+[node name="StoryRuntimeManager" type="Node" parent="."]
+script = ExtResource("17_story_runtime")
