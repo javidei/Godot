@@ -1,0 +1,53 @@
+name: Validar narrativa 0.9
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "web/**"
+      - ".asset_upload/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: godot-v090-smoke
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: "4.7.1"
+
+jobs:
+  v090-story-roster:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.7.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Importar recursos Godot
+        run: |
+          set +e
+          godot --headless --editor --path . --quit > import.log 2>&1
+          STATUS=$?
+          set -e
+          cat import.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" import.log; then
+            echo "La importación de recursos contiene errores."
+            exit 1
+          fi
+
+      - name: Smoke test de narrativa, roster y audio 0.9
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v090_story_roster_smoke_test.gd > v090-story-roster.log 2>&1
+          STATUS=$?
+          set -e
+          cat v090-story-roster.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V090 STORY ROSTER FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v090-story-roster.log; then
+            echo "La validación 0.9 de narrativa, roster y audio ha fallado."
+            exit 1
+          fi
+          grep -q "V090 STORY ROSTER OK:" v090-story-roster.log
