@@ -19,17 +19,26 @@ void fragment() {
 }
 """
 
+const LOGO_HOLD_SECONDS := 2.65
+const MENU_READY_MAX_FRAMES := 120
+const MENU_REVEAL_SECONDS := 0.35
+
 var logo: TextureRect
 var fade_overlay: ColorRect
 var logo_material: ShaderMaterial
+var prepared_main: Control
 
 
 func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
+    z_index = 100
     _build_splash()
     await get_tree().process_frame
-    await _play_intro()
-    get_tree().change_scene_to_packed(MAIN_SCENE)
+    await _play_opening()
+    await _prepare_main_scene()
+    await get_tree().create_timer(LOGO_HOLD_SECONDS).timeout
+    await _fade_to_black()
+    await _reveal_prepared_main()
 
 
 func _build_splash() -> void:
@@ -74,26 +83,85 @@ func _build_splash() -> void:
     add_child(fade_overlay)
 
 
-func _play_intro() -> void:
+func _play_opening() -> void:
     var tween := create_tween()
     tween.set_trans(Tween.TRANS_SINE)
     tween.set_ease(Tween.EASE_IN_OUT)
 
-    # Arranque completamente negro y fundido de entrada del logo.
     tween.tween_interval(0.12)
     tween.tween_method(Callable(self, "_set_fade_alpha"), 1.0, 0.0, 0.55)
     tween.tween_interval(0.18)
-
-    # Un único barrido diagonal de brillo, limitado a la silueta del PNG.
     tween.tween_callback(Callable(self, "_enable_shine"))
     tween.tween_method(Callable(self, "_set_shine_progress"), -0.35, 1.30, 0.85)
     tween.tween_callback(Callable(self, "_disable_shine"))
+    await tween.finished
 
-    # El logo respira un instante y vuelve a negro antes de cargar el menú.
-    tween.tween_interval(0.65)
+
+func _prepare_main_scene() -> void:
+    prepared_main = MAIN_SCENE.instantiate() as Control
+    if prepared_main == null:
+        get_tree().change_scene_to_packed(MAIN_SCENE)
+        return
+
+    prepared_main.visible = false
+    prepared_main.z_index = -100
+    get_tree().root.add_child(prepared_main)
+
+    while not prepared_main.is_node_ready():
+        await get_tree().process_frame
+
+    for _frame in range(MENU_READY_MAX_FRAMES):
+        var menu_screen := prepared_main.get("menu_screen") as Control
+        var menu_characters := prepared_main.get("menu_characters") as TextureRect
+        var menu_video := prepared_main.find_child("MenuEclipseVideo065", true, false)
+        var studio_logo := prepared_main.find_child("NaranjalStudioMenuLogo093", true, false)
+        var base_ready := menu_screen != null and menu_characters != null and menu_characters.texture != null
+        var deferred_ready := menu_video != null and studio_logo != null
+        if base_ready and deferred_ready:
+            break
+        await get_tree().process_frame
+
+    _stop_prepared_menu_music()
+
+
+func _fade_to_black() -> void:
+    var tween := create_tween()
+    tween.set_trans(Tween.TRANS_SINE)
+    tween.set_ease(Tween.EASE_IN_OUT)
     tween.tween_method(Callable(self, "_set_fade_alpha"), 0.0, 1.0, 0.48)
     tween.tween_interval(0.12)
     await tween.finished
+
+
+func _reveal_prepared_main() -> void:
+    if prepared_main == null or not is_instance_valid(prepared_main):
+        get_tree().change_scene_to_packed(MAIN_SCENE)
+        return
+
+    prepared_main.visible = true
+    prepared_main.z_index = -100
+    if prepared_main.has_method("_sync_menu_music_scope"):
+        prepared_main.call("_sync_menu_music_scope")
+    await get_tree().process_frame
+    await get_tree().process_frame
+
+    var tween := create_tween()
+    tween.set_trans(Tween.TRANS_SINE)
+    tween.set_ease(Tween.EASE_IN_OUT)
+    tween.tween_property(self, "modulate:a", 0.0, MENU_REVEAL_SECONDS)
+    await tween.finished
+
+    prepared_main.z_index = 0
+    get_tree().current_scene = prepared_main
+    queue_free()
+
+
+func _stop_prepared_menu_music() -> void:
+    if prepared_main == null:
+        return
+    var prepared_audio := prepared_main.get("audio_manager") as Node
+    if prepared_audio != null and prepared_audio.has_method("stop_menu_music"):
+        prepared_audio.call("stop_menu_music")
 
 
 func _set_fade_alpha(value: float) -> void:

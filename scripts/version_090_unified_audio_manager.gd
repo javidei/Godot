@@ -1,5 +1,9 @@
 extends "res://scripts/version_084_unified_audio_manager.gd"
 
+const MUTE_ICON_MAX_WIDTH := 30
+const MENU_MUTE_MIN_SIZE := Vector2(52, 44)
+const ROOM_MUTE_MIN_SIZE := Vector2(52, 46)
+
 
 func _refresh_master_ui() -> void:
 	super()
@@ -15,7 +19,11 @@ func _refresh_master_ui() -> void:
 		button.expand_icon = true
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
-		button.add_theme_constant_override("icon_max_width", 18)
-		if button.name in ["MasterMute084", "RoomMasterMute084"]:
+		button.add_theme_constant_override("icon_max_width", MUTE_ICON_MAX_WIDTH)
+		if button.name == "MasterMute084":
+			button.custom_minimum_size = MENU_MUTE_MIN_SIZE
 			button.text = ""
-			button.tooltip_text = "Activar todo el audio" if muted else "Silenciar todo el audio"
+		elif button.name == "RoomMasterMute084":
+			button.custom_minimum_size = ROOM_MUTE_MIN_SIZE
+			button.text = ""
+		button.tooltip_text = "Activar todo el audio" if muted else "Silenciar todo el audio"
