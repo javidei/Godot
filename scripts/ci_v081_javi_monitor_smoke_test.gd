@@ -48,23 +48,50 @@ func _run() -> void:
 		return
 
 	# El manager cierra correctamente el primer plano si la habitación deja de
-	# estar activa. El smoke debe simular el contexto real de una visita a Javi
-	# en lugar de abrirlo mientras Main sigue en la pantalla de menú.
+	# estar activa. El smoke simula el contexto real de una visita a Javi.
 	var game_screen := main.get("game_screen") as Control
 	if game_screen == null:
 		_fail("No existe GameScreen")
 		return
 	game_screen.visible = true
 	main.set("current_background", "habitacion_javi")
+	manager.call("_apply_layout")
+	await process_frame
+
+	# El hotspot de la habitación debe ser una forma irregular ajustada al área
+	# izquierda marcada, no el rectángulo amplio usado inicialmente.
+	var room_polygon: PackedVector2Array = room_hotspot.call("get_hit_polygon")
+	if room_polygon.size() < 8:
+		_fail("La zona de los monitores de la habitación no es poligonal")
+		return
+	var room_inside := _average_point(room_polygon)
+	if not (room_hotspot as Control).has_point(room_inside):
+		_fail("El área marcada de los monitores de la habitación no es clicable")
+		return
+	var room_outside := Vector2((room_hotspot as Control).size.x * 0.72, (room_hotspot as Control).size.y * 0.50)
+	if (room_hotspot as Control).has_point(room_outside):
+		_fail("La habitación acepta clics fuera del área roja de los monitores")
+		return
 
 	manager.call("_open_closeup")
 	await process_frame
 	if not bool(manager.call("is_closeup_open")) or not (overlay as Control).visible:
 		_fail("El primer plano no se abre")
 		return
-	if (right_hotspot as Control).size.x <= 1.0 or (right_hotspot as Control).size.y <= 1.0:
-		_fail("La pantalla derecha no tiene un área clicable válida")
+
+	var right_polygon: PackedVector2Array = right_hotspot.call("get_hit_polygon")
+	if right_polygon.size() < 8:
+		_fail("La pantalla derecha no usa un hotspot poligonal preciso")
 		return
+	var right_inside := _average_point(right_polygon)
+	if not (right_hotspot as Control).has_point(right_inside):
+		_fail("La pantalla derecha marcada no es clicable")
+		return
+	var left_monitor_point := Vector2((right_hotspot as Control).size.x * 0.30, (right_hotspot as Control).size.y * 0.52)
+	if (right_hotspot as Control).has_point(left_monitor_point):
+		_fail("El primer plano permite abrir Pixel Adventure fuera de la pantalla derecha")
+		return
+
 	var visible_buttons := 0
 	for node in (overlay as Control).find_children("*", "Button", true, false):
 		if node is Button and (node as Button).visible:
@@ -79,8 +106,15 @@ func _run() -> void:
 		_fail("El botón Volver no cierra el primer plano")
 		return
 
-	print("V081 JAVI MONITORS OK: primer plano, botón Volver y enlace a Pixel Adventure validados.")
+	print("V081 JAVI MONITORS OK: zonas rojas poligonales, primer plano, Volver y Pixel Adventure validados.")
 	quit(0)
+
+
+func _average_point(points: PackedVector2Array) -> Vector2:
+	var total := Vector2.ZERO
+	for point in points:
+		total += point
+	return total / float(points.size())
 
 
 func _fail(message: String) -> void:
