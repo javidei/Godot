@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.9.1"
-run/main_scene="res://scenes/main.tscn"
+config/version="0.9.2"
+run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
 
