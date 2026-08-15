@@ -12,6 +12,20 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.8.1] - 2026-08-15
+
+### Added
+
+- La habitación de Javi incorpora una zona interactiva sobre sus monitores que abre un primer plano usando `assets/backgrounds/pantalla-javi-naranjal.png`.
+- En el primer plano, la pantalla derecha funciona como acceso directo a `https://javidei.github.io/pixel-adventure/` desde Web, escritorio y móvil.
+- Smoke test específico de 0.8.1 para validar el fondo, el único botón visible de retorno y el destino de Pixel Adventure.
+
+### Changed
+
+- El primer plano de los monitores cubre completamente la escena normal: no muestra personajes, diálogo, HUD ni controles de habitación; únicamente deja el botón **Volver** y la zona clicable de la pantalla derecha.
+- Las áreas interactivas se calculan sobre coordenadas normalizadas de la imagen y respetan el recorte `cover` del fondo en distintas relaciones de aspecto.
+- Abrir los monitores no avanza la conversación ni altera la música o el checkpoint narrativo de la habitación.
+
 ## [0.8.0] - 2026-08-14
 
 ### Added
