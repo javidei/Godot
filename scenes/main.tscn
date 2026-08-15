@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/main_data_driven.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/ui_shell_manager.gd" id="2_ui_shell"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://scripts/version_065_menu_video.gd" id="12_menu_video"]
 [ext_resource type="Script" path="res://scripts/version_080_save_slots_patch.gd" id="13_save_slots"]
 [ext_resource type="Script" path="res://scripts/version_080_narrative_day_manager.gd" id="14_narrative_days"]
+[ext_resource type="Script" path="res://scripts/version_081_javi_monitor_closeup.gd" id="15_javi_monitors"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -62,3 +63,6 @@ script = ExtResource("12_menu_video")
 
 [node name="SaveSlotsManager" type="Node" parent="."]
 script = ExtResource("13_save_slots")
+
+[node name="JaviMonitorCloseupManager" type="Node" parent="."]
+script = ExtResource("15_javi_monitors")
