@@ -1,17 +1,40 @@
 extends Node
 
 const Story = preload("res://scripts/story.gd")
+const PolygonHotspot = preload("res://scripts/polygon_hotspot.gd")
 
 const JAVI_BACKGROUND_ID := "habitacion_javi"
 const CLOSEUP_BACKGROUND_PATH := "res://assets/backgrounds/pantalla-javi-naranjal.png"
 const PIXEL_ADVENTURE_URL := "https://javidei.github.io/pixel-adventure/"
 const BACK_ICON_PATH := "res://assets/ui/icons/arrow-left.svg"
 
-# Rectángulos normalizados sobre la imagen original. Se convierten al área real
-# dibujada por TextureRect en modo KEEP_ASPECT_COVERED, por lo que siguen el
-# recorte del fondo en escritorio, Web y móvil.
-const ROOM_MONITORS_RECT := Rect2(0.16, 0.24, 0.42, 0.42)
-const CLOSEUP_RIGHT_MONITOR_RECT := Rect2(0.51, 0.17, 0.39, 0.62)
+# Áreas normalizadas sobre las imágenes originales. Se han ajustado siguiendo
+# las zonas marcadas por el usuario: en la habitación solo el conjunto de
+# monitores/escritorio de la izquierda y, en el primer plano, únicamente la
+# superficie de la pantalla derecha. El hit-test es poligonal, no rectangular.
+const ROOM_MONITORS_POLYGON := [
+	Vector2(0.0254, 0.3701),
+	Vector2(0.0037, 0.4426),
+	Vector2(0.0005, 0.6534),
+	Vector2(0.0291, 0.7701),
+	Vector2(0.1826, 0.7635),
+	Vector2(0.2970, 0.7023),
+	Vector2(0.2949, 0.4642),
+	Vector2(0.2705, 0.4068),
+	Vector2(0.1652, 0.3428),
+	Vector2(0.0609, 0.3381),
+]
+const CLOSEUP_RIGHT_MONITOR_POLYGON := [
+	Vector2(0.8279, 0.3933),
+	Vector2(0.4881, 0.3952),
+	Vector2(0.4790, 0.5500),
+	Vector2(0.4854, 0.6822),
+	Vector2(0.5061, 0.6964),
+	Vector2(0.5661, 0.6822),
+	Vector2(0.6102, 0.6945),
+	Vector2(0.8290, 0.6954),
+	Vector2(0.8354, 0.4924),
+]
 
 var main: Control
 var game_screen: Control
@@ -60,8 +83,9 @@ func _process(_delta: float) -> void:
 
 
 func _build_room_hotspot() -> void:
-	room_hotspot = Control.new()
+	room_hotspot = PolygonHotspot.new() as Control
 	room_hotspot.name = "JaviRoomMonitorsHotspot081"
+	room_hotspot.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	room_hotspot.mouse_filter = Control.MOUSE_FILTER_STOP
 	room_hotspot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	room_hotspot.z_index = 24
@@ -90,8 +114,9 @@ func _build_closeup() -> void:
 		closeup_background.texture = ResourceLoader.load(CLOSEUP_BACKGROUND_PATH) as Texture2D
 	closeup_overlay.add_child(closeup_background)
 
-	right_monitor_hotspot = Control.new()
+	right_monitor_hotspot = PolygonHotspot.new() as Control
 	right_monitor_hotspot.name = "PixelAdventureMonitorHotspot081"
+	right_monitor_hotspot.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	right_monitor_hotspot.mouse_filter = Control.MOUSE_FILTER_STOP
 	right_monitor_hotspot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	right_monitor_hotspot.z_index = 2
@@ -207,9 +232,9 @@ func _apply_layout() -> void:
 	if game_screen == null:
 		return
 	if room_hotspot != null and game_background != null:
-		_set_hotspot_from_image_rect(room_hotspot, game_background, ROOM_MONITORS_RECT)
+		_set_hotspot_from_image_polygon(room_hotspot, game_background, ROOM_MONITORS_POLYGON)
 	if right_monitor_hotspot != null and closeup_background != null:
-		_set_hotspot_from_image_rect(right_monitor_hotspot, closeup_background, CLOSEUP_RIGHT_MONITOR_RECT)
+		_set_hotspot_from_image_polygon(right_monitor_hotspot, closeup_background, CLOSEUP_RIGHT_MONITOR_POLYGON)
 	if back_button != null:
 		var viewport := get_viewport().get_visible_rect().size
 		var compact := viewport.x < 760.0 or viewport.y > viewport.x
@@ -220,8 +245,8 @@ func _apply_layout() -> void:
 		back_button.offset_bottom = back_button.offset_top + (42.0 if compact else 46.0)
 
 
-func _set_hotspot_from_image_rect(hotspot: Control, texture_rect: TextureRect, normalized_rect: Rect2) -> void:
-	if hotspot == null or texture_rect == null or texture_rect.texture == null or game_screen == null:
+func _set_hotspot_from_image_polygon(hotspot: Control, texture_rect: TextureRect, normalized_points: Array) -> void:
+	if hotspot == null or texture_rect == null or texture_rect.texture == null:
 		return
 	var container_rect := texture_rect.get_global_rect()
 	var texture_size := texture_rect.texture.get_size()
@@ -230,15 +255,13 @@ func _set_hotspot_from_image_rect(hotspot: Control, texture_rect: TextureRect, n
 	var scale := maxf(container_rect.size.x / texture_size.x, container_rect.size.y / texture_size.y)
 	var drawn_size := texture_size * scale
 	var drawn_origin := container_rect.position + (container_rect.size - drawn_size) * 0.5
-	var region_global := Rect2(
-		drawn_origin + Vector2(normalized_rect.position.x * drawn_size.x, normalized_rect.position.y * drawn_size.y),
-		Vector2(normalized_rect.size.x * drawn_size.x, normalized_rect.size.y * drawn_size.y)
-	)
-	var clipped := region_global.intersection(container_rect)
-	var screen_origin := game_screen.get_global_rect().position
-	hotspot.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	hotspot.position = clipped.position - screen_origin
-	hotspot.size = clipped.size
+	var hotspot_origin := hotspot.get_global_rect().position
+	var local_points := PackedVector2Array()
+	for raw_point in normalized_points:
+		var point := raw_point as Vector2
+		var global_point := drawn_origin + Vector2(point.x * drawn_size.x, point.y * drawn_size.y)
+		local_points.append(global_point - hotspot_origin)
+	hotspot.call("set_hit_polygon", local_points)
 
 
 func is_closeup_open() -> bool:
