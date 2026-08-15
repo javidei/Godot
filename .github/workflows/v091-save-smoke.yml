@@ -1,0 +1,46 @@
+name: Validar guardado 0.9.1
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/ci_v091_save_resume_smoke_test.gd"
+      - "scripts/save_slots_manager.gd"
+      - "scripts/version_080_save_slots_patch.gd"
+      - "scripts/version_090_character_select_manager.gd"
+      - "scripts/main_data_driven.gd"
+      - "autoload/data_manager_v090.gd"
+      - "scenes/main.tscn"
+      - "project.godot"
+      - ".github/workflows/v091-save-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  save-resume:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.7.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Importar recursos Godot
+        run: |
+          set +e
+          godot --headless --editor --path . --quit > import.log 2>&1
+          STATUS=$?
+          set -e
+          cat import.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" import.log; then
+            exit 1
+          fi
+      - name: Reproducir guardado y vuelta al menú
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v091_save_resume_smoke_test.gd > v091-save.log 2>&1
+          STATUS=$?
+          set -e
+          cat v091-save.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V091 SAVE RESUME FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" v091-save.log; then
+            exit 1
+          fi
+          grep -q "V091 SAVE RESUME OK:" v091-save.log
