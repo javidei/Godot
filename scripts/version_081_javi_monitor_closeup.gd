@@ -258,7 +258,7 @@ func _set_hotspot_from_image_polygon(hotspot: Control, texture_rect: TextureRect
 	var hotspot_origin := hotspot.get_global_rect().position
 	var local_points := PackedVector2Array()
 	for raw_point in normalized_points:
-		var point := raw_point as Vector2
+		var point: Vector2 = raw_point
 		var global_point := drawn_origin + Vector2(point.x * drawn_size.x, point.y * drawn_size.y)
 		local_points.append(global_point - hotspot_origin)
 	hotspot.call("set_hit_polygon", local_points)
