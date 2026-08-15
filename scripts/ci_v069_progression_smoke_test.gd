@@ -3,10 +3,10 @@ extends "res://scripts/ci_v060_progression_smoke_test.gd"
 # El smoke completo nació en 0.6 y conserva una guard clause histórica que
 # exige 0.6.x. Desde 0.7 seguimos validando exactamente esas mecánicas
 # heredadas, así que solo dentro de este proceso headless presentamos 0.6.9 al
-# test base aunque la versión real del juego ya sea 0.7 u 0.8.
+# test base aunque la versión real del juego ya sea 0.7, 0.8 o 0.9.
 func _initialize() -> void:
 	var current_version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if current_version.begins_with("0.7.") or current_version.begins_with("0.8."):
+	if current_version.begins_with("0.7.") or current_version.begins_with("0.8.") or current_version.begins_with("0.9."):
 		ProjectSettings.set_setting("application/config/version", "0.6.9")
 	super()
 
