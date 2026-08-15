@@ -5,6 +5,15 @@
   "story_name": "Carmen",
   "role": "principal",
   "summary": "Graciosa · estudiante de Cine · vegetariana",
+  "gustos": [
+    "Nintendo Switch",
+    "Tomodachi Life",
+    "Animal Crossing",
+    "Jugar a videojuegos con Fran"
+  ],
+  "notas_gustos": [
+    "Su perfil de juegos en Switch es distinto al de Jony; entre los títulos que le gustan están Tomodachi Life y Animal Crossing."
+  ],
   "current_residence": "Monte del Toro",
   "current_zone_id": "monte_del_toro",
   "playable": true,
