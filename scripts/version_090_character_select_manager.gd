@@ -59,6 +59,11 @@ func _all_ids(dm: Variant) -> Array[String]:
 
 
 func _apply_runtime(active: Array, day_id: int) -> void:
+	# Los smoke tests históricos presentan temporalmente la versión 0.6.9. En
+	# ese contrato no debemos refrescar Story, porque borraría los parches de
+	# visita instalados por los managers heredados antes de arrancar la partida.
+	if str(ProjectSettings.get_setting("application/config/version", "")).begins_with("0.6."):
+		return
 	var runtime := _story_runtime()
 	if runtime != null and runtime.has_method("apply_story_runtime"):
 		runtime.call("apply_story_runtime", active, day_id, true)
