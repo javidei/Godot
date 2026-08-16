@@ -6,11 +6,21 @@ extends "res://scripts/version_090_unified_audio_manager.gd"
 const LEGACY_MUTE_ICON_NODE_NAME := "MuteStateIcon090"
 
 
+func _process(delta: float) -> void:
+	# Ejecutar primero toda la lógica heredada del HUD/audio y fijar el icono al
+	# final del frame. Hay refrescos antiguos que pueden tocar el botón durante
+	# _process; esta última escritura garantiza que la imagen visible corresponde
+	# siempre al estado real del mute general.
+	super(delta)
+	if not _legacy_audio_contract() and audio_manager != null and main != null:
+		_apply_single_mute_icon(bool(audio_manager.call("is_muted")))
+
+
 func _refresh_master_ui() -> void:
-	# La implementación 0.9 ya selecciona correctamente sound-on.svg o mute.svg
-	# según el estado global y actualiza menú + habitación.
 	super()
 	_cleanup_legacy_mute_overlays()
+	if not _legacy_audio_contract() and audio_manager != null:
+		_apply_single_mute_icon(bool(audio_manager.call("is_muted")))
 
 
 func _toggle_master_mute() -> void:
