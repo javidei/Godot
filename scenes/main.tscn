@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://scripts/main_v091.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/ui_shell_manager.gd" id="2_ui_shell"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" path="res://scripts/version_084_runtime_defaults.gd" id="16_runtime_defaults"]
 [ext_resource type="Script" path="res://scripts/version_090_story_runtime.gd" id="17_story_runtime"]
 [ext_resource type="Script" path="res://scripts/version_093_menu_branding.gd" id="18_menu_branding"]
+[ext_resource type="Script" path="res://scripts/version_096_mute_visual_guard.gd" id="19_mute_guard"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -78,3 +79,6 @@ script = ExtResource("17_story_runtime")
 
 [node name="Version093MenuBranding" type="Node" parent="."]
 script = ExtResource("18_menu_branding")
+
+[node name="Version096MuteVisualGuard" type="Node" parent="."]
+script = ExtResource("19_mute_guard")
