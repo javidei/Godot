@@ -33,8 +33,12 @@ func _run() -> void:
 	audio_manager.set("music_muted", false)
 	audio_manager.set("effects_muted", false)
 	audio_manager.call("_apply_audio_settings")
+	print("V095 DEBUG state before refresh master=%s music=%s effects=%s" % [str(audio_manager.call("is_muted")), str(audio_manager.call("is_music_muted")), str(audio_manager.call("is_effects_muted"))])
 	manager.call("_refresh_master_ui")
+	_dump_button("ROOM IMMEDIATE", room_button)
+	print("V095 DEBUG state after refresh master=%s music=%s effects=%s" % [str(audio_manager.call("is_muted")), str(audio_manager.call("is_music_muted")), str(audio_manager.call("is_effects_muted"))])
 	await process_frame
+	print("V095 DEBUG state after frame master=%s music=%s effects=%s" % [str(audio_manager.call("is_muted")), str(audio_manager.call("is_music_muted")), str(audio_manager.call("is_effects_muted"))])
 	if not _expect_single_button_icon(room_button, SOUND_ON_PATH):
 		_dump_button("ROOM ACTIVE", room_button)
 		_fail("La habitación no muestra únicamente sound-on cuando el audio está activo")
@@ -82,8 +86,6 @@ func _expect_single_button_icon(button: Button, expected_path: String) -> bool:
 	var expected := load(expected_path) as Texture2D
 	if expected == null:
 		return false
-	# Godot puede normalizar la ruta de SVG al importarlo; comparamos el RID de
-	# la textura cargada en vez de depender del resource_path textual.
 	if button.icon.get_rid() != expected.get_rid():
 		return false
 	for child in button.get_children():
