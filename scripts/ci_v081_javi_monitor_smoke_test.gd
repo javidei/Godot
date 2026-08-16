@@ -2,6 +2,8 @@ extends SceneTree
 
 const CLOSEUP_PATH := "res://assets/backgrounds/pantalla-javi-naranjal.png"
 const EXPECTED_URL := "https://javidei.github.io/pixel-adventure/"
+const MUTE_SOUND_NODE := "MuteSoundOn096"
+const MUTE_OFF_NODE := "MuteOff096"
 
 
 func _initialize() -> void:
@@ -111,8 +113,9 @@ func _run() -> void:
 		_fail("No está activo el controlador de pantalla completa por defecto")
 		return
 
-	# 0.8.4: ya no existe volumen ni mute por canción. Los controles visibles en
-	# una habitación deben modificar exactamente el mismo volumen general que el menú.
+	# 0.8.4+: ya no existe volumen ni mute por canción. Los controles visibles en
+	# una habitación modifican el mismo volumen general que el menú. En 0.9.6 el
+	# mute se representa con dos capas de estado, pero exactamente una visible.
 	var version040 := main.get_node_or_null("Version040Manager")
 	var audio_manager: Variant = main.get("audio_manager")
 	if version040 == null or audio_manager == null:
@@ -123,8 +126,8 @@ func _run() -> void:
 	if room_mute is not Button or room_label is not Label:
 		_fail("Faltan los controles de volumen general en la habitación")
 		return
-	if not (room_mute as Button).text.is_empty() or (room_mute as Button).icon == null:
-		_fail("El mute de habitación debe mostrarse solo como icono")
+	if not _has_single_mute_state_icon(room_mute as Button):
+		_fail("El mute de habitación debe mostrar exactamente un icono de estado")
 		return
 
 	audio_manager.call("set_master_volume", 0.4)
@@ -152,8 +155,19 @@ func _run() -> void:
 		_fail("El botón de mute de la habitación no reactiva todo el audio")
 		return
 
-	print("V081 JAVI MONITORS OK: zonas poligonales, fullscreen y audio general 0.8.4 validados.")
+	print("V081 JAVI MONITORS OK: zonas poligonales, fullscreen y audio general con mute 0.9.6 validados.")
 	quit(0)
+
+
+func _has_single_mute_state_icon(button: Button) -> bool:
+	if not button.text.is_empty() or button.icon != null:
+		return false
+	var sound_on := button.get_node_or_null(MUTE_SOUND_NODE) as TextureRect
+	var mute_off := button.get_node_or_null(MUTE_OFF_NODE) as TextureRect
+	if sound_on == null or mute_off == null:
+		return false
+	# XOR: uno visible y el otro oculto; nunca superpuestos.
+	return sound_on.visible != mute_off.visible
 
 
 func _average_point(points: PackedVector2Array) -> Vector2:
