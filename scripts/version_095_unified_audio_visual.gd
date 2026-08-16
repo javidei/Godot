@@ -1,16 +1,24 @@
 extends "res://scripts/version_090_unified_audio_manager.gd"
 
-# Capa visual 0.9.5: usa un TextureRect interno en vez de Button.icon para
-# garantizar que el estado visible se redibuja al alternar mute en Web y native.
+# Capa visual del mute: se dibuja un único TextureRect interno por botón.
+# Es importante NO llamar a super() en _refresh_master_ui(), porque la versión
+# anterior también asigna Button.icon y eso provoca dos iconos superpuestos.
 const MUTE_ICON_NODE_NAME := "MuteStateIcon090"
 const MUTE_ICON_INSET := 8.0
 
 
 func _refresh_master_ui() -> void:
-	super()
 	if _legacy_audio_contract() or audio_manager == null or main == null:
 		return
-	_refresh_mute_visuals(bool(audio_manager.call("is_muted")))
+	var percent := int(audio_manager.call("get_volume_percent"))
+	var muted := bool(audio_manager.call("is_muted"))
+
+	if master_menu_label != null:
+		master_menu_label.text = "Volumen · %d %%" % percent
+	if room_label != null:
+		room_label.text = "%d%%" % percent
+
+	_refresh_mute_visuals(muted)
 
 
 func _toggle_master_mute() -> void:
@@ -41,13 +49,26 @@ func _refresh_mute_visuals(muted: bool) -> void:
 
 
 func _set_mute_button_visual(button: Button, muted: bool) -> void:
+	# El Button no debe dibujar icono propio: toda la imagen la pinta el único
+	# TextureRect hijo. Así nunca pueden verse sound-on y mute a la vez.
 	button.icon = null
 	button.expand_icon = false
-	button.text = "" if button.name in ["MasterMute084", "RoomMasterMute084"] else button.text
+	if button.name in ["MasterMute084", "RoomMasterMute084"]:
+		button.text = ""
 	button.tooltip_text = "Activar todo el audio" if muted else "Silenciar todo el audio"
 	button.set_meta("audio_muted_visual", muted)
 
-	var icon_view := button.get_node_or_null(MUTE_ICON_NODE_NAME) as TextureRect
+	# Limpiar posibles duplicados creados por builds anteriores/deferred calls.
+	var icon_views: Array[Node] = []
+	for child in button.get_children():
+		if child.name == MUTE_ICON_NODE_NAME:
+			icon_views.append(child)
+	var icon_view: TextureRect = null
+	if not icon_views.is_empty():
+		icon_view = icon_views[0] as TextureRect
+		for index in range(1, icon_views.size()):
+			icon_views[index].queue_free()
+
 	if icon_view == null:
 		icon_view = TextureRect.new()
 		icon_view.name = MUTE_ICON_NODE_NAME
@@ -61,6 +82,7 @@ func _set_mute_button_visual(button: Button, muted: bool) -> void:
 		icon_view.offset_top = MUTE_ICON_INSET
 		icon_view.offset_right = -MUTE_ICON_INSET
 		icon_view.offset_bottom = -MUTE_ICON_INSET
+
 	icon_view.texture = _mute_state_icon(muted)
 	icon_view.visible = true
 	icon_view.queue_redraw()
