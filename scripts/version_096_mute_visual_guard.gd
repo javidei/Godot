@@ -13,15 +13,14 @@ var audio_manager: Node
 
 
 func _ready() -> void:
-	# Este nodo debe ser la última autoridad visual del HUD. Los managers
-	# heredados pueden refrescar botones durante el frame; una prioridad alta
-	# hace que este guard se ejecute después y deje el estado definitivo.
+	# Los hijos reciben _ready() antes que el Main. Por eso el AudioManager puede
+	# no estar asignado todavía aquí; _refresh_all() lo vuelve a resolver cuando
+	# el padre ya ha terminado de inicializarse.
 	process_priority = 1000
 	main = get_parent() as Control
 	if main == null:
 		set_process(false)
 		return
-	audio_manager = main.get("audio_manager") as Node
 	_refresh_all()
 
 
@@ -34,8 +33,13 @@ func refresh_now() -> void:
 
 
 func _refresh_all() -> void:
-	if main == null or audio_manager == null:
+	if main == null:
 		return
+	if audio_manager == null or not is_instance_valid(audio_manager):
+		audio_manager = main.get("audio_manager") as Node
+	if audio_manager == null:
+		return
+
 	var muted := bool(audio_manager.call("is_muted"))
 	for button_name in ["MasterMute084", "RoomMasterMute084"]:
 		var button := main.find_child(button_name, true, false) as Button
@@ -52,8 +56,7 @@ func _apply_state(button: Button, muted: bool) -> void:
 	button.tooltip_text = "Activar todo el audio" if muted else "Silenciar todo el audio"
 	button.set_meta("audio_muted_visual", muted)
 
-	# Eliminar cualquier capa del intento anterior para evitar residuos al
-	# actualizar una partida ya abierta o al reconstruir controles.
+	# Eliminar cualquier capa del intento anterior para evitar residuos.
 	for child in button.get_children():
 		if child.name == LEGACY_NODE_NAME:
 			button.remove_child(child)
