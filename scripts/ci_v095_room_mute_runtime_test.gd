@@ -2,7 +2,7 @@ extends SceneTree
 
 const SOUND_ON_PATH := "res://assets/ui/icons/sound-on.svg"
 const MUTED_PATH := "res://assets/ui/icons/mute.svg"
-const ICON_NODE_NAME := "MuteStateIcon090"
+const LEGACY_ICON_NODE_NAME := "MuteStateIcon090"
 
 
 func _initialize() -> void:
@@ -35,10 +35,10 @@ func _run() -> void:
 	audio_manager.call("_apply_audio_settings")
 	manager.call("_refresh_master_ui")
 	await process_frame
-	if not _expect_single_icon(room_button, SOUND_ON_PATH):
+	if not _expect_single_button_icon(room_button, SOUND_ON_PATH):
 		_fail("La habitación no muestra únicamente sound-on cuando el audio está activo")
 		return
-	if not _expect_single_icon(menu_button, SOUND_ON_PATH):
+	if not _expect_single_button_icon(menu_button, SOUND_ON_PATH):
 		_fail("El menú no muestra únicamente sound-on cuando el audio está activo")
 		return
 
@@ -47,11 +47,11 @@ func _run() -> void:
 	if not bool(audio_manager.call("is_muted")):
 		_fail("Pulsar mute en la habitación no silencia el audio general")
 		return
-	if not _expect_single_icon(room_button, MUTED_PATH):
-		_fail("La habitación no muestra únicamente mute tras silenciar")
+	if not _expect_single_button_icon(room_button, MUTED_PATH):
+		_fail("La habitación no cambia a mute sin superposiciones")
 		return
-	if not _expect_single_icon(menu_button, MUTED_PATH):
-		_fail("El menú no muestra únicamente mute al sincronizarse")
+	if not _expect_single_button_icon(menu_button, MUTED_PATH):
+		_fail("El menú no se sincroniza con el icono mute")
 		return
 
 	room_button.emit_signal("pressed")
@@ -59,31 +59,24 @@ func _run() -> void:
 	if bool(audio_manager.call("is_muted")):
 		_fail("Pulsar de nuevo el mute de habitación no reactiva el audio")
 		return
-	if not _expect_single_icon(room_button, SOUND_ON_PATH):
-		_fail("La habitación no vuelve a mostrar únicamente sound-on")
+	if not _expect_single_button_icon(room_button, SOUND_ON_PATH):
+		_fail("La habitación no vuelve a sound-on sin superposiciones")
 		return
-	if not _expect_single_icon(menu_button, SOUND_ON_PATH):
-		_fail("El menú no vuelve a mostrar únicamente sound-on")
+	if not _expect_single_button_icon(menu_button, SOUND_ON_PATH):
+		_fail("El menú no vuelve a sound-on")
 		return
 
-	print("V095 ROOM MUTE OK: un solo icono visible alterna sound-on/mute en habitación y menú.")
+	print("V095 ROOM MUTE OK: un único Button.icon alterna sound-on/mute sin capas superpuestas.")
 	quit(0)
 
 
-func _expect_single_icon(button: Button, expected_path: String) -> bool:
-	# No puede coexistir Button.icon con el TextureRect: eso fue lo que produjo
-	# visualmente dos símbolos superpuestos.
-	if button.icon != null:
+func _expect_single_button_icon(button: Button, expected_path: String) -> bool:
+	if button.icon == null or button.icon.resource_path != expected_path:
 		return false
-	var count := 0
-	var icon_view: TextureRect = null
 	for child in button.get_children():
-		if child.name == ICON_NODE_NAME:
-			count += 1
-			icon_view = child as TextureRect
-	if count != 1 or icon_view == null or icon_view.texture == null:
-		return false
-	return icon_view.texture.resource_path == expected_path
+		if child.name == LEGACY_ICON_NODE_NAME:
+			return false
+	return true
 
 
 func _fail(message: String) -> void:
