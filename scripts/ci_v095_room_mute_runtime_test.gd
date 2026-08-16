@@ -36,9 +36,11 @@ func _run() -> void:
 	manager.call("_refresh_master_ui")
 	await process_frame
 	if not _expect_single_button_icon(room_button, SOUND_ON_PATH):
+		_dump_button("ROOM ACTIVE", room_button)
 		_fail("La habitación no muestra únicamente sound-on cuando el audio está activo")
 		return
 	if not _expect_single_button_icon(menu_button, SOUND_ON_PATH):
+		_dump_button("MENU ACTIVE", menu_button)
 		_fail("El menú no muestra únicamente sound-on cuando el audio está activo")
 		return
 
@@ -48,9 +50,11 @@ func _run() -> void:
 		_fail("Pulsar mute en la habitación no silencia el audio general")
 		return
 	if not _expect_single_button_icon(room_button, MUTED_PATH):
+		_dump_button("ROOM MUTED", room_button)
 		_fail("La habitación no cambia a mute sin superposiciones")
 		return
 	if not _expect_single_button_icon(menu_button, MUTED_PATH):
+		_dump_button("MENU MUTED", menu_button)
 		_fail("El menú no se sincroniza con el icono mute")
 		return
 
@@ -60,9 +64,11 @@ func _run() -> void:
 		_fail("Pulsar de nuevo el mute de habitación no reactiva el audio")
 		return
 	if not _expect_single_button_icon(room_button, SOUND_ON_PATH):
+		_dump_button("ROOM UNMUTED", room_button)
 		_fail("La habitación no vuelve a sound-on sin superposiciones")
 		return
 	if not _expect_single_button_icon(menu_button, SOUND_ON_PATH):
+		_dump_button("MENU UNMUTED", menu_button)
 		_fail("El menú no vuelve a sound-on")
 		return
 
@@ -71,12 +77,29 @@ func _run() -> void:
 
 
 func _expect_single_button_icon(button: Button, expected_path: String) -> bool:
-	if button.icon == null or button.icon.resource_path != expected_path:
+	if button.icon == null:
+		return false
+	var expected := load(expected_path) as Texture2D
+	if expected == null:
+		return false
+	# Godot puede normalizar la ruta de SVG al importarlo; comparamos el RID de
+	# la textura cargada en vez de depender del resource_path textual.
+	if button.icon.get_rid() != expected.get_rid():
 		return false
 	for child in button.get_children():
 		if child.name == LEGACY_ICON_NODE_NAME:
 			return false
 	return true
+
+
+func _dump_button(prefix: String, button: Button) -> void:
+	var icon_path := "<null>" if button.icon == null else button.icon.resource_path
+	print("V095 DEBUG %s icon=%s children=%d" % [prefix, icon_path, button.get_child_count()])
+	for child in button.get_children():
+		var texture_path := ""
+		if child is TextureRect and (child as TextureRect).texture != null:
+			texture_path = (child as TextureRect).texture.resource_path
+		print("V095 DEBUG child name=%s type=%s texture=%s" % [child.name, child.get_class(), texture_path])
 
 
 func _fail(message: String) -> void:
