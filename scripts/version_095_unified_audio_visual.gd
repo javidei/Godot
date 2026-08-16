@@ -1,24 +1,16 @@
 extends "res://scripts/version_090_unified_audio_manager.gd"
 
-# Capa visual del mute: se dibuja un único TextureRect interno por botón.
-# Es importante NO llamar a super() en _refresh_master_ui(), porque la versión
-# anterior también asigna Button.icon y eso provoca dos iconos superpuestos.
-const MUTE_ICON_NODE_NAME := "MuteStateIcon090"
-const MUTE_ICON_INSET := 8.0
+# 0.9.6: cada botón de mute dibuja UN solo icono mediante Button.icon.
+# La capa TextureRect introducida en 0.9.5 podía coexistir con Button.icon y
+# provocar que sound-on y mute apareciesen superpuestos.
+const LEGACY_MUTE_ICON_NODE_NAME := "MuteStateIcon090"
 
 
 func _refresh_master_ui() -> void:
-	if _legacy_audio_contract() or audio_manager == null or main == null:
-		return
-	var percent := int(audio_manager.call("get_volume_percent"))
-	var muted := bool(audio_manager.call("is_muted"))
-
-	if master_menu_label != null:
-		master_menu_label.text = "Volumen · %d %%" % percent
-	if room_label != null:
-		room_label.text = "%d%%" % percent
-
-	_refresh_mute_visuals(muted)
+	# La implementación 0.9 ya selecciona correctamente sound-on.svg o mute.svg
+	# según el estado global y actualiza menú + habitación.
+	super()
+	_cleanup_legacy_mute_overlays()
 
 
 func _toggle_master_mute() -> void:
@@ -28,62 +20,46 @@ func _toggle_master_mute() -> void:
 	if audio_manager == null:
 		return
 	var muted := bool(audio_manager.call("toggle_mute"))
-	_refresh_mute_visuals(muted)
+	_apply_single_mute_icon(muted)
 	call_deferred("_refresh_master_ui")
 
 
-func _refresh_mute_visuals(muted: bool) -> void:
+func _apply_single_mute_icon(muted: bool) -> void:
 	if main == null:
 		return
-	var visited := {}
-	for candidate in [master_menu_mute, room_mute]:
-		var button := candidate as Button
-		if button != null and is_instance_valid(button):
-			_set_mute_button_visual(button, muted)
-			visited[button.get_instance_id()] = true
+	var icon := _mute_state_icon(muted)
 	for node in main.find_children("*Mute*", "Button", true, false):
 		var button := node as Button
-		if button == null or visited.has(button.get_instance_id()):
+		if button == null:
 			continue
-		_set_mute_button_visual(button, muted)
+		_remove_legacy_overlay(button)
+		button.icon = icon
+		button.expand_icon = true
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+		button.add_theme_constant_override("icon_max_width", MUTE_ICON_MAX_WIDTH)
+		if button.name == "MasterMute084":
+			button.custom_minimum_size = MENU_MUTE_MIN_SIZE
+			button.text = ""
+		elif button.name == "RoomMasterMute084":
+			button.custom_minimum_size = ROOM_MUTE_MIN_SIZE
+			button.text = ""
+		button.tooltip_text = "Activar todo el audio" if muted else "Silenciar todo el audio"
+		button.set_meta("audio_muted_visual", muted)
+		button.queue_redraw()
 
 
-func _set_mute_button_visual(button: Button, muted: bool) -> void:
-	# El Button no debe dibujar icono propio: toda la imagen la pinta el único
-	# TextureRect hijo. Así nunca pueden verse sound-on y mute a la vez.
-	button.icon = null
-	button.expand_icon = false
-	if button.name in ["MasterMute084", "RoomMasterMute084"]:
-		button.text = ""
-	button.tooltip_text = "Activar todo el audio" if muted else "Silenciar todo el audio"
-	button.set_meta("audio_muted_visual", muted)
+func _cleanup_legacy_mute_overlays() -> void:
+	if main == null:
+		return
+	for node in main.find_children("*Mute*", "Button", true, false):
+		var button := node as Button
+		if button != null:
+			_remove_legacy_overlay(button)
 
-	# Limpiar posibles duplicados creados por builds anteriores/deferred calls.
-	var icon_views: Array[Node] = []
+
+func _remove_legacy_overlay(button: Button) -> void:
 	for child in button.get_children():
-		if child.name == MUTE_ICON_NODE_NAME:
-			icon_views.append(child)
-	var icon_view: TextureRect = null
-	if not icon_views.is_empty():
-		icon_view = icon_views[0] as TextureRect
-		for index in range(1, icon_views.size()):
-			icon_views[index].queue_free()
-
-	if icon_view == null:
-		icon_view = TextureRect.new()
-		icon_view.name = MUTE_ICON_NODE_NAME
-		icon_view.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		icon_view.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		icon_view.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon_view.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-		button.add_child(icon_view)
-		icon_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		icon_view.offset_left = MUTE_ICON_INSET
-		icon_view.offset_top = MUTE_ICON_INSET
-		icon_view.offset_right = -MUTE_ICON_INSET
-		icon_view.offset_bottom = -MUTE_ICON_INSET
-
-	icon_view.texture = _mute_state_icon(muted)
-	icon_view.visible = true
-	icon_view.queue_redraw()
-	button.queue_redraw()
+		if child.name == LEGACY_MUTE_ICON_NODE_NAME:
+			button.remove_child(child)
+			child.queue_free()
