@@ -1,7 +1,5 @@
 extends SceneTree
 
-const SOUND_ON_PATH := "res://assets/ui/icons/sound-on.svg"
-const MUTED_PATH := "res://assets/ui/icons/mute.svg"
 const SOUND_NODE_NAME := "MuteSoundOn096"
 const MUTED_NODE_NAME := "MuteOff096"
 const LEGACY_NODE_NAME := "MuteStateIcon090"
@@ -38,6 +36,9 @@ func _run() -> void:
 	guard.call("refresh_now")
 	await process_frame
 	await process_frame
+	if guard.get("audio_manager") == null:
+		_fail("El guard no enlaza AudioManager después de inicializar Main")
+		return
 	if not _expect_state(room_button, false):
 		_dump("ROOM ACTIVE", room_button, audio_manager)
 		_fail("La habitación no muestra solo el icono de sonido cuando está activo")
