@@ -104,22 +104,25 @@ func _run() -> void:
 
 	var audio: Node = main.get("audio_manager") as Node
 	var audio_ui := main.get_node_or_null("Version040Manager")
-	if audio == null or audio_ui == null:
+	var audio_guard := main.get_node_or_null("Version096MuteVisualGuard")
+	if audio == null or audio_ui == null or audio_guard == null:
 		main.queue_free()
 		_fail("No se puede validar el audio 0.9")
 		return
 	if bool(audio.call("is_muted")):
 		audio.call("toggle_mute")
 	audio_ui.call("_refresh_master_ui")
-	if master_mute.icon == null or not master_mute.icon.resource_path.ends_with("sound-on.svg") or room_mute.icon == null or not room_mute.icon.resource_path.ends_with("sound-on.svg"):
+	audio_guard.call("refresh_now")
+	if not _audio_visual_matches(master_mute, false) or not _audio_visual_matches(room_mute, false):
 		main.queue_free()
-		_fail("El estado de audio activo no usa sound-on.svg")
+		_fail("El estado de audio activo no usa exclusivamente sound-on.svg")
 		return
 	audio.call("toggle_mute")
 	audio_ui.call("_refresh_master_ui")
-	if master_mute.icon == null or not master_mute.icon.resource_path.ends_with("mute.svg") or room_mute.icon == null or not room_mute.icon.resource_path.ends_with("mute.svg"):
+	audio_guard.call("refresh_now")
+	if not _audio_visual_matches(master_mute, true) or not _audio_visual_matches(room_mute, true):
 		main.queue_free()
-		_fail("El estado silenciado no usa mute.svg")
+		_fail("El estado silenciado no usa exclusivamente mute.svg")
 		return
 	audio.call("toggle_mute")
 
@@ -159,6 +162,22 @@ func _run() -> void:
 	main.queue_free()
 	print("V090 STORY ROSTER OK: diálogos por día, una pregunta, roster, título, cambio manual de día, mute dual y monitores del día 3 validados.")
 	quit(0)
+
+
+func _audio_visual_matches(button: Button, muted: bool) -> bool:
+	if button == null or button.icon != null:
+		return false
+	var sound_on := button.get_node_or_null("MuteSoundOn096") as TextureRect
+	var mute_off := button.get_node_or_null("MuteOff096") as TextureRect
+	if sound_on == null or mute_off == null or sound_on.texture == null or mute_off.texture == null:
+		return false
+	if not sound_on.texture.resource_path.ends_with("sound-on.svg"):
+		return false
+	if not mute_off.texture.resource_path.ends_with("mute.svg"):
+		return false
+	if sound_on.visible != (not muted) or mute_off.visible != muted:
+		return false
+	return bool(button.get_meta("audio_muted_visual", not muted)) == muted
 
 
 func _fail(message: String) -> void:
