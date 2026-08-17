@@ -3,9 +3,22 @@ extends "res://scripts/version_080_visit_transitions.gd"
 const DataStory098 = preload("res://scripts/story.gd")
 const DataAccess098 = preload("res://scripts/data_access.gd")
 
+var _javi_visit_prepared := false
+
 
 func begin_character_visit(character_id: String) -> void:
 	if character_id == "javi" and not transition_active:
+		_prepare_random_javi_visit()
+		_javi_visit_prepared = true
+	super(character_id)
+	_javi_visit_prepared = false
+
+
+func _on_visit_selected(character_id: String) -> void:
+	# El mapa actual entra por begin_character_visit(), mientras que algunos
+	# selectores heredados llaman directamente a _on_visit_selected(). Cubrimos
+	# ambos caminos sin volver a sortear dos veces en la misma entrada.
+	if character_id == "javi" and not transition_active and not _javi_visit_prepared:
 		_prepare_random_javi_visit()
 	super(character_id)
 
