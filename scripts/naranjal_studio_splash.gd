@@ -1,7 +1,13 @@
 extends Control
 
+signal fullscreen_confirmed
+
 const MAIN_SCENE := preload("res://scenes/main.tscn")
 const LOGO_TEXTURE := preload("res://assets/ui/naranjal-studio-logo.png")
+const DEJAVU_SERIF_BOLD := preload("res://assets/ui/fonts/DejaVuSerif-Bold.ttf")
+
+const FULLSCREEN_TEXT := "PULSA PARA ACTIVAR LA PANTALLA COMPLETA\n\nESTE JUEGO SE DISFRUTA MEJOR ASÍ"
+const PORTUGAL_NOTICE := "En este juego no se realizará mención alguna a los hechos acontecidos en Portugal, ya que es un tema bastante gastado."
 
 const SHINE_SHADER := """
 shader_type canvas_item;
@@ -22,6 +28,9 @@ void fragment() {
 const LOGO_HOLD_SECONDS := 2.65
 const MENU_READY_MAX_FRAMES := 120
 const MENU_REVEAL_SECONDS := 0.35
+const DISCLAIMER_FADE_IN_SECONDS := 1.65
+const DISCLAIMER_HOLD_SECONDS := 4.4
+const DISCLAIMER_FADE_OUT_SECONDS := 1.85
 
 var splash_background: ColorRect
 var logo: TextureRect
@@ -29,17 +38,50 @@ var fade_overlay: ColorRect
 var logo_material: ShaderMaterial
 var prepared_main: Control
 
+var fullscreen_prompt: Control
+var fullscreen_message: Label
+var portugal_screen: Control
+var startup_phase := ""
+var fullscreen_request_consumed := false
+
 
 func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
     z_index = 100
     _build_splash()
+    _build_fullscreen_prompt()
+    _build_portugal_screen()
     await get_tree().process_frame
+    await _run_fullscreen_prompt()
+    await _run_portugal_notice()
     await _play_opening()
     await _prepare_main_scene()
     await get_tree().create_timer(LOGO_HOLD_SECONDS).timeout
     await _fade_to_black()
     await _reveal_prepared_main()
+
+
+func _input(event: InputEvent) -> void:
+    if startup_phase != "fullscreen" or fullscreen_request_consumed:
+        return
+
+    var confirmed := false
+    if event is InputEventMouseButton:
+        confirmed = event.pressed and event.button_index == MOUSE_BUTTON_LEFT
+    elif event is InputEventScreenTouch:
+        confirmed = event.pressed
+    elif event is InputEventKey:
+        confirmed = event.pressed and not event.echo
+    elif event is InputEventJoypadButton:
+        confirmed = event.pressed
+
+    if not confirmed:
+        return
+
+    fullscreen_request_consumed = true
+    _request_fullscreen()
+    fullscreen_confirmed.emit()
+    get_viewport().set_input_as_handled()
 
 
 func _build_splash() -> void:
@@ -84,7 +126,172 @@ func _build_splash() -> void:
     add_child(fade_overlay)
 
 
+func _build_fullscreen_prompt() -> void:
+    fullscreen_prompt = Control.new()
+    fullscreen_prompt.name = "FullscreenPrompt092"
+    fullscreen_prompt.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    fullscreen_prompt.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    fullscreen_prompt.z_index = 20
+    add_child(fullscreen_prompt)
+
+    fullscreen_message = Label.new()
+    fullscreen_message.name = "FullscreenPromptText092"
+    fullscreen_message.anchor_left = 0.08
+    fullscreen_message.anchor_top = 0.30
+    fullscreen_message.anchor_right = 0.92
+    fullscreen_message.anchor_bottom = 0.70
+    fullscreen_message.offset_left = 0.0
+    fullscreen_message.offset_top = 0.0
+    fullscreen_message.offset_right = 0.0
+    fullscreen_message.offset_bottom = 0.0
+    fullscreen_message.text = FULLSCREEN_TEXT
+    fullscreen_message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    fullscreen_message.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+    fullscreen_message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    fullscreen_message.add_theme_font_override("font", _system_font(PackedStringArray(["Courier New", "Liberation Mono", "DejaVu Sans Mono"])))
+    fullscreen_message.add_theme_font_size_override("font_size", 25)
+    fullscreen_message.add_theme_color_override("font_color", Color("a6a2ff"))
+    fullscreen_message.add_theme_color_override("font_outline_color", Color(0.05, 0.04, 0.10, 0.95))
+    fullscreen_message.add_theme_constant_override("outline_size", 4)
+    fullscreen_message.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    fullscreen_prompt.add_child(fullscreen_message)
+
+    var hint := Label.new()
+    hint.name = "FullscreenPromptHint092"
+    hint.anchor_left = 0.12
+    hint.anchor_top = 0.72
+    hint.anchor_right = 0.88
+    hint.anchor_bottom = 0.82
+    hint.text = "CLIC · TOQUE · TECLA · MANDO"
+    hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+    hint.add_theme_font_override("font", _system_font(PackedStringArray(["Courier New", "Liberation Mono", "DejaVu Sans Mono"])))
+    hint.add_theme_font_size_override("font_size", 14)
+    hint.add_theme_color_override("font_color", Color(0.58, 0.56, 0.86, 0.82))
+    hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    fullscreen_prompt.add_child(hint)
+
+
+func _build_portugal_screen() -> void:
+    portugal_screen = Control.new()
+    portugal_screen.name = "PortugalDisclaimer092"
+    portugal_screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    portugal_screen.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    portugal_screen.z_index = 20
+    portugal_screen.visible = false
+    portugal_screen.modulate.a = 0.0
+    add_child(portugal_screen)
+
+    var content := VBoxContainer.new()
+    content.name = "PortugalFontComparison092"
+    content.anchor_left = 0.075
+    content.anchor_top = 0.075
+    content.anchor_right = 0.925
+    content.anchor_bottom = 0.925
+    content.offset_left = 0.0
+    content.offset_top = 0.0
+    content.offset_right = 0.0
+    content.offset_bottom = 0.0
+    content.alignment = BoxContainer.ALIGNMENT_CENTER
+    content.add_theme_constant_override("separation", 24)
+    content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    portugal_screen.add_child(content)
+
+    _add_notice_sample(content, DEJAVU_SERIF_BOLD, "DejaVu Serif Bold", 21)
+    _add_notice_sample(content, _system_font(PackedStringArray(["Georgia", "Times New Roman", "serif"])), "Georgia", 21)
+    _add_notice_sample(content, _system_font(PackedStringArray(["Courier New", "Liberation Mono", "DejaVu Sans Mono"])), "Courier New", 20)
+
+
+func _add_notice_sample(parent: VBoxContainer, font: Font, font_name: String, font_size: int) -> void:
+    var block := VBoxContainer.new()
+    block.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    block.add_theme_constant_override("separation", 5)
+    block.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    parent.add_child(block)
+
+    var paragraph := Label.new()
+    paragraph.text = PORTUGAL_NOTICE
+    paragraph.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    paragraph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    paragraph.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    paragraph.add_theme_font_override("font", font)
+    paragraph.add_theme_font_size_override("font_size", font_size)
+    paragraph.add_theme_color_override("font_color", Color("eee9e1"))
+    paragraph.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    block.add_child(paragraph)
+
+    var font_label := Label.new()
+    font_label.text = "Fuente: " + font_name
+    font_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    font_label.add_theme_font_override("font", _system_font(PackedStringArray(["Arial", "Helvetica", "sans-serif"])))
+    font_label.add_theme_font_size_override("font_size", 12)
+    font_label.add_theme_color_override("font_color", Color(0.58, 0.56, 0.53, 0.88))
+    font_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    block.add_child(font_label)
+
+
+func _system_font(names: PackedStringArray) -> Font:
+    var font := SystemFont.new()
+    font.font_names = names
+    return font
+
+
+func _run_fullscreen_prompt() -> void:
+    startup_phase = "fullscreen"
+    fullscreen_request_consumed = false
+    fullscreen_prompt.visible = true
+    fullscreen_prompt.modulate.a = 1.0
+    fullscreen_message.modulate.a = 1.0
+
+    var blink := create_tween()
+    blink.set_loops()
+    blink.set_trans(Tween.TRANS_SINE)
+    blink.set_ease(Tween.EASE_IN_OUT)
+    blink.tween_property(fullscreen_message, "modulate:a", 0.22, 0.58)
+    blink.tween_property(fullscreen_message, "modulate:a", 1.0, 0.58)
+
+    await fullscreen_confirmed
+    startup_phase = ""
+    blink.kill()
+    fullscreen_message.modulate.a = 1.0
+
+    var fade := create_tween()
+    fade.set_trans(Tween.TRANS_SINE)
+    fade.set_ease(Tween.EASE_IN_OUT)
+    fade.tween_property(fullscreen_prompt, "modulate:a", 0.0, 0.38)
+    await fade.finished
+    fullscreen_prompt.visible = false
+    await get_tree().create_timer(0.25).timeout
+
+
+func _request_fullscreen() -> void:
+    var mode := DisplayServer.window_get_mode()
+    if mode == DisplayServer.WINDOW_MODE_FULLSCREEN or mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+        return
+    DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+
+
+func _run_portugal_notice() -> void:
+    portugal_screen.visible = true
+    portugal_screen.modulate.a = 0.0
+
+    var tween := create_tween()
+    tween.set_trans(Tween.TRANS_SINE)
+    tween.set_ease(Tween.EASE_IN_OUT)
+    tween.tween_property(portugal_screen, "modulate:a", 1.0, DISCLAIMER_FADE_IN_SECONDS)
+    tween.tween_interval(DISCLAIMER_HOLD_SECONDS)
+    tween.tween_property(portugal_screen, "modulate:a", 0.0, DISCLAIMER_FADE_OUT_SECONDS)
+    await tween.finished
+
+    portugal_screen.visible = false
+    await get_tree().create_timer(0.35).timeout
+
+
 func _play_opening() -> void:
+    logo.visible = true
+    splash_background.visible = true
+    _set_fade_alpha(1.0)
+
     var tween := create_tween()
     tween.set_trans(Tween.TRANS_SINE)
     tween.set_ease(Tween.EASE_IN_OUT)
