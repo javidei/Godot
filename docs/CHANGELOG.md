@@ -12,6 +12,28 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.11] - 2026-08-17
+
+### Added
+
+- La apariencia alternativa `jony_alternativo.png` queda registrada para Jony con el nombre **Adam Driver**.
+
+### Changed
+
+- La pestaña activa de las fichas de personaje se conserva al navegar con **Anterior** y **Siguiente**: Ficha, Cosméticos o Apariencia permanecen seleccionadas al pasar a otro personaje.
+- Las tarjetas de Apariencia son ahora completamente clicables; desaparece el botón interior de selección y la apariencia activa se identifica visualmente con borde destacado y estado `EN USO`.
+- Las tarjetas de Apariencia se compactan y distribuyen en más columnas para que, en escritorio, no sea necesario hacer scroll mientras haya menos de cinco apariencias.
+
+### Fixed
+
+- Las franjas oscuras con los nombres en el listado de Personajes comienzan debajo de la ilustración y dejan de tapar la parte inferior del personaje.
+
+## [0.9.10] - 2026-08-17
+
+### Fixed
+
+- Eliminado el destello de unas milésimas del logo de Naranjal Studio al terminar el splash: una vez alcanzado el negro total, el logo se oculta y el menú se revela desvaneciendo únicamente la capa negra.
+
 ## [0.9.9] - 2026-08-17
 
 ### Added
