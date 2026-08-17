@@ -4,14 +4,14 @@
 ;
 ; Format:
 ;   [section] ; section between []
-;   param=value ; assigning values to them.
+;   param=value assigning values to them.
 
 config_version=5
 
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.9.11"
+config/version="0.9.12"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
