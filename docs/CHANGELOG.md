@@ -12,6 +12,18 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.7] - 2026-08-17
+
+### Added
+
+- Pool de 16 preguntas de combate verbal para Javi, inspirado en los duelos de insultos piratas y adaptado a un tono andaluz suave y natural.
+
+### Changed
+
+- Javi mantiene una sola pregunta por jornada en los tres días actuales, pero cada partida selecciona sus preguntas desde el nuevo pool mediante una semilla aleatoria persistente.
+- Los días 1, 2 y 3 avanzan cinco posiciones dentro del pool, evitando repetir la misma pregunta de Javi durante esos tres días de una misma partida.
+- La semilla se guarda en el slot y se restaura antes de reconstruir el diálogo, por lo que cargar una partida conserva las preguntas que le correspondían; los guardados antiguos reciben una semilla al continuar por primera vez.
+
 ## [0.8.1] - 2026-08-15
 
 ### Added
