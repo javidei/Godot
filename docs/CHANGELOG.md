@@ -12,6 +12,19 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.12] - 2026-08-17
+
+### Added
+
+- Nuevo preludio antes del logo de Naranjal Studio con pantalla negra y mensaje parpadeante de estilo Commodore que recomienda jugar a pantalla completa.
+- La primera interacción por clic, toque, teclado o mando solicita el modo de pantalla completa antes de continuar el arranque.
+- Segunda pantalla negra con el aviso sobre los hechos acontecidos en Portugal mostrado simultáneamente en tres propuestas tipográficas: **DejaVu Serif Bold**, **Georgia** y **Courier New**, identificadas en pantalla para poder escoger una más adelante.
+
+### Changed
+
+- El aviso de Portugal entra y sale mediante fundidos lentos y automáticos para darle un tono más dramático antes de iniciar el splash de Naranjal Studio.
+- El logo de Naranjal conserva su animación y transición posterior al menú una vez finalizado el nuevo preludio.
+
 ## [0.9.11] - 2026-08-17
 
 ### Added
