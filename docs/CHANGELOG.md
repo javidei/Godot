@@ -22,7 +22,7 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 - Cada entrada en la habitación de Javi vuelve a elegir aleatoriamente una de las 16 preguntas del pool, en lugar de fijar la secuencia únicamente al crear la partida.
 - Las revisitas evitan repetir inmediatamente el mismo insulto cuando existen alternativas, manteniendo una sola pregunta durante toda la estancia actual.
-- La semilla guardada sigue permitiendo reanudar una conversación de Javi ya empezada sin cambiar el insulto a mitad de la visita; el siguiente acceso a su habitación vuelve a sortearlo.
+- Entrar de nuevo en la habitación de Javi reinicia su minijuego desde la introducción, descarta el checkpoint parcial de Javi y sortea un insulto nuevo antes de mostrar el aviso.
 
 ## [0.9.7] - 2026-08-17
 
