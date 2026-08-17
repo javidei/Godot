@@ -12,6 +12,19 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.13] - 2026-08-17
+
+### Changed
+
+- Las tarjetas de Apariencia reservan espacio vertical según la altura real de la ventana y eliminan el texto auxiliar inferior redundante, evitando que el contenido quede cortado en determinadas resoluciones.
+- La apariencia seleccionada se identifica mediante una insignia flotante **EN USO** dentro de la propia tarjeta, manteniendo toda la tarjeta como superficie de selección.
+- La franja oscura de nombre en `Extras → Personajes` se reduce a una etiqueta inferior de aproximadamente el 14,5 % de la tarjeta, con menor opacidad y tipografía más compacta.
+
+### Fixed
+
+- Corregido el recorte del texto inferior en las tarjetas de Apariencia cuando el alto disponible era insuficiente.
+- Corregido el bloque negro excesivamente alto del listado de Personajes, que ocupaba demasiado espacio visual bajo las ilustraciones.
+
 ## [0.9.12] - 2026-08-17
 
 ### Added
