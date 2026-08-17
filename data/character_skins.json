@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "characters": {
+    "javi": [
+      {
+        "id": "lapalanca",
+        "name": "La Palanca",
+        "description": "Camiseta Naranjal, gorra, gafas negras y pantalón cargo de camuflaje.",
+        "asset": "res://assets/characters/javi/skins/javi-lapalanca.png"
+      }
+    ],
+    "jony": [
+      {
+        "id": "lapalanca",
+        "name": "La Palanca",
+        "description": "Sudadera oscura, pasamontañas y paraguas plegado.",
+        "asset": "res://assets/characters/jony/skins/jony-lapalanca.png"
+      }
+    ],
+    "smokey": [
+      {
+        "id": "lapalanca",
+        "name": "La Palanca",
+        "description": "Bandana roja, camiseta roja y los libros del Instituto del GPS.",
+        "asset": "res://assets/characters/smokey/skins/smokey-lapalanca.png"
+      }
+    ],
+    "ana": [
+      {
+        "id": "apariencia_2",
+        "name": "Apariencia 2",
+        "description": "Variante gótica con coletas, mechones blancos y conjunto negro.",
+        "asset": "res://assets/characters/ana/skins/ana-2.png"
+      }
+    ]
+  }
+}
