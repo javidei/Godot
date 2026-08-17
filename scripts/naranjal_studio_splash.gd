@@ -23,6 +23,7 @@ const LOGO_HOLD_SECONDS := 2.65
 const MENU_READY_MAX_FRAMES := 120
 const MENU_REVEAL_SECONDS := 0.35
 
+var splash_background: ColorRect
 var logo: TextureRect
 var fade_overlay: ColorRect
 var logo_material: ShaderMaterial
@@ -42,12 +43,12 @@ func _ready() -> void:
 
 
 func _build_splash() -> void:
-    var background := ColorRect.new()
-    background.name = "SplashBackground"
-    background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    background.color = Color.BLACK
-    background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    add_child(background)
+    splash_background = ColorRect.new()
+    splash_background.name = "SplashBackground"
+    splash_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    splash_background.color = Color.BLACK
+    splash_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    add_child(splash_background)
 
     logo = TextureRect.new()
     logo.name = "NaranjalStudioLogo"
@@ -138,6 +139,14 @@ func _reveal_prepared_main() -> void:
         get_tree().change_scene_to_packed(MAIN_SCENE)
         return
 
+    # Ya estamos completamente a negro. A partir de este punto el logo no debe
+    # volver a participar en el render: si se desvanece el Control completo,
+    # la capa negra se hace translúcida y deja ver el logo durante unos frames.
+    if logo != null:
+        logo.visible = false
+    if splash_background != null:
+        splash_background.visible = false
+
     prepared_main.visible = true
     prepared_main.z_index = -100
     if prepared_main.has_method("_sync_menu_music_scope"):
@@ -145,10 +154,12 @@ func _reveal_prepared_main() -> void:
     await get_tree().process_frame
     await get_tree().process_frame
 
+    # Revelar el menú desvaneciendo únicamente la capa negra. El logo ya está
+    # oculto, por lo que no puede reaparecer durante la transición.
     var tween := create_tween()
     tween.set_trans(Tween.TRANS_SINE)
     tween.set_ease(Tween.EASE_IN_OUT)
-    tween.tween_property(self, "modulate:a", 0.0, MENU_REVEAL_SECONDS)
+    tween.tween_method(Callable(self, "_set_fade_alpha"), 1.0, 0.0, MENU_REVEAL_SECONDS)
     await tween.finished
 
     prepared_main.z_index = 0
