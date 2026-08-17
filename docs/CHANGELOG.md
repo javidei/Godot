@@ -12,6 +12,22 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.9] - 2026-08-17
+
+### Added
+
+- Sistema global de **Apariencias** por personaje, separado de los cosméticos comprables de la tienda.
+- Nueva pestaña **Apariencia** dentro de `Extras → Personajes → ficha del personaje`, con previsualización y selección del aspecto activo.
+- Registro data-driven `data/character_skins.json` para asociar skins a cada personaje sin tocar su lógica narrativa.
+- Primeras asociaciones preparadas para Javi (`javi-lapalanca`), Jony (`jony-lapalanca`), Smokey (`smokey-lapalanca`) y Ana (`ana(2)`).
+
+### Changed
+
+- Todas las apariencias registradas en esta pestaña están disponibles desde el principio: no cuestan MONEDAS ni requieren desbloqueo.
+- La apariencia elegida se guarda en el perfil global y puede cambiarse en cualquier momento desde Extras, afectando a partidas actuales y futuras.
+- El aspecto original permanece siempre como opción y conserva el sistema de poses y expresiones existente.
+- Una skin alternativa sustituye la ilustración completa del personaje mientras está seleccionada, sin alterar preguntas, afinidad, habitación o progreso.
+
 ## [0.9.8] - 2026-08-17
 
 ### Added
