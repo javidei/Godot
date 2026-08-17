@@ -15,6 +15,12 @@
         "name": "La Palanca",
         "description": "Sudadera oscura, pasamontañas y paraguas plegado.",
         "asset": "res://assets/characters/jony/skins/jony-lapalanca.png"
+      },
+      {
+        "id": "adam_driver",
+        "name": "Adam Driver",
+        "description": "Apariencia alternativa inspirada en el actor Adam Driver.",
+        "asset": "res://assets/characters/jony/skins/jony_alternativo.png"
       }
     ],
     "smokey": [
