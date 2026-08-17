@@ -12,6 +12,18 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.8] - 2026-08-17
+
+### Added
+
+- Antes de la pregunta de Javi se avisa explícitamente de que comienza un juego de insultos piratas y que las réplicas forman parte del juego.
+
+### Changed
+
+- Cada entrada en la habitación de Javi vuelve a elegir aleatoriamente una de las 16 preguntas del pool, en lugar de fijar la secuencia únicamente al crear la partida.
+- Las revisitas evitan repetir inmediatamente el mismo insulto cuando existen alternativas, manteniendo una sola pregunta durante toda la estancia actual.
+- La semilla guardada sigue permitiendo reanudar una conversación de Javi ya empezada sin cambiar el insulto a mitad de la visita; el siguiente acceso a su habitación vuelve a sortearlo.
+
 ## [0.9.7] - 2026-08-17
 
 ### Added
