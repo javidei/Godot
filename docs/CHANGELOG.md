@@ -12,6 +12,14 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.26] - 2026-08-18
+
+### Changed
+
+- Retirado del aviso de Portugal el experimento visual de créditos analógicos y la comparativa de diez presets.
+- El aviso vuelve a mostrarse una sola vez con **Monocraft**, sin jitter, vibración, aberración cromática, grano, halation, flicker ni shader.
+- Se conserva el flujo y los tiempos del preludio 0.9.22, incluido el enlace en negro hacia **El reencuentro** para evitar destellos del mapa.
+
 ## [0.9.25] - 2026-08-18
 
 ### Added
