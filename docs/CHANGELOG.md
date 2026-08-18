@@ -12,6 +12,13 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.28] - 2026-08-18
+
+### Fixed
+
+- Eliminado el fallback heredado de Javi que todavía podía reconstruir el aviso «esto es un juego de insultos piratas» en el Día 3.
+- La introducción narrativa del duelo se vuelve a instalar explícitamente después de cada reconstrucción de `Story`, garantizando que la primera frase sea «Hace muchos años, un joven llegó a una isla con un sueño.» y que termine en «Allí las peleas se ganaban de otra forma.» antes del primer insulto.
+
 ## [0.9.27] - 2026-08-18
 
 ### Added
@@ -457,7 +464,6 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 - Alineadas las cuatro esquinas del vídeo con la misma máscara usada para preparar el fondo, evitando diferencias entre el área editada y la superficie proyectada.
 
 ## [0.5.7]
-
 ### Changed
 
 - El vídeo de la habitación de Javi utiliza ahora una homografía calculada desde sus cuatro esquinas para reproducir la perspectiva real del plano.
