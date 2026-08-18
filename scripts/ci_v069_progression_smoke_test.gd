@@ -13,7 +13,10 @@ func _initialize() -> void:
 
 # Desde 0.7 Nueva partida ya no inicia el prólogo de forma inmediata: primero
 # abre el selector de slots y, tras elegir uno vacío, CharacterSelectManager
-# lanza exactamente la misma introducción de 2026. Validamos ambos contratos.
+# lanza exactamente la misma introducción de 2026. Desde 0.9.16 existe además
+# un preludio cinematográfico Portugal -> Naranjal antes de esa frase. En CI lo
+# adelantamos sin esperar sus ~14 segundos para seguir validando el contrato
+# importante: la frase de 2026 no puede avanzar hasta que el jugador interactúa.
 func _validate_new_game_intro(main: Control, transitions: Node) -> bool:
 	var new_game := _find_button_with_text(main, "Nueva partida")
 	var continue_game := _find_button_with_text(main, "Continuar")
@@ -30,6 +33,21 @@ func _validate_new_game_intro(main: Control, transitions: Node) -> bool:
 	intro_callback_called = false
 	transitions.call("set_fast_mode", false)
 	transitions.call("play_new_game_intro", Callable(self, "_on_intro_finished"))
+	await process_frame
+
+	# El preludio 0.9.17 usa temporizadores reales de varios segundos. Esperarlo
+	# dentro de un smoke headless convertiría un test de interacción en un test de
+	# duración. Confirmamos que existe y que todavía no ha disparado el callback,
+	# y emitimos su final únicamente dentro de este proceso de CI.
+	var cinematic := main.get_node_or_null("NewGamePrelude0917")
+	if cinematic != null:
+		if intro_callback_called:
+			_fail("El preludio de nueva partida completa el flujo antes de terminar")
+			return false
+		cinematic.emit_signal("prelude_finished")
+		cinematic.queue_free()
+		await process_frame
+
 	var waited := 0
 	while not bool(transitions.get("waiting_for_continue")) and waited < 180:
 		await process_frame
