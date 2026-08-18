@@ -12,6 +12,19 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.23] - 2026-08-18
+
+### Added
+
+- Nuevo sistema reutilizable de créditos con estética de película de 35 mm: shader independiente para grano, aberración cromática, soft focus, halation, flicker, color bleed, polvo, arañazos y variación de exposición.
+- Controlador separado para gate weave/jitter, rotación y variación mínima de escala mediante movimientos pseudoaleatorios suaves.
+- Preset `subtle_35mm_titles` guardado en `data/film_credit_presets.json`, con parámetros editables y activación individual de cada efecto.
+- Documentación de reutilización en `docs/FILM_CREDIT_TEXT_EFFECT.md`.
+
+### Changed
+
+- El aviso de Portugal usa el nuevo preset analógico sobre la fuente local Monocraft, manteniendo efectos deliberadamente sutiles y legibles.
+
 ## [0.9.17] - 2026-08-18
 
 ### Fixed
