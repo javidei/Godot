@@ -11,12 +11,9 @@ func _initialize() -> void:
 	super()
 
 
-# Desde 0.7 Nueva partida ya no inicia el prólogo de forma inmediata: primero
-# abre el selector de slots y, tras elegir uno vacío, CharacterSelectManager
-# lanza exactamente la misma introducción de 2026. Desde 0.9.16 existe además
-# un preludio cinematográfico Portugal -> Naranjal antes de esa frase. En CI lo
-# adelantamos sin esperar sus ~14 segundos para seguir validando el contrato
-# importante: la frase de 2026 no puede avanzar hasta que el jugador interactúa.
+# Desde 0.9.19 el flujo es: slot -> selección de protagonista -> Portugal ->
+# Naranjal Studio -> partida. Ya no existe la pantalla intermedia de 2026.
+# El test comprueba el orden sin esperar los temporizadores cinematográficos.
 func _validate_new_game_intro(main: Control, transitions: Node) -> bool:
 	var new_game := _find_button_with_text(main, "Nueva partida")
 	var continue_game := _find_button_with_text(main, "Continuar")
@@ -27,57 +24,69 @@ func _validate_new_game_intro(main: Control, transitions: Node) -> bool:
 		_fail("Continuar no está enlazado al último slot utilizado")
 		return false
 	if _button_has_callback(new_game, "_begin_new_game") or _button_has_callback(continue_game, "_begin_new_game"):
-		_fail("El menú salta el selector de slots o reproduce el prólogo al continuar")
+		_fail("El menú salta el selector de slots o reproduce el preludio al continuar")
 		return false
 
+	var character_select := main.get_node_or_null("CharacterSelectManager")
+	if character_select == null:
+		_fail("No está disponible el selector de protagonista")
+		return false
+
+	var menu_screen := main.get("menu_screen") as Control
+	var game_screen := main.get("game_screen") as Control
+	var ending_screen := main.get("ending_screen") as Control
+	var menu_was_visible := menu_screen != null and menu_screen.visible
+	var game_was_visible := game_screen != null and game_screen.visible
+	var ending_was_visible := ending_screen != null and ending_screen.visible
+
+	character_select.call("_begin_new_game")
+	await process_frame
+	var flow_screen := character_select.get("flow_screen") as Control
+	if flow_screen == null or not flow_screen.visible:
+		_fail("Nueva partida no abre la selección de protagonista antes del preludio")
+		return false
+	if main.get_node_or_null("NewGamePrelude0917") != null:
+		_fail("Portugal/Naranjal aparece antes de elegir protagonista")
+		return false
+	if not bool(character_select.get("_pending_new_game_prelude_0919")):
+		_fail("La selección no deja preparado el preludio posterior al protagonista")
+		return false
+
+	# Validamos el preludio de forma aislada y adelantamos su final solo en CI.
 	intro_callback_called = false
 	transitions.call("set_fast_mode", false)
 	transitions.call("play_new_game_intro", Callable(self, "_on_intro_finished"))
 	await process_frame
-
-	# El preludio 0.9.17 usa temporizadores reales de varios segundos. Esperarlo
-	# dentro de un smoke headless convertiría un test de interacción en un test de
-	# duración. Confirmamos que existe y que todavía no ha disparado el callback,
-	# y emitimos su final únicamente dentro de este proceso de CI.
 	var cinematic := main.get_node_or_null("NewGamePrelude0917")
-	if cinematic != null:
-		if intro_callback_called:
-			_fail("El preludio de nueva partida completa el flujo antes de terminar")
-			return false
-		cinematic.emit_signal("prelude_finished")
-		cinematic.queue_free()
-		await process_frame
-
-	var waited := 0
-	while not bool(transitions.get("waiting_for_continue")) and waited < 180:
-		await process_frame
-		waited += 1
-	var name_label: Variant = transitions.get("name_label")
-	var message_label: Variant = transitions.get("message_label")
-	if intro_callback_called or not bool(transitions.get("waiting_for_continue")):
-		_fail("La introducción de nueva partida avanza sin interacción")
+	if cinematic == null:
+		_fail("No se crea el preludio Portugal/Naranjal")
 		return false
-	if name_label == null or message_label == null or name_label.visible or not str(name_label.text).is_empty() or str(message_label.text) != "Los hechos acontecieron desde 2026.":
-		_fail("La introducción repite 2026 o no conserva la frase requerida")
+	if intro_callback_called:
+		_fail("El preludio termina antes de reproducirse")
 		return false
-	var click := InputEventMouseButton.new()
-	click.button_index = MOUSE_BUTTON_LEFT
-	click.pressed = true
-	transitions.call("_on_transition_input", click)
-	waited = 0
-	while not intro_callback_called and waited < 180:
-		await process_frame
-		waited += 1
+	cinematic.emit_signal("prelude_finished")
+	cinematic.queue_free()
+	await process_frame
+	await process_frame
 	if not intro_callback_called:
-		_fail("Un clic no permite continuar la introducción")
+		_fail("El preludio no entrega el control al terminar")
 		return false
-	waited = 0
-	while bool(transitions.get("transition_active")) and waited < 180:
-		await process_frame
-		waited += 1
-	if bool(transitions.get("transition_active")):
-		_fail("La capa negra no termina de cerrarse después del clic")
+	if bool(transitions.get("waiting_for_continue")) or bool(transitions.get("transition_active")):
+		_fail("Sigue existiendo una transición interactiva después del logo de Naranjal")
 		return false
+	var message_label: Variant = transitions.get("message_label")
+	if message_label != null and str(message_label.text) == "Los hechos acontecieron desde 2026.":
+		_fail("La pantalla de 2026 sigue presente")
+		return false
+
+	# Restauramos la visibilidad previa para no interferir con el resto del smoke.
+	flow_screen.visible = false
+	if menu_screen != null:
+		menu_screen.visible = menu_was_visible
+	if game_screen != null:
+		game_screen.visible = game_was_visible
+	if ending_screen != null:
+		ending_screen.visible = ending_was_visible
 	return true
 
 
