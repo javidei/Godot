@@ -6,7 +6,7 @@ uniform float grain_intensity : hint_range(0.0, 0.20) = 0.024;
 uniform float grain_fps : hint_range(1.0, 60.0) = 18.0;
 
 uniform bool chromatic_aberration_enabled = true;
-uniform float chromatic_aberration_px : hint_range(0.0, 3.0) = 0.85;
+uniform float chromatic_aberration_px : hint_range(0.0, 8.0) = 0.85;
 
 uniform bool soft_focus_enabled = true;
 uniform float soft_focus_amount : hint_range(0.0, 1.0) = 0.14;
