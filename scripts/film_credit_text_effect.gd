@@ -1,7 +1,7 @@
 class_name FilmCreditTextEffect
 extends Node
 
-const PRESET_PATH := "res://data/film_credit_presets.json"
+const PRESET_PATH := "res://data/film_credit_presets_compare_0925.json"
 const FILM_SHADER := preload("res://assets/shaders/film_credit_35mm.gdshader")
 
 var _target: CanvasItem
@@ -48,26 +48,59 @@ func _ready() -> void:
     _capture_base_transform()
 
 
+# Desde 0.9.25 los presets de comparación pueden contener solo diferencias.
+# Siempre partimos del fallback, aplicamos el preset por defecto y finalmente
+# los overrides del preset solicitado.
 func _load_preset(requested_name: String) -> Dictionary:
-    var fallback := _fallback_preset()
+    var result := _fallback_preset()
     if not FileAccess.file_exists(PRESET_PATH):
-        return fallback
+        return result
+
     var raw := FileAccess.get_file_as_string(PRESET_PATH)
     var parsed: Variant = JSON.parse_string(raw)
     if typeof(parsed) != TYPE_DICTIONARY:
-        return fallback
+        return result
+
     var root := parsed as Dictionary
-    var presets: Variant = root.get("presets", {})
-    if typeof(presets) != TYPE_DICTIONARY:
-        return fallback
-    var presets_dict := presets as Dictionary
+    var presets_value: Variant = root.get("presets", {})
+    if typeof(presets_value) != TYPE_DICTIONARY:
+        return result
+    var presets := presets_value as Dictionary
+
+    var default_name := str(root.get("default_preset", "subtle_35mm_titles"))
+    var default_value: Variant = presets.get(default_name, null)
+    if typeof(default_value) == TYPE_DICTIONARY:
+        result = _merge_preset(result, default_value as Dictionary)
+
     var selected_name := requested_name.strip_edges()
     if selected_name.is_empty():
-        selected_name = str(root.get("default_preset", "subtle_35mm_titles"))
-    var selected: Variant = presets_dict.get(selected_name, null)
-    if typeof(selected) != TYPE_DICTIONARY:
-        return fallback
-    return selected as Dictionary
+        selected_name = default_name
+    if selected_name == default_name:
+        return result
+
+    var selected: Variant = presets.get(selected_name, null)
+    if typeof(selected) == TYPE_DICTIONARY:
+        result = _merge_preset(result, selected as Dictionary)
+    return result
+
+
+func _merge_preset(base: Dictionary, overrides: Dictionary) -> Dictionary:
+    var merged := base.duplicate(true)
+    for key_value in overrides.keys():
+        var key := str(key_value)
+        var override_value: Variant = overrides[key_value]
+        if key == "shader" or key == "motion":
+            var section: Dictionary = {}
+            var existing: Variant = merged.get(key, {})
+            if typeof(existing) == TYPE_DICTIONARY:
+                section = (existing as Dictionary).duplicate(true)
+            if typeof(override_value) == TYPE_DICTIONARY:
+                for parameter in (override_value as Dictionary).keys():
+                    section[parameter] = (override_value as Dictionary)[parameter]
+            merged[key] = section
+        else:
+            merged[key] = override_value
+    return merged
 
 
 func _apply_shader_preset(shader_values: Dictionary) -> void:
@@ -139,7 +172,7 @@ func _fallback_preset() -> Dictionary:
             "chromatic_aberration_enabled": true,
             "chromatic_aberration_px": 1.2,
             "soft_focus_enabled": true,
-            "soft_focus_amount": 0.2,
+            "soft_focus_amount": 0.20,
             "soft_focus_radius_px": 0.85,
             "halation_enabled": true,
             "halation_intensity": 0.16,
