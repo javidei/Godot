@@ -26,7 +26,9 @@ func play_new_game_intro(on_finished: Callable = Callable()) -> void:
 		if on_finished.is_valid():
 			on_finished.call()
 		return
-	prelude.name = "NewGamePrelude0922"
+	# Conservamos el nombre histórico del nodo porque varios smoke tests lo usan
+	# solo como identificador estable; la implementación real es la 0.9.22.
+	prelude.name = "NewGamePrelude0917"
 	prelude.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	prelude.connect("prelude_finished", Callable(self, "_on_new_game_prelude_finished").bind(on_finished), CONNECT_ONE_SHOT)
 	_new_game_prelude_0917 = prelude
