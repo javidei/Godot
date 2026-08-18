@@ -1,9 +1,54 @@
 extends "res://scripts/version_0919_visit_transitions.gd"
 
 const NewGamePrelude0922 = preload("res://scripts/new_game_prelude_0922.gd")
+const DataStory0932 = preload("res://scripts/story.gd")
 
 var _next_generic_starts_black_0922 := false
 var _javi_day3_entry_node_0930 := ""
+
+
+# Las revisitas ya no muestran la frase de reencuentro sobre una pantalla negra.
+# Entramos primero en la habitación y la frase se presenta como un nodo normal de
+# diálogo inferior; al pulsarlo se continúa exactamente en el checkpoint previo.
+func _begin_resumed_visit(character_id: String, node_id: String) -> void:
+	var state := _state()
+	if state.is_empty() or main == null:
+		super(character_id, node_id)
+		return
+
+	_ensure_transition_arrays(state)
+	var order: Array = state.get("visit_order", [])
+	if not order.has(character_id):
+		order.append(character_id)
+	state["visit_order"] = order
+	state["save_version"] = _release_version()
+	main.set("state", state)
+	main.call("_save_game", false)
+
+	var dm: Variant = _dm()
+	var character: Dictionary = dm.call("get_character", character_id) if dm != null else {}
+	var display_name := str(character.get("display_name", character.get("name", character_id.capitalize())))
+	var background_id := str(dm.call("get_character_background_id", character_id)) if dm != null else ""
+	var resume_node_id := "%s_resume_bubble_0932" % character_id
+	var resume_message := _pick_room_resume_message()
+
+	DataStory0932.NODES[resume_node_id] = {
+		"speaker": display_name,
+		"text": resume_message,
+		"background": background_id,
+		"show": [character_id],
+		"positions": {character_id: "center"},
+		"focus": character_id,
+		"chapter": "REENCUENTRO · " + display_name.to_upper(),
+		"next": node_id,
+		"resume_target": node_id,
+		"transient_resume": true
+	}
+
+	_start_character_music(character_id)
+	if version_manager != null:
+		version_manager.call("_hide_selector")
+	main.call("_go_to", resume_node_id, false)
 
 
 # El mapa entra por begin_character_visit() de la cadena 0.9.8. Ese método
