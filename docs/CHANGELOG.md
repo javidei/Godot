@@ -12,6 +12,22 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.27] - 2026-08-18
+
+### Added
+
+- Nueva introducción narrativa para el duelo de insultos de Javi: un joven llega a una isla con un sueño, consigue una espada y una pala y descubre que allí los combates se ganaban de otra forma.
+- La introducción termina en «Allí las peleas se ganaban de otra forma.» y enlaza directamente con el primer insulto y sus cuatro posibles réplicas.
+- Estado persistente de la batalla de insultos dentro de cada slot, con registro de insultos completados y pendientes.
+
+### Changed
+
+- El duelo de insultos de Javi queda reservado al **Día 3**; los días 1 y 2 recuperan sus preguntas normales definidas en `data/day_dialogues.json`.
+- La primera visita del Día 3 muestra la introducción narrativa y después encadena los insultos pendientes; las visitas posteriores empiezan con «¿Seguimos con la batalla de insultos?» y permiten continuar o volver al mapa.
+- Los insultos ya respondidos no vuelven a aparecer. En cada nueva entrada se barajan únicamente los que siguen pendientes, de forma que el orden cambia sin introducir repeticiones.
+- Guardar o continuar una partida a mitad de la batalla conserva el progreso y reconstruye un punto de reanudación estable antes de los insultos restantes.
+- La pista de los monitores del Día 3 se muestra después del último insulto pendiente de la sesión para no interrumpir la presentación del duelo.
+
 ## [0.9.26] - 2026-08-18
 
 ### Changed
