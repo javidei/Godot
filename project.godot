@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.9.19"
+config/version="0.9.20"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -41,4 +41,4 @@ textures/canvas_textures/default_texture_filter=1
 
 driver/enable_input=false
 
-; 0.9.19: el protagonista se elige antes del aviso de Portugal y Naranjal; se elimina la pantalla de 2026.
+; 0.9.20: la partida se crea después de Portugal y Naranjal para que El reencuentro aparezca a continuación.
