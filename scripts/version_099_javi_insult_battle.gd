@@ -6,6 +6,7 @@ const DataAccess099 = preload("res://scripts/data_access.gd")
 const JAVI_PIRATE_DAY_ID_0927 := 3
 const JAVI_BATTLE_RESUME_NODE_0927 := "javi_battle_resume_0927"
 const JAVI_BATTLE_COMPLETE_NODE_0927 := "javi_battle_complete_0927"
+const JAVI_BATTLE_STORY_INTRO_FLAG_0930 := "javi_battle_story_intro_seen_0930"
 
 
 func _select_visit(character_id: String) -> void:
@@ -18,56 +19,52 @@ func _select_visit(character_id: String) -> void:
 		super(character_id)
 		return
 
-	var dm: Variant = DataAccess099.dm()
-	if dm == null:
+	var entry_node := prepare_javi_battle_for_transition(state)
+	if entry_node.is_empty():
 		super(character_id)
 		return
-
-	_ensure_visit_state(state)
-	var order: Array = state.get("visit_order", []) if typeof(state.get("visit_order", [])) == TYPE_ARRAY else []
-	if not order.has(character_id):
-		order.append(character_id)
-	state["visit_order"] = order
-
-	var battle: Dictionary = dm.call("prepare_javi_insult_battle_visit", state)
-	var first_entry := not bool(battle.get("entered_once", false))
-	battle = dm.call("mark_javi_insult_battle_entered", state)
-	dm.call("set_runtime_javi_insult_battle_state", state)
-
-	_rebuild_javi_battle_story_0927(state)
-	main.set("state", state)
-	main.call("_save_game", false)
 	_hide_selector()
-
-	if bool(battle.get("complete", false)):
-		main.call("_go_to", JAVI_BATTLE_COMPLETE_NODE_0927, false)
-	elif first_entry:
-		main.call("_go_to", "javi_intro_01", false)
-	else:
-		main.call("_go_to", JAVI_BATTLE_RESUME_NODE_0927, false)
+	main.call("_go_to", entry_node, false)
 
 
-# Continuar una partida que se guardó dentro de la habitación de Javi vuelve a
-# un punto estable. Si el slot es anterior al sistema de batalla, se considera
-# una primera entrada para que no se salte la introducción narrativa.
-func prepare_javi_battle_resume_from_save(state: Dictionary) -> String:
+# Punto único de preparación para la ruta real mapa -> transición -> habitación.
+# No navega por sí mismo: devuelve el nodo que debe abrir la transición activa.
+func prepare_javi_battle_for_transition(state: Dictionary) -> String:
 	if state.is_empty() or _current_day_0927(state) != JAVI_PIRATE_DAY_ID_0927:
 		return ""
 	var dm: Variant = DataAccess099.dm()
 	if dm == null:
 		return ""
 
-	var before: Dictionary = dm.call("ensure_javi_insult_battle_state", state)
-	var first_entry := not bool(before.get("entered_once", false))
+	_ensure_visit_state(state)
+	var raw_checkpoints: Variant = state.get("conversation_checkpoints", {})
+	if typeof(raw_checkpoints) == TYPE_DICTIONARY:
+		var checkpoints := (raw_checkpoints as Dictionary).duplicate(true)
+		checkpoints.erase("javi")
+		state["conversation_checkpoints"] = checkpoints
+
+	var show_story_intro := not bool(state.get(JAVI_BATTLE_STORY_INTRO_FLAG_0930, false))
 	var battle: Dictionary = dm.call("prepare_javi_insult_battle_visit", state)
 	dm.call("mark_javi_insult_battle_entered", state)
 	dm.call("set_runtime_javi_insult_battle_state", state)
 	_rebuild_javi_battle_story_0927(state)
+
+	# La marca 0.9.30 es deliberadamente nueva. Los slots que pasaron por las
+	# rutas defectuosas 0.9.27-0.9.29 no la tienen y verán el prólogo una vez.
+	if show_story_intro:
+		state[JAVI_BATTLE_STORY_INTRO_FLAG_0930] = true
 	main.set("state", state)
+	main.call("_save_game", false)
 
 	if bool(battle.get("complete", false)):
 		return JAVI_BATTLE_COMPLETE_NODE_0927
-	return "javi_intro_01" if first_entry else JAVI_BATTLE_RESUME_NODE_0927
+	return "javi_intro_01" if show_story_intro else JAVI_BATTLE_RESUME_NODE_0927
+
+
+# Continuar una partida guardada dentro de Javi usa exactamente la misma
+# preparación que una entrada desde el mapa, evitando dos contratos distintos.
+func prepare_javi_battle_resume_from_save(state: Dictionary) -> String:
+	return prepare_javi_battle_for_transition(state)
 
 
 func _rebuild_javi_battle_story_0927(state: Dictionary) -> void:
