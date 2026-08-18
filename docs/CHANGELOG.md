@@ -12,6 +12,14 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.30] - 2026-08-18
+
+### Fixed
+
+- La entrada real desde el mapa a la habitación de Javi en el Día 3 deja de ejecutar el `reroll_javi_question_for_visit()` heredado de 0.9.8, que reconstruía una sola pregunta y podía volver a mostrar el aviso antiguo.
+- `Version044VisitTransitions` prepara ahora la batalla persistente antes de abrir la habitación y usa como destino el prólogo narrativo, la pregunta «¿Seguimos con la batalla de insultos?» o el estado de batalla completada según corresponda.
+- Se añade una marca nueva por slot para que incluso partidas que pasaron por las rutas defectuosas 0.9.27–0.9.29 vean una vez el prólogo «Hace muchos años, un joven llegó a una isla con un sueño.» tras actualizar.
+
 ## [0.9.29] - 2026-08-18
 
 ### Fixed
