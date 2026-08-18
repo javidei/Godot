@@ -56,7 +56,7 @@ func get_question_bundle(character_id: String) -> Dictionary:
 	if character_id != "javi" or _legacy_contract() or not _runtime_day_enabled:
 		return super.get_question_bundle(character_id)
 
-	# 0.10.0: el minijuego de insultos deja de sustituir las preguntas de Javi
+	# 0.9.27: el minijuego de insultos deja de sustituir las preguntas de Javi
 	# en todas las jornadas. Los días 1 y 2 recuperan su diálogo data-driven.
 	if _runtime_day_id != JAVI_PIRATE_DAY_ID_0100:
 		return _day_specific_bundle_0100(character_id)
