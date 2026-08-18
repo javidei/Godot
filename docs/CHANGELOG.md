@@ -12,6 +12,17 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.32] - 2026-08-18
+
+### Changed
+
+- Los textos narrativos inferiores avanzan con clic o toque únicamente sobre el propio panel de diálogo; pulsar el fondo, personajes, hotspots u otras zonas de la pantalla ya no avanza la conversación.
+- Al volver a una habitación cuya conversación quedó a medias, la frase de reencuentro se muestra como un bocadillo inferior dentro de la habitación y enlaza después con el checkpoint exacto, en lugar de aparecer sobre una transición negra.
+
+### Fixed
+
+- Los nodos temporales de reencuentro nunca se guardan como checkpoint permanente: guardar o salir al menú mientras están visibles conserva el nodo narrativo real que había quedado pendiente.
+
 ## [0.9.31] - 2026-08-18
 
 ### Fixed
@@ -332,7 +343,7 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 - La portada de **Extras** distribuye sus accesos en una cuadrícula responsive de hasta cuatro columnas y reduce la altura de las tarjetas para mostrar más opciones sin tanto desplazamiento.
 - La página **Extras → Logros** pasa de una lista vertical de tarjetas a una cuadrícula responsive: hasta cuatro columnas en pantallas muy anchas, tres en escritorio estándar, dos en anchos intermedios y una en pantallas estrechas.
-- Las tarjetas de logros usan iconos, tipografías, márgenes y barras de progreso más compactos, manteniendo el scroll táctil y la legibilidad en móvil.
+- Las tarjetas de logros usan iconos, tipografías, márgenes y barras de progreso más compactas, manteniendo el scroll táctil y la legibilidad en móvil.
 
 ## [0.6.5] - 2026-08-14
 
@@ -367,7 +378,7 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 ### Fixed
 
 - Corregido el desplazamiento con el dedo en Extras, que podía responder con mucho retardo al iniciar el gesto sobre textos, paneles o tarjetas.
-- Sustituidos los símbolos Unicode usados como iconos de colección, logros y selección de sonido, evitando glifos ausentes o caracteres extraños en Android.
+- Sustituidos los símbolos Unicode usados como iconos de colección, logros y selección de sonido de clic, evitando glifos ausentes o caracteres extraños en Android.
 
 ## [0.6.2] - 2026-08-13
 
