@@ -103,7 +103,7 @@ func _process(delta: float) -> void:
     if _retarget_in <= 0.0:
         _choose_next_motion_target()
 
-    var smoothing := maxf(0.1, float(_motion.get("smoothing", 10.0)))
+    var smoothing := maxf(0.1, float(_motion.get("smoothing", 4.8)))
     var blend := 1.0 - exp(-smoothing * delta)
     _current_offset = _current_offset.lerp(_target_offset, blend)
     _current_rotation_deg = lerpf(_current_rotation_deg, _target_rotation_deg, blend)
@@ -115,11 +115,11 @@ func _process(delta: float) -> void:
 
 
 func _choose_next_motion_target() -> void:
-    var jitter_px := maxf(0.0, float(_motion.get("jitter_px", 1.2)))
-    var rotation_deg := maxf(0.0, float(_motion.get("rotation_deg", 0.04)))
-    var scale_variation := maxf(0.0, float(_motion.get("scale_variation", 0.0012)))
-    var min_interval := maxf(0.03, float(_motion.get("refresh_min_seconds", 0.07)))
-    var max_interval := maxf(min_interval, float(_motion.get("refresh_max_seconds", 0.17)))
+    var jitter_px := maxf(0.0, float(_motion.get("jitter_px", 0.28)))
+    var rotation_deg := maxf(0.0, float(_motion.get("rotation_deg", 0.008)))
+    var scale_variation := maxf(0.0, float(_motion.get("scale_variation", 0.00025)))
+    var min_interval := maxf(0.03, float(_motion.get("refresh_min_seconds", 0.18)))
+    var max_interval := maxf(min_interval, float(_motion.get("refresh_max_seconds", 0.45)))
 
     _target_offset = Vector2(
         _rng.randf_range(-jitter_px, jitter_px),
@@ -134,37 +134,37 @@ func _fallback_preset() -> Dictionary:
     return {
         "shader": {
             "grain_enabled": true,
-            "grain_intensity": 0.024,
+            "grain_intensity": 0.04,
             "grain_fps": 18.0,
             "chromatic_aberration_enabled": true,
-            "chromatic_aberration_px": 0.85,
+            "chromatic_aberration_px": 1.2,
             "soft_focus_enabled": true,
-            "soft_focus_amount": 0.14,
-            "soft_focus_radius_px": 0.70,
+            "soft_focus_amount": 0.2,
+            "soft_focus_radius_px": 0.85,
             "halation_enabled": true,
-            "halation_intensity": 0.10,
-            "halation_radius_px": 1.25,
+            "halation_intensity": 0.16,
+            "halation_radius_px": 1.45,
             "flicker_enabled": true,
-            "flicker_intensity": 0.012,
-            "flicker_speed": 7.5,
+            "flicker_intensity": 0.007,
+            "flicker_speed": 6.5,
             "color_bleed_enabled": true,
-            "color_bleed_intensity": 0.065,
-            "color_bleed_radius_px": 0.90,
+            "color_bleed_intensity": 0.09,
+            "color_bleed_radius_px": 1.05,
             "dust_enabled": true,
-            "dust_intensity": 0.006,
+            "dust_intensity": 0.0045,
             "scratches_enabled": true,
-            "scratches_intensity": 0.003,
+            "scratches_intensity": 0.0015,
             "exposure_variation_enabled": true,
-            "exposure_variation_intensity": 0.010,
-            "exposure_variation_speed": 1.7
+            "exposure_variation_intensity": 0.007,
+            "exposure_variation_speed": 1.5
         },
         "motion": {
             "enabled": true,
-            "jitter_px": 1.2,
-            "rotation_deg": 0.04,
-            "scale_variation": 0.0012,
-            "refresh_min_seconds": 0.07,
-            "refresh_max_seconds": 0.17,
-            "smoothing": 10.5
+            "jitter_px": 0.28,
+            "rotation_deg": 0.008,
+            "scale_variation": 0.00025,
+            "refresh_min_seconds": 0.18,
+            "refresh_max_seconds": 0.45,
+            "smoothing": 4.8
         }
     }

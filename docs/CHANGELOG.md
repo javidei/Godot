@@ -12,6 +12,14 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.24] - 2026-08-18
+
+### Changed
+
+- Reequilibrado el preset `subtle_35mm_titles`: el gate weave pasa a una deriva casi imperceptible, con mucho menos desplazamiento, rotación y variación de escala y con cambios más lentos.
+- La aberración cromática, el grano fino, el soft focus, el halation y el color bleed ganan algo de presencia para que el aspecto de película analógica domine sobre el movimiento del texto.
+- Reducidos ligeramente el flicker y las variaciones de exposición para evitar que el resultado parezca una animación digital.
+
 ## [0.9.23] - 2026-08-18
 
 ### Added
