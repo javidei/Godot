@@ -6,7 +6,7 @@ const DataAccess099 = preload("res://scripts/data_access.gd")
 const JAVI_PIRATE_DAY_ID_0927 := 3
 const JAVI_BATTLE_RESUME_NODE_0927 := "javi_battle_resume_0927"
 const JAVI_BATTLE_COMPLETE_NODE_0927 := "javi_battle_complete_0927"
-const JAVI_BATTLE_STORY_INTRO_FLAG_0930 := "javi_battle_story_intro_seen_0930"
+const JAVI_BATTLE_STORY_INTRO_COMPLETED_FLAG_0931 := "javi_battle_story_intro_completed_0931"
 
 
 func _select_visit(character_id: String) -> void:
@@ -28,7 +28,8 @@ func _select_visit(character_id: String) -> void:
 
 
 # Punto único de preparación para la ruta real mapa -> transición -> habitación.
-# No navega por sí mismo: devuelve el nodo que debe abrir la transición activa.
+# El prólogo no se consume al entrar: solo deja de mostrarse cuando Main registra
+# que la última línea narrativa ha enlazado realmente con el primer insulto.
 func prepare_javi_battle_for_transition(state: Dictionary) -> String:
 	if state.is_empty() or _current_day_0927(state) != JAVI_PIRATE_DAY_ID_0927:
 		return ""
@@ -37,32 +38,49 @@ func prepare_javi_battle_for_transition(state: Dictionary) -> String:
 		return ""
 
 	_ensure_visit_state(state)
+	var story_intro_completed := bool(state.get(JAVI_BATTLE_STORY_INTRO_COMPLETED_FLAG_0931, false))
+	var intro_checkpoint := ""
 	var raw_checkpoints: Variant = state.get("conversation_checkpoints", {})
 	if typeof(raw_checkpoints) == TYPE_DICTIONARY:
 		var checkpoints := (raw_checkpoints as Dictionary).duplicate(true)
-		checkpoints.erase("javi")
+		if not story_intro_completed:
+			var candidate := str(checkpoints.get("javi", ""))
+			if not candidate.begins_with("javi_intro_"):
+				candidate = str(state.get("node_id", ""))
+			if candidate.begins_with("javi_intro_"):
+				intro_checkpoint = candidate
+				checkpoints["javi"] = candidate
+			else:
+				# Un checkpoint de preguntas creado por las versiones defectuosas no
+				# debe saltarse el relato nuevo.
+				checkpoints.erase("javi")
+		else:
+			# Una vez terminado el relato, cada nueva entrada debe pasar por la
+			# pregunta «¿Seguimos con la batalla?» y no reanudar un qN directo.
+			checkpoints.erase("javi")
 		state["conversation_checkpoints"] = checkpoints
 
-	var show_story_intro := not bool(state.get(JAVI_BATTLE_STORY_INTRO_FLAG_0930, false))
 	var battle: Dictionary = dm.call("prepare_javi_insult_battle_visit", state)
-	dm.call("mark_javi_insult_battle_entered", state)
+	if story_intro_completed:
+		dm.call("mark_javi_insult_battle_entered", state)
 	dm.call("set_runtime_javi_insult_battle_state", state)
 	_rebuild_javi_battle_story_0927(state)
 
-	# La marca 0.9.30 es deliberadamente nueva. Los slots que pasaron por las
-	# rutas defectuosas 0.9.27-0.9.29 no la tienen y verán el prólogo una vez.
-	if show_story_intro:
-		state[JAVI_BATTLE_STORY_INTRO_FLAG_0930] = true
 	main.set("state", state)
 	main.call("_save_game", false)
 
+	if not story_intro_completed:
+		if not intro_checkpoint.is_empty() and DataStory099.NODES.has(intro_checkpoint):
+			return intro_checkpoint
+		return "javi_intro_01"
 	if bool(battle.get("complete", false)):
 		return JAVI_BATTLE_COMPLETE_NODE_0927
-	return "javi_intro_01" if show_story_intro else JAVI_BATTLE_RESUME_NODE_0927
+	return JAVI_BATTLE_RESUME_NODE_0927
 
 
-# Continuar una partida guardada dentro de Javi usa exactamente la misma
-# preparación que una entrada desde el mapa, evitando dos contratos distintos.
+# Continuar una partida guardada dentro de Javi usa la misma preparación. Si el
+# jugador salió a mitad del relato, el checkpoint javi_intro_XX se conserva y se
+# reconstruye antes de volver a mostrarlo.
 func prepare_javi_battle_resume_from_save(state: Dictionary) -> String:
 	return prepare_javi_battle_for_transition(state)
 
