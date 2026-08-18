@@ -1,0 +1,2 @@
+Force export requested for version 0.9.16 on 2026-08-18.
+This file exists only to trigger the Export Godot Web workflow from a non-ignored path.
