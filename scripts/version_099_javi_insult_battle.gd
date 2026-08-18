@@ -48,20 +48,26 @@ func _select_visit(character_id: String) -> void:
 
 
 # Continuar una partida que se guardó dentro de la habitación de Javi vuelve a
-# un punto estable: pregunta si se desea seguir y baraja únicamente los insultos
-# que siguen pendientes.
+# un punto estable. Si el slot es anterior al sistema de batalla, se considera
+# una primera entrada para que no se salte la introducción narrativa.
 func prepare_javi_battle_resume_from_save(state: Dictionary) -> String:
 	if state.is_empty() or _current_day_0927(state) != JAVI_PIRATE_DAY_ID_0927:
 		return ""
 	var dm: Variant = DataAccess099.dm()
 	if dm == null:
 		return ""
+
+	var before: Dictionary = dm.call("ensure_javi_insult_battle_state", state)
+	var first_entry := not bool(before.get("entered_once", false))
 	var battle: Dictionary = dm.call("prepare_javi_insult_battle_visit", state)
 	dm.call("mark_javi_insult_battle_entered", state)
 	dm.call("set_runtime_javi_insult_battle_state", state)
 	_rebuild_javi_battle_story_0927(state)
 	main.set("state", state)
-	return JAVI_BATTLE_COMPLETE_NODE_0927 if bool(battle.get("complete", false)) else JAVI_BATTLE_RESUME_NODE_0927
+
+	if bool(battle.get("complete", false)):
+		return JAVI_BATTLE_COMPLETE_NODE_0927
+	return "javi_intro_01" if first_entry else JAVI_BATTLE_RESUME_NODE_0927
 
 
 func _rebuild_javi_battle_story_0927(state: Dictionary) -> void:
