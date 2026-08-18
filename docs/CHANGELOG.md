@@ -12,6 +12,15 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.31] - 2026-08-18
+
+### Fixed
+
+- El hotspot interactivo de los monitores de Javi queda desactivado mientras hay respuestas visibles, evitando que los botones de la columna izquierda abran accidentalmente el primer plano de las dos pantallas.
+- La introducción narrativa del duelo de Javi ya no se considera vista al entrar en la habitación: solo se marca como completada al avanzar desde su última frase al primer insulto.
+- Si se sale al mapa, al menú o se carga la partida antes de terminar el relato, se conserva el checkpoint `javi_intro_XX` y se continúa la secuencia narrativa en vez de saltar directamente al bucle de insultos.
+- Una vez terminada la introducción, las nuevas entradas eliminan el checkpoint de pregunta y vuelven a pasar por «¿Seguimos con la batalla de insultos?» antes de continuar con los insultos pendientes.
+
 ## [0.9.30] - 2026-08-18
 
 ### Fixed
