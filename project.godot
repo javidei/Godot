@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.9.16"
+config/version="0.9.17"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -41,5 +41,4 @@ textures/canvas_textures/default_texture_filter=1
 
 driver/enable_input=false
 
-; 0.9.16: Portugal y Naranjal Studio se reproducen al iniciar una nueva partida.
-; Reexportación web solicitada el 2026-08-18.
+; 0.9.17: el preludio de Nueva partida es independiente del splash de arranque para evitar dependencias circulares.

@@ -12,6 +12,35 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.17] - 2026-08-18
+
+### Fixed
+
+- Eliminada la dependencia circular que impedía importar/exportar el proyecto desde 0.9.16: el preludio de Nueva partida deja de heredar del splash de arranque, que precarga `main.tscn`, y pasa a ser un `Control` independiente.
+- El flujo conserva el aviso de Portugal en Georgia, los fundidos lentos y el logo de Naranjal Studio a mitad de tamaño sin volver a cargar la escena principal durante su propia importación.
+
+## [0.9.16] - 2026-08-18
+
+### Changed
+
+- El aviso de Portugal y el splash de Naranjal Studio pasan a mostrarse únicamente al iniciar una **Nueva partida**.
+- Al abrir la aplicación solo se conserva la pantalla inicial que solicita activar pantalla completa antes de mostrar el menú.
+- El logo de Naranjal Studio del preludio de Nueva partida se reduce al 50 % de su tamaño anterior manteniéndose centrado.
+
+## [0.9.15] - 2026-08-17
+
+### Changed
+
+- La franja oscura con el nombre en `Extras → Personajes` se convierte en una etiqueta inferior más fina, con margen respecto a los bordes de la tarjeta.
+- El antiguo flujo **Crear personaje** se sustituye por **Invitado al grupo**, que permite entrar directamente sin rellenar nombre, género ni apariencia.
+
+## [0.9.14] - 2026-08-17
+
+### Changed
+
+- El aviso sobre Portugal usa únicamente la fuente **Georgia**, retirando la comparación con DejaVu Serif Bold y Courier New.
+- El fundido de entrada del aviso aumenta a 4 segundos y el de salida a 4,5 segundos, más del doble que los tiempos anteriores.
+
 ## [0.9.13] - 2026-08-17
 
 ### Changed
