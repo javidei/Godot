@@ -137,16 +137,18 @@ func _run() -> void:
 	main.set("state", state)
 	var game_screen := main.get("game_screen") as Control
 	var menu_screen := main.get("menu_screen") as Control
+	var dialogue_panel := main.get("dialogue_panel") as PanelContainer
 	game_screen.visible = true
 	menu_screen.visible = false
 	await process_frame
 	if str(audio_manager.get("current_menu_music_id")) == "menu" or music_player.playing:
 		_fail("La música del menú continúa al salir de él")
 		return
-
-	var callback := Callable(patch, "_on_game_screen_input")
-	if not game_screen.gui_input.is_connected(callback):
-		_fail("GameScreen no escucha los clics de las zonas libres")
+	if dialogue_panel == null:
+		_fail("No se encuentra el panel inferior de diálogo")
+		return
+	if patch.has_method("_on_game_screen_input") or patch.has_method("_handle_screen_advance"):
+		_fail("El parche conserva el avance global de GameScreen")
 		return
 
 	main.call("_go_to", "javi_intro_01", false)
@@ -161,13 +163,22 @@ func _run() -> void:
 	click.button_index = MOUSE_BUTTON_LEFT
 	click.pressed = true
 	click.position = Vector2(640, 260)
-	patch.call("_on_game_screen_input", click)
+	game_screen.emit_signal("gui_input", click)
 	await process_frame
-	patch.call("_on_game_screen_input", click)
+	game_screen.emit_signal("gui_input", click)
+	await process_frame
+	state = main.get("state")
+	if str(state.get("node_id", "")) != "javi_intro_01":
+		_fail("Pulsar fuera del bocadillo sigue avanzando la conversación")
+		return
+
+	dialogue_panel.emit_signal("gui_input", click)
+	await process_frame
+	dialogue_panel.emit_signal("gui_input", click)
 	await process_frame
 	state = main.get("state")
 	if str(state.get("node_id", "")) != expected_next:
-		_fail("Pulsar en una zona libre de la pantalla no avanza al siguiente diálogo")
+		_fail("Pulsar el bocadillo inferior no avanza al siguiente diálogo")
 		return
 
 	main.call("_show_menu")
@@ -176,7 +187,7 @@ func _run() -> void:
 		_fail("La música no vuelve a empezar con fundido al regresar al menú")
 		return
 
-	print("V045 OK: distribución, música continua en menú/Extras/Ajustes, bucle con fundido y avance por clic directo validados.")
+	print("V045 OK: distribución, música continua y avance limitado al panel inferior validados.")
 	quit(0)
 
 
