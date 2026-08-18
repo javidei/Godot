@@ -12,6 +12,13 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.29] - 2026-08-18
+
+### Fixed
+
+- Los slots guardados dentro de la habitación de Javi en el Día 3 antes de introducir `javi_insult_battle` ya no continúan por el diálogo heredado.
+- Al cargar uno de esos guardados se crea el estado de la batalla y, al tratarse de la primera entrada al nuevo sistema, se redirige a «Hace muchos años, un joven llegó a una isla con un sueño.» en vez de saltarse el prólogo.
+
 ## [0.9.28] - 2026-08-18
 
 ### Fixed
