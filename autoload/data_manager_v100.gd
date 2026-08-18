@@ -71,11 +71,12 @@ func get_question_bundle(character_id: String) -> Dictionary:
 	if _runtime_day_id != JAVI_PIRATE_DAY_ID_0927:
 		return _day_specific_bundle_0927(character_id)
 
-	# Si un test histórico consulta el bundle sin preparar una visita, se conserva
-	# el comportamiento anterior. En juego real el manager configura el orden antes
-	# de reconstruir Story.
+	# En el Día 3 nunca volvemos al bundle heredado de 0.9.7/0.9.8, porque ese
+	# fallback añade el antiguo aviso «esto es un juego de insultos piratas».
+	# Antes de preparar la batalla devolvemos el bundle normal del Día 3; cuando
+	# el manager configura la sesión, se sustituye por la introducción narrativa.
 	if not _runtime_javi_battle_configured_0927:
-		return super.get_question_bundle(character_id)
+		return _day_specific_bundle_0927(character_id)
 
 	var bundle := {
 		"character": "javi",
