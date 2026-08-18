@@ -3,6 +3,65 @@ extends "res://scripts/version_0919_visit_transitions.gd"
 const NewGamePrelude0922 = preload("res://scripts/new_game_prelude_0922.gd")
 
 var _next_generic_starts_black_0922 := false
+var _javi_day3_entry_node_0930 := ""
+
+
+# El mapa entra por begin_character_visit() de la cadena 0.9.8. Ese método
+# llama virtualmente a _prepare_random_javi_visit(); aquí interceptamos solo el
+# Día 3 para que no ejecute el reroll/aviso heredado y prepare la batalla nueva.
+func _prepare_random_javi_visit() -> void:
+	var state := _state()
+	if _is_javi_day3_state_0930(state):
+		if version_manager == null and main != null:
+			version_manager = main.get_node_or_null("Version040Manager")
+		if version_manager != null and version_manager.has_method("prepare_javi_battle_for_transition"):
+			_javi_day3_entry_node_0930 = str(version_manager.call("prepare_javi_battle_for_transition", state))
+			if not _javi_day3_entry_node_0930.is_empty():
+				return
+	_javi_day3_entry_node_0930 = ""
+	super()
+
+
+# version_098_visit_transitions llama después a este método. Para el Día 3 de
+# Javi conservamos la transición existente, pero el destino lo decide la batalla:
+# prólogo narrativo, pregunta de reanudación o batalla completada.
+func _on_visit_selected(character_id: String) -> void:
+	if character_id != "javi" or _javi_day3_entry_node_0930.is_empty():
+		super(character_id)
+		return
+	if transition_active:
+		return
+	var state := _state()
+	if state.is_empty():
+		_javi_day3_entry_node_0930 = ""
+		return
+
+	_ensure_transition_arrays(state)
+	var order: Array = state.get("visit_order", [])
+	if not order.has(character_id):
+		order.append(character_id)
+	state["visit_order"] = order
+	state["save_version"] = _release_version()
+	main.set("state", state)
+	main.call("_save_game", false)
+
+	var entry_node := _javi_day3_entry_node_0930
+	_javi_day3_entry_node_0930 = ""
+	var intros: Array = state.get("intro_transitions_seen", [])
+	if entry_node == "javi_intro_01" and not intros.has(character_id):
+		_play_intro(character_id)
+		return
+
+	if version_manager != null:
+		version_manager.call("_hide_selector")
+	main.call("_go_to", entry_node, false)
+
+
+func _is_javi_day3_state_0930(state: Dictionary) -> bool:
+	if state.is_empty():
+		return false
+	var progress: Variant = state.get("narrative_progress", {})
+	return typeof(progress) == TYPE_DICTIONARY and int((progress as Dictionary).get("current_day", 1)) == 3
 
 
 # El primer texto narrativo posterior a Naranjal debe heredar el negro total del
