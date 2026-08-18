@@ -30,9 +30,10 @@ func _read_save() -> bool:
 
 	if saved_day != 3 or not saved_node.begins_with("javi_"):
 		return true
-	if typeof(state.get("javi_insult_battle", null)) != TYPE_DICTIONARY:
-		return true
 
+	# También migramos slots anteriores a 0.9.27 que todavía no tenían
+	# `javi_insult_battle`: el manager crea el estado y, al ser primera entrada,
+	# los dirige al prólogo narrativo en lugar de mantener el diálogo antiguo.
 	var battle_manager := get_node_or_null("Version040Manager")
 	if battle_manager == null or not battle_manager.has_method("prepare_javi_battle_resume_from_save"):
 		return true
