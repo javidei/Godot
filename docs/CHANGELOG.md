@@ -12,6 +12,18 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.25] - 2026-08-18
+
+### Added
+
+- Comparativa simultánea de diez configuraciones del efecto de créditos analógicos aplicada al aviso de Portugal, numeradas del 01 al 10 en una cuadrícula 2×5.
+- Presets de comparación reutilizables con variantes claramente diferenciadas: limpio, RGB marcado, proyección suave, grano/suciedad, halation, RGB extremo, gate weave, flicker/exposición, archivo gastado y cine marcado.
+
+### Changed
+
+- El cargador de presets permite ahora definir variantes mediante overrides parciales sobre el preset base, facilitando guardar y reutilizar configuraciones sin duplicar todos los parámetros.
+- El shader admite valores de aberración cromática de hasta 8 px para poder comparar desregistros RGB mucho más visibles.
+
 ## [0.9.24] - 2026-08-18
 
 ### Changed
