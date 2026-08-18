@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.9.27"
+config/version="0.9.28"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -43,3 +43,4 @@ driver/enable_input=false
 
 ; 0.9.26: retirado el experimento de créditos 35 mm; Portugal vuelve a Monocraft limpio, sin vibración ni shader.
 ; 0.9.27: el duelo de insultos de Javi pasa al Día 3 y se presenta mediante una introducción narrativa con guiño a una aventura pirata clásica.
+; 0.9.28: eliminada la ruta heredada que podía volver a mostrar el aviso antiguo de Javi; la introducción narrativa se fuerza tras cada reconstrucción de Story.
