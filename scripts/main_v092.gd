@@ -4,6 +4,21 @@ const Story092 = preload("res://scripts/story.gd")
 const JAVI_BATTLE_STORY_INTRO_COMPLETED_FLAG_0931 := "javi_battle_story_intro_completed_0931"
 
 
+func _save_game(show_message: bool) -> void:
+	# Los nodos de reencuentro 0.9.32 son solo una línea visual delante del
+	# checkpoint real. Si se guarda mientras esa línea está visible, persistimos
+	# el destino original para que nunca quede un nodo temporal huérfano al cerrar.
+	if bool(current_node.get("transient_resume", false)):
+		var target := str(current_node.get("resume_target", ""))
+		var runtime_node := str(state.get("node_id", ""))
+		if not target.is_empty():
+			state["node_id"] = target
+			super(show_message)
+			state["node_id"] = runtime_node
+			return
+	super(show_message)
+
+
 func _go_to(node_id: String, add_to_history: bool = true) -> void:
 	# La introducción de Javi solo se considera terminada cuando se abandona su
 	# última línea narrativa para entrar realmente en el primer insulto. Entrar en
