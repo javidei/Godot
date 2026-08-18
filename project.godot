@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.9.22"
+config/version="0.9.23"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -41,4 +41,4 @@ textures/canvas_textures/default_texture_filter=1
 
 driver/enable_input=false
 
-; 0.9.22: Portugal usa Monocraft y dura un segundo menos; El reencuentro hereda el negro de Naranjal sin mostrar el mapa.
+; 0.9.23: preset reutilizable de créditos 35 mm aplicado al texto de Portugal con grano, jitter, aberración cromática, soft focus, halation y flicker sutiles.
