@@ -26,12 +26,16 @@ func _prepare_random_javi_visit() -> void:
 # Javi conservamos la transición existente, pero el destino lo decide la batalla:
 # prólogo narrativo, pregunta de reanudación o batalla completada.
 func _on_visit_selected(character_id: String) -> void:
+	var state := _state()
+	if character_id == "javi" and _javi_day3_entry_node_0930.is_empty() and _is_javi_day3_state_0930(state):
+		# También cubre selectores antiguos que llaman aquí directamente y no pasan
+		# primero por begin_character_visit().
+		_prepare_random_javi_visit()
 	if character_id != "javi" or _javi_day3_entry_node_0930.is_empty():
 		super(character_id)
 		return
 	if transition_active:
 		return
-	var state := _state()
 	if state.is_empty():
 		_javi_day3_entry_node_0930 = ""
 		return
