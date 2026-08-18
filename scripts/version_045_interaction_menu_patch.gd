@@ -30,45 +30,11 @@ func _ready() -> void:
 	_build_action_rows()
 	_compact_audio_row()
 	_order_menu()
-	_connect_game_screen_input()
+	# El avance de conversación ya pertenece al gui_input de DialoguePanel.
+	# No conectamos GameScreen: pulsar el fondo, personajes o hotspots no debe
+	# completar ni avanzar el texto inferior.
 	_apply_layout()
 	get_viewport().size_changed.connect(_queue_layout)
-
-
-func _connect_game_screen_input() -> void:
-	if game_screen == null:
-		return
-	var callback := Callable(self, "_on_game_screen_input")
-	if not game_screen.gui_input.is_connected(callback):
-		game_screen.gui_input.connect(callback)
-
-
-func _on_game_screen_input(event: InputEvent) -> void:
-	_handle_screen_advance(event)
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	_handle_screen_advance(event)
-
-
-func _handle_screen_advance(event: InputEvent) -> void:
-	if main == null or game_screen == null or not game_screen.visible:
-		return
-	if transition_manager != null and bool(transition_manager.get("transition_active")):
-		return
-
-	var advance := false
-	if event is InputEventMouseButton:
-		advance = event.button_index == MOUSE_BUTTON_LEFT and event.pressed
-	elif event is InputEventScreenTouch:
-		advance = event.pressed
-	elif event is InputEventKey and event.pressed and not event.echo:
-		advance = event.keycode == KEY_SPACE or event.keycode == KEY_ENTER
-	if not advance:
-		return
-
-	main.call("_advance")
-	get_viewport().set_input_as_handled()
 
 
 func _capture_menu_nodes() -> void:
