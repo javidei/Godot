@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "default_preset": "subtle_35mm_titles",
+  "presets": {
+    "subtle_35mm_titles": {
+      "description": "Créditos de película de 35 mm muy sutiles: grano fino, gate weave, ligero desregistro RGB, soft focus, halation, flicker e imperfecciones discretas sin estética VHS ni glitch.",
+      "shader": {
+        "grain_enabled": true,
+        "grain_intensity": 0.024,
+        "grain_fps": 18.0,
+        "chromatic_aberration_enabled": true,
+        "chromatic_aberration_px": 0.85,
+        "soft_focus_enabled": true,
+        "soft_focus_amount": 0.14,
+        "soft_focus_radius_px": 0.7,
+        "halation_enabled": true,
+        "halation_intensity": 0.1,
+        "halation_radius_px": 1.25,
+        "flicker_enabled": true,
+        "flicker_intensity": 0.012,
+        "flicker_speed": 7.5,
+        "color_bleed_enabled": true,
+        "color_bleed_intensity": 0.065,
+        "color_bleed_radius_px": 0.9,
+        "dust_enabled": true,
+        "dust_intensity": 0.006,
+        "scratches_enabled": true,
+        "scratches_intensity": 0.003,
+        "exposure_variation_enabled": true,
+        "exposure_variation_intensity": 0.01,
+        "exposure_variation_speed": 1.7
+      },
+      "motion": {
+        "enabled": true,
+        "jitter_px": 1.2,
+        "rotation_deg": 0.04,
+        "scale_variation": 0.0012,
+        "refresh_min_seconds": 0.07,
+        "refresh_max_seconds": 0.17,
+        "smoothing": 10.5
+      }
+    }
+  }
+}
