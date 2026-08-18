@@ -65,6 +65,16 @@ func prepare_javi_battle_resume_from_save(state: Dictionary) -> String:
 
 
 func _rebuild_javi_battle_story_0927(state: Dictionary) -> void:
+	var dm: Variant = DataAccess099.dm()
+	if dm != null:
+		if dm.has_method("set_runtime_narrative_day"):
+			dm.call("set_runtime_narrative_day", _current_day_0927(state))
+		var raw_active: Variant = state.get("active_characters", [])
+		if dm.has_method("set_runtime_active_characters") and typeof(raw_active) == TYPE_ARRAY and not (raw_active as Array).is_empty():
+			dm.call("set_runtime_active_characters", raw_active as Array)
+		if dm.has_method("set_runtime_javi_insult_battle_state"):
+			dm.call("set_runtime_javi_insult_battle_state", state)
+
 	DataStory099.refresh()
 	_patch_story()
 	_install_javi_battle_nodes_0927()
