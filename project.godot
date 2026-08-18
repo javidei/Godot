@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.9.24"
+config/version="0.9.25"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -41,4 +41,4 @@ textures/canvas_textures/default_texture_filter=1
 
 driver/enable_input=false
 
-; 0.9.24: el preset 35 mm reduce drásticamente la vibración y refuerza de forma sutil aberración cromática, grano, soft focus y halation.
+; 0.9.25: comparativa simultánea de diez configuraciones de créditos 35 mm para elegir el preset definitivo del aviso de Portugal.
