@@ -12,6 +12,13 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.33] - 2026-08-21
+
+### Fixed
+
+- El selector de protagonista de **Nueva partida** refresca los retratos cada vez que se abre y muestra la apariencia marcada como **EN USO** en `Extras → Personajes → Apariencia`, en lugar de conservar una textura antigua creada al arrancar la aplicación.
+- Cambiar una apariencia desde la ficha de un personaje sincroniza también en ese momento su tarjeta del selector de protagonista, manteniendo ambas pantallas conectadas al mismo estado global de skins.
+
 ## [0.9.32] - 2026-08-18
 
 ### Changed
