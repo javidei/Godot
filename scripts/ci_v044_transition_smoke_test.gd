@@ -102,7 +102,8 @@ func _run() -> void:
 		return
 
 	# Salir de una conversación no la reinicia: guarda el nodo por personaje,
-	# vuelve al mapa y exige una nueva pulsación antes de retomar exactamente ahí.
+	# vuelve al mapa y, al regresar, muestra el reencuentro dentro de la habitación
+	# como bocadillo inferior antes de retomar exactamente el checkpoint pendiente.
 	main.call("_go_to", "ana_q2", false)
 	for _i in range(3):
 		await process_frame
@@ -138,24 +139,48 @@ func _run() -> void:
 
 	transition.call("set_fast_mode", false)
 	transition.call("begin_character_visit", "ana")
+	var resume_node_id := "ana_resume_bubble_0932"
 	waited = 0
-	while not bool(transition.get("waiting_for_continue")) and waited < 180:
+	while str((main.get("state") as Dictionary).get("node_id", "")) != resume_node_id and waited < 180:
 		await process_frame
 		waited += 1
 	state = main.get("state")
-	var resume_message := str((transition.get("message_label") as Label).text)
-	if not bool(transition.get("waiting_for_continue")) or str(state.get("node_id", "")) != VISIT_NODE:
-		_fail("El reencuentro avanza solo antes de que el jugador pulse")
+	if str(state.get("node_id", "")) != resume_node_id:
+		_fail("El reencuentro no aparece como bocadillo inferior dentro de la habitación")
 		return
+	if bool(transition.get("transition_active")) or bool(transition.get("waiting_for_continue")):
+		_fail("El reencuentro sigue dependiendo de la pantalla negra de transición")
+		return
+	var current_node: Dictionary = main.get("current_node")
+	if not bool(current_node.get("transient_resume", false)) or str(current_node.get("resume_target", "")) != "ana_q2":
+		_fail("El bocadillo de reencuentro no conserva el checkpoint exacto de Ana")
+		return
+	var resume_message := str(current_node.get("text", ""))
 	var configured_messages: Array = root.get_node("DataManager").call("get_room_resume_messages")
 	if not configured_messages.has(resume_message):
 		_fail("El reencuentro no usa una frase configurable")
 		return
-	transition.call("_on_transition_input", click)
-	waited = 0
-	while bool(transition.get("transition_active")) and waited < 180:
+	# Esperar varios frames no debe consumir el bocadillo por sí solo.
+	for _i in range(30):
 		await process_frame
-		waited += 1
+	state = main.get("state")
+	if str(state.get("node_id", "")) != resume_node_id:
+		_fail("El bocadillo de reencuentro avanza solo antes de que el jugador pulse")
+		return
+	checkpoints = state.get("conversation_checkpoints", {})
+	if str(checkpoints.get("ana", "")) != "ana_q2":
+		_fail("El bocadillo temporal sobrescribe el checkpoint real de Ana")
+		return
+	var dialogue_panel := main.get("dialogue_panel") as PanelContainer
+	if dialogue_panel == null:
+		_fail("No se encuentra el bocadillo inferior para reanudar la visita")
+		return
+	# Primer clic completa el efecto de escritura; el segundo confirma el bocadillo.
+	dialogue_panel.emit_signal("gui_input", click)
+	await process_frame
+	dialogue_panel.emit_signal("gui_input", click)
+	for _i in range(3):
+		await process_frame
 	state = main.get("state")
 	if str(state.get("node_id", "")) != "ana_q2":
 		_fail("La visita retomada no continúa exactamente donde se dejó")
@@ -189,7 +214,7 @@ func _run() -> void:
 		_fail("La capa negra no se oculta al terminar la transición")
 		return
 
-	print("V044 OK: fundidos manuales, salida al mapa, reencuentro, continuación exacta y despedida validados.")
+	print("V044 OK: fundidos manuales, salida al mapa, reencuentro en bocadillo, continuación exacta y despedida validados.")
 	quit(0)
 
 
