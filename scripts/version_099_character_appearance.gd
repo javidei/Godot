@@ -170,7 +170,12 @@ func _select_character_skin(character_id: String, skin_id: String) -> void:
 		return
 	_refresh_runtime_character_visual(character_id)
 	_refresh_character_detail_portrait(character_id)
+	# La pantalla de Nueva partida vive durante toda la sesión. Sincronizamos su
+	# tarjeta inmediatamente para que no conserve la textura anterior en memoria.
 	if main != null:
+		var selector := main.get_node_or_null("CharacterSelectManager")
+		if selector != null and selector.has_method("refresh_character_portrait"):
+			selector.call("refresh_character_portrait", character_id)
 		main.call("_show_toast", "Apariencia cambiada")
 	# Reconstruir la ficha refresca inmediatamente previews, borde y botón activo.
 	_show_character(character_id)
