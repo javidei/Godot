@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La octava silla"
-config/version="0.9.32"
+config/version="0.9.33"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -48,3 +48,4 @@ driver/enable_input=false
 ; 0.9.30: la transición real del mapa prepara el duelo persistente de Javi y deja de ejecutar el reroll heredado de 0.9.8 en el Día 3.
 ; 0.9.31: el prólogo de Javi solo se consume al llegar al primer insulto y el hotspot de monitores se desactiva mientras hay respuestas visibles.
 ; 0.9.32: el diálogo solo avanza desde su panel inferior y las revisitas muestran el reencuentro dentro de la habitación en vez de una pantalla negra.
+; 0.9.33: el selector de protagonista sincroniza sus retratos con la apariencia seleccionada en Extras -> Personajes.
