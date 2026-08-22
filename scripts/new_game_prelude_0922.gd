@@ -4,11 +4,53 @@ signal prelude_finished
 
 const LOGO_TEXTURE := preload("res://assets/ui/naranjal-studio-logo.png")
 const MONOCRAFT_FONT := preload("res://assets/ui/fonts/Monocraft.ttf")
-const PORTUGAL_NOTICE := "En este juego no se realizará mención alguna a los hechos acontecidos en Portugal, ya que es un tema bastante gastado."
 
-const PORTUGAL_FADE_IN_SECONDS := 4.0
-const PORTUGAL_HOLD_SECONDS := 3.4
-const PORTUGAL_FADE_OUT_SECONDS := 4.5
+const INTRO_QUOTES := [
+    {
+        "text": "Dicen que todas las buenas historias empiezan con alguien tomando una mala decisión.",
+        "source": "Leído en un azucarillo del Bar Ávila"
+    },
+    {
+        "text": "Con los años uno olvida los detalles. Por desgracia, los demás no.",
+        "source": "Anotado en una servilleta del Bar Ávila"
+    },
+    {
+        "text": "Hay recuerdos que mejoran con el tiempo. Otros solo se vuelven más sospechosos.",
+        "source": "Filosofía encontrada junto a una máquina de tabaco"
+    },
+    {
+        "text": "Toda pandilla tiene una historia que nadie cuenta igual dos veces.",
+        "source": "Leído en la parte de atrás de un ticket de bar"
+    },
+    {
+        "text": "Si algo ocurrió hace muchos años y todos lo recuerdan distinto, probablemente merece otra ronda.",
+        "source": "Sabiduría popular del Bar Ávila"
+    },
+    {
+        "text": "Volver a ver a viejos amigos es fácil. Recordar por qué dejaste de verlos ya es otra historia.",
+        "source": "Escrito a boli en una mesa que no era nuestra"
+    },
+    {
+        "text": "Nadie sospecha del pasado hasta que el pasado empieza a hacer cosas raras.",
+        "source": "Leído en un azucarillo ligeramente mojado"
+    },
+    {
+        "text": "Las mejores leyendas suelen empezar con alguien diciendo: yo estaba allí.",
+        "source": "Atribuido a un señor del Bar Ávila que parecía saber demasiado"
+    },
+    {
+        "text": "Una amistad puede sobrevivir al tiempo, la distancia y, con suerte, a ciertas decisiones cuestionables.",
+        "source": "Máxima encontrada debajo de una tapa de cerveza"
+    },
+    {
+        "text": "Esta historia está basada en hechos reales. Lo preocupante es averiguar cuáles.",
+        "source": "Leído en un azucarillo del Bar Ávila"
+    }
+]
+
+const QUOTE_FADE_IN_SECONDS := 4.0
+const QUOTE_HOLD_SECONDS := 3.4
+const QUOTE_FADE_OUT_SECONDS := 4.5
 const LOGO_HOLD_SECONDS := 2.65
 const REVEAL_SECONDS := 0.35
 
@@ -32,16 +74,16 @@ var splash_background: ColorRect
 var logo: TextureRect
 var fade_overlay: ColorRect
 var logo_material: ShaderMaterial
-var portugal_screen: Control
+var intro_quote_screen: Control
 
 
 func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
     z_index = 500
     _build_splash()
-    _build_portugal_screen()
+    _build_intro_quote_screen()
     await get_tree().process_frame
-    await _run_portugal_notice()
+    await _run_intro_quote()
     await _play_opening()
     await get_tree().create_timer(LOGO_HOLD_SECONDS).timeout
     await _fade_to_black()
@@ -103,23 +145,27 @@ func _build_splash() -> void:
     add_child(fade_overlay)
 
 
-func _build_portugal_screen() -> void:
-    portugal_screen = Control.new()
-    portugal_screen.name = "PortugalDisclaimer0922"
-    portugal_screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-    portugal_screen.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    portugal_screen.z_index = 20
-    portugal_screen.visible = false
-    portugal_screen.modulate.a = 0.0
-    add_child(portugal_screen)
+func _build_intro_quote_screen() -> void:
+    intro_quote_screen = Control.new()
+    intro_quote_screen.name = "StoryOpeningQuote0937"
+    intro_quote_screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    intro_quote_screen.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    intro_quote_screen.z_index = 20
+    intro_quote_screen.visible = false
+    intro_quote_screen.modulate.a = 0.0
+    add_child(intro_quote_screen)
+
+    var rng := RandomNumberGenerator.new()
+    rng.randomize()
+    var selected: Dictionary = INTRO_QUOTES[rng.randi_range(0, INTRO_QUOTES.size() - 1)]
 
     var paragraph := Label.new()
-    paragraph.name = "PortugalNoticeMonocraft0922"
+    paragraph.name = "StoryOpeningQuoteText0937"
     paragraph.anchor_left = 0.12
-    paragraph.anchor_top = 0.30
+    paragraph.anchor_top = 0.24
     paragraph.anchor_right = 0.88
-    paragraph.anchor_bottom = 0.70
-    paragraph.text = PORTUGAL_NOTICE
+    paragraph.anchor_bottom = 0.60
+    paragraph.text = str(selected.get("text", ""))
     paragraph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     paragraph.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
     paragraph.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -127,22 +173,38 @@ func _build_portugal_screen() -> void:
     paragraph.add_theme_font_size_override("font_size", 24)
     paragraph.add_theme_color_override("font_color", Color("eee9e1"))
     paragraph.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    portugal_screen.add_child(paragraph)
+    intro_quote_screen.add_child(paragraph)
+
+    var source := Label.new()
+    source.name = "StoryOpeningQuoteSource0937"
+    source.anchor_left = 0.16
+    source.anchor_top = 0.58
+    source.anchor_right = 0.84
+    source.anchor_bottom = 0.73
+    source.text = "— " + str(selected.get("source", ""))
+    source.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    source.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+    source.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    source.add_theme_font_override("font", MONOCRAFT_FONT)
+    source.add_theme_font_size_override("font_size", 17)
+    source.add_theme_color_override("font_color", Color("aaa69f"))
+    source.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    intro_quote_screen.add_child(source)
 
 
-func _run_portugal_notice() -> void:
-    portugal_screen.visible = true
-    portugal_screen.modulate.a = 0.0
+func _run_intro_quote() -> void:
+    intro_quote_screen.visible = true
+    intro_quote_screen.modulate.a = 0.0
 
     var tween := create_tween()
     tween.set_trans(Tween.TRANS_SINE)
     tween.set_ease(Tween.EASE_IN_OUT)
-    tween.tween_property(portugal_screen, "modulate:a", 1.0, PORTUGAL_FADE_IN_SECONDS)
-    tween.tween_interval(PORTUGAL_HOLD_SECONDS)
-    tween.tween_property(portugal_screen, "modulate:a", 0.0, PORTUGAL_FADE_OUT_SECONDS)
+    tween.tween_property(intro_quote_screen, "modulate:a", 1.0, QUOTE_FADE_IN_SECONDS)
+    tween.tween_interval(QUOTE_HOLD_SECONDS)
+    tween.tween_property(intro_quote_screen, "modulate:a", 0.0, QUOTE_FADE_OUT_SECONDS)
     await tween.finished
 
-    portugal_screen.visible = false
+    intro_quote_screen.visible = false
     await get_tree().create_timer(0.35).timeout
 
 
