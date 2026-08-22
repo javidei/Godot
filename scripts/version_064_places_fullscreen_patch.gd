@@ -174,8 +174,8 @@ func _prime_room_pinch() -> void:
 	if points.size() < 2:
 		room_pinch_distance = 0.0
 		return
-	room_pinch_distance = (points[0] as Vector2).distance_to(points[1] as Vector2)
-	room_pinch_center = ((points[0] as Vector2) + (points[1] as Vector2)) * 0.5
+	room_pinch_distance = points[0].distance_to(points[1])
+	room_pinch_center = (points[0] + points[1]) * 0.5
 
 
 func _update_room_pinch() -> void:
@@ -184,8 +184,8 @@ func _update_room_pinch() -> void:
 		room_pinch_distance = 0.0
 		return
 
-	var first := points[0] as Vector2
-	var second := points[1] as Vector2
+	var first: Vector2 = points[0]
+	var second: Vector2 = points[1]
 	var current_distance := first.distance_to(second)
 	var current_center := (first + second) * 0.5
 	if room_pinch_distance <= 0.0:
@@ -249,7 +249,8 @@ func _clamp_room_pan(value: Vector2) -> Vector2:
 func _first_two_room_touch_points() -> Array[Vector2]:
 	var result: Array[Vector2] = []
 	for key in room_touches.keys():
-		result.append(room_touches[key] as Vector2)
+		var point: Vector2 = room_touches[key]
+		result.append(point)
 		if result.size() == 2:
 			break
 	return result
