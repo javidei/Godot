@@ -23,10 +23,14 @@ func _process(_delta: float) -> void:
 	var state := _state()
 	if state.is_empty() or typeof(state.get("player", null)) != TYPE_DICTIONARY:
 		return
-	var signature := "%s|%s|%s" % [
-		str(_current_day(state)),
+	var route_serial := 0
+	var raw_progress: Variant = state.get("narrative_routes", {})
+	if typeof(raw_progress) == TYPE_DICTIONARY:
+		route_serial = int((raw_progress as Dictionary).get("event_serial", 0))
+	var signature := "%d|%s|%d" % [
+		_current_day(state),
 		str(state.get("node_id", "")),
-		str((state.get("narrative_routes", {}) as Dictionary).get("event_serial", 0)) if typeof(state.get("narrative_routes", {})) == TYPE_DICTIONARY else "0"
+		route_serial
 	]
 	if signature == _last_signature:
 		return
@@ -121,15 +125,13 @@ func is_day_ready(day_id: int) -> bool:
 	if state.is_empty():
 		return false
 	var progress := _ensure_progress(state)
-	var found_required := false
 	for route in _routes_for_day(day_id):
 		if not bool(route.get("required_for_day", false)):
 			continue
-		found_required = true
 		var route_state := _route_state(progress, str(route.get("id", "")))
 		if not bool(route_state.get("completed", false)):
 			return false
-	return true if found_required else true
+	return true
 
 
 func get_day_progress(day_id: int) -> Dictionary:
@@ -163,8 +165,7 @@ func get_current_required_characters(day_id: int) -> Array[String]:
 	for route in _routes_for_day(day_id):
 		if not bool(route.get("required_for_day", false)):
 			continue
-		var route_id := str(route.get("id", ""))
-		var route_state := _route_state(progress, route_id)
+		var route_state := _route_state(progress, str(route.get("id", "")))
 		if bool(route_state.get("completed", false)):
 			continue
 		var stage := _current_stage(route, route_state)
@@ -244,9 +245,12 @@ func get_journal_routes(day_id: int) -> Array[Dictionary]:
 
 
 func get_discovered_clues() -> Array[String]:
-	var progress := _ensure_progress(_state())
-	var raw: Variant = progress.get("clues", [])
+	var state := _state()
 	var result: Array[String] = []
+	if state.is_empty():
+		return result
+	var progress := _ensure_progress(state)
+	var raw: Variant = progress.get("clues", [])
 	if typeof(raw) == TYPE_ARRAY:
 		for item in raw as Array:
 			var clue := str(item)
@@ -256,9 +260,12 @@ func get_discovered_clues() -> Array[String]:
 
 
 func get_unlocked_locations() -> Array[String]:
-	var progress := _ensure_progress(_state())
-	var raw: Variant = progress.get("unlocked_locations", [])
+	var state := _state()
 	var result: Array[String] = []
+	if state.is_empty():
+		return result
+	var progress := _ensure_progress(state)
+	var raw: Variant = progress.get("unlocked_locations", [])
 	if typeof(raw) == TYPE_ARRAY:
 		for item in raw as Array:
 			var value := str(item)
@@ -269,7 +276,10 @@ func get_unlocked_locations() -> Array[String]:
 
 func get_unlocked_arcs() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
-	var progress := _ensure_progress(_state())
+	var state := _state()
+	if state.is_empty():
+		return result
+	var progress := _ensure_progress(state)
 	var unlocked: Array = progress.get("unlocked_arcs", []) if typeof(progress.get("unlocked_arcs", [])) == TYPE_ARRAY else []
 	var raw_arcs: Variant = route_data.get("arcs", [])
 	if typeof(raw_arcs) != TYPE_ARRAY:
@@ -394,7 +404,10 @@ func _objective_satisfied(objective: Dictionary, route_state: Dictionary, progre
 				return false
 			for raw_target in raw_targets as Array:
 				var serial := int(events.get("visit:" + str(raw_target), 0))
-				if (serial <= start_serial) if fresh else (serial <= 0):
+				if fresh:
+					if serial <= start_serial:
+						return false
+				elif serial <= 0:
 					return false
 			return true
 		"event":
