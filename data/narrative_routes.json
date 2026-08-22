@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "day_overrides": {
+    "2": {
+      "title": "Cosas que no encajan",
+      "subtitle": "Sigue el hilo de una conversación a la siguiente",
+      "opening": {
+        "title": "DÍA 2 · COSAS QUE NO ENCAJAN",
+        "message": "Hoy no hay una lista de habitaciones que rellenar. Empieza por el hilo que tienes abierto y deja que cada conversación te lleve a la siguiente."
+      },
+      "completion_message": "Tres conversaciones después, ya no parece que todos recuerden lo mismo. Hay algo ahí, aunque todavía no sepas qué."
+    }
+  },
+  "routes": [
+    {
+      "id": "cosas_no_encajan",
+      "day": 2,
+      "title": "Cosas que no encajan",
+      "description": "Una conversación abre la siguiente. Si visitas a alguien antes de tiempo, tendrás que volver cuando tengas el contexto adecuado.",
+      "required_for_day": true,
+      "stages": [
+        {
+          "id": "recuerdo_de_jony",
+          "objective_text": "Habla con Jony y tira del hilo de sus recuerdos.",
+          "truth_layer": "altered",
+          "objectives": [
+            {"type": "visit", "target": "jony", "fresh": true}
+          ],
+          "on_complete": {
+            "flags": ["jony_recuerdo_incompleto"],
+            "clues": ["recuerdo_contradictorio"],
+            "toast": "Algo del recuerdo de Jony no termina de encajar."
+          }
+        },
+        {
+          "id": "carmen_y_el_instituto",
+          "objective_text": "Con lo que sabes ahora, vuelve a hablar con Carmen.",
+          "truth_layer": "altered",
+          "objectives": [
+            {"type": "visit", "target": "carmen", "fresh": true}
+          ],
+          "on_complete": {
+            "flags": ["carmen_menciona_instituto"],
+            "clues": ["instituto_gps"],
+            "locations": ["instituto_gps"],
+            "toast": "Nueva pista: el Instituto del GPS aparece en la historia."
+          }
+        },
+        {
+          "id": "contrastar_con_ana",
+          "objective_text": "Contrasta la historia con Ana antes de sacar conclusiones.",
+          "truth_layer": "real",
+          "objectives": [
+            {"type": "visit", "target": "ana", "fresh": true}
+          ],
+          "on_complete": {
+            "flags": ["grupo_empieza_a_dudar"],
+            "toast": "Ruta completada: ya tienes una contradicción real de la que tirar."
+          }
+        }
+      ]
+    },
+    {
+      "id": "primera_prueba",
+      "day": 3,
+      "title": "La primera prueba",
+      "description": "El código de la octava silla deja de ser un simple acertijo cuando encaja con el resto de pistas.",
+      "required_for_day": false,
+      "stages": [
+        {
+          "id": "resolver_octava_silla",
+          "objective_text": "Resuelve el código de la octava silla.",
+          "truth_layer": "fiction",
+          "objectives": [
+            {"type": "event", "event": "puzzle:octava_silla_codigo_01", "fresh": false}
+          ],
+          "on_complete": {
+            "flags": ["octava_silla_resuelta", "palanca_3_preparada"],
+            "clues": ["primera_prueba_superada"],
+            "arcs": ["la_palanca_3"],
+            "toast": "Hay otro hilo abierto. Y viene de bastante más atrás."
+          }
+        }
+      ]
+    }
+  ],
+  "arcs": [
+    {
+      "id": "la_palanca_3",
+      "title": "La Palanca III",
+      "description": "Un arco del pasado ha quedado preparado para entrar en la historia principal sin revelar todavía qué ocurrió realmente.",
+      "truth_layer": "fiction"
+    }
+  ]
+}
