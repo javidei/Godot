@@ -12,6 +12,19 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.35] - 2026-08-22
+
+### Added
+
+- El visor a pantalla completa de `Extras → Lugares` permite hacer **zoom táctil con pellizco** desde 1× hasta 5× en Web móvil.
+- Con la imagen ampliada se puede **arrastrar con un dedo** para recorrer los detalles sin perder el botón **Atrás**.
+- Un **doble toque** alterna rápidamente entre tamaño normal y 2×; en escritorio también se admite la rueda del ratón y gestos de trackpad compatibles.
+
+### Changed
+
+- El desplazamiento de la imagen ampliada queda limitado a su superficie visible para evitar perderla fuera de la pantalla.
+- Al cerrar el visor o abrir otra habitación, el zoom y la posición se reinician automáticamente.
+
 ## [0.9.34] - 2026-08-22
 
 ### Added
