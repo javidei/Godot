@@ -1,5 +1,15 @@
 extends "res://scripts/version_081_javi_monitor_closeup.gd"
 
+const PIXEL_ADVENTURE_ENTRE_LINEAS_URL := "https://javidei.github.io/pixel-adventure/?source=entre-lineas"
+
+
+func _open_pixel_adventure() -> void:
+	if OS.has_feature("web"):
+		var open_script := "window.__pixelAdventureTab = window.open('" + PIXEL_ADVENTURE_ENTRE_LINEAS_URL + "', '_blank'); if (window.__pixelAdventureTab) { window.__pixelAdventureTab.focus(); }"
+		JavaScriptBridge.eval(open_script, true)
+		return
+	OS.shell_open(PIXEL_ADVENTURE_URL)
+
 
 func _is_javi_room_active() -> bool:
 	if not super():
