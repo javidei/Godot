@@ -12,6 +12,31 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.38] - 2026-08-22
+
+### Added
+
+- Nuevo motor data-driven de rutas narrativas en `data/narrative_routes.json`, con etapas secuenciales, eventos, pistas, flags, lugares, decisiones, easter eggs y arcos desbloqueables persistentes por slot.
+- El Día 2 estrena la ruta **Cosas que no encajan**: Jony → Carmen → Ana. Visitar una etapa antes de desbloquearla no la completa; hay que volver cuando el contexto narrativo la active.
+- El Diario muestra la ruta en curso, las etapas ya descubiertas, lugares desbloqueados e hilos narrativos abiertos.
+- Las escenas y elecciones pueden activar rutas o registrar easter eggs mediante los metadatos `route_event` y `easter_egg_id`, sin acoplar el guion al motor.
+- Resolver el código del Día 3 deja preparado y visible el hilo **La Palanca III**, sin fijar todavía sus revelaciones argumentales.
+
+### Changed
+
+- Las nuevas partidas ya no muestran selector de protagonista: se entra siempre como **Invitado**, por lo que los siete miembros del grupo permanecen disponibles como NPC durante la run.
+- El mapa del Día 2 marca como objetivo únicamente al personaje correspondiente a la etapa narrativa actual, en lugar de presentar una lista de habitaciones por rellenar.
+- Los eventos de visita usados por las rutas se aíslan por jornada para que una conversación de un día anterior nunca complete una etapa posterior.
+- Tras agotar todos los insultos de Javi, una visita posterior reinicia el pool completo y vuelve a barajarlo, permitiendo jugar nuevas rondas indefinidamente hasta que el jugador decida marcharse.
+- El subtítulo del menú presenta el juego como una aventura de pistas, decisiones y rutas desde el punto de vista del Invitado.
+
+## [0.9.37] - 2026-08-22
+
+### Changed
+
+- Eliminado por completo el aviso de Portugal del preludio de Nueva partida.
+- Su lugar lo ocupa una de diez frases narrativas originales elegida al azar, con atribuciones humorísticas de bar y la misma presentación Monocraft sobre negro.
+
 ## [0.9.36] - 2026-08-22
 
 ### Fixed
@@ -381,7 +406,7 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 - La portada de **Extras** distribuye sus accesos en una cuadrícula responsive de hasta cuatro columnas y reduce la altura de las tarjetas para mostrar más opciones sin tanto desplazamiento.
 - La página **Extras → Logros** pasa de una lista vertical de tarjetas a una cuadrícula responsive: hasta cuatro columnas en pantallas muy anchas, tres en escritorio estándar, dos en anchos intermedios y una en pantallas estrechas.
-- Las tarjetas de logros usan iconos, tipografías, márgenes y barras de progreso más compactas, manteniendo el scroll táctil y la legibilidad en móvil.
+- Las tarjetas de logros usan iconos, tipografías, márgenes y barras de progreso más compactos, manteniendo el scroll táctil y la legibilidad en móvil.
 
 ## [0.6.5] - 2026-08-14
 
