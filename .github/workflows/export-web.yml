@@ -261,3 +261,5 @@ jobs:
       - name: Publicar juego
         id: deployment
         uses: actions/deploy-pages@v5
+
+# Reintento de publicación 0.9.38 (23/08/2026)
