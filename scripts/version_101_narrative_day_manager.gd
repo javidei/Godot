@@ -85,7 +85,7 @@ func submit_puzzle_solution(value: String) -> bool:
 	var was_solved := false
 	if not state_before.is_empty():
 		was_solved = bool(_puzzle_state(_current_day_state(state_before)).get("solved", false))
-	var solved := await super(value)
+	var solved := super(value)
 	if solved and not was_solved:
 		var routes := _route_manager()
 		if routes != null and routes.has_method("record_puzzle_solved"):
