@@ -1,4 +1,4 @@
-extends "res://scripts/version_063_mobile_extras_patch.gd"
+extends "res://scripts/version_064_places_fullscreen_patch.gd"
 
 
 func _show_home() -> void:

@@ -12,6 +12,17 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.34] - 2026-08-22
+
+### Added
+
+- Las imágenes de `Extras → Lugares` se pueden pulsar o tocar para abrirlas en un visor a pantalla completa.
+- El visor de lugares muestra únicamente la imagen y un botón **Atrás**, que cierra la vista y devuelve al mismo listado de Lugares sin reconstruir la pantalla.
+
+### Changed
+
+- La imagen se ajusta al tamaño máximo disponible conservando su proporción, tanto en escritorio como en dispositivos móviles.
+
 ## [0.9.33] - 2026-08-21
 
 ### Fixed
