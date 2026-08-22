@@ -41,7 +41,10 @@ func _process(_delta: float) -> void:
 func record_visit(character_id: String) -> void:
 	if character_id.is_empty():
 		return
-	record_event("visit:" + character_id, true)
+	var state := _state()
+	if state.is_empty():
+		return
+	record_event("visit:%d:%s" % [_current_day(state), character_id], true)
 
 
 func record_puzzle_solved(puzzle_id: String) -> void:
@@ -327,6 +330,7 @@ func _ensure_progress(state: Dictionary) -> Dictionary:
 			continue
 		var source: Variant = routes_state.get(route_id, {})
 		var route_state: Dictionary = (source as Dictionary).duplicate(true) if typeof(source) == TYPE_DICTIONARY else {}
+		route_state["day"] = int(route.get("day", 0))
 		route_state["stage_index"] = maxi(0, int(route_state.get("stage_index", 0)))
 		route_state["stage_started_serial"] = maxi(0, int(route_state.get("stage_started_serial", 0)))
 		if typeof(route_state.get("completed_stages", [])) != TYPE_ARRAY:
@@ -393,21 +397,22 @@ func _objective_satisfied(objective: Dictionary, route_state: Dictionary, progre
 	var kind := str(objective.get("type", ""))
 	var events: Dictionary = progress.get("events", {}) if typeof(progress.get("events", {})) == TYPE_DICTIONARY else {}
 	var start_serial := int(route_state.get("stage_started_serial", 0))
+	var route_day := int(route_state.get("day", 0))
 	var fresh := bool(objective.get("fresh", true))
 	match kind:
 		"visit":
-			var serial := int(events.get("visit:" + str(objective.get("target", "")), 0))
-			return serial > start_serial if fresh else serial > 0
+			var visit_serial := int(events.get("visit:%d:%s" % [route_day, str(objective.get("target", ""))], 0))
+			return visit_serial > start_serial if fresh else visit_serial > 0
 		"visit_all":
 			var raw_targets: Variant = objective.get("targets", [])
 			if typeof(raw_targets) != TYPE_ARRAY:
 				return false
 			for raw_target in raw_targets as Array:
-				var serial := int(events.get("visit:" + str(raw_target), 0))
+				var target_serial := int(events.get("visit:%d:%s" % [route_day, str(raw_target)], 0))
 				if fresh:
-					if serial <= start_serial:
+					if target_serial <= start_serial:
 						return false
-				elif serial <= 0:
+				elif target_serial <= 0:
 					return false
 			return true
 		"event":
@@ -470,6 +475,7 @@ func _migrate_completed_days(state: Dictionary, progress: Dictionary) -> void:
 			var stage := raw_stage as Dictionary
 			completed_stages.append(str(stage.get("id", "")))
 			_apply_actions(progress, stage.get("on_complete", {}))
+		route_state["day"] = day_id
 		route_state["completed_stages"] = completed_stages
 		route_state["stage_index"] = stages.size()
 		route_state["completed"] = true
@@ -506,9 +512,9 @@ func _visit_targets(stage: Dictionary) -> Array[String]:
 				var raw_targets: Variant = objective.get("targets", [])
 				if typeof(raw_targets) == TYPE_ARRAY:
 					for raw_target in raw_targets as Array:
-						var target := str(raw_target)
-						if not target.is_empty() and not result.has(target):
-							result.append(target)
+						var target_id := str(raw_target)
+						if not target_id.is_empty() and not result.has(target_id):
+							result.append(target_id)
 	return result
 
 
@@ -516,6 +522,7 @@ func _route_state(progress: Dictionary, route_id: String) -> Dictionary:
 	var routes_state: Dictionary = progress.get("routes", {}) if typeof(progress.get("routes", {})) == TYPE_DICTIONARY else {}
 	var raw: Variant = routes_state.get(route_id, {})
 	return (raw as Dictionary).duplicate(true) if typeof(raw) == TYPE_DICTIONARY else {
+		"day": 0,
 		"stage_index": 0,
 		"stage_started_serial": 0,
 		"completed_stages": [],
