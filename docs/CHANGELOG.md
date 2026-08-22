@@ -12,6 +12,13 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.36] - 2026-08-22
+
+### Fixed
+
+- Pixel Adventure se abre desde el monitor de Javi como una pestaña controlada por `Entre líneas` y recibe una marca de origen para distinguir este flujo del acceso independiente.
+- Al usar el portal de salida en Pixel Adventure, la pestaña abierta desde `Entre líneas` puede cerrarse realmente y devolver el foco al juego principal, eliminando el anterior resultado de una pestaña `about:blank`.
+
 ## [0.9.35] - 2026-08-22
 
 ### Added
