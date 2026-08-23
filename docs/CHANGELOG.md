@@ -12,6 +12,14 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.40] - 2026-08-23
+
+### Changed
+
+- Charlie utiliza ya el retrato real `assets/characters/charlie/charlie.png` como imagen neutral y como recurso temporal para sus expresiones disponibles.
+- La habitación de Charlie utiliza ya `assets/backgrounds/fondo-habitacion-charlie.jpg` y deja de reutilizar el fondo provisional de Casa Asturias.
+- La música de la habitación de Charlie continúa marcada como provisional.
+
 ## [0.9.39] - 2026-08-23
 
 ### Added

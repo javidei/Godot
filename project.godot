@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La novena silla"
-config/version="0.9.39"
+config/version="0.9.40"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -55,3 +55,4 @@ driver/enable_input=false
 ; 0.9.37: el aviso de Portugal se sustituye por diez frases narrativas aleatorias con atribuciones humorísticas al iniciar una nueva historia.
 ; 0.9.38: nuevas partidas con Invitado fijo, motor data-driven de rutas/pistas/decisiones/easter eggs y bucle repetible de insultos de Javi.
 ; 0.9.39: Charlie se incorpora como octavo miembro del grupo, con ficha, habitación provisional, mapa y arco propio Trípode -> tarta -> cámara de La Palanca; el Argentino añade su frase de la carita sonriente.
+; 0.9.40: Charlie usa su retrato real y su habitación deja de utilizar el fondo provisional.

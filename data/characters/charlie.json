@@ -3,9 +3,15 @@
   "name": "Carlos",
   "real_name": "Carlos",
   "display_name": "Charlie",
-  "nombres_alternativos": ["Charlie", "El Trípode"],
+  "nombres_alternativos": [
+    "Charlie",
+    "El Trípode"
+  ],
   "apodo": "Charlie",
-  "apodos": ["Charlie", "El Trípode"],
+  "apodos": [
+    "Charlie",
+    "El Trípode"
+  ],
   "notas_apodos": [
     "A veces le llaman El Trípode.",
     "Dentro del grupo todavía no hay una explicación canónica de por qué existe ese apodo; se mantiene como misterio y running gag."
@@ -18,14 +24,20 @@
   "playable": false,
   "enabled": true,
   "room": "room_charlie",
-  "image": "",
-  "image_optional": true,
+  "image": "res://assets/characters/charlie/charlie.png",
+  "image_optional": false,
   "music": "",
   "music_volume": 1.0,
   "initial_friendship": 0,
-  "poses": {},
+  "poses": {
+    "neutral": "res://assets/characters/charlie/charlie.png",
+    "happy": "res://assets/characters/charlie/charlie.png",
+    "thoughtful": "res://assets/characters/charlie/charlie.png"
+  },
   "profesion_o_estudios": "Ingeniero informático",
-  "estudios": ["Ingeniería Informática"],
+  "estudios": [
+    "Ingeniería Informática"
+  ],
   "personalidad": [],
   "descripcion_personalidad": "Pendiente de completar con rasgos de personalidad reales. La ficha evita inventarlos hasta que el grupo los defina.",
   "gustos": [
@@ -40,11 +52,22 @@
     "Magic: The Gathering",
     "Whisky Macallan"
   ],
-  "videojuegos": ["League of Legends", "Skate 2", "Halo", "Portal"],
-  "aficiones": ["Magic: The Gathering", "Videojuegos", "Cultura japonesa"],
+  "videojuegos": [
+    "League of Legends",
+    "Skate 2",
+    "Halo",
+    "Portal"
+  ],
+  "aficiones": [
+    "Magic: The Gathering",
+    "Videojuegos",
+    "Cultura japonesa"
+  ],
   "comida": {
     "favoritas": [],
-    "bebidas": ["Whisky Macallan"]
+    "bebidas": [
+      "Whisky Macallan"
+    ]
   },
   "forma_de_hablar": {
     "latiguillos": [],
@@ -52,14 +75,25 @@
     "palabras_o_expresiones": []
   },
   "relaciones": [
-    {"personaje": "javi", "tipo": "amigo"},
-    {"personaje": "grupo", "tipo": "amigo y cámara de los cortos de La Palanca"}
+    {
+      "personaje": "javi",
+      "tipo": "amigo"
+    },
+    {
+      "personaje": "grupo",
+      "tipo": "amigo y cámara de los cortos de La Palanca"
+    }
   ],
   "apariencia": {
     "altura_aproximada_m": 1.62,
     "pelo": "No está calvo; suele raparse la cabeza al cero.",
     "barba": "Barba y bigote cuidados.",
-    "estilo_ropa": ["Polos de palmeras", "Vaqueros claros", "Vaqueros de corte estándar", "Converse azules"],
+    "estilo_ropa": [
+      "Polos de palmeras",
+      "Vaqueros claros",
+      "Vaqueros de corte estándar",
+      "Converse azules"
+    ],
     "descripcion_estilo": "Estética muy ochentera con polos tropicales, vaqueros claros y reloj analógico. Dentro del grupo se bromea con llamarlo «estilo de putero de los 80» como descripción puramente estética, no literal.",
     "detalles_reconocibles": [
       "Reloj analógico negro",
