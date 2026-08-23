@@ -29,7 +29,7 @@ sed -i "s#href=\"index.manifest.json[^\"]*\"#href=\"index.manifest.json?v=${BUIL
 # Loader propio: oculta el splash genérico de Godot y conserva su progreso real.
 if ! grep -Fq 'ENTRE_LINEAS_LOADING_UI' "${HTML_SHELL}"; then
 	LOADER_STYLE='<!-- ENTRE_LINEAS_LOADING_UI --><style>#status{background:radial-gradient(circle at 50% 42%,#2c1b12 0%,#100a07 56%,#050302 100%)!important;gap:16px}#status-splash{display:none!important}#entre-lineas-loading-label{color:#f2c97e;font-family:Arial,sans-serif;font-size:clamp(14px,1.6vw,20px);font-weight:700;letter-spacing:.22em;line-height:1;text-align:center;text-transform:uppercase}#status-progress{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;width:min(460px,64vw)!important;height:8px;margin:0!important;border:0;border-radius:999px;overflow:hidden;appearance:none;-webkit-appearance:none;background:#24170f}#status-progress::-webkit-progress-bar{background:#24170f;border-radius:999px}#status-progress::-webkit-progress-value{background:#e4b968;border-radius:999px}#status-progress::-moz-progress-bar{background:#e4b968;border-radius:999px}</style>'
-	sed -i "s#</head>#${LOADER_STYLE}</head>#" "${HTML_SHELL}"
+	sed -i "s|</head>|${LOADER_STYLE}</head>|" "${HTML_SHELL}"
 	sed -i 's#<progress id="status-progress"></progress>#<div id="entre-lineas-loading-label">CARGANDO...</div><progress id="status-progress"></progress>#' "${HTML_SHELL}"
 fi
 
