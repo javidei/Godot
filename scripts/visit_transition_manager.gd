@@ -29,7 +29,7 @@ func _begin_resumed_visit(character_id: String, node_id: String) -> void:
 	var character: Dictionary = dm.call("get_character", character_id) if dm != null else {}
 	var display_name := str(character.get("display_name", character.get("name", character_id.capitalize())))
 	var background_id := str(dm.call("get_character_background_id", character_id)) if dm != null else ""
-	var resume_node_id := "%s_resume_bubble" % character_id
+	var resume_node_id := "%s_resume_bubble_0932" % character_id
 	RuntimeStory.NODES[resume_node_id] = {
 		"speaker": display_name,
 		"text": _pick_room_resume_message(),
