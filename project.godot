@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La novena silla"
-config/version="0.9.42"
+config/version="0.10.0"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
 
 [autoload]
 
-DataManager="*res://autoload/data_manager_v103.gd"
+DataManager="*res://autoload/data_manager_current.gd"
 
 [display]
 
@@ -58,3 +58,4 @@ driver/enable_input=false
 ; 0.9.40: Charlie usa su retrato real y su habitación deja de utilizar el fondo provisional.
 ; 0.9.41: primera revisión de guion con nuevas frases de apertura, un Día 1 más natural y los primeros diálogos revisados de Javi.
 ; 0.9.42: restauradas constantes vacías de compatibilidad para compilar la cadena heredada de transiciones sin recuperar el texto de 2026.
+; 0.10.0: consolidada la arquitectura activa para separar contenido, nueva partida, transiciones y lógica principal de los parches históricos por versión.
