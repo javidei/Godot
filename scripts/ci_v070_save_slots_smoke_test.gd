@@ -9,10 +9,6 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	var version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if not (version.begins_with("0.7.") or version.begins_with("0.8.") or version.begins_with("0.9.")):
-		_fail("La prueba requiere una rama compatible con el sistema de slots 0.7+")
-		return
 	dm = root.get_node_or_null("DataManager")
 	if dm == null:
 		_fail("DataManager no está disponible")
@@ -48,7 +44,7 @@ func _run() -> void:
 			_cleanup()
 			return
 	else:
-		print("V070 INFO: no hay dos slots vacíos; se omite escritura para proteger partidas locales.")
+		print("SAVE SLOTS INFO: no hay dos slots vacíos; se omite escritura para proteger partidas locales.")
 
 	var packed := load("res://scenes/main.tscn") as PackedScene
 	if packed == null:
@@ -91,32 +87,32 @@ func _run() -> void:
 	manager.call("_close_slots")
 	main.queue_free()
 	_cleanup()
-	print("V070 SAVE SLOTS OK: 10 slots, separación de partidas, resumen, carga/borrado y UI validados.")
+	print("SAVE SLOTS OK: 10 slots, Invitado fijo, separación de partidas, resumen, carga/borrado y UI validados.")
 	quit(0)
+
+
+func _guest_state(coins: int, zone_id: String, completed: Array, checkpoints: Dictionary, play_seconds: float) -> Dictionary:
+	return dm.call("migrate_save_state", {
+		"node_id": "__VISIT_SELECT__",
+		"player": {"id": "custom", "name": "Invitado", "display_name": "Invitado", "guest": true},
+		"affinity": {}, "expressions": {}, "history": [],
+		"completed_characters": completed,
+		"conversation_checkpoints": checkpoints,
+		"current_zone_id": zone_id,
+		"coins": coins,
+		"claimed_rewards": {},
+		"slot_play_seconds": play_seconds
+	})
 
 
 func _exercise_two_independent_slots(slot_a: int, slot_b: int) -> bool:
 	var profile_path_before := str(dm.call("get_profile_path"))
-	var state_a := {
-		"node_id": "__VISIT_SELECT__",
-		"player": {"id": "javi", "name": "Javi", "display_name": "Javi"},
-		"affinity": {}, "expressions": {}, "history": [],
-		"completed_characters": ["sue"], "conversation_checkpoints": {},
-		"current_zone_id": "naranjal_del_rio", "coins": 77,
-		"claimed_rewards": {}, "slot_play_seconds": 123.0
-	}
+	var state_a := _guest_state(77, "naranjal_del_rio", ["sue"], {}, 123.0)
 	if not bool(dm.call("set_active_save_slot", slot_a)) or not bool(dm.call("save_game", state_a)):
 		_fail("No se puede crear una partida en un slot vacío")
 		return false
 	created_slots.append(slot_a)
-	var state_b := {
-		"node_id": "__VISIT_SELECT__",
-		"player": {"id": "ana", "name": "Ana", "display_name": "Ana"},
-		"affinity": {}, "expressions": {}, "history": [],
-		"completed_characters": [], "conversation_checkpoints": {"jony": "jony_intro_01"},
-		"current_zone_id": "triana", "coins": 3,
-		"claimed_rewards": {}, "slot_play_seconds": 20.0
-	}
+	var state_b := _guest_state(3, "triana", [], {"jony": "jony_intro_01"}, 20.0)
 	if not bool(dm.call("set_active_save_slot", slot_b)) or not bool(dm.call("save_game", state_b)):
 		_fail("No se puede crear una segunda partida independiente")
 		return false
@@ -126,18 +122,19 @@ func _exercise_two_independent_slots(slot_a: int, slot_b: int) -> bool:
 	if not bool(summary_a.get("occupied", false)) or not bool(summary_b.get("occupied", false)):
 		_fail("Los slots creados no aparecen ocupados")
 		return false
-	if str(summary_a.get("protagonist_name", "")) != "Javi" or int(summary_a.get("coins", -1)) != 77:
+	if str(summary_a.get("protagonist_name", "")) != "Invitado" or int(summary_a.get("coins", -1)) != 77:
 		_fail("El resumen del primer slot mezcla o pierde sus datos")
 		return false
-	if str(summary_b.get("protagonist_name", "")) != "Ana" or int(summary_b.get("coins", -1)) != 3:
+	if str(summary_b.get("protagonist_name", "")) != "Invitado" or int(summary_b.get("coins", -1)) != 3:
 		_fail("El resumen del segundo slot mezcla o pierde sus datos")
 		return false
 	if int(summary_a.get("progress_percent", 0)) <= 0:
 		_fail("El porcentaje narrativo no refleja las visitas completadas")
 		return false
 	var loaded_a: Dictionary = dm.call("load_save_slot", slot_a)
-	if int(loaded_a.get("coins", -1)) != 77 or str((loaded_a.get("player", {}) as Dictionary).get("id", "")) != "javi":
-		_fail("Cargar un slot concreto devuelve datos de otra partida")
+	var loaded_player: Dictionary = loaded_a.get("player", {}) if typeof(loaded_a.get("player", {})) == TYPE_DICTIONARY else {}
+	if int(loaded_a.get("coins", -1)) != 77 or str(loaded_player.get("id", "")) != "custom" or not bool(loaded_player.get("guest", false)):
+		_fail("Cargar un slot concreto devuelve datos de otra partida o pierde al Invitado")
 		return false
 	if int(dm.call("get_last_used_save_slot")) != slot_a:
 		_fail("El slot cargado no pasa a ser la partida más reciente")
@@ -184,5 +181,5 @@ func _has_pressed_method(button: Button, method_name: String) -> bool:
 
 
 func _fail(message: String) -> void:
-	push_error("V070 SAVE SLOTS FAIL: " + message)
+	push_error("SAVE SLOTS FAIL: " + message)
 	quit(1)
