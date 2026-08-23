@@ -1,0 +1,119 @@
+name: Force Export Godot Web
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/force-export-web.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: godot-pages-force
+  cancel-in-progress: false
+
+env:
+  GODOT_VERSION: "4.7.1"
+
+jobs:
+  force-export-web:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.7.1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Preparar plantillas de exportación
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          mkdir -p "$HOME/.config"
+          if [ -d /root/.config/godot ]; then
+            mv /root/.config/godot "$HOME/.config/godot"
+          fi
+          mv "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+
+      - name: Importar recursos y validar GDScript
+        run: |
+          set +e
+          godot --headless --editor --path . --quit > import.log 2>&1
+          STATUS=$?
+          set -e
+          cat import.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" import.log; then
+            echo "La importación contiene errores reales de Godot/GDScript; no se publicará una build rota."
+            exit 1
+          fi
+
+      - name: Configurar título dinámico
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/configure_dynamic_title.gd > dynamic-title.log 2>&1
+          STATUS=$?
+          set -e
+          cat dynamic-title.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" dynamic-title.log; then
+            echo "No se ha podido calcular el título dinámico."
+            exit 1
+          fi
+          GAME_TITLE=$(sed -n 's/^DYNAMIC TITLE: //p' dynamic-title.log | tail -n 1)
+          test -n "$GAME_TITLE"
+          echo "GAME_TITLE=$GAME_TITLE" >> "$GITHUB_ENV"
+
+      - name: Exportar Web
+        run: |
+          rm -rf web
+          mkdir -p web
+          set +e
+          godot --headless --export-release "Web" web/index.html > export.log 2>&1
+          STATUS=$?
+          set -e
+          cat export.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" export.log; then
+            echo "La exportación contiene errores reales de GDScript; no se publicará."
+            exit 1
+          fi
+          test -s web/index.html
+          test -s web/index.wasm
+          test -s web/index.pck
+          ./scripts/prepare_web_export.sh web "${GITHUB_SHA}" "${GAME_TITLE}"
+          touch web/.nojekyll
+
+      - name: Guardar exportación Web en main
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f web
+          if git diff --cached --quiet; then
+            echo "Sin cambios en la exportación web"
+          else
+            git commit -m "build: forzar exportación web de Godot 0.9.39"
+            git push origin HEAD:main
+          fi
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Preparar artefacto de GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+  deploy-pages:
+    name: Publicar GitHub Pages (forzado)
+    needs: force-export-web
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Publicar juego
+        id: deployment
+        uses: actions/deploy-pages@v5
