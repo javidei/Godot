@@ -1,6 +1,6 @@
 [gd_scene load_steps=21 format=3]
 
-[ext_resource type="Script" path="res://scripts/main_v101.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/main_v102.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/ui_shell_manager.gd" id="2_ui_shell"]
 [ext_resource type="Script" path="res://scripts/version_101_guest_character_select.gd" id="3_character_select"]
 [ext_resource type="Script" path="res://scripts/version_099_javi_insult_battle.gd" id="4_version_040"]
@@ -19,7 +19,7 @@
 [ext_resource type="Script" path="res://scripts/version_090_story_runtime.gd" id="17_story_runtime"]
 [ext_resource type="Script" path="res://scripts/version_093_menu_branding.gd" id="18_menu_branding"]
 [ext_resource type="Script" path="res://scripts/version_096_mute_visual_guard.gd" id="19_mute_guard"]
-[ext_resource type="Script" path="res://scripts/narrative_route_manager.gd" id="20_routes"]
+[ext_resource type="Script" path="res://scripts/narrative_route_manager_v102.gd" id="20_routes"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
