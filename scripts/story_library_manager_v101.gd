@@ -3,6 +3,10 @@ extends "res://scripts/story_library_manager.gd"
 
 func _apply_layout() -> void:
 	super()
+	if story_body != null:
+		# El texto sigue siendo seleccionable, pero el gesto táctil puede ascender
+		# al ScrollContainer y desplazar el relato empezando sobre cualquier párrafo.
+		story_body.mouse_filter = Control.MOUSE_FILTER_PASS
 	if menu_content == null:
 		return
 	# ScrollContainer gobierna el rect real del VBox. Conservamos los anchors
