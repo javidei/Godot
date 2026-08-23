@@ -1,10 +1,11 @@
 # Godot 4+
 .godot/
 
-# Exportaciones locales
+# Exportaciones locales y artefactos de CI
 build/
 exports/
-web/*.import
+web/
+web-build/
 
 # Sistema / editor
 .DS_Store
