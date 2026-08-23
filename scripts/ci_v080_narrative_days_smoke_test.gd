@@ -38,7 +38,7 @@ func _run() -> void:
 
 	var state := {
 		"node_id": "__VISIT_SELECT__",
-		"player": {"id": "javi", "name": "Javi", "display_name": "Javi"},
+		"player": {"id": "custom", "name": "Invitado", "display_name": "Invitado", "guest": true},
 		"affinity": {},
 		"expressions": {},
 		"history": [],
@@ -49,7 +49,11 @@ func _run() -> void:
 	}
 	state = dm.call("migrate_save_state", state) as Dictionary
 	if int(state.get("schema_version", 0)) < 5:
-		_fail("El guardado no se migra al esquema narrativo 0.8")
+		_fail("El guardado no se migra al esquema narrativo actual")
+		return
+	var player: Dictionary = state.get("player", {}) if typeof(state.get("player", {})) == TYPE_DICTIONARY else {}
+	if str(player.get("id", "")) != "custom" or not bool(player.get("guest", false)):
+		_fail("La progresión no conserva al Invitado fijo")
 		return
 	var progress: Dictionary = state.get("narrative_progress", {})
 	if int(progress.get("current_day", 0)) != 1:
@@ -71,11 +75,15 @@ func _run() -> void:
 	manager.set("transition_manager", null)
 	manager.set("progress_manager", null)
 
-	for character_id in ["sue", "smokey", "carmen", "jony", "ana", "argentino", "charlie"]:
-		manager.call("on_character_visit_completed", character_id)
+	var all_npcs: Array = dm.call("get_all_character_ids", true)
+	if all_npcs.size() != 8:
+		_fail("El Día 1 debe partir de los ocho NPC actuales")
+		return
+	for character_id in all_npcs:
+		manager.call("on_character_visit_completed", str(character_id))
 	var day_one_progress: Dictionary = manager.call("get_current_day_progress")
-	if int(day_one_progress.get("completed", 0)) != 7 or not bool(day_one_progress.get("ready", false)):
-		_fail("El Día 1 no se completa al visitar a los siete NPC además del protagonista histórico de la prueba")
+	if int(day_one_progress.get("completed", 0)) != 8 or not bool(day_one_progress.get("ready", false)):
+		_fail("El Día 1 no se completa al visitar a los ocho NPC")
 		return
 	manager.call("_commit_day_advance", 1, 2)
 	if int(manager.call("get_current_day_id")) != 2:
@@ -97,8 +105,8 @@ func _run() -> void:
 	var unique_targets: Dictionary = {}
 	for clue_id in targets.keys():
 		var target := str(targets[clue_id])
-		if target == "javi":
-			_fail("Una pista ha apuntado al propio protagonista")
+		if target == "custom":
+			_fail("Una pista ha apuntado al Invitado, que no es un NPC visitable")
 			return
 		unique_targets[target] = true
 	if unique_targets.size() != 4:
@@ -125,15 +133,15 @@ func _run() -> void:
 		_fail("El primer arco no queda marcado como completado")
 		return
 
-	var story_progress: Dictionary = dm.call("_story_progress", dummy.state, "javi")
+	var story_progress: Dictionary = dm.call("_story_progress", dummy.state, "custom")
 	if int(story_progress.get("percent", 0)) != 100:
 		_fail("El progreso global no alcanza el 100% al completar el arco disponible")
 		return
 
-	print("V080 NARRATIVE DAYS OK: 3 días, ocho miembros, objetivos variables, pistas, código, migración y progreso persistente validados.")
+	print("NARRATIVE DAYS OK: 3 días, Invitado, ocho NPC, objetivos variables, pistas, código, migración y progreso persistente validados.")
 	quit(0)
 
 
 func _fail(message: String) -> void:
-	push_error("V080 NARRATIVE DAYS FAIL: " + message)
+	push_error("NARRATIVE DAYS FAIL: " + message)
 	quit(1)
