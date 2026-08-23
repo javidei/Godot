@@ -10,15 +10,15 @@ config_version=5
 
 [application]
 
-config/name="Entre líneas: La octava silla"
-config/version="0.9.38"
+config/name="Entre líneas: La novena silla"
+config/version="0.9.39"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
 
 [autoload]
 
-DataManager="*res://autoload/data_manager_v101.gd"
+DataManager="*res://autoload/data_manager_v102.gd"
 
 [display]
 
@@ -54,3 +54,4 @@ driver/enable_input=false
 ; 0.9.36: Pixel Adventure se abre como pestaña controlada desde Entre líneas para que su portal pueda cerrarla y devolver el foco al juego.
 ; 0.9.37: el aviso de Portugal se sustituye por diez frases narrativas aleatorias con atribuciones humorísticas al iniciar una nueva historia.
 ; 0.9.38: nuevas partidas con Invitado fijo, motor data-driven de rutas/pistas/decisiones/easter eggs y bucle repetible de insultos de Javi.
+; 0.9.39: Charlie se incorpora como octavo miembro del grupo, con ficha, habitación provisional, mapa y arco propio Trípode -> tarta -> cámara de La Palanca; el Argentino añade su frase de la carita sonriente.
