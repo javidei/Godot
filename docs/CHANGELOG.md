@@ -12,6 +12,26 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.39] - 2026-08-23
+
+### Added
+
+- **Charlie / Carlos** se incorpora como octavo miembro del grupo, también conocido ocasionalmente como **El Trípode**, cuyo origen queda deliberadamente sin explicación como running gag.
+- Ficha completa de Charlie con Ingeniería Informática, afición por Japón, League of Legends, Skate 2, Halo, Portal, Xbox, Magic: The Gathering y Macallan; además de altura, ropa, reloj, tatuaje binario y rasgos físicos preparados para su futuro retrato.
+- Habitación propia `room_charlie`, ya integrada en Lugares y en el mapa de Naranjal del Río, con fondo y música provisionales hasta disponer del arte definitivo.
+- Arco secundario de Charlie distribuido en tres jornadas: **El Trípode**, **El pico de la tarta** y **Detrás de la cámara**.
+- La anécdota real del pico de la tarta en el mexicano queda convertida en easter egg narrativo del Día 2.
+- El papel de Charlie como cámara de **La Palanca I** y **La Palanca II** se convierte en una pista potencial para reconstruir aquello que quedó fuera de plano y enlazar más adelante con **La Palanca III**.
+- El Argentino incorpora la frase «Yo no he puesto una carita sonriente en mi vida.» dentro de una conversación del Día 2 sobre sus historias sentimentales.
+
+### Changed
+
+- El reparto activo pasa de siete a ocho miembros y el título dinámico pasa a **Entre líneas: La novena silla**, manteniendo al jugador como Invitado externo al grupo.
+- Los guardados anteriores incorporan automáticamente a Charlie al continuar, incluyendo afinidad, expresión y disponibilidad en el mapa.
+- El sistema de validación admite personajes con retrato explícitamente pendiente mediante `image_optional`, permitiendo integrar a Charlie sin inventarle una foto o una silueta.
+- Las rutas narrativas pueden registrar easter eggs desde sus acciones y el arco de Charlie se integra como contenido opcional sin bloquear la ruta principal.
+- Los smoke tests históricos de personajes, mapa, Extras, jornadas y transiciones se adaptan al flujo Invitado y al reparto de ocho NPC.
+
 ## [0.9.38] - 2026-08-22
 
 ### Added
