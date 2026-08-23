@@ -71,11 +71,11 @@ func _run() -> void:
 	manager.set("transition_manager", null)
 	manager.set("progress_manager", null)
 
-	for character_id in ["sue", "smokey", "carmen", "jony", "ana", "argentino"]:
+	for character_id in ["sue", "smokey", "carmen", "jony", "ana", "argentino", "charlie"]:
 		manager.call("on_character_visit_completed", character_id)
 	var day_one_progress: Dictionary = manager.call("get_current_day_progress")
-	if int(day_one_progress.get("completed", 0)) != 6 or not bool(day_one_progress.get("ready", false)):
-		_fail("El Día 1 no se completa al visitar al grupo salvo al protagonista")
+	if int(day_one_progress.get("completed", 0)) != 7 or not bool(day_one_progress.get("ready", false)):
+		_fail("El Día 1 no se completa al visitar a los siete NPC además del protagonista histórico de la prueba")
 		return
 	manager.call("_commit_day_advance", 1, 2)
 	if int(manager.call("get_current_day_id")) != 2:
@@ -130,7 +130,7 @@ func _run() -> void:
 		_fail("El progreso global no alcanza el 100% al completar el arco disponible")
 		return
 
-	print("V080 NARRATIVE DAYS OK: 3 días, objetivos variables, pistas, código, migración y progreso persistente validados.")
+	print("V080 NARRATIVE DAYS OK: 3 días, ocho miembros, objetivos variables, pistas, código, migración y progreso persistente validados.")
 	quit(0)
 
 
