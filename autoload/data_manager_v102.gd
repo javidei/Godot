@@ -55,10 +55,16 @@ func migrate_save_state(state: Dictionary) -> Dictionary:
 	if get_all_character_ids(true).has("charlie") and not active.has("charlie"):
 		active.append("charlie")
 	result["active_characters"] = active
-	if typeof(result.get("affinity", {})) == TYPE_DICTIONARY and not (result["affinity"] as Dictionary).has("charlie"):
-		(result["affinity"] as Dictionary)["charlie"] = get_initial_friendship("charlie")
-	if typeof(result.get("expressions", {})) == TYPE_DICTIONARY and not (result["expressions"] as Dictionary).has("charlie"):
-		(result["expressions"] as Dictionary)["charlie"] = "neutral"
+
+	var affinity: Dictionary = result.get("affinity", {}) if typeof(result.get("affinity", {})) == TYPE_DICTIONARY else {}
+	if not affinity.has("charlie"):
+		affinity["charlie"] = get_initial_friendship("charlie")
+	result["affinity"] = affinity
+
+	var expressions: Dictionary = result.get("expressions", {}) if typeof(result.get("expressions", {})) == TYPE_DICTIONARY else {}
+	if not expressions.has("charlie"):
+		expressions["charlie"] = "neutral"
+	result["expressions"] = expressions
 	return result
 
 
