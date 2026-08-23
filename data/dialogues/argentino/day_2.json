@@ -1,0 +1,62 @@
+{
+  "character": "argentino",
+  "intro": [
+    {
+      "expression": "thoughtful",
+      "text": "En una investigación no hace falta hacerse el detective de película. Mirá qué cambió y quién pudo tocarlo."
+    },
+    {
+      "speaker": "Narrador",
+      "speaker_id": "",
+      "text": "La conversación deriva hacia las historias sentimentales del Argentino y la cantidad de conquistas que asegura haber acumulado."
+    },
+    {
+      "speaker": "El Argentino",
+      "speaker_id": "argentino",
+      "expression": "happy",
+      "text": "Yo no he puesto una carita sonriente en mi vida."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Una máquina hoy hace un ruido nuevo. ¿Qué revisaría?",
+      "answers": [
+        {
+          "text": "Qué pieza o ajuste cambió desde ayer",
+          "side": "left",
+          "score": 1,
+          "feedback": "correct"
+        },
+        {
+          "text": "El horóscopo de la máquina",
+          "side": "right",
+          "score": 0,
+          "feedback": "wrong"
+        },
+        {
+          "text": "Pintarla de otro color",
+          "side": "left",
+          "score": 0,
+          "feedback": "wrong"
+        },
+        {
+          "text": "Subir la música para no oírla",
+          "side": "right",
+          "score": 0,
+          "feedback": "wrong"
+        }
+      ],
+      "feedback": {
+        "correct": {
+          "text": "Eso, che. Primero lo que cambió.",
+          "expression": "happy"
+        },
+        "wrong": {
+          "text": "Revisá qué cambió desde ayer.",
+          "expression": "thoughtful"
+        }
+      }
+    }
+  ]
+}
