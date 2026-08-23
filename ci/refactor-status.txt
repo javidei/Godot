@@ -1,0 +1,183 @@
+FAILED
+commit=64edfd3744823376855e7cc708432c52c4a9781f
+--- tail ---
+         [6] reload_all (res://autoload/data_manager_v097.gd:16)
+         [7] reload_all (res://autoload/data_manager_v099.gd:11)
+         [8] reload_all (res://autoload/data_manager_current.gd:11)
+         [9] _run (res://scripts/ci_v070_character_smoke_test.gd:16)
+WARNING: DataManager: optional music is missing in 'casa_asturias': res://assets/audio/music/casa-asturias.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validate_data (res://autoload/data_manager.gd:748)
+         [1] _validate_data (res://autoload/data_manager_runtime.gd:23)
+         [2] reload_all (res://autoload/data_manager.gd:68)
+         [3] reload_all (res://autoload/data_manager_runtime.gd:16)
+         [4] reload_all (res://autoload/data_manager_v080.gd:13)
+         [5] reload_all (res://autoload/data_manager_v090.gd:15)
+         [6] reload_all (res://autoload/data_manager_v097.gd:16)
+         [7] reload_all (res://autoload/data_manager_v099.gd:11)
+         [8] reload_all (res://autoload/data_manager_current.gd:11)
+         [9] _run (res://scripts/ci_v070_character_smoke_test.gd:16)
+WARNING: DataManager: optional music is missing in 'room_charlie': res://assets/audio/music/casa-asturias.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validate_data (res://autoload/data_manager.gd:748)
+         [1] _validate_data (res://autoload/data_manager_runtime.gd:23)
+         [2] reload_all (res://autoload/data_manager.gd:68)
+         [3] reload_all (res://autoload/data_manager_runtime.gd:16)
+         [4] reload_all (res://autoload/data_manager_v080.gd:13)
+         [5] reload_all (res://autoload/data_manager_v090.gd:15)
+         [6] reload_all (res://autoload/data_manager_v097.gd:16)
+         [7] reload_all (res://autoload/data_manager_v099.gd:11)
+         [8] reload_all (res://autoload/data_manager_current.gd:11)
+         [9] _run (res://scripts/ci_v070_character_smoke_test.gd:16)
+WARNING: Canción no registrada o inexistente: casa_asturias -> res://assets/audio/music/casa-asturias.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _load_music (res://scripts/audio_manager.gd:435)
+         [1] play_music (res://scripts/audio_manager.gd:106)
+         [2] play_background_music (res://scripts/audio_manager.gd:97)
+         [3] _set_background (res://scripts/main.gd:759)
+         [4] _ready (res://scripts/main.gd:84)
+         [5] _ready (res://scripts/main_data_driven.gd:20)
+         [6] _ready (res://scripts/main_current.gd:8)
+         [7] _run (res://scripts/ci_v070_character_smoke_test.gd:85)
+Demo narrativa Godot cargada con recursos locales.
+SMOKE OK: ocho miembros, Invitado fijo, Charlie con retrato y habitación reales, arco y frase del Argentino validados.
+WARNING: 8 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 4 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+=== res://scripts/ci_v070_v044_transition_smoke_test.gd ===
+libfontconfig.so.1: cannot open shared object file: No such file or directory
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+WARNING: DataManager: optional music is missing in 'bar': res://assets/audio/music/bar-nocturno.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validate_data (res://autoload/data_manager.gd:748)
+         [1] _validate_data (res://autoload/data_manager_runtime.gd:23)
+         [2] reload_all (res://autoload/data_manager.gd:68)
+         [3] reload_all (res://autoload/data_manager_runtime.gd:16)
+         [4] reload_all (res://autoload/data_manager_v080.gd:13)
+         [5] reload_all (res://autoload/data_manager_v090.gd:15)
+         [6] reload_all (res://autoload/data_manager_v097.gd:16)
+         [7] reload_all (res://autoload/data_manager_v099.gd:11)
+         [8] reload_all (res://autoload/data_manager_current.gd:11)
+         [9] ensure_loaded (res://autoload/data_manager.gd:50)
+         [10] _ready (res://autoload/data_manager.gd:44)
+WARNING: DataManager: optional music is missing in 'bosque': res://assets/audio/music/bosque-misterioso.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validate_data (res://autoload/data_manager.gd:748)
+         [1] _validate_data (res://autoload/data_manager_runtime.gd:23)
+         [2] reload_all (res://autoload/data_manager.gd:68)
+         [3] reload_all (res://autoload/data_manager_runtime.gd:16)
+         [4] reload_all (res://autoload/data_manager_v080.gd:13)
+         [5] reload_all (res://autoload/data_manager_v090.gd:15)
+         [6] reload_all (res://autoload/data_manager_v097.gd:16)
+         [7] reload_all (res://autoload/data_manager_v099.gd:11)
+         [8] reload_all (res://autoload/data_manager_current.gd:11)
+         [9] ensure_loaded (res://autoload/data_manager.gd:50)
+         [10] _ready (res://autoload/data_manager.gd:44)
+WARNING: DataManager: optional music is missing in 'casa_asturias': res://assets/audio/music/casa-asturias.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validate_data (res://autoload/data_manager.gd:748)
+         [1] _validate_data (res://autoload/data_manager_runtime.gd:23)
+         [2] reload_all (res://autoload/data_manager.gd:68)
+         [3] reload_all (res://autoload/data_manager_runtime.gd:16)
+         [4] reload_all (res://autoload/data_manager_v080.gd:13)
+         [5] reload_all (res://autoload/data_manager_v090.gd:15)
+         [6] reload_all (res://autoload/data_manager_v097.gd:16)
+         [7] reload_all (res://autoload/data_manager_v099.gd:11)
+         [8] reload_all (res://autoload/data_manager_current.gd:11)
+         [9] ensure_loaded (res://autoload/data_manager.gd:50)
+         [10] _ready (res://autoload/data_manager.gd:44)
+WARNING: DataManager: optional music is missing in 'room_charlie': res://assets/audio/music/casa-asturias.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validate_data (res://autoload/data_manager.gd:748)
+         [1] _validate_data (res://autoload/data_manager_runtime.gd:23)
+         [2] reload_all (res://autoload/data_manager.gd:68)
+         [3] reload_all (res://autoload/data_manager_runtime.gd:16)
+         [4] reload_all (res://autoload/data_manager_v080.gd:13)
+         [5] reload_all (res://autoload/data_manager_v090.gd:15)
+         [6] reload_all (res://autoload/data_manager_v097.gd:16)
+         [7] reload_all (res://autoload/data_manager_v099.gd:11)
+         [8] reload_all (res://autoload/data_manager_current.gd:11)
+         [9] ensure_loaded (res://autoload/data_manager.gd:50)
+         [10] _ready (res://autoload/data_manager.gd:44)
+WARNING: DataManager: optional music is missing in 'bar': res://assets/audio/music/bar-nocturno.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validate_data (res://autoload/data_manager.gd:748)
+         [1] _validate_data (res://autoload/data_manager_runtime.gd:23)
+         [2] reload_all (res://autoload/data_manager.gd:68)
+         [3] reload_all (res://autoload/data_manager_runtime.gd:16)
+         [4] reload_all (res://autoload/data_manager_v080.gd:13)
+         [5] reload_all (res://autoload/data_manager_v090.gd:15)
+         [6] reload_all (res://autoload/data_manager_v097.gd:16)
+         [7] reload_all (res://autoload/data_manager_v099.gd:11)
+         [8] reload_all (res://autoload/data_manager_current.gd:11)
+         [9] _run (res://scripts/ci_v070_v044_transition_smoke_test.gd:15)
+WARNING: DataManager: optional music is missing in 'bosque': res://assets/audio/music/bosque-misterioso.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validate_data (res://autoload/data_manager.gd:748)
+         [1] _validate_data (res://autoload/data_manager_runtime.gd:23)
+         [2] reload_all (res://autoload/data_manager.gd:68)
+         [3] reload_all (res://autoload/data_manager_runtime.gd:16)
+         [4] reload_all (res://autoload/data_manager_v080.gd:13)
+         [5] reload_all (res://autoload/data_manager_v090.gd:15)
+         [6] reload_all (res://autoload/data_manager_v097.gd:16)
+         [7] reload_all (res://autoload/data_manager_v099.gd:11)
+         [8] reload_all (res://autoload/data_manager_current.gd:11)
+         [9] _run (res://scripts/ci_v070_v044_transition_smoke_test.gd:15)
+WARNING: DataManager: optional music is missing in 'casa_asturias': res://assets/audio/music/casa-asturias.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validate_data (res://autoload/data_manager.gd:748)
+         [1] _validate_data (res://autoload/data_manager_runtime.gd:23)
+         [2] reload_all (res://autoload/data_manager.gd:68)
+         [3] reload_all (res://autoload/data_manager_runtime.gd:16)
+         [4] reload_all (res://autoload/data_manager_v080.gd:13)
+         [5] reload_all (res://autoload/data_manager_v090.gd:15)
+         [6] reload_all (res://autoload/data_manager_v097.gd:16)
+         [7] reload_all (res://autoload/data_manager_v099.gd:11)
+         [8] reload_all (res://autoload/data_manager_current.gd:11)
+         [9] _run (res://scripts/ci_v070_v044_transition_smoke_test.gd:15)
+WARNING: DataManager: optional music is missing in 'room_charlie': res://assets/audio/music/casa-asturias.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _validate_data (res://autoload/data_manager.gd:748)
+         [1] _validate_data (res://autoload/data_manager_runtime.gd:23)
+         [2] reload_all (res://autoload/data_manager.gd:68)
+         [3] reload_all (res://autoload/data_manager_runtime.gd:16)
+         [4] reload_all (res://autoload/data_manager_v080.gd:13)
+         [5] reload_all (res://autoload/data_manager_v090.gd:15)
+         [6] reload_all (res://autoload/data_manager_v097.gd:16)
+         [7] reload_all (res://autoload/data_manager_v099.gd:11)
+         [8] reload_all (res://autoload/data_manager_current.gd:11)
+         [9] _run (res://scripts/ci_v070_v044_transition_smoke_test.gd:15)
+WARNING: Canción no registrada o inexistente: casa_asturias -> res://assets/audio/music/casa-asturias.ogg
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _load_music (res://scripts/audio_manager.gd:435)
+         [1] play_music (res://scripts/audio_manager.gd:106)
+         [2] play_background_music (res://scripts/audio_manager.gd:97)
+         [3] _set_background (res://scripts/main.gd:759)
+         [4] _ready (res://scripts/main.gd:84)
+         [5] _ready (res://scripts/main_data_driven.gd:20)
+         [6] _ready (res://scripts/main_current.gd:8)
+         [7] _run (res://scripts/ci_v070_v044_transition_smoke_test.gd:21)
+Demo narrativa Godot cargada con recursos locales.
+ERROR: V044 FAIL: No se guarda el checkpoint de una conversación a medias
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://scripts/ci_v070_v044_transition_smoke_test.gd:102)
+       [1] _run (res://scripts/ci_v070_v044_transition_smoke_test.gd:73)
+WARNING: 4 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 2 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
