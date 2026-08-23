@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "character_order": ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino"],
+  "character_order": ["javi", "sue", "smokey", "carmen", "jony", "ana", "argentino", "charlie"],
   "menu": {
     "characters_image": "res://assets/ui/menu-lineup.png",
     "music_id": "menu",
