@@ -14,6 +14,16 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.3] - 2026-08-23
+
+### Changed
+
+- El preset Web incluye explícitamente `data/stories/*.txt`, de modo que **Historia de un asesino** y **Una trilogía innecesaria** se empaquetan dentro de `index.pck` y pueden leerse en la versión publicada.
+
+### Fixed
+
+- El postprocesado de la exportación comprueba que ambos relatos existan, no estén vacíos y que sus nombres aparezcan dentro del paquete PCK; si falta cualquiera, la publicación falla en lugar de generar un lector sin texto.
+
 ## [0.10.2] - 2026-08-23
 
 ### Added
