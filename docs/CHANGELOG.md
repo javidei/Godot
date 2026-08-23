@@ -12,6 +12,16 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 
 ### Fixed
 
+## [0.9.41] - 2026-08-23
+
+### Changed
+
+- El preludio de Nueva partida renueva sus diez frases aleatorias con un tono más cómico, sin nombres de personajes y con una fuente distinta para cada frase.
+- La apertura del Día 1 pasa a «Ha pasado tiempo desde la última vez que estuvisteis todos juntos. Empieza por saludar. Ya habrá tiempo de arrepentirse.».
+- La primera visita a Javi del Día 1 estrena una entrada, conversación, respuestas, feedback y despedida más naturales y humorísticos.
+- La introducción de Javi en el Día 2 deja de explicar la mecánica como un tutorial y pasa a una frase más conversacional.
+- Se retira del código heredado el antiguo texto «Los hechos acontecieron desde 2026.», que ya no formaba parte del flujo real de Nueva partida.
+
 ## [0.9.40] - 2026-08-23
 
 ### Changed
@@ -476,7 +486,6 @@ El proyecto utiliza versiones de tres bloques (`x.x.x`). Cada entrega que modifi
 ### Added
 
 - Pestaña permanente de Cosméticos en todas las fichas de personaje, conectada al perfil global, con skins y mascotas iniciales para Ana y Jony.
-- Botón `Mapa` dentro de las habitaciones y checkpoints independientes para pausar y retomar cada conversación.
 
 ### Changed
 

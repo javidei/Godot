@@ -3,9 +3,6 @@ extends "res://scripts/version_044_visit_transitions.gd"
 const DataAccess = preload("res://scripts/data_access.gd")
 const DataStory = preload("res://scripts/story.gd")
 
-const NEW_GAME_INTRO_TITLE := ""
-const NEW_GAME_INTRO_TEXT := "Los hechos acontecieron desde 2026."
-
 var last_missing_map_excuse := ""
 var last_room_resume_message := ""
 
@@ -118,13 +115,11 @@ func _pick_room_resume_message() -> String:
 	return selected
 
 
+# El antiguo texto de 2026 quedó fuera del flujo real al introducir el preludio
+# actual. La implementación base conserva solo el callback por compatibilidad.
 func play_new_game_intro(on_finished: Callable = Callable()) -> void:
-	play_generic_transition(
-		NEW_GAME_INTRO_TITLE,
-		NEW_GAME_INTRO_TEXT,
-		0.0,
-		on_finished
-	)
+	if on_finished.is_valid():
+		on_finished.call()
 
 
 func play_missing_map_transition(
