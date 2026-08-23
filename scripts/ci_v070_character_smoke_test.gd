@@ -35,16 +35,17 @@ func _run() -> void:
 	if str(charlie.get("display_name", "")) != "Charlie" or bool(charlie.get("playable", true)):
 		_fail("La ficha operativa de Charlie no está configurada como NPC")
 		return
-	if not str(charlie.get("image", "")).is_empty():
-		_fail("Charlie debe seguir sin retrato hasta recibir una imagen real")
+	var charlie_image := str(charlie.get("image", ""))
+	if charlie_image != "res://assets/characters/charlie/charlie.png" or not ResourceLoader.exists(charlie_image):
+		_fail("El retrato real de Charlie no está configurado o no es cargable")
 		return
 	var room: Dictionary = dm.call("get_room_for_character", "charlie")
-	if str(room.get("id", "")) != "room_charlie" or not bool(room.get("placeholder_background", false)):
-		_fail("La habitación provisional de Charlie no está disponible")
+	if str(room.get("id", "")) != "room_charlie" or bool(room.get("placeholder_background", true)):
+		_fail("La habitación real de Charlie no está configurada")
 		return
 	var room_path := str(room.get("background_path", ""))
-	if room_path.is_empty() or not ResourceLoader.exists(room_path):
-		_fail("El fondo provisional de Charlie no es cargable")
+	if room_path != "res://assets/backgrounds/fondo-habitacion-charlie.jpg" or not ResourceLoader.exists(room_path):
+		_fail("El fondo real de Charlie no es cargable")
 		return
 
 	for day_id in [1, 2, 3]:
@@ -90,11 +91,11 @@ func _run() -> void:
 		_fail("La escena principal no crea el slot de Charlie")
 		return
 	var charlie_view := views.get("charlie") as TextureRect
-	if charlie_view == null or charlie_view.texture != null:
-		_fail("Charlie debe renderizar un slot válido pero sin inventar retrato")
+	if charlie_view == null or charlie_view.texture == null:
+		_fail("Charlie debe renderizar su retrato real")
 		return
 
-	print("SMOKE OK: ocho miembros, Invitado fijo, Charlie sin foto, habitación, arco y frase del Argentino validados.")
+	print("SMOKE OK: ocho miembros, Invitado fijo, Charlie con retrato y habitación reales, arco y frase del Argentino validados.")
 	quit(0)
 
 
