@@ -17,99 +17,28 @@ if [ ! -s "${SERVICE_WORKER}" ] || [ ! -s "${ENGINE_SCRIPT}" ] || [ ! -s "${MANI
 	exit 1
 fi
 
-# Define una identidad exclusiva y estable para Entre lineas. Sin `id`, Chrome
-# puede asociar la exportacion generica de Godot a otra PWA del mismo sitio y
-# afirmar que ya esta instalada aunque el juego no tenga acceso visible.
+# Identidad estable para la PWA de Entre líneas.
 if ! grep -Fq '"id":"./entre-lineas"' "${MANIFEST}"; then
 	sed -i "s#{\"background_color\"#{\"id\":\"./entre-lineas\",\"short_name\":\"${SHORT_NAME}\",\"description\":\"Novela visual ${GAME_TITLE}\",\"scope\":\"./\",\"background_color\"#" "${MANIFEST}"
 fi
 sed -i "s#\"name\":\"[^\"]*\"#\"name\":\"${GAME_TITLE}\"#" "${MANIFEST}"
 sed -i "s#\"short_name\":\"[^\"]*\"#\"short_name\":\"${SHORT_NAME}\"#" "${MANIFEST}"
 sed -i "s#\"description\":\"[^\"]*\"#\"description\":\"Novela visual ${GAME_TITLE}\"#" "${MANIFEST}"
-
-# Chrome mantiene su propia cache del manifiesto. La referencia versionada
-# obliga a leer la identidad nueva y evita que siga mostrando la PWA fantasma.
 sed -i "s#href=\"index.manifest.json[^\"]*\"#href=\"index.manifest.json?v=${BUILD_ID}\"#" "${HTML_SHELL}"
 
-# Sustituye la pantalla de carga generica de Godot por una carga mínima propia.
-# Se conserva el progreso real que proporciona el motor, pero se oculta el
-# splash de Godot y se muestra un fondo coherente con el juego y «CARGANDO...».
+# Loader propio: oculta el splash genérico de Godot y conserva su progreso real.
 if ! grep -Fq 'ENTRE_LINEAS_LOADING_UI' "${HTML_SHELL}"; then
-	python3 - "${HTML_SHELL}" <<'PY'
-from pathlib import Path
-import sys
-
-path = Path(sys.argv[1])
-html = path.read_text(encoding="utf-8")
-needle = '<progress id="status-progress"></progress>'
-if needle not in html:
-    raise SystemExit("No se encuentra la barra de progreso de Godot en index.html")
-
-style = r'''<!-- ENTRE_LINEAS_LOADING_UI -->
-<style>
-#status {
-  background: radial-gradient(circle at 50% 42%, #2c1b12 0%, #100a07 56%, #050302 100%) !important;
-  gap: 16px;
-}
-#status-splash {
-  display: none !important;
-}
-#entre-lineas-loading-label {
-  color: #f2c97e;
-  font-family: Arial, sans-serif;
-  font-size: clamp(14px, 1.6vw, 20px);
-  font-weight: 700;
-  letter-spacing: .22em;
-  line-height: 1;
-  text-align: center;
-  text-transform: uppercase;
-}
-#status-progress {
-  position: relative !important;
-  left: auto !important;
-  right: auto !important;
-  bottom: auto !important;
-  width: min(460px, 64vw) !important;
-  height: 8px;
-  margin: 0 !important;
-  border: 0;
-  border-radius: 999px;
-  overflow: hidden;
-  appearance: none;
-  -webkit-appearance: none;
-  background: #24170f;
-}
-#status-progress::-webkit-progress-bar {
-  background: #24170f;
-  border-radius: 999px;
-}
-#status-progress::-webkit-progress-value {
-  background: #e4b968;
-  border-radius: 999px;
-}
-#status-progress::-moz-progress-bar {
-  background: #e4b968;
-  border-radius: 999px;
-}
-</style>'''
-
-html = html.replace('</head>', style + '\n\t</head>', 1)
-html = html.replace(needle, '<div id="entre-lineas-loading-label">CARGANDO...</div>\n\t\t\t' + needle, 1)
-path.write_text(html, encoding="utf-8")
-PY
+	LOADER_STYLE='<!-- ENTRE_LINEAS_LOADING_UI --><style>#status{background:radial-gradient(circle at 50% 42%,#2c1b12 0%,#100a07 56%,#050302 100%)!important;gap:16px}#status-splash{display:none!important}#entre-lineas-loading-label{color:#f2c97e;font-family:Arial,sans-serif;font-size:clamp(14px,1.6vw,20px);font-weight:700;letter-spacing:.22em;line-height:1;text-align:center;text-transform:uppercase}#status-progress{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;width:min(460px,64vw)!important;height:8px;margin:0!important;border:0;border-radius:999px;overflow:hidden;appearance:none;-webkit-appearance:none;background:#24170f}#status-progress::-webkit-progress-bar{background:#24170f;border-radius:999px}#status-progress::-webkit-progress-value{background:#e4b968;border-radius:999px}#status-progress::-moz-progress-bar{background:#e4b968;border-radius:999px}</style>'
+	sed -i "s#</head>#${LOADER_STYLE}</head>#" "${HTML_SHELL}"
+	sed -i 's#<progress id="status-progress"></progress>#<div id="entre-lineas-loading-label">CARGANDO...</div><progress id="status-progress"></progress>#' "${HTML_SHELL}"
 fi
 
-# Cada build usa una cache distinta aunque Godot reutilice su plantilla.
+# Cache aislada por build y actualización inmediata de la PWA instalada.
 sed -i "s/^const CACHE_VERSION = .*/const CACHE_VERSION = '${BUILD_ID}';/" "${SERVICE_WORKER}"
-
-# Evita que la cache HTTP de GitHub Pages (10 minutos) alimente la cache nueva
-# con index.html, index.pck o index.wasm pertenecientes a la build anterior.
 sed -i "s/cache.addAll(CACHED_FILES)/cache.addAll(CACHED_FILES.map((file) => new Request(file, { cache: 'reload' })))/" "${SERVICE_WORKER}"
 sed -i "s/let response = await event.preloadResponse;/let response = null;/" "${SERVICE_WORKER}"
 sed -i "s/response = await self.fetch(event.request);/response = await self.fetch(new Request(event.request, { cache: 'reload' }));/" "${SERVICE_WORKER}"
 
-# Evita que una app instalada siga ejecutando la build anterior. El worker
-# nuevo toma el control, elimina la cache antigua y recarga los clientes una vez.
 if ! grep -q "ENTRE_LINEAS_AUTO_UPDATE" "${SERVICE_WORKER}"; then
 	printf '%s\n' \
 		'' \
@@ -126,7 +55,6 @@ if ! grep -q "ENTRE_LINEAS_AUTO_UPDATE" "${SERVICE_WORKER}"; then
 		'});' >> "${SERVICE_WORKER}"
 fi
 
-# Obliga al navegador a consultar el worker publicado en cada arranque.
 REGISTER_CALL="navigator.serviceWorker.register(this.config.serviceWorker)"
 REGISTER_NO_CACHE="navigator.serviceWorker.register(this.config.serviceWorker, { updateViaCache: 'none' })"
 if grep -q "${REGISTER_CALL}" "${ENGINE_SCRIPT}"; then
