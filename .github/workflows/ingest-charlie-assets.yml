@@ -29,11 +29,11 @@ jobs:
           test -f .asset_upload/charlie-room-00.b64part
           test -f .asset_upload/charlie-portrait-00.b64part
           cat .asset_upload/charlie-room-*.b64part | base64 --decode > assets/generated/charlie-room.jpg
-          cat .asset_upload/charlie-portrait-*.b64part | base64 --decode > assets/generated/charlie.png
+          cat .asset_upload/charlie-portrait-*.b64part | base64 --decode > assets/generated/charlie.jpg
           test -s assets/generated/charlie-room.jpg
-          test -s assets/generated/charlie.png
+          test -s assets/generated/charlie.jpg
           file assets/generated/charlie-room.jpg
-          file assets/generated/charlie.png
+          file assets/generated/charlie.jpg
 
       - name: Guardar assets reales
         shell: bash
@@ -41,7 +41,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f assets/generated/charlie-room.jpg assets/generated/charlie.png
+          git add -f assets/generated/charlie-room.jpg assets/generated/charlie.jpg
           git rm -rf .asset_upload
           git add .github/workflows/ingest-charlie-assets.yml
           if git diff --cached --quiet; then
