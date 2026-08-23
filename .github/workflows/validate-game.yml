@@ -99,7 +99,7 @@ jobs:
             fi
           done
 
-      - name: Exportar Web de prueba
+      - name: Exportar y validar Web de prueba
         run: |
           rm -rf /tmp/entre-lineas-web
           mkdir -p /tmp/entre-lineas-web
@@ -114,3 +114,9 @@ jobs:
           test -s /tmp/entre-lineas-web/index.html
           test -s /tmp/entre-lineas-web/index.pck
           test -s /tmp/entre-lineas-web/index.wasm
+          GAME_TITLE=$(sed -n 's/^config\/name="\([^"]*\)"/\1/p' project.godot | head -n1)
+          test -n "$GAME_TITLE"
+          ./scripts/prepare_web_export.sh /tmp/entre-lineas-web "ci-${GITHUB_SHA}" "$GAME_TITLE"
+          grep -Fq 'ENTRE_LINEAS_LOADING_UI' /tmp/entre-lineas-web/index.html
+          grep -Fq '>CARGANDO...</div>' /tmp/entre-lineas-web/index.html
+          grep -Fq 'display: none !important;' /tmp/entre-lineas-web/index.html
