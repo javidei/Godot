@@ -40,17 +40,8 @@ jobs:
             mv "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
           fi
 
-      - name: Validar arquitectura y JSON
+      - name: Validar arquitectura
         run: |
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-
-          for path in Path("data").rglob("*.json"):
-              with path.open("r", encoding="utf-8") as fh:
-                  json.load(fh)
-          print("JSON OK")
-          PY
           git fetch origin main --depth=1 || true
           if git rev-parse --verify origin/main >/dev/null 2>&1; then
             NEW_VERSIONED=$(git diff --diff-filter=A --name-only origin/main...HEAD | grep -E '^(scripts/version_|scripts/main_v[0-9]|autoload/data_manager_v[0-9])' || true)
@@ -61,14 +52,14 @@ jobs:
             fi
           fi
 
-      - name: Importar proyecto y validar GDScript
+      - name: Importar proyecto y validar GDScript/JSON
         run: |
           set +e
           godot --headless --editor --path . --quit > import.log 2>&1
           STATUS=$?
           set -e
           cat import.log
-          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" import.log; then
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script|DataManager:.*error" import.log; then
             exit 1
           fi
 
@@ -118,4 +109,4 @@ jobs:
           ./scripts/prepare_web_export.sh /tmp/entre-lineas-web "ci-${GITHUB_SHA}" "$GAME_TITLE"
           grep -Fq 'ENTRE_LINEAS_LOADING_UI' /tmp/entre-lineas-web/index.html
           grep -Fq '>CARGANDO...</div>' /tmp/entre-lineas-web/index.html
-          grep -Fq 'display: none !important;' /tmp/entre-lineas-web/index.html
+          grep -Fq '#status-splash{display:none!important}' /tmp/entre-lineas-web/index.html
