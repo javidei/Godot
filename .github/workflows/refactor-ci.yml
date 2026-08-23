@@ -1,0 +1,102 @@
+name: Refactor 0.10.0 diagnostic
+
+on:
+  push:
+    branches: [refactor/0.10.0-cleanup]
+    paths-ignore:
+      - "ci/refactor-status.txt"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: "4.7.1"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.7.1
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Validar, exportar y registrar resultado
+        shell: bash
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p "$HOME/.local/share/godot/export_templates" "$HOME/.config" ci
+          if [ -d /root/.config/godot ]; then
+            mv /root/.config/godot "$HOME/.config/godot"
+          fi
+          if [ -d "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" ]; then
+            mv "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          fi
+
+          STATUS=0
+          : > combined.log
+
+          set +e
+          godot --headless --editor --path . --quit > import.log 2>&1
+          IMPORT_STATUS=$?
+          set -e
+          cat import.log >> combined.log
+          if [ "$IMPORT_STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" import.log; then
+            STATUS=1
+          fi
+
+          TESTS="res://scripts/ci_datamanager_smoke_test.gd res://scripts/ci_v070_character_smoke_test.gd res://scripts/ci_v070_v044_transition_smoke_test.gd res://scripts/ci_v070_save_slots_smoke_test.gd res://scripts/ci_v080_narrative_days_smoke_test.gd res://scripts/ci_v102_charlie_runtime_smoke_test.gd"
+          if [ "$STATUS" -eq 0 ]; then
+            for TEST in $TESTS; do
+              echo "=== $TEST ===" >> combined.log
+              set +e
+              timeout 90s godot --headless --path . --script "$TEST" > smoke.log 2>&1
+              TEST_STATUS=$?
+              set -e
+              cat smoke.log >> combined.log
+              if [ "$TEST_STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script| FAIL:" smoke.log; then
+                STATUS=1
+                break
+              fi
+            done
+          fi
+
+          if [ "$STATUS" -eq 0 ]; then
+            rm -rf /tmp/refactor-web
+            mkdir -p /tmp/refactor-web
+            set +e
+            godot --headless --export-release "Web" /tmp/refactor-web/index.html > export.log 2>&1
+            EXPORT_STATUS=$?
+            set -e
+            cat export.log >> combined.log
+            if [ "$EXPORT_STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" export.log || [ ! -s /tmp/refactor-web/index.html ] || [ ! -s /tmp/refactor-web/index.pck ] || [ ! -s /tmp/refactor-web/index.wasm ]; then
+              STATUS=1
+            fi
+          fi
+
+          if [ "$STATUS" -eq 0 ]; then
+            {
+              echo "PASS"
+              echo "commit=$GITHUB_SHA"
+              echo "version=$(sed -n 's/^config\/version=\"\([^\"]*\)\"/\1/p' project.godot | head -n1)"
+              echo "import=ok"
+              echo "smoke_tests=ok"
+              echo "web_export=ok"
+            } > ci/refactor-status.txt
+          else
+            {
+              echo "FAILED"
+              echo "commit=$GITHUB_SHA"
+              echo "--- tail ---"
+              tail -n 160 combined.log
+            } > ci/refactor-status.txt
+          fi
+
+          git add ci/refactor-status.txt
+          git commit -m "ci: registrar resultado del refactor 0.10.0" || true
+          git push origin HEAD:refactor/0.10.0-cleanup
+          exit "$STATUS"
