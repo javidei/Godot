@@ -24,12 +24,13 @@
       "name": "Naranjal del Río",
       "map_asset": "res://assets/maps/naranjal_del_rio.png",
       "temporary": false,
-      "residents": ["javi", "sue", "smokey", "argentino"],
+      "residents": ["javi", "sue", "smokey", "argentino", "charlie"],
       "locations": [
         {"id": "home_javi", "name": "Javi", "type": "character", "kind": "character", "character_id": "javi", "position": {"x": 0.36, "y": 0.40}},
         {"id": "home_sue", "name": "Sue", "type": "character", "kind": "character", "character_id": "sue", "position": {"x": 0.53, "y": 0.34}},
         {"id": "home_smokey", "name": "Fran / Smokey", "visit_label": "Visitar a Fran", "type": "character", "kind": "character", "character_id": "smokey", "position": {"x": 0.40, "y": 0.68}},
         {"id": "home_argentino", "name": "El Argentino", "visit_label": "Visitar al Argentino", "type": "character", "kind": "character", "character_id": "argentino", "position": {"x": 0.57, "y": 0.76}},
+        {"id": "home_charlie", "name": "Charlie", "visit_label": "Visitar a Charlie", "type": "character", "kind": "character", "character_id": "charlie", "position": {"x": 0.72, "y": 0.66}},
         {"id": "shop_naranjal", "name": "Tienda", "type": "shop", "kind": "shop", "position": {"x": 0.64, "y": 0.49}}
       ],
       "connections": [
@@ -48,7 +49,7 @@
         {"id": "home_jony", "name": "Jony", "type": "character", "kind": "character", "character_id": "jony", "position": {"x": 0.64, "y": 0.5}}
       ],
       "connections": [
-        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "bottom_right", "label": "VOLVER A NARANJAL DEL RÍO", "compact_label": "NARANJAL", "show_residents": false, "residents": ["javi", "sue", "smokey", "argentino"]}
+        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "bottom_right", "label": "VOLVER A NARANJAL DEL RÍO", "compact_label": "NARANJAL", "show_residents": false, "residents": ["javi", "sue", "smokey", "argentino", "charlie"]}
       ]
     },
     "monte_del_toro": {
@@ -61,7 +62,7 @@
         {"id": "home_carmen", "name": "Carmen", "type": "character", "kind": "character", "character_id": "carmen", "position": {"x": 0.5, "y": 0.5}}
       ],
       "connections": [
-        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "bottom_left", "label": "VOLVER A NARANJAL DEL RÍO", "compact_label": "NARANJAL", "show_residents": false, "residents": ["javi", "sue", "smokey", "argentino"]}
+        {"id": "to_naranjal", "to": "naranjal_del_rio", "target_zone_id": "naranjal_del_rio", "side": "bottom_left", "label": "VOLVER A NARANJAL DEL RÍO", "compact_label": "NARANJAL", "show_residents": false, "residents": ["javi", "sue", "smokey", "argentino", "charlie"]}
       ]
     }
   }
