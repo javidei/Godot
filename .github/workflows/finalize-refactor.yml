@@ -2,14 +2,14 @@ name: Finalize Refactor Changelog
 
 on:
   push:
-    branches: [refactor/0.10.0-cleanup]
-  workflow_dispatch:
+    branches: [main]
 
 permissions:
   contents: write
 
 jobs:
   finalize:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -18,6 +18,11 @@ jobs:
       - name: Registrar 0.10.0 y retirar workflow temporal
         shell: bash
         run: |
+          VERSION=$(sed -n 's/^config\/version="\([^"]*\)"/\1/p' project.godot | head -n1)
+          if [ "$VERSION" != "0.10.0" ]; then
+            echo "No corresponde finalizar 0.10.0 en la versión $VERSION"
+            exit 0
+          fi
           python3 - <<'PY'
           from pathlib import Path
           path = Path('docs/CHANGELOG.md')
@@ -30,7 +35,7 @@ jobs:
 
 - Nueva capa estable de runtime para la historia, guardados, nueva partida, transiciones, jornadas y rutas, evitando crear una subclase nueva por cada versión.
 - Diálogos revisables por personaje y día en `data/dialogues/`, con overrides JSON independientes del código.
-- Validación unificada de importación, JSON, flujo con Invitado, guardados, audio y exportación Web antes de publicar.
+- Validación unificada de importación, flujo con Invitado, guardados, audio y exportación Web antes de publicar.
 - Pantalla de carga Web propia con el texto «CARGANDO...» y una barra de progreso real, ocultando el splash genérico de Godot.
 
 ### Changed
@@ -44,7 +49,7 @@ jobs:
 ### Removed
 
 - Workflows temporales y duplicados de reparación, exportación y smoke tests que habían quedado obsoletos.
-- Pruebas antiguas que exigían la rama 0.9.x, selección de protagonista o reparto variable.
+- Pruebas antiguas que exigían selección de protagonista o reparto variable.
 - Archivos de exportación Web generados (`web/`) y placeholders de texto vacíos que no formaban parte del juego.
 
 ### Fixed
@@ -55,12 +60,11 @@ jobs:
 '''
               if marker not in text:
                   raise SystemExit('No se encuentra el punto de inserción del changelog')
-              text = text.replace(marker, section + marker, 1)
-              path.write_text(text, encoding='utf-8')
+              path.write_text(text.replace(marker, section + marker, 1), encoding='utf-8')
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git rm .github/workflows/finalize-refactor.yml
           git add docs/CHANGELOG.md
           git commit -m "docs: cerrar changelog 0.10.0"
-          git push
+          git push origin HEAD:main
