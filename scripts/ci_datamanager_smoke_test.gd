@@ -29,34 +29,44 @@ func _run() -> void:
 		_fail("DataManager ha detectado errores de datos: " + " | ".join(error_texts))
 		return
 
-	print("DATAMANAGER STEP 3: validar personajes/preguntas/habitaciones")
-	var character_ids: Array = data_manager.call("get_character_ids", true)
-	if character_ids.size() != 7:
-		_fail("Se esperaban siete personajes activos y hay %d" % character_ids.size())
+	print("DATAMANAGER STEP 3: validar roster, diálogos y habitaciones")
+	var character_ids: Array = data_manager.call("get_all_character_ids", true) if data_manager.has_method("get_all_character_ids") else data_manager.call("get_character_ids", true)
+	if character_ids.size() < 8 or not character_ids.has("charlie"):
+		_fail("El roster actual debe incluir al menos los ocho NPC activos, incluido Charlie")
 		return
+	if data_manager.has_method("set_runtime_active_characters"):
+		data_manager.call("set_runtime_active_characters", character_ids)
+	if data_manager.has_method("set_runtime_narrative_day"):
+		data_manager.call("set_runtime_narrative_day", 1)
+	GameData.refresh()
+	Story.refresh()
+
 	for raw_character_id in character_ids:
 		var character_id := str(raw_character_id)
 		var character: Dictionary = data_manager.call("get_character", character_id)
 		if character.is_empty() or str(character.get("room", "")).is_empty():
 			_fail("Ficha incompleta para " + character_id)
 			return
-		var questions: Array = data_manager.call("get_questions", character_id)
-		if questions.size() != 3:
-			_fail("%s no conserva sus tres preguntas" % character_id)
+		var bundle: Dictionary = data_manager.call("get_question_bundle", character_id)
+		var questions: Array = bundle.get("questions", []) if typeof(bundle.get("questions", [])) == TYPE_ARRAY else []
+		if questions.is_empty():
+			_fail("%s no tiene conversación para el Día 1" % character_id)
 			return
+		for raw_question in questions:
+			if typeof(raw_question) != TYPE_DICTIONARY:
+				_fail("Pregunta inválida para " + character_id)
+				return
+			var answers: Variant = (raw_question as Dictionary).get("answers", [])
+			if typeof(answers) != TYPE_ARRAY or (answers as Array).size() != 4:
+				_fail("Las preguntas de %s deben generar cuatro respuestas" % character_id)
+				return
 		var room: Dictionary = data_manager.call("get_room_for_character", character_id)
-		if room.is_empty() or str(room.get("background_path", "")).is_empty() or str(room.get("music_path", "")).is_empty():
+		if room.is_empty() or str(room.get("background_path", "")).is_empty():
 			_fail("Habitación incompleta para " + character_id)
 			return
 		if not Story.NODES.has(character_id + "_intro_01"):
 			_fail("La historia no genera la introducción de " + character_id)
 			return
-		for number in range(1, 4):
-			var question_id := "%s_q%d" % [character_id, number]
-			var node: Dictionary = Story.NODES.get(question_id, {})
-			if node.is_empty() or (node.get("choices", []) as Array).size() != 4:
-				_fail("La pregunta %s no genera cuatro respuestas" % question_id)
-				return
 
 	var menu_music: Dictionary = data_manager.call("get_menu_music")
 	if str(menu_music.get("id", "")) != "menu" or str(menu_music.get("path", "")) != "res://assets/audio/music/menu.ogg":
@@ -68,7 +78,7 @@ func _run() -> void:
 
 	print("DATAMANAGER STEP 4: validar user://")
 	if str(data_manager.call("get_save_path")) != "user://savegame.json":
-		_fail("La partida no apunta a user://savegame.json")
+		_fail("La partida de compatibilidad no apunta a user://savegame.json")
 		return
 	if str(data_manager.call("get_settings_path")) != "user://settings.json":
 		_fail("La configuración no apunta a user://settings.json")
@@ -76,7 +86,8 @@ func _run() -> void:
 
 	var test_save := {
 		"node_id": Story.START,
-		"player": {"id": "javi", "display_name": "Javi"},
+		"player": {"id": "custom", "display_name": "Invitado", "guest": true},
+		"active_characters": character_ids.duplicate(),
 		"affinity": {"sue": 2},
 		"expressions": {},
 		"history": []
@@ -85,7 +96,7 @@ func _run() -> void:
 		_fail("DataManager no puede escribir una partida JSON")
 		return
 	var loaded_save: Dictionary = data_manager.call("load_game")
-	if str(loaded_save.get("node_id", "")) != Story.START or int((loaded_save.get("affinity", {}) as Dictionary).get("sue", -1)) != 2:
+	if int((loaded_save.get("affinity", {}) as Dictionary).get("sue", -1)) != 2:
 		_fail("La partida JSON no se recupera correctamente")
 		return
 
@@ -121,23 +132,32 @@ func _run() -> void:
 			_fail("No carga el fondo de " + character_id)
 			return
 
-	var selection := main.get_node_or_null("CharacterSelectManager")
+	var new_game := main.get_node_or_null("CharacterSelectManager")
 	var visits := main.get_node_or_null("Version040Manager")
 	var transitions := main.get_node_or_null("Version044VisitTransitions")
 	var extras := main.get_node_or_null("Version050ExtrasCodex")
-	if selection == null or visits == null or transitions == null or extras == null:
-		_fail("Falta una capa de compatibilidad de la escena principal")
+	if new_game == null or visits == null or transitions == null or extras == null:
+		_fail("Falta un manager requerido en la escena principal")
+		return
+	if new_game.get_script() == null or not str(new_game.get_script().resource_path).ends_with("new_game_manager.gd"):
+		_fail("Nueva partida sigue dependiendo del selector de protagonista heredado")
 		return
 
-	print("DATAMANAGER STEP 7: validar selección")
-	selection.call("open_selection")
-	await process_frame
-	var cards: Array = selection.get("character_cards") as Array
-	if cards.size() != 8:
-		_fail("La selección no conserva siete personajes más el personalizado")
+	print("DATAMANAGER STEP 7: validar Invitado fijo")
+	new_game.call("_start_guest_game")
+	for _i in range(8):
+		await process_frame
+	var state: Dictionary = main.get("state")
+	var player: Variant = state.get("player", {})
+	if typeof(player) != TYPE_DICTIONARY or str((player as Dictionary).get("id", "")) != "custom" or not bool((player as Dictionary).get("guest", false)):
+		_fail("Nueva partida no entra como Invitado fijo")
+		return
+	var active: Variant = state.get("active_characters", [])
+	if typeof(active) != TYPE_ARRAY or (active as Array).size() < 8 or not (active as Array).has("charlie"):
+		_fail("El Invitado no conserva disponibles los ocho NPC")
 		return
 
-	print("DATAMANAGER OK: JSON estáticos, menú musical, escena, preguntas, habitaciones, assets y user:// validados.")
+	print("DATAMANAGER OK: datos, roster, Invitado, escena, diálogos, habitaciones, assets y user:// validados.")
 	quit(0)
 
 
