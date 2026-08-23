@@ -1,0 +1,95 @@
+name: Finalize Charlie Visuals
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".asset_upload/finalize-charlie-visuals"
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validar assets subidos
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s assets/characters/charlie/charlie.png
+          test -s assets/backgrounds/fondo-habitacion-charlie.jpg
+
+      - name: Conectar Charlie y su habitación
+        shell: python
+        run: |
+          from pathlib import Path
+          import json
+
+          portrait = "res://assets/characters/charlie/charlie.png"
+          background = "res://assets/backgrounds/fondo-habitacion-charlie.jpg"
+
+          charlie_path = Path("data/characters/charlie.json")
+          charlie = json.loads(charlie_path.read_text(encoding="utf-8"))
+          charlie["image"] = portrait
+          charlie["image_optional"] = False
+          poses = charlie.get("poses") if isinstance(charlie.get("poses"), dict) else {}
+          poses.update({
+              "neutral": portrait,
+              "happy": portrait,
+              "thoughtful": portrait,
+          })
+          charlie["poses"] = poses
+          charlie_path.write_text(json.dumps(charlie, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+          room_path = Path("data/rooms/room_charlie.json")
+          room = json.loads(room_path.read_text(encoding="utf-8"))
+          room["description"] = "Espacio preparado para Charlie: ordenador, referencias a Xbox, Halo, Portal y Skate 2, cartas de Magic, objetos de estética japonesa y una cámara que recuerda su papel en La Palanca I y II. La música actual sigue siendo provisional."
+          room["background_path"] = background
+          room["placeholder_background"] = False
+          room_path.write_text(json.dumps(room, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+          project_path = Path("project.godot")
+          project = project_path.read_text(encoding="utf-8")
+          old_version = 'config/version="0.9.39"'
+          new_version = 'config/version="0.9.40"'
+          if old_version not in project and new_version not in project:
+              raise SystemExit("No se ha encontrado la versión esperada en project.godot")
+          project = project.replace(old_version, new_version, 1)
+          note = '; 0.9.40: Charlie usa su retrato real y su habitación deja de utilizar el fondo provisional.\n'
+          if note.strip() not in project:
+              project = project.rstrip() + "\n" + note
+          project_path.write_text(project, encoding="utf-8")
+
+          changelog_path = Path("docs/CHANGELOG.md")
+          changelog = changelog_path.read_text(encoding="utf-8")
+          if "## [0.9.40]" not in changelog:
+              anchor = "## [Unreleased]\n\n### Added\n\n### Changed\n\n### Fixed\n\n"
+              if anchor not in changelog:
+                  raise SystemExit("No se ha encontrado el bloque Unreleased esperado")
+              section = (
+                  "## [0.9.40] - 2026-08-23\n\n"
+                  "### Changed\n\n"
+                  "- Charlie utiliza ya el retrato real `assets/characters/charlie/charlie.png` como imagen neutral y como recurso temporal para sus expresiones disponibles.\n"
+                  "- La habitación de Charlie utiliza ya `assets/backgrounds/fondo-habitacion-charlie.jpg` y deja de reutilizar el fondo provisional de Casa Asturias.\n"
+                  "- La música de la habitación de Charlie continúa marcada como provisional.\n\n"
+              )
+              changelog = changelog.replace(anchor, anchor + section, 1)
+              changelog_path.write_text(changelog, encoding="utf-8")
+
+      - name: Guardar integración
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/characters/charlie.json data/rooms/room_charlie.json project.godot docs/CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "Sin cambios pendientes"
+            exit 0
+          fi
+          git commit -m "feat: activar retrato y habitación de Charlie"
+          git push origin HEAD:main
