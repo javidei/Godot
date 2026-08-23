@@ -13,8 +13,8 @@ const GUEST_PROFILE_101 := {
 
 
 # El selector de personaje deja de formar parte de una run nueva. Tras elegir
-# slot, el jugador entra siempre como Invitado y los siete miembros del grupo
-# permanecen disponibles como NPC.
+# slot, el jugador entra siempre como Invitado. El reparto completo sigue
+# disponible, aunque la run usa por defecto el subconjunto configurado en datos.
 func _begin_new_game() -> void:
 	_pending_new_game_prelude_0919 = true
 	_start_guest_run_101()

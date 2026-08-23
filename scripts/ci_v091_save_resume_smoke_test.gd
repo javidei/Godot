@@ -12,8 +12,8 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if not version.begins_with("0.9."):
-		_fail("La prueba requiere la rama 0.9.x")
+	if not version.begins_with("0.9.") and not version.begins_with("0.10."):
+		_fail("La prueba requiere la rama 0.9.x o 0.10.x")
 		return
 
 	dm = root.get_node_or_null("DataManager")

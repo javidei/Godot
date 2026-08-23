@@ -11,8 +11,8 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var version := str(ProjectSettings.get_setting("application/config/version", ""))
-	if not version.begins_with("0.9."):
-		_fail("La prueba requiere la rama 0.9.x")
+	if not version.begins_with("0.9.") and not version.begins_with("0.10."):
+		_fail("La prueba requiere la rama 0.9.x o 0.10.x")
 		return
 	if not ResourceLoader.exists("res://assets/ui/icons/sound-on.svg") or not ResourceLoader.exists("res://assets/ui/icons/mute.svg"):
 		_fail("Faltan los dos iconos de estado de audio")
@@ -27,6 +27,19 @@ func _run() -> void:
 		if not dm.has_method(method_name):
 			_fail("Falta API 0.9: " + method_name)
 			return
+
+	var default_ids: Array = dm.call("get_runtime_active_characters")
+	if default_ids != ["javi", "smokey"]:
+		_fail("El reparto predeterminado no es Javi + Smokey: %s" % [default_ids])
+		return
+
+	var default_state: Dictionary = dm.call("migrate_save_state", {
+		"node_id": "javi_intro_01",
+		"affinity": {}, "expressions": {}, "history": []
+	})
+	if default_state.get("active_characters", []) != ["javi", "smokey"]:
+		_fail("Una partida nueva no hereda Javi + Smokey como roster")
+		return
 
 	var all_ids: Array = dm.call("get_all_character_ids", true)
 	if all_ids.size() < 7:
@@ -160,7 +173,7 @@ func _run() -> void:
 		return
 
 	main.queue_free()
-	print("V090 STORY ROSTER OK: diálogos por día, una pregunta, roster, título, cambio manual de día, mute dual y monitores del día 3 validados.")
+	print("V090 STORY ROSTER OK: reparto Javi + Smokey por defecto, diálogos por día, una pregunta, roster, título, cambio manual de día, mute dual y monitores del día 3 validados.")
 	quit(0)
 
 
