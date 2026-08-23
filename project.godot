@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La novena silla"
-config/version="0.10.2"
+config/version="0.10.3"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -61,3 +61,4 @@ driver/enable_input=false
 ; 0.10.0: las runs nuevas parten por defecto solo con Javi y Fran/Smokey activos; el resto del reparto permanece disponible.
 ; 0.10.1: biblioteca de historias en el menú con Historia de un asesino y Una trilogía innecesaria, lectura negra a pantalla completa y menú principal desplazable.
 ; 0.10.2: la exportación web genera un alias opaco estable que carga la misma build sin redirigir a index.html.
+; 0.10.3: la exportación web incluye los relatos TXT de la biblioteca y valida su presencia dentro del PCK antes de publicar.
