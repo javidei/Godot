@@ -31,26 +31,6 @@ func _chapter_for_node(node_id: String, node: Dictionary) -> String:
 	return chapter
 
 
-func _choose(choice: Dictionary) -> void:
-	var routes := get_node_or_null("NarrativeRouteManager")
-	if routes != null and routes.has_method("record_choice"):
-		routes.call(
-			"record_choice",
-			str(state.get("node_id", "")),
-			str(choice.get("label", "")),
-			str(choice.get("route_event", ""))
-		)
-
-	var affinity: Dictionary = choice.get("affinity", {})
-	for character in affinity.keys():
-		var character_id := str(character)
-		var amount := int(affinity[character])
-		state["affinity"][character_id] = int(state["affinity"].get(character_id, 0)) + amount
-		_show_toast(_character_display_name_102(character_id) + " +" + str(amount) + " afinidad")
-	state["history"].append({"choice": str(choice.get("label", ""))})
-	_go_to(str(choice.get("next", "__END__")))
-
-
 func _character_display_name_102(character_id: String) -> String:
 	var dm: Variant = DataAccess102.dm()
 	if dm != null and dm.has_method("get_character"):
