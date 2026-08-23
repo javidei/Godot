@@ -14,6 +14,26 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.1] - 2026-08-23
+
+### Added
+
+- Nueva fila de historias en el menú principal con **Historia de un asesino** y **Una trilogía innecesaria**.
+- Lector narrativo a pantalla completa con fondo negro, cabecera fija, botón **Volver**, lectura mediante scroll y adaptación a escritorio/móvil.
+- `Historia de un asesino`: relato largo en catorce capítulos sobre un investigador externo al grupo que reconstruye el asesinato de Darío Luna, descubre que el sospechoso Elías Vela era su propio alias y termina afrontando que él mismo cometió el crimen antes de perder parte de su memoria.
+- El misterio utiliza de forma diferenciada a los ocho miembros del grupo —Javi, Sue, Smokey/Fran, Carmen, Jony, Ana, el Argentino y Charlie— como testigos y piezas de la reconstrucción, con explicación explícita de la cinta, la amnesia, el silencio del grupo y el origen de la pista inicial.
+- `Una trilogía innecesaria`: crónica corta de **La Palanca**, **La Palanca II** y el planteamiento actual de **La Palanca III**, incluyendo a Rojo/Fran, Negro/Javi, RNE/Jony, Charlie como cámara, el túnel, el salto de quince años, el monje y la reinterpretación del láser.
+- La crónica de La Palanca reutiliza las tres apariencias ya existentes de Javi, Smokey y Jony como material visual, sin añadir un logo ficticio que no exista en los assets.
+
+### Changed
+
+- El bloque principal del menú queda alojado en un `ScrollContainer`, por lo que puede crecer con nuevas opciones sin cortar **Salir**, la versión ni los controles de audio en pantallas bajas.
+- Las nuevas historias se cargan desde `data/story_library.json` y ficheros de texto independientes en `data/stories/`, dejando el contenido separado de la lógica de interfaz y preparado para futuras ampliaciones.
+
+### Fixed
+
+- La versión actual del misterio evita la contradicción de mostrar simultáneamente al protagonista y a la persona desaparecida como dos individuos distintos: Elías Vela es un alias previo del protagonista y Darío Luna es la víctima independiente del asesinato.
+
 ## [0.10.0] - 2026-08-23
 
 ### Changed

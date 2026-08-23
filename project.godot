@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La novena silla"
-config/version="0.10.0"
+config/version="0.10.1"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -59,3 +59,4 @@ driver/enable_input=false
 ; 0.9.41: primera revisión de guion con nuevas frases de apertura, un Día 1 más natural y los primeros diálogos revisados de Javi.
 ; 0.9.42: restauradas constantes vacías de compatibilidad para compilar la cadena heredada de transiciones sin recuperar el texto de 2026.
 ; 0.10.0: las runs nuevas parten por defecto solo con Javi y Fran/Smokey activos; el resto del reparto permanece disponible.
+; 0.10.1: biblioteca de historias en el menú con Historia de un asesino y Una trilogía innecesaria, lectura negra a pantalla completa y menú principal desplazable.
