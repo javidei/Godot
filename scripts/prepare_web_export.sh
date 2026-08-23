@@ -31,6 +31,74 @@ sed -i "s#\"description\":\"[^\"]*\"#\"description\":\"Novela visual ${GAME_TITL
 # obliga a leer la identidad nueva y evita que siga mostrando la PWA fantasma.
 sed -i "s#href=\"index.manifest.json[^\"]*\"#href=\"index.manifest.json?v=${BUILD_ID}\"#" "${HTML_SHELL}"
 
+# Sustituye la pantalla de carga generica de Godot por una carga mínima propia.
+# Se conserva el progreso real que proporciona el motor, pero se oculta el
+# splash de Godot y se muestra un fondo coherente con el juego y «CARGANDO...».
+if ! grep -Fq 'ENTRE_LINEAS_LOADING_UI' "${HTML_SHELL}"; then
+	python3 - "${HTML_SHELL}" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+html = path.read_text(encoding="utf-8")
+needle = '<progress id="status-progress"></progress>'
+if needle not in html:
+    raise SystemExit("No se encuentra la barra de progreso de Godot en index.html")
+
+style = r'''<!-- ENTRE_LINEAS_LOADING_UI -->
+<style>
+#status {
+  background: radial-gradient(circle at 50% 42%, #2c1b12 0%, #100a07 56%, #050302 100%) !important;
+  gap: 16px;
+}
+#status-splash {
+  display: none !important;
+}
+#entre-lineas-loading-label {
+  color: #f2c97e;
+  font-family: Arial, sans-serif;
+  font-size: clamp(14px, 1.6vw, 20px);
+  font-weight: 700;
+  letter-spacing: .22em;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+#status-progress {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(460px, 64vw) !important;
+  height: 8px;
+  margin: 0 !important;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #24170f;
+}
+#status-progress::-webkit-progress-bar {
+  background: #24170f;
+  border-radius: 999px;
+}
+#status-progress::-webkit-progress-value {
+  background: #e4b968;
+  border-radius: 999px;
+}
+#status-progress::-moz-progress-bar {
+  background: #e4b968;
+  border-radius: 999px;
+}
+</style>'''
+
+html = html.replace('</head>', style + '\n\t</head>', 1)
+html = html.replace(needle, '<div id="entre-lineas-loading-label">CARGANDO...</div>\n\t\t\t' + needle, 1)
+path.write_text(html, encoding="utf-8")
+PY
+fi
+
 # Cada build usa una cache distinta aunque Godot reutilice su plantilla.
 sed -i "s/^const CACHE_VERSION = .*/const CACHE_VERSION = '${BUILD_ID}';/" "${SERVICE_WORKER}"
 
@@ -75,3 +143,5 @@ grep -Fq "\"name\":\"${GAME_TITLE}\"" "${MANIFEST}"
 grep -Fq "\"short_name\":\"${SHORT_NAME}\"" "${MANIFEST}"
 grep -Fq '"scope":"./"' "${MANIFEST}"
 grep -Fq "href=\"index.manifest.json?v=${BUILD_ID}\"" "${HTML_SHELL}"
+grep -Fq 'ENTRE_LINEAS_LOADING_UI' "${HTML_SHELL}"
+grep -Fq '>CARGANDO...</div>' "${HTML_SHELL}"
