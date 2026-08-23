@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: validate-game-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   GODOT_VERSION: "4.7.1"
 
@@ -68,7 +72,7 @@ jobs:
             exit 1
           fi
 
-      - name: Smoke tests críticos
+      - name: Smoke tests de regresión
         run: |
           set -e
           TESTS="
@@ -77,6 +81,10 @@ jobs:
           res://scripts/ci_v070_v044_transition_smoke_test.gd
           res://scripts/ci_v070_save_slots_smoke_test.gd
           res://scripts/ci_v080_narrative_days_smoke_test.gd
+          res://scripts/ci_v090_story_roster_smoke_test.gd
+          res://scripts/ci_v091_save_resume_smoke_test.gd
+          res://scripts/ci_v094_startup_audio_smoke_test.gd
+          res://scripts/ci_v095_room_mute_runtime_test.gd
           res://scripts/ci_v102_charlie_runtime_smoke_test.gd
           "
           for TEST in $TESTS; do
