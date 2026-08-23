@@ -7,44 +7,44 @@ const MONOCRAFT_FONT := preload("res://assets/ui/fonts/Monocraft.ttf")
 
 const INTRO_QUOTES := [
     {
-        "text": "Dicen que todas las buenas historias empiezan con alguien tomando una mala decisión.",
-        "source": "Leído en un azucarillo del Bar Ávila"
+        "text": "Toda buena historia empieza con un plan. Esta, por desgracia, también.",
+        "source": "Escrito en la pizarra del Bar Ávila"
     },
     {
-        "text": "Con los años uno olvida los detalles. Por desgracia, los demás no.",
-        "source": "Anotado en una servilleta del Bar Ávila"
+        "text": "Éramos jóvenes, teníamos tiempo libre y nadie supervisaba nuestras decisiones.",
+        "source": "Declaración recogida años después"
     },
     {
-        "text": "Hay recuerdos que mejoran con el tiempo. Otros solo se vuelven más sospechosos.",
-        "source": "Filosofía encontrada junto a una máquina de tabaco"
+        "text": "Cuando siete personas recuerdan la misma noche de siete maneras distintas, alguien está mintiendo. O todos estaban borrachos.",
+        "source": "Conclusión provisional del grupo"
     },
     {
-        "text": "Toda pandilla tiene una historia que nadie cuenta igual dos veces.",
-        "source": "Leído en la parte de atrás de un ticket de bar"
+        "text": "La amistad consiste en estar ahí cuando te necesitan. Y en recordarles durante quince años aquella vez que hicieron el gilipollas.",
+        "source": "Grabado en un banco del parque"
     },
     {
-        "text": "Si algo ocurrió hace muchos años y todos lo recuerdan distinto, probablemente merece otra ronda.",
-        "source": "Sabiduría popular del Bar Ávila"
+        "text": "Algunas decisiones envejecen como el vino. Otras como un táper olvidado detrás de la leche.",
+        "source": "Nota encontrada en una nevera"
     },
     {
-        "text": "Volver a ver a viejos amigos es fácil. Recordar por qué dejaste de verlos ya es otra historia.",
-        "source": "Escrito a boli en una mesa que no era nuestra"
+        "text": "Ninguno sabía exactamente qué estaba haciendo. Esto no impidió que todos tuvieran una opinión.",
+        "source": "Acta no oficial de una reunión"
     },
     {
-        "text": "Nadie sospecha del pasado hasta que el pasado empieza a hacer cosas raras.",
-        "source": "Leído en un azucarillo ligeramente mojado"
+        "text": "El problema de quedar con viejos amigos es descubrir que siguen siendo exactamente los mismos imbéciles.",
+        "source": "Mensaje eliminado del grupo de WhatsApp"
     },
     {
-        "text": "Las mejores leyendas suelen empezar con alguien diciendo: yo estaba allí.",
-        "source": "Atribuido a un señor del Bar Ávila que parecía saber demasiado"
+        "text": "Los nombres han sido cambiados para proteger a los inocentes. Por suerte, aquí no hay ninguno.",
+        "source": "Aviso legal ignorado por producción"
     },
     {
-        "text": "Una amistad puede sobrevivir al tiempo, la distancia y, con suerte, a ciertas decisiones cuestionables.",
-        "source": "Máxima encontrada debajo de una tapa de cerveza"
+        "text": "Esta historia está basada en hechos reales. Pedimos disculpas por los hechos reales.",
+        "source": "Departamento jurídico de Naranjal Studio"
     },
     {
-        "text": "Esta historia está basada en hechos reales. Lo preocupante es averiguar cuáles.",
-        "source": "Leído en un azucarillo del Bar Ávila"
+        "text": "La madurez consiste en cometer exactamente los mismos errores, pero teniendo ya nómina.",
+        "source": "Ticket de un datáfono"
     }
 ]
 
