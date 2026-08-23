@@ -64,12 +64,14 @@ func _run() -> void:
 		_fail("La transición de entrada no termina en la habitación de Ana")
 		return
 
-	main.call("_go_to", "ana_q2", false)
+	# Día 1 tiene una sola pregunta por personaje: esa pregunta es ya un
+	# checkpoint real de conversación a medias.
+	main.call("_go_to", "ana_q1", false)
 	for _i in range(3):
 		await process_frame
 	state = main.get("state")
 	var checkpoints: Dictionary = state.get("conversation_checkpoints", {})
-	if str(checkpoints.get("ana", "")) != "ana_q2":
+	if str(checkpoints.get("ana", "")) != "ana_q1":
 		_fail("No se guarda el checkpoint de una conversación a medias")
 		return
 	world_map.call("return_to_map_from_room")
@@ -90,7 +92,7 @@ func _run() -> void:
 		_fail("La revisita no muestra el bocadillo de reencuentro")
 		return
 	var current_node: Dictionary = main.get("current_node")
-	if not bool(current_node.get("transient_resume", false)) or str(current_node.get("resume_target", "")) != "ana_q2":
+	if not bool(current_node.get("transient_resume", false)) or str(current_node.get("resume_target", "")) != "ana_q1":
 		_fail("El reencuentro no conserva el checkpoint exacto")
 		return
 
