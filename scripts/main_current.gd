@@ -4,6 +4,11 @@ const StoryCurrent = preload("res://scripts/story.gd")
 const JAVI_BATTLE_STORY_INTRO_COMPLETED_FLAG := "javi_battle_story_intro_completed_0931"
 
 
+func _ready() -> void:
+	super()
+	_update_guest_menu_copy()
+
+
 func _show_menu() -> void:
 	var has_player := not state.is_empty() and typeof(state.get("player", null)) == TYPE_DICTIONARY
 	if has_player:
@@ -144,3 +149,13 @@ func _is_javi_battle_question() -> bool:
 func _state_day(source: Dictionary) -> int:
 	var progress: Variant = source.get("narrative_progress", {})
 	return int((progress as Dictionary).get("current_day", 1)) if typeof(progress) == TYPE_DICTIONARY else 1
+
+
+func _update_guest_menu_copy() -> void:
+	if menu_content == null:
+		return
+	for node in menu_content.find_children("*", "Label", true, false):
+		var label := node as Label
+		if label != null and label.text.begins_with("Elige quién eres"):
+			label.text = "Entra como invitado, recorre el grupo y sigue las pistas, decisiones y rutas que se vayan abriendo."
+			return
