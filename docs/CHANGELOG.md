@@ -14,6 +14,16 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.2] - 2026-08-23
+
+### Added
+
+- La exportación Web genera el alias opaco `a7f3c9e2b6d4.html`, que carga exactamente la misma build que `index.html` sin redirección, por lo que la barra del navegador conserva la URL aleatoria.
+
+### Changed
+
+- El alias se recrea automáticamente en cada exportación Web para que no desaparezca al regenerar la carpeta `web`.
+
 ## [0.10.1] - 2026-08-23
 
 ### Added

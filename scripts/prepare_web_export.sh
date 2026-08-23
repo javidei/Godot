@@ -11,6 +11,7 @@ SERVICE_WORKER="${EXPORT_DIR}/index.service.worker.js"
 ENGINE_SCRIPT="${EXPORT_DIR}/index.js"
 MANIFEST="${EXPORT_DIR}/index.manifest.json"
 HTML_SHELL="${EXPORT_DIR}/index.html"
+PUBLIC_ALIAS="${EXPORT_DIR}/a7f3c9e2b6d4.html"
 
 if [ ! -s "${SERVICE_WORKER}" ] || [ ! -s "${ENGINE_SCRIPT}" ] || [ ! -s "${MANIFEST}" ] || [ ! -s "${HTML_SHELL}" ]; then
 	echo "La exportacion web no contiene el HTML, service worker, index.js o el manifiesto" >&2
@@ -65,6 +66,11 @@ if grep -q "${REGISTER_CALL}" "${ENGINE_SCRIPT}"; then
 	sed -i "s/${REGISTER_CALL}/${REGISTER_NO_CACHE}/" "${ENGINE_SCRIPT}"
 fi
 
+# Alias opaco: es una copia directa del HTML final, no una redirección. Así la
+# barra del navegador conserva la URL aleatoria mientras carga la misma build.
+cp "${HTML_SHELL}" "${PUBLIC_ALIAS}"
+
+test -s "${PUBLIC_ALIAS}"
 grep -Fq "const CACHE_VERSION = '${BUILD_ID}';" "${SERVICE_WORKER}"
 grep -Fq "new Request(file, { cache: 'reload' })" "${SERVICE_WORKER}"
 grep -Fq "new Request(event.request, { cache: 'reload' })" "${SERVICE_WORKER}"
