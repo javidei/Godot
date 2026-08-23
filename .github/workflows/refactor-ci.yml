@@ -10,6 +10,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: refactor-010-diagnostic
+  cancel-in-progress: true
+
 env:
   GODOT_VERSION: "4.7.1"
 
@@ -49,7 +53,7 @@ jobs:
             STATUS=1
           fi
 
-          TESTS="res://scripts/ci_datamanager_smoke_test.gd res://scripts/ci_v070_character_smoke_test.gd res://scripts/ci_v070_v044_transition_smoke_test.gd res://scripts/ci_v070_save_slots_smoke_test.gd res://scripts/ci_v080_narrative_days_smoke_test.gd res://scripts/ci_v102_charlie_runtime_smoke_test.gd"
+          TESTS="res://scripts/ci_datamanager_smoke_test.gd res://scripts/ci_v070_character_smoke_test.gd res://scripts/ci_v070_v044_transition_smoke_test.gd res://scripts/ci_v070_save_slots_smoke_test.gd res://scripts/ci_v080_narrative_days_smoke_test.gd res://scripts/ci_v090_story_roster_smoke_test.gd res://scripts/ci_v091_save_resume_smoke_test.gd res://scripts/ci_v094_startup_audio_smoke_test.gd res://scripts/ci_v095_room_mute_runtime_test.gd res://scripts/ci_v102_charlie_runtime_smoke_test.gd"
           if [ "$STATUS" -eq 0 ]; then
             for TEST in $TESTS; do
               echo "=== $TEST ===" >> combined.log
@@ -78,6 +82,7 @@ jobs:
             fi
           fi
 
+          mkdir -p /tmp/refactor-status
           if [ "$STATUS" -eq 0 ]; then
             {
               echo "PASS"
@@ -86,16 +91,19 @@ jobs:
               echo "import=ok"
               echo "smoke_tests=ok"
               echo "web_export=ok"
-            } > ci/refactor-status.txt
+            } > /tmp/refactor-status/refactor-status.txt
           else
             {
               echo "FAILED"
               echo "commit=$GITHUB_SHA"
               echo "--- tail ---"
-              tail -n 160 combined.log
-            } > ci/refactor-status.txt
+              tail -n 180 combined.log
+            } > /tmp/refactor-status/refactor-status.txt
           fi
 
+          git pull --rebase origin refactor/0.10.0-cleanup
+          mkdir -p ci
+          cp /tmp/refactor-status/refactor-status.txt ci/refactor-status.txt
           git add ci/refactor-status.txt
           git commit -m "ci: registrar resultado del refactor 0.10.0" || true
           git push origin HEAD:refactor/0.10.0-cleanup
