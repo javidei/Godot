@@ -20,7 +20,7 @@
 [ext_resource type="Script" path="res://scripts/version_093_menu_branding.gd" id="18_menu_branding"]
 [ext_resource type="Script" path="res://scripts/version_096_mute_visual_guard.gd" id="19_mute_guard"]
 [ext_resource type="Script" path="res://scripts/narrative_route_manager_v102.gd" id="20_routes"]
-[ext_resource type="Script" path="res://scripts/story_library_manager.gd" id="21_story_library"]
+[ext_resource type="Script" path="res://scripts/story_library_manager_v101.gd" id="21_story_library"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
