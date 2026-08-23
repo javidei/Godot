@@ -11,12 +11,31 @@ SERVICE_WORKER="${EXPORT_DIR}/index.service.worker.js"
 ENGINE_SCRIPT="${EXPORT_DIR}/index.js"
 MANIFEST="${EXPORT_DIR}/index.manifest.json"
 HTML_SHELL="${EXPORT_DIR}/index.html"
+PACK_FILE="${EXPORT_DIR}/index.pck"
 PUBLIC_ALIAS="${EXPORT_DIR}/a7f3c9e2b6d4.html"
 
-if [ ! -s "${SERVICE_WORKER}" ] || [ ! -s "${ENGINE_SCRIPT}" ] || [ ! -s "${MANIFEST}" ] || [ ! -s "${HTML_SHELL}" ]; then
-	echo "La exportacion web no contiene el HTML, service worker, index.js o el manifiesto" >&2
+if [ ! -s "${SERVICE_WORKER}" ] || [ ! -s "${ENGINE_SCRIPT}" ] || [ ! -s "${MANIFEST}" ] || [ ! -s "${HTML_SHELL}" ] || [ ! -s "${PACK_FILE}" ]; then
+	echo "La exportacion web no contiene el HTML, service worker, index.js, manifiesto o paquete PCK" >&2
 	exit 1
 fi
+
+# Las historias son archivos de texto leídos en tiempo de ejecución. Si Godot
+# no las empaqueta, el lector abre correctamente pero queda sin contenido.
+# Verificamos tanto el origen como la tabla de rutas del PCK antes de publicar.
+for STORY_FILE in \
+	"data/stories/historia_de_un_asesino.txt" \
+	"data/stories/una_trilogia_innecesaria.txt"
+do
+	if [ ! -s "${STORY_FILE}" ]; then
+		echo "Falta la historia o esta vacia: ${STORY_FILE}" >&2
+		exit 1
+	fi
+	STORY_NAME="$(basename "${STORY_FILE}")"
+	if ! grep -aFq "${STORY_NAME}" "${PACK_FILE}"; then
+		echo "La exportacion PCK no contiene la historia: ${STORY_FILE}" >&2
+		exit 1
+	fi
+done
 
 # Define una identidad exclusiva y estable para Entre lineas. Sin `id`, Chrome
 # puede asociar la exportacion generica de Godot a otra PWA del mismo sitio y
