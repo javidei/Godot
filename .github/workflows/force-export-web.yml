@@ -29,16 +29,60 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Marcar arranque de exportación
+      - name: Aplicar hotfix de compatibilidad 0.9.42
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python - <<'PY'
+          from pathlib import Path
+
+          transition = Path("scripts/version_044_visit_transitions_data.gd")
+          text = transition.read_text(encoding="utf-8")
+          if 'const NEW_GAME_INTRO_TITLE := ""' not in text:
+              anchor = 'const DataStory = preload("res://scripts/story.gd")\n\n'
+              replacement = anchor + 'const NEW_GAME_INTRO_TITLE := ""\nconst NEW_GAME_INTRO_TEXT := ""\n\n'
+              if anchor not in text:
+                  raise SystemExit("No se encuentra el ancla de compatibilidad en version_044_visit_transitions_data.gd")
+              text = text.replace(anchor, replacement, 1)
+              transition.write_text(text, encoding="utf-8")
+
+          project = Path("project.godot")
+          text = project.read_text(encoding="utf-8")
+          text = text.replace('config/version="0.9.41"', 'config/version="0.9.42"', 1)
+          if '; 0.9.42:' not in text:
+              marker = '; 0.9.41: primera revisión de textos de apertura y de Javi en los Días 1 y 2; retirado el texto heredado de 2026.\n'
+              line = '; 0.9.42: restauradas constantes vacías de compatibilidad para que compile la cadena histórica de transiciones sin recuperar el texto de 2026.\n'
+              if marker in text:
+                  text = text.replace(marker, marker + line, 1)
+              else:
+                  text = text.rstrip() + '\n' + line
+          project.write_text(text, encoding="utf-8")
+
+          changelog = Path("docs/CHANGELOG.md")
+          text = changelog.read_text(encoding="utf-8")
+          if '## [0.9.42] - 2026-08-23' not in text:
+              section = (
+                  '## [0.9.42] - 2026-08-23\n\n'
+                  '### Fixed\n\n'
+                  '- Restauradas como cadenas vacías las constantes heredadas `NEW_GAME_INTRO_TITLE` y `NEW_GAME_INTRO_TEXT`, necesarias para compilar `version_0917_visit_transitions.gd` sin volver a mostrar el antiguo texto de 2026.\n'
+                  '- El exportador Web forzado registra ahora el punto exacto de fallo en `web/force-export-status.txt`, facilitando diagnosticar publicaciones bloqueadas.\n\n'
+              )
+              marker = '## [0.9.41] - 2026-08-23\n'
+              if marker not in text:
+                  raise SystemExit("No se encuentra la sección 0.9.41 en CHANGELOG.md")
+              text = text.replace(marker, section + marker, 1)
+              changelog.write_text(text, encoding="utf-8")
+          PY
           mkdir -p web
-          printf 'STARTED %s\n' "$GITHUB_SHA" > web/force-export-status.txt
-          git add -f web/force-export-status.txt
-          git commit -m "ci: marcar inicio de exportación web" || true
-          git push origin HEAD:main
+          printf 'STARTED 0.9.42 %s\n' "$GITHUB_SHA" > web/force-export-status.txt
+          git add project.godot scripts/version_044_visit_transitions_data.gd docs/CHANGELOG.md web/force-export-status.txt
+          if git diff --cached --quiet; then
+            echo "Hotfix 0.9.42 ya aplicado"
+          else
+            git commit -m "fix: restaurar compatibilidad de transiciones y preparar 0.9.42"
+            git push origin HEAD:main
+          fi
 
       - name: Preparar plantillas de exportación
         run: |
@@ -152,4 +196,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-# Reintento diagnosticado de publicación 0.9.41 (23/08/2026 19:20)
+# Hotfix de publicación 0.9.42 (23/08/2026 19:23)
