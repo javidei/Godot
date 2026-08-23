@@ -11,6 +11,19 @@ func reload_all() -> void:
 	_charlie_arc_102 = _load_json_object(CHARLIE_ARC_PATH_102, {})
 
 
+func migrate_save_state(state: Dictionary) -> Dictionary:
+	var result := super(state)
+	var active: Array = result.get("active_characters", []) if typeof(result.get("active_characters", [])) == TYPE_ARRAY else []
+	if get_all_character_ids(true).has("charlie") and not active.has("charlie"):
+		active.append("charlie")
+	result["active_characters"] = active
+	if typeof(result.get("affinity", {})) == TYPE_DICTIONARY and not (result["affinity"] as Dictionary).has("charlie"):
+		(result["affinity"] as Dictionary)["charlie"] = get_initial_friendship("charlie")
+	if typeof(result.get("expressions", {})) == TYPE_DICTIONARY and not (result["expressions"] as Dictionary).has("charlie"):
+		(result["expressions"] as Dictionary)["charlie"] = "neutral"
+	return result
+
+
 func get_question_bundle(character_id: String) -> Dictionary:
 	var bundle := super(character_id)
 	if _legacy_contract() or not _runtime_day_enabled:
@@ -74,7 +87,7 @@ func get_codex_data() -> Dictionary:
 			"real_name", "nombres_alternativos", "apodos", "notas_apodos",
 			"profesion_o_estudios", "estudios", "personalidad", "descripcion_personalidad",
 			"gustos", "videojuegos", "aficiones", "comida", "forma_de_hablar", "relaciones",
-			"apariencia", "historia_grupo", "easter_eggs", "current_residence"
+			"apariencia", "historia_grupo", "easter_eggs", "current_residence", "residencia_actual"
 		]:
 			if charlie.has(key):
 				person[key] = charlie[key]
