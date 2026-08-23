@@ -13,6 +13,30 @@
   },
   "routes": [
     {
+      "id": "charlie_el_tripode",
+      "day": 1,
+      "title": "El Trípode",
+      "description": "Conoce a Charlie y descubre el primer gran misterio sobre él: el apodo existe, la explicación no.",
+      "required_for_day": false,
+      "stages": [
+        {
+          "id": "conocer_a_charlie",
+          "objective_text": "Visita a Charlie y pregunta por el Trípode... o intenta no hacerlo.",
+          "truth_layer": "real",
+          "objectives": [
+            {"type": "visit", "target": "charlie", "fresh": true}
+          ],
+          "on_complete": {
+            "flags": ["charlie_conocido", "tripode_sigue_sin_explicacion"],
+            "clues": ["apodo_tripode_sin_origen"],
+            "easter_eggs": ["charlie_tripode"],
+            "arcs": ["charlie"],
+            "toast": "Nuevo hilo: Charlie, también conocido como El Trípode. Motivo: pendiente desde hace años."
+          }
+        }
+      ]
+    },
+    {
       "id": "cosas_no_encajan",
       "day": 2,
       "title": "Cosas que no encajan",
@@ -61,6 +85,30 @@
       ]
     },
     {
+      "id": "charlie_pico_tarta",
+      "day": 2,
+      "title": "El pico de la tarta",
+      "description": "Una anécdota real convertida en pequeña leyenda interna del grupo.",
+      "required_for_day": false,
+      "stages": [
+        {
+          "id": "escuchar_incidente_tarta",
+          "objective_text": "Pásate por Charlie y descubre por qué una tarta en un mexicano acabó enfadando a alguien con Javi.",
+          "truth_layer": "real",
+          "objectives": [
+            {"type": "visit", "target": "charlie", "fresh": true}
+          ],
+          "on_complete": {
+            "flags": ["historia_pico_tarta_conocida"],
+            "clues": ["el_pico_se_guarda_para_el_final"],
+            "easter_eggs": ["charlie_pico_tarta"],
+            "arcs": ["charlie"],
+            "toast": "Easter egg descubierto: el incidente del pico de la tarta."
+          }
+        }
+      ]
+    },
+    {
       "id": "primera_prueba",
       "day": 3,
       "title": "La primera prueba",
@@ -82,9 +130,39 @@
           }
         }
       ]
+    },
+    {
+      "id": "charlie_camara_palanca",
+      "day": 3,
+      "title": "Detrás de la cámara",
+      "description": "Charlie fue el cámara de La Palanca I y II. Su recuerdo no es el mismo que el de quienes estaban delante del objetivo.",
+      "required_for_day": false,
+      "stages": [
+        {
+          "id": "recordar_los_cortos",
+          "objective_text": "Habla con Charlie sobre lo que vio mientras grababa La Palanca I y II.",
+          "truth_layer": "real",
+          "objectives": [
+            {"type": "visit", "target": "charlie", "fresh": true}
+          ],
+          "on_complete": {
+            "flags": ["charlie_camara_recordado", "charlie_puede_aportar_a_palanca_3"],
+            "clues": ["charlie_recuerda_fuera_de_plano"],
+            "easter_eggs": ["charlie_camara_palanca"],
+            "arcs": ["charlie"],
+            "toast": "Charlie recuerda La Palanca desde un lugar distinto: detrás de la cámara."
+          }
+        }
+      ]
     }
   ],
   "arcs": [
+    {
+      "id": "charlie",
+      "title": "Charlie · El Trípode",
+      "description": "Un arco secundario de recuerdos reales, bromas del grupo y su inesperada importancia como cámara de los dos primeros cortos.",
+      "truth_layer": "real"
+    },
     {
       "id": "la_palanca_3",
       "title": "La Palanca III",
