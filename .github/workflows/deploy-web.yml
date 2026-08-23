@@ -1,0 +1,117 @@
+name: Deploy Godot Web
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "web/**"
+      - ".asset_upload/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: godot-pages
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: "4.7.1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.7.1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Preparar Godot
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates" "$HOME/.config"
+          if [ -d /root/.config/godot ]; then
+            mv /root/.config/godot "$HOME/.config/godot"
+          fi
+          if [ -d "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" ]; then
+            mv "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          fi
+
+      - name: Importar y validar GDScript
+        run: |
+          set +e
+          godot --headless --editor --path . --quit > import.log 2>&1
+          STATUS=$?
+          set -e
+          cat import.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" import.log; then
+            exit 1
+          fi
+
+      - name: Smoke tests de producción
+        run: |
+          set -e
+          TESTS="res://scripts/ci_datamanager_smoke_test.gd res://scripts/ci_v070_v044_transition_smoke_test.gd res://scripts/ci_v070_save_slots_smoke_test.gd res://scripts/ci_v080_narrative_days_smoke_test.gd res://scripts/ci_v102_charlie_runtime_smoke_test.gd"
+          for TEST in $TESTS; do
+            echo "=== $TEST ==="
+            set +e
+            timeout 90s godot --headless --path . --script "$TEST" > smoke.log 2>&1
+            STATUS=$?
+            set -e
+            cat smoke.log
+            if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script| FAIL:" smoke.log; then
+              exit 1
+            fi
+          done
+
+      - name: Preparar título y versión
+        run: |
+          godot --headless --path . --script res://scripts/configure_dynamic_title.gd > dynamic-title.log 2>&1
+          cat dynamic-title.log
+          GAME_TITLE=$(sed -n 's/^DYNAMIC TITLE: //p' dynamic-title.log | tail -n1)
+          GAME_VERSION=$(sed -n 's/^config\/version="\([^"]*\)"/\1/p' project.godot | head -n1)
+          test -n "$GAME_TITLE"
+          test -n "$GAME_VERSION"
+          echo "GAME_TITLE=$GAME_TITLE" >> "$GITHUB_ENV"
+          echo "GAME_VERSION=$GAME_VERSION" >> "$GITHUB_ENV"
+
+      - name: Exportar Web
+        run: |
+          rm -rf web-build
+          mkdir -p web-build
+          set +e
+          godot --headless --export-release "Web" web-build/index.html > export.log 2>&1
+          STATUS=$?
+          set -e
+          cat export.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" export.log; then
+            exit 1
+          fi
+          test -s web-build/index.html
+          test -s web-build/index.pck
+          test -s web-build/index.wasm
+          ./scripts/prepare_web_export.sh web-build "${GITHUB_SHA}" "${GAME_TITLE}"
+          printf '%s\n' "${GAME_VERSION}" > web-build/build-version.txt
+          touch web-build/.nojekyll
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir artefacto
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web-build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v5
