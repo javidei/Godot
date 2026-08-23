@@ -71,7 +71,7 @@ func _apply_layout() -> void:
 			var button := child as Button
 			if button == null:
 				continue
-			button.custom_minimum_size.y = 50 if not portrait else 54
+			button.custom_minimum_size = Vector2(button.custom_minimum_size.x, 50 if not portrait else 54)
 			button.add_theme_font_size_override("font_size", 14 if row == story_row else 15)
 
 	var exit_button := menu_content.find_child("ExitGameButton", true, false) as Button
