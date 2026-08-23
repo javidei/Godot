@@ -123,6 +123,7 @@ func _compact_audio_row() -> void:
 func _order_menu() -> void:
 	if menu_content == null:
 		return
+	var game_title := menu_content.find_child("GameTitle", false, false) as Label
 	var subtitle: Label
 	var spacer: Control
 	var version_label: Label
@@ -131,15 +132,19 @@ func _order_menu() -> void:
 			var label := child as Label
 			if label.name == "VersionLabel":
 				version_label = label
-			elif label.name != "EngineTag" and label.name != "GameTitle" and label != audio_title and label.text.begins_with("Elige quién eres"):
-				subtitle = label
+			elif label.name != "EngineTag" and label.name != "GameTitle" and label != audio_title:
+				# El texto del subtítulo cambió en 0.9.38 al flujo de Invitado. No
+				# dependemos ya de una frase concreta: es el primer Label normal
+				# situado inmediatamente después del título principal.
+				if subtitle == null and game_title != null and label.get_index() > game_title.get_index():
+					subtitle = label
 		elif child is Control and not (child is Container) and child.custom_minimum_size.y <= 20.0:
 			spacer = child
 
 	if spacer != null:
 		spacer.custom_minimum_size = Vector2(0, 2)
 
-	var insert_after := 0
+	var insert_after := game_title.get_index() + 1 if game_title != null else 0
 	if subtitle != null:
 		insert_after = subtitle.get_index() + 1
 	if spacer != null:
