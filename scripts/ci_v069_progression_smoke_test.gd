@@ -103,22 +103,16 @@ func _validate_new_game_intro(main: Control, transitions: Node) -> bool:
 		_fail("La run del Invitado no conserva a los ocho NPC")
 		return false
 
-	# El gestor sigue siendo capaz de crear el preludio cinematográfico; lo
-	# validamos aislado para no esperar temporizadores en CI.
-	intro_callback_called = false
-	transitions.call("set_fast_mode", false)
-	transitions.call("play_new_game_intro", Callable(self, "_on_intro_finished"))
-	await process_frame
 	var cinematic := main.get_node_or_null("NewGamePrelude0917")
 	if cinematic == null:
-		_fail("No se crea el preludio de Nueva partida")
+		_fail("No se crea el preludio de Nueva partida al confirmar al Invitado")
 		return false
 	cinematic.emit_signal("prelude_finished")
 	cinematic.queue_free()
 	await process_frame
 	await process_frame
-	if not intro_callback_called:
-		_fail("El preludio no entrega el control al terminar")
+	if bool(transitions.get("waiting_for_continue")) or bool(transitions.get("transition_active")):
+		_fail("El preludio deja una transición bloqueada")
 		return false
 
 	if menu_screen != null:
