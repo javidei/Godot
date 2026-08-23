@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: godot-pages-force
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
   GODOT_VERSION: "4.7.1"
@@ -28,6 +28,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Marcar arranque de exportación
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p web
+          printf 'STARTED %s\n' "$GITHUB_SHA" > web/force-export-status.txt
+          git add -f web/force-export-status.txt
+          git commit -m "ci: marcar inicio de exportación web" || true
+          git push origin HEAD:main
 
       - name: Preparar plantillas de exportación
         run: |
@@ -46,7 +57,13 @@ jobs:
           set -e
           cat import.log
           if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" import.log; then
-            echo "La importación contiene errores reales de Godot/GDScript; no se publicará una build rota."
+            {
+              echo "FAILED IMPORT"
+              tail -n 120 import.log
+            } > web/force-export-status.txt
+            git add -f web/force-export-status.txt
+            git commit -m "ci: registrar fallo de importación web" || true
+            git push origin HEAD:main
             exit 1
           fi
 
@@ -58,7 +75,13 @@ jobs:
           set -e
           cat dynamic-title.log
           if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" dynamic-title.log; then
-            echo "No se ha podido calcular el título dinámico."
+            {
+              echo "FAILED DYNAMIC TITLE"
+              tail -n 120 dynamic-title.log
+            } > web/force-export-status.txt
+            git add -f web/force-export-status.txt
+            git commit -m "ci: registrar fallo de título web" || true
+            git push origin HEAD:main
             exit 1
           fi
           GAME_TITLE=$(sed -n 's/^DYNAMIC TITLE: //p' dynamic-title.log | tail -n 1)
@@ -79,7 +102,13 @@ jobs:
           set -e
           cat export.log
           if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" export.log; then
-            echo "La exportación contiene errores reales de GDScript; no se publicará."
+            {
+              echo "FAILED EXPORT"
+              tail -n 120 export.log
+            } > web/force-export-status.txt
+            git add -f web/force-export-status.txt
+            git commit -m "ci: registrar fallo de exportación web" || true
+            git push origin HEAD:main
             exit 1
           fi
           test -s web/index.html
@@ -123,4 +152,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-# Reintento de publicación 0.9.41 (23/08/2026 19:10)
+# Reintento diagnosticado de publicación 0.9.41 (23/08/2026 19:20)
