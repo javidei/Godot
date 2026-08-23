@@ -51,8 +51,8 @@ jobs:
           text = project.read_text(encoding="utf-8")
           text = text.replace('config/version="0.9.41"', 'config/version="0.9.42"', 1)
           if '; 0.9.42:' not in text:
-              marker = '; 0.9.41: primera revisión de textos de apertura y de Javi en los Días 1 y 2; retirado el texto heredado de 2026.\n'
-              line = '; 0.9.42: restauradas constantes vacías de compatibilidad para que compile la cadena histórica de transiciones sin recuperar el texto de 2026.\n'
+              marker = '; 0.9.41: primera revisión de guion con nuevas frases de apertura, un Día 1 más natural y los primeros diálogos revisados de Javi.\n'
+              line = '; 0.9.42: restauradas constantes vacías de compatibilidad para compilar la cadena heredada de transiciones sin recuperar el texto de 2026.\n'
               if marker in text:
                   text = text.replace(marker, marker + line, 1)
               else:
@@ -66,7 +66,7 @@ jobs:
                   '## [0.9.42] - 2026-08-23\n\n'
                   '### Fixed\n\n'
                   '- Restauradas como cadenas vacías las constantes heredadas `NEW_GAME_INTRO_TITLE` y `NEW_GAME_INTRO_TEXT`, necesarias para compilar `version_0917_visit_transitions.gd` sin volver a mostrar el antiguo texto de 2026.\n'
-                  '- El exportador Web forzado registra ahora el punto exacto de fallo en `web/force-export-status.txt`, facilitando diagnosticar publicaciones bloqueadas.\n\n'
+                  '- Corregida la publicación Web bloqueada por ese error de compilación y añadido un diagnóstico persistente del exportador forzado.\n\n'
               )
               marker = '## [0.9.41] - 2026-08-23\n'
               if marker not in text:
@@ -80,7 +80,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "Hotfix 0.9.42 ya aplicado"
           else
-            git commit -m "fix: restaurar compatibilidad de transiciones y preparar 0.9.42"
+            git commit -m "fix: completar hotfix de publicación 0.9.42"
             git push origin HEAD:main
           fi
 
@@ -196,4 +196,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-# Hotfix de publicación 0.9.42 (23/08/2026 19:23)
+# Reintento tras hotfix directo 0.9.42 (23/08/2026)
