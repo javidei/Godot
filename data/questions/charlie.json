@@ -1,0 +1,53 @@
+{
+  "character": "charlie",
+  "intro": [
+    {"speaker": "Charlie", "speaker_id": "charlie", "text": "Carlos, Charlie... como te salga. Lo importante es que no preguntes demasiado pronto por lo del Trípode."},
+    {"speaker": "Charlie", "speaker_id": "charlie", "text": "Sí, algunos me llaman así. No, todavía no tenemos una explicación oficial. Y casi prefiero que siga así."}
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Entre todo lo que hay por aquí, ¿por dónde empiezas la conversación?",
+      "answers": [
+        {"text": "Por las cosas japonesas", "side": "left", "score": 1, "feedback": "japon"},
+        {"text": "Por Halo, Xbox y Skate 2", "side": "right", "score": 1, "feedback": "xbox"},
+        {"text": "Por las cartas de Magic", "side": "left", "score": 1, "feedback": "magic"},
+        {"text": "Por qué demonios te llaman el Trípode", "side": "right", "score": 1, "feedback": "tripode"}
+      ],
+      "feedback": {
+        "japon": {"text": "Buena elección. Con Japón tienes conversación para rato.", "expression": "happy"},
+        "xbox": {"text": "Halo, Skate 2, Xbox... por ahí también puedes perder una tarde entera.", "expression": "happy"},
+        "magic": {"text": "Magic funciona. Solo recuerda que una partida rápida es una promesa peligrosa.", "expression": "happy"},
+        "tripode": {"text": "Sabía que ibas a preguntar. La respuesta oficial sigue siendo: nadie sabe por qué.", "expression": "thoughtful"}
+      }
+    },
+    {
+      "id": "q2",
+      "text": "¿Qué combinación describe mejor mi uniforme no oficial?",
+      "answers": [
+        {"text": "Polo de palmeras, vaqueros claros y Converse azules", "side": "left", "score": 1, "feedback": "correct"},
+        {"text": "Traje negro y zapatos", "side": "right", "score": 0, "feedback": "wrong"},
+        {"text": "Chándal rojo y botas", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "Sudadera gótica y pantalón cargo", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Exacto. Añade el reloj de aguja negro y ya casi tienes el retrato robot.", "expression": "happy"},
+        "wrong": {"text": "Polo de palmeras, vaqueros claros y Converse azules. Hay quien lo resume como estética ochentera muy concreta.", "expression": "thoughtful"}
+      }
+    },
+    {
+      "id": "q3",
+      "text": "¿Qué papel tuve en los dos primeros cortos de La Palanca?",
+      "answers": [
+        {"text": "Cámara", "side": "left", "score": 1, "feedback": "correct"},
+        {"text": "Actor principal", "side": "right", "score": 0, "feedback": "wrong"},
+        {"text": "Montador de sonido", "side": "left", "score": 0, "feedback": "wrong"},
+        {"text": "No participé", "side": "right", "score": 0, "feedback": "wrong"}
+      ],
+      "feedback": {
+        "correct": {"text": "Eso es. Yo estaba detrás de la cámara en La Palanca I y II.", "expression": "happy"},
+        "wrong": {"text": "Yo era el cámara. Y estar detrás de la cámara significa recordar cosas que los demás ni siquiera vieron encuadradas.", "expression": "thoughtful"}
+      }
+    }
+  ]
+}
