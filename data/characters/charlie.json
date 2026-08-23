@@ -1,0 +1,86 @@
+{
+  "id": "charlie",
+  "name": "Carlos",
+  "real_name": "Carlos",
+  "display_name": "Charlie",
+  "nombres_alternativos": ["Charlie", "El Trípode"],
+  "apodo": "Charlie",
+  "apodos": ["Charlie", "El Trípode"],
+  "notas_apodos": [
+    "A veces le llaman El Trípode.",
+    "Dentro del grupo todavía no hay una explicación canónica de por qué existe ese apodo; se mantiene como misterio y running gag."
+  ],
+  "role": "principal",
+  "summary": "Ingeniero informático · Japón · Xbox · Magic",
+  "current_residence": "Naranjal del Río",
+  "current_zone_id": "naranjal_del_rio",
+  "playable": false,
+  "enabled": true,
+  "room": "room_charlie",
+  "image": "",
+  "music": "",
+  "music_volume": 1.0,
+  "initial_friendship": 0,
+  "poses": {},
+  "profesion_o_estudios": "Ingeniero informático",
+  "estudios": ["Ingeniería Informática"],
+  "personalidad": [],
+  "descripcion_personalidad": "Pendiente de completar con rasgos de personalidad reales. La ficha evita inventarlos hasta que el grupo los defina.",
+  "gustos": [
+    "Cultura japonesa",
+    "Cosas japonesas",
+    "Videojuegos",
+    "League of Legends",
+    "Skate 2",
+    "Halo",
+    "Xbox",
+    "Portal",
+    "Magic: The Gathering",
+    "Whisky Macallan"
+  ],
+  "videojuegos": ["League of Legends", "Skate 2", "Halo", "Portal"],
+  "aficiones": ["Magic: The Gathering", "Videojuegos", "Cultura japonesa"],
+  "comida": {
+    "favoritas": [],
+    "bebidas": ["Whisky Macallan"]
+  },
+  "forma_de_hablar": {
+    "latiguillos": [],
+    "tono": "Pendiente de definir con frases reales de Charlie.",
+    "palabras_o_expresiones": []
+  },
+  "relaciones": [
+    {"personaje": "javi", "tipo": "amigo"},
+    {"personaje": "grupo", "tipo": "amigo y cámara de los cortos de La Palanca"}
+  ],
+  "apariencia": {
+    "altura_aproximada_m": 1.62,
+    "pelo": "No está calvo; suele raparse la cabeza al cero.",
+    "barba": "Barba y bigote cuidados.",
+    "estilo_ropa": ["Polos de palmeras", "Vaqueros claros", "Vaqueros de corte estándar", "Converse azules"],
+    "descripcion_estilo": "Estética muy ochentera con polos tropicales, vaqueros claros y reloj analógico. Dentro del grupo se bromea con llamarlo «estilo de putero de los 80» como descripción puramente estética, no literal.",
+    "detalles_reconocibles": [
+      "Reloj analógico negro",
+      "Converse azules",
+      "Tatuaje de código binario en la parte interior del bíceps",
+      "Cabeza rapada al cero",
+      "Barba y bigote cuidados"
+    ]
+  },
+  "historia_grupo": {
+    "la_palanca": [
+      "Fue el cámara de La Palanca I.",
+      "Fue el cámara de La Palanca II.",
+      "Su posición detrás de la cámara se usará como puente narrativo hacia La Palanca III."
+    ],
+    "tarta_mexicano": "Una antigua novia de Charlie se enfadó con Javi después de que ambos compartieran una tarta en un mexicano y Javi se comiera, sin saberlo, el pico que ella siempre se reservaba para comer al final."
+  },
+  "easter_eggs": [
+    "El origen desconocido del apodo El Trípode.",
+    "El incidente del pico de la tarta.",
+    "Una cámara relacionada con La Palanca I y II.",
+    "Referencias a Portal, Halo, Skate 2, League of Legends, Magic y cultura japonesa."
+  ],
+  "transition_intro": "Charlie te abre la puerta entre referencias a Japón, cartas de Magic y cacharros de Xbox. Nadie explica lo del Trípode.",
+  "transition_outro": "Charlie se despide sin aclarar lo del Trípode. El misterio, de momento, sobrevive."
+}
