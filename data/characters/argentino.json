@@ -17,6 +17,9 @@
   "poses": {
     "neutral": "res://assets/characters/argentino/argentino.png"
   },
+  "quotes": [
+    "Yo no he puesto una carita sonriente en mi vida."
+  ],
   "transition_intro": "El Argentino te recibe entre rock, humo y objetos que parecen guardar una historia propia.",
   "transition_outro": "El Argentino se despide con calma. «Nos vemos, che. La próxima ronda queda pendiente.»"
 }
