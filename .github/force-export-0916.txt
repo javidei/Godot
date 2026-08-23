@@ -1,3 +1,0 @@
-Force export requested for version 0.9.33 on 2026-08-21 17:19 Europe/Madrid.
-This file exists only to trigger the Export Godot Web workflow from a non-ignored path.
-Retry because source main is 0.9.33 while web export is still the stale 0.9.31 build from 2026-08-18.
