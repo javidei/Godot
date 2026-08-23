@@ -3,6 +3,9 @@ extends "res://scripts/version_044_visit_transitions.gd"
 const DataAccess = preload("res://scripts/data_access.gd")
 const DataStory = preload("res://scripts/story.gd")
 
+const NEW_GAME_INTRO_TITLE := ""
+const NEW_GAME_INTRO_TEXT := ""
+
 var last_missing_map_excuse := ""
 var last_room_resume_message := ""
 
