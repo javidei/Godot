@@ -2,6 +2,16 @@ extends "res://autoload/data_manager_v100.gd"
 
 const CHARLIE_ARC_PATH := "res://data/charlie_arc.json"
 const DIALOGUE_OVERRIDES_ROOT := "res://data/dialogues"
+const FIXED_GUEST_PROFILE := {
+	"id": "custom",
+	"name": "Invitado",
+	"display_name": "Invitado",
+	"gender": "No especificar",
+	"appearance": "",
+	"role": "invitado",
+	"custom": true,
+	"guest": true
+}
 
 var _charlie_arc: Dictionary = {}
 var _dialogue_override_cache: Dictionary = {}
@@ -15,19 +25,23 @@ func reload_all() -> void:
 
 func migrate_save_state(state: Dictionary) -> Dictionary:
 	var result := super(state)
-	var active: Array = result.get("active_characters", []) if typeof(result.get("active_characters", [])) == TYPE_ARRAY else []
-	if get_all_character_ids(true).has("charlie") and not active.has("charlie"):
-		active.append("charlie")
+	result["player"] = FIXED_GUEST_PROFILE.duplicate(true)
+
+	var active: Array = []
+	for raw_id in get_all_character_ids(true):
+		var character_id := str(raw_id)
+		if not character_id.is_empty() and not active.has(character_id):
+			active.append(character_id)
 	result["active_characters"] = active
 
 	var affinity: Dictionary = result.get("affinity", {}) if typeof(result.get("affinity", {})) == TYPE_DICTIONARY else {}
-	if not affinity.has("charlie"):
-		affinity["charlie"] = get_initial_friendship("charlie")
-	result["affinity"] = affinity
-
 	var expressions: Dictionary = result.get("expressions", {}) if typeof(result.get("expressions", {})) == TYPE_DICTIONARY else {}
-	if not expressions.has("charlie"):
-		expressions["charlie"] = "neutral"
+	for character_id in active:
+		if not affinity.has(character_id):
+			affinity[character_id] = get_initial_friendship(character_id)
+		if not expressions.has(character_id):
+			expressions[character_id] = "neutral"
+	result["affinity"] = affinity
 	result["expressions"] = expressions
 	return result
 
