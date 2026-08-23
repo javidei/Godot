@@ -1,0 +1,66 @@
+name: Finalize Refactor Changelog
+
+on:
+  push:
+    branches: [refactor/0.10.0-cleanup]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Registrar 0.10.0 y retirar workflow temporal
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('docs/CHANGELOG.md')
+          text = path.read_text(encoding='utf-8')
+          if '## [0.10.0] - 2026-08-23' not in text:
+              marker = '## [0.9.41] - 2026-08-23'
+              section = '''## [0.10.0] - 2026-08-23
+
+### Added
+
+- Nueva capa estable de runtime para la historia, guardados, nueva partida, transiciones, jornadas y rutas, evitando crear una subclase nueva por cada versión.
+- Diálogos revisables por personaje y día en `data/dialogues/`, con overrides JSON independientes del código.
+- Validación unificada de importación, JSON, flujo con Invitado, guardados, audio y exportación Web antes de publicar.
+- Pantalla de carga Web propia con el texto «CARGANDO...» y una barra de progreso real, ocultando el splash genérico de Godot.
+
+### Changed
+
+- Nueva partida y guardados antiguos convergen en el jugador fijo **Invitado** y mantienen siempre disponibles los ocho NPC actuales.
+- El runtime deja de mostrar el selector heredado de protagonista y el selector de reparto que permitía reducir personajes.
+- La exportación Web pasa a generarse como artefacto de GitHub Pages y deja de almacenarse dentro del repositorio.
+- `project.godot` queda limitado a configuración activa; el historial de cambios permanece únicamente en este changelog.
+- Charlie se valida con su retrato y habitación definitivos en lugar de los antiguos placeholders.
+
+### Removed
+
+- Workflows temporales y duplicados de reparación, exportación y smoke tests que habían quedado obsoletos.
+- Pruebas antiguas que exigían la rama 0.9.x, selección de protagonista o reparto variable.
+- Archivos de exportación Web generados (`web/`) y placeholders de texto vacíos que no formaban parte del juego.
+
+### Fixed
+
+- Las migraciones de partidas antiguas ya no pueden reactivar un protagonista del grupo ni dejar personajes fuera del reparto actual.
+- La CI deja de depender de pruebas inexistentes o de supuestos anteriores a la incorporación definitiva de Charlie.
+
+'''
+              if marker not in text:
+                  raise SystemExit('No se encuentra el punto de inserción del changelog')
+              text = text.replace(marker, section + marker, 1)
+              path.write_text(text, encoding='utf-8')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/finalize-refactor.yml
+          git add docs/CHANGELOG.md
+          git commit -m "docs: cerrar changelog 0.10.0"
+          git push
