@@ -54,7 +54,18 @@ jobs:
       - name: Smoke tests de producción
         run: |
           set -e
-          TESTS="res://scripts/ci_datamanager_smoke_test.gd res://scripts/ci_v070_v044_transition_smoke_test.gd res://scripts/ci_v070_save_slots_smoke_test.gd res://scripts/ci_v080_narrative_days_smoke_test.gd res://scripts/ci_v102_charlie_runtime_smoke_test.gd"
+          TESTS="
+          res://scripts/ci_datamanager_smoke_test.gd
+          res://scripts/ci_v070_character_smoke_test.gd
+          res://scripts/ci_v070_v044_transition_smoke_test.gd
+          res://scripts/ci_v070_save_slots_smoke_test.gd
+          res://scripts/ci_v080_narrative_days_smoke_test.gd
+          res://scripts/ci_v090_story_roster_smoke_test.gd
+          res://scripts/ci_v091_save_resume_smoke_test.gd
+          res://scripts/ci_v094_startup_audio_smoke_test.gd
+          res://scripts/ci_v095_room_mute_runtime_test.gd
+          res://scripts/ci_v102_charlie_runtime_smoke_test.gd
+          "
           for TEST in $TESTS; do
             echo "=== $TEST ==="
             set +e
