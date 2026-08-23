@@ -14,6 +14,19 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.4] - 2026-08-23
+
+### Changed
+
+- El menú principal deja de estar contenido en un `ScrollContainer`: todas las opciones vuelven a mostrarse de forma fija, sin barra ni desplazamiento.
+- Las acciones se reorganizan en un orden más claro: **Nueva partida / Continuar**, las dos historias, utilidades (**Pantalla completa / Extras / Ajustes**), volumen, **Salir** y versión.
+- Se reducen de forma moderada alturas, tipografías y separaciones del menú para mantener una composición limpia sin sacrificar legibilidad.
+
+### Fixed
+
+- **Salir** recupera una fila propia aunque alguna capa heredada lo hubiera dejado dentro de las utilidades.
+- Los smoke tests históricos conservan la anchura de menú que esperan, mientras la versión actual gana algo de espacio horizontal para las nuevas opciones.
+
 ## [0.10.3] - 2026-08-23
 
 ### Changed
