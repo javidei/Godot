@@ -1,0 +1,51 @@
+{
+  "character": "javi",
+  "intro": [
+    {
+      "expression": "thoughtful",
+      "text": "Hay algo que no encaja. Podría ignorarlo, pero los dos sabemos que no va a pasar."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Un cable aparece cambiado de puerto. ¿Qué haría primero?",
+      "answers": [
+        {
+          "text": "Comprobar qué dispositivo se comporta distinto",
+          "side": "left",
+          "score": 1,
+          "feedback": "correct"
+        },
+        {
+          "text": "Ignorarlo",
+          "side": "right",
+          "score": 0,
+          "feedback": "wrong"
+        },
+        {
+          "text": "Apagar la luz y esperar",
+          "side": "left",
+          "score": 0,
+          "feedback": "wrong"
+        },
+        {
+          "text": "Preguntar por el color favorito del cable",
+          "side": "right",
+          "score": 0,
+          "feedback": "wrong"
+        }
+      ],
+      "feedback": {
+        "correct": {
+          "text": "Eso. Primero averigua qué cambió realmente.",
+          "expression": "happy"
+        },
+        "wrong": {
+          "text": "Yo empezaría por ver qué dispositivo se comporta distinto.",
+          "expression": "thoughtful"
+        }
+      }
+    }
+  ]
+}
