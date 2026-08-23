@@ -1,0 +1,108 @@
+name: Validate Game
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches:
+      - "refactor/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  GODOT_VERSION: "4.7.1"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.7.1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Preparar plantillas de exportación
+        run: |
+          mkdir -p "$HOME/.local/share/godot/export_templates" "$HOME/.config"
+          if [ -d /root/.config/godot ]; then
+            mv /root/.config/godot "$HOME/.config/godot"
+          fi
+          if [ -d "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" ]; then
+            mv "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          fi
+
+      - name: Validar arquitectura y JSON
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          for path in Path("data").rglob("*.json"):
+              with path.open("r", encoding="utf-8") as fh:
+                  json.load(fh)
+          print("JSON OK")
+          PY
+          git fetch origin main --depth=1 || true
+          if git rev-parse --verify origin/main >/dev/null 2>&1; then
+            NEW_VERSIONED=$(git diff --diff-filter=A --name-only origin/main...HEAD | grep -E '^(scripts/version_|scripts/main_v[0-9]|autoload/data_manager_v[0-9])' || true)
+            if [ -n "$NEW_VERSIONED" ]; then
+              echo "No se permiten nuevas capas runtime versionadas:"
+              echo "$NEW_VERSIONED"
+              exit 1
+            fi
+          fi
+
+      - name: Importar proyecto y validar GDScript
+        run: |
+          set +e
+          godot --headless --editor --path . --quit > import.log 2>&1
+          STATUS=$?
+          set -e
+          cat import.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" import.log; then
+            exit 1
+          fi
+
+      - name: Smoke tests críticos
+        run: |
+          set -e
+          TESTS="
+          res://scripts/ci_datamanager_smoke_test.gd
+          res://scripts/ci_v070_character_smoke_test.gd
+          res://scripts/ci_v070_v044_transition_smoke_test.gd
+          res://scripts/ci_v070_save_slots_smoke_test.gd
+          res://scripts/ci_v080_narrative_days_smoke_test.gd
+          res://scripts/ci_v102_charlie_runtime_smoke_test.gd
+          "
+          for TEST in $TESTS; do
+            echo "=== $TEST ==="
+            set +e
+            timeout 90s godot --headless --path . --script "$TEST" > smoke.log 2>&1
+            STATUS=$?
+            set -e
+            cat smoke.log
+            if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script| FAIL:" smoke.log; then
+              exit 1
+            fi
+          done
+
+      - name: Exportar Web de prueba
+        run: |
+          rm -rf /tmp/entre-lineas-web
+          mkdir -p /tmp/entre-lineas-web
+          set +e
+          godot --headless --export-release "Web" /tmp/entre-lineas-web/index.html > export.log 2>&1
+          STATUS=$?
+          set -e
+          cat export.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "SCRIPT ERROR:|Parse Error:|Failed to load script" export.log; then
+            exit 1
+          fi
+          test -s /tmp/entre-lineas-web/index.html
+          test -s /tmp/entre-lineas-web/index.pck
+          test -s /tmp/entre-lineas-web/index.wasm
