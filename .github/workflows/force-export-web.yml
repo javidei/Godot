@@ -171,4 +171,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-# Reintento de La Palanca III conservando ejecutable el empaquetador (24/08/2026)
+# Reintento de publicación del canon 0.10.16 de La Palanca III (24/08/2026)
