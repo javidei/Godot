@@ -39,6 +39,22 @@ func _run() -> void:
 		_fail("La presentación antigua sigue visible detrás de la experiencia")
 		return
 
+	var story_scroll := manager.get("story_scroll") as ScrollContainer
+	if story_scroll == null or story_scroll.scroll_deadzone != 0:
+		_fail("La Palanca III no tiene desplazamiento táctil inmediato")
+		return
+	var first_chapter := experience.find_child("PalancaChapter", true, false) as PanelContainer
+	if first_chapter == null or first_chapter.mouse_filter != Control.MOUSE_FILTER_IGNORE:
+		_fail("Las tarjetas narrativas siguen interceptando el arrastre táctil")
+		return
+	var first_body: RichTextLabel
+	for node in experience.find_children("*", "RichTextLabel", true, false):
+		first_body = node as RichTextLabel
+		break
+	if first_body == null or first_body.mouse_filter != Control.MOUSE_FILTER_IGNORE:
+		_fail("El texto de La Palanca III sigue bloqueando el scroll móvil")
+		return
+
 	var logo_count := 0
 	var comic_count := 0
 	var comic_image: TextureRect
@@ -75,10 +91,10 @@ func _run() -> void:
 		_fail("La experiencia de La Palanca invade Historia de un asesino")
 		return
 
-	print("V01011 PALANCA OK: portada, capítulos, cómic, ampliación y aislamiento validados.")
+	print("V01012 PALANCA OK: portada, capítulos, scroll táctil, cómic, ampliación y aislamiento validados.")
 	quit(0)
 
 
 func _fail(message: String) -> void:
-	push_error("V01011 PALANCA FAIL: " + message)
+	push_error("V01012 PALANCA FAIL: " + message)
 	quit(1)
