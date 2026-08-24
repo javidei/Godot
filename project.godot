@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La novena silla"
-config/version="0.10.4"
+config/version="0.10.5"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -57,9 +57,10 @@ driver/enable_input=false
 ; 0.9.39: Charlie se incorpora como octavo miembro del grupo, con ficha, habitación provisional, mapa y arco propio Trípode -> tarta -> cámara de La Palanca; el Argentino añade su frase de la carita sonriente.
 ; 0.9.40: Charlie usa su retrato real y su habitación deja de utilizar el fondo provisional.
 ; 0.9.41: primera revisión de guion con nuevas frases de apertura, un Día 1 más natural y los primeros diálogos revisados de Javi.
-; 0.9.42: restauradas constantes vacías de compatibilidad para compilar la cadena heredada de transiciones sin recuperar el texto retirado de 2026.
+; 0.9.42: restauradas constantes vacías de compatibilidad para compilar la cadena de transiciones sin recuperar el texto retirado de 2026.
 ; 0.10.0: las runs nuevas parten por defecto solo con Javi y Fran/Smokey activos; el resto del reparto permanece disponible.
 ; 0.10.1: biblioteca de historias en el menú con Historia de un asesino y Una trilogía innecesaria, lectura negra a pantalla completa y menú principal desplazable.
 ; 0.10.2: la exportación web genera un alias opaco estable que carga la misma build sin redirigir a index.html.
 ; 0.10.3: la exportación web incluye los relatos TXT de la biblioteca y valida su presencia dentro del PCK antes de publicar.
 ; 0.10.4: el menú principal elimina su scroll y reorganiza acciones, historias, utilidades, audio y salida en filas compactas fijas.
+; 0.10.5: el lector de historias desactiva la selección de texto para que el gesto táctil de scroll no marque párrafos.
