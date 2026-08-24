@@ -3,9 +3,9 @@
   "hero": {
     "image": "res://assets/comic/la_palanca_iii_logo.webp",
     "image_caption": "Emblema de La Palanca III",
-    "eyebrow": "UNA PALANCA · DOS LÍNEAS · QUINCE AÑOS",
+    "eyebrow": "UNA PALANCA · DOS ROJOS · UN SOLO FUTURO",
     "title": "LA HISTORIA QUE SE DIVIDIÓ EN LA IGLESIA",
-    "body": "[center]La palanca no era un simple interruptor. Despertó al Robot Ninja del Espacio y abrió pasos entre lugares, instantes y posibilidades. En La Palanca II, Rojo atravesó uno de aquellos túneles, apareció en una iglesia y allí el camino se bifurcó en dos líneas temporales.[/center]",
+    "body": "[center]La palanca despertó al Robot Ninja del Espacio y abrió un túnel hacia una iglesia. Allí, el camino de Rojo se dividió en dos líneas temporales. Quince años después, la pregunta ya no es solamente cuál de los dos sobrevivió, sino por qué alguien necesita que uno desaparezca.[/center]",
     "hint": "DESLIZA PARA ATRAVESAR LA PRIMERA GRIETA"
   },
   "chapters": [
@@ -13,7 +13,7 @@
       "eyebrow": "ARCHIVO 01 · LA PALANCA I",
       "title": "El interruptor que no parecía hacer nada",
       "accent": "red",
-      "body": "Negro y Rojo encontraron una pequeña palanca instalada junto al asiento del conductor. No tenía etiqueta, mecanismo visible ni una función razonable. La curiosidad ganó.\n\n[color=#e8b86a][i]—¿Y esto? ¿Esa palanquita?\n—Pues no sé… Venía con el coche.\n—Dale.[/i][/color]\n\nAl accionarla, despertaron a distancia al Robot Ninja del Espacio, oculto bajo un pasamontañas verde militar y armado con un paraguas capaz de canalizar una energía desconocida. Al moverla de nuevo, lo desactivaron.\n\nNegro y Rojo no presenciaron el despertar. Creyeron que la palanca no servía para nada. En realidad habían activado dos mecanismos unidos: al ser que esperaba en la oscuridad y una red de grietas espacio-temporales que todavía no podían ver."
+      "body": "Negro y Rojo encontraron una pequeña palanca instalada junto al asiento del conductor. No tenía etiqueta, mecanismo visible ni una función razonable. La curiosidad ganó.\n\n[color=#e8b86a][i]—¿Y esto? ¿Esa palanquita?\n—Pues no sé… Venía con el coche.\n—Dale.[/i][/color]\n\nAl accionarla, despertaron a distancia al Robot Ninja del Espacio, oculto bajo un pasamontañas verde militar y armado con un paraguas capaz de canalizar una energía desconocida. Al moverla de nuevo, lo desactivaron.\n\nNegro y Rojo no presenciaron el despertar. Creyeron que la palanca no servía para nada. Tampoco podían saber que el Robot ya tenía un objetivo concreto: vigilar a Rojo hasta que la línea temporal se dividiera."
     },
     {
       "eyebrow": "ARCHIVO 02 · LA PALANCA II",
@@ -25,7 +25,7 @@
       "eyebrow": "PÁGINA 1 · QUINCE AÑOS DESPUÉS",
       "title": "Un altar para una sola versión de Rojo",
       "accent": "red",
-      "body": "Después de atravesar la iglesia, una de las líneas condujo a Negro y Rojo hasta el túnel del Robot Ninja del Espacio. Allí adoptaron los colores de la profecía. Cuando apareció el enemigo con su paraguas, Negro huyó. No fue una maniobra ni un sacrificio calculado: tuvo miedo y dejó a Rojo solo.\n\n[color=#e8b86a][i]—No podrás con nosotros.[/i][/color]\n\nRojo pronunció el plural justo antes de comprender que Negro ya no estaba. Después llegó el enfrentamiento y el sonido de un arma cargándose.\n\nQuince años más tarde, Negro sigue convencido de que abandonó a Rojo para morir. Bajo la lluvia visita un altar con velas, flores y un cartel: [i]«Rojo siempre con nosotros»[/i]. Negro recuerda el desenlace de una línea, pero desconoce que el camino ya se había dividido mucho antes, dentro de la iglesia.",
+      "body": "Después de atravesar la iglesia, una de las líneas condujo a Negro y Rojo hasta el túnel del Robot Ninja del Espacio. Allí adoptaron los colores de la profecía. Cuando apareció el enemigo con su paraguas, Negro huyó. No fue una maniobra ni un sacrificio calculado: tuvo miedo y dejó a Rojo solo.\n\n[color=#e8b86a][i]—No podrás con nosotros.[/i][/color]\n\nRojo pronunció el plural justo antes de comprender que Negro ya no estaba. El Robot Ninja del Espacio no fingía ni trataba de asustarlo: pretendía matarlo. La bifurcación de la iglesia había dejado dos continuidades de Rojo coexistiendo, y esa duplicidad estaba abriendo un conflicto capaz de romper el espacio-tiempo.\n\nQuince años más tarde, Negro recuerda el enfrentamiento como una muerte. Desconoce tanto el disparo que evitó el asesinato como la identidad de quien había ordenado al Robot terminar el trabajo.",
       "image": "res://assets/comic/la_palanca_iii_pagina_01.webp",
       "image_caption": "Página 1 · El altar, el recuerdo incompleto y la entrada al bar. Pulsa para ampliar."
     },
@@ -49,23 +49,23 @@
       "eyebrow": "PÁGINA 4 · CARMELA",
       "title": "Una prueba de que el camino continuó",
       "accent": "red",
-      "body": "Carmela se sienta junto a Negro y utiliza el nombre que este enterró con su amigo.\n\n[color=#e8b86a][i]—¿Negro?\n—Rojo me habló de ti. En el Instituto del GPS.[/i][/color]\n\nCarmela no lo conoce personalmente; lo reconoce por las historias y las imágenes que Rojo conservaba. En su teléfono guarda una prueba reciente imposible de conciliar con el altar.\n\n[color=#e8b86a][i]—Rojo salió con vida de aquello.[/i][/color]\n\nCarmela explica el final del túnel: cuando el Robot Ninja del Espacio acorraló a Rojo y alzó el paraguas, el arma que se oyó cargar era la suya. Disparó contra el enemigo y ayudó a Rojo a salir. Su intervención no creó la bifurcación; solo permitió que Rojo sobreviviera en una de las líneas que ya se habían separado en la iglesia.",
+      "body": "Carmela se sienta junto a Negro y utiliza el nombre que este enterró con su amigo.\n\n[color=#e8b86a][i]—¿Negro?\n—Rojo me habló de ti. En el Instituto del GPS.[/i][/color]\n\nCarmela no lo conoce personalmente; lo reconoce por las historias y las imágenes que Rojo conservaba. En su teléfono guarda una prueba reciente imposible de conciliar con el altar.\n\n[color=#e8b86a][i]—Rojo salió con vida de aquello.[/i][/color]\n\nCarmela explica el final del túnel. El Robot Ninja del Espacio levantó el paraguas con intención real de matar a Rojo. El arma que se oyó cargar era la de Carmela: disparó contra el enemigo antes de que pudiera ejecutar su orden y ayudó a Rojo a salir.\n\nSu intervención no creó la bifurcación; impidió que el Robot eliminara una de las dos líneas nacidas en la iglesia.",
       "image": "res://assets/comic/la_palanca_iii_pagina_04.webp",
       "image_caption": "Página 4 · Carmela trae la primera prueba de la bifurcación. Pulsa para ampliar."
     },
     {
       "eyebrow": "PÁGINA 5 · LA IGLESIA BIFURCADA",
-      "title": "El lugar donde un camino se convirtió en dos",
+      "title": "Dos Rojos no pueden compartir el mismo futuro",
       "accent": "red",
-      "body": "La clave no está en el destello final, sino en el túnel espacio-temporal que Rojo atravesó antes. Aquel paso lo llevó hasta una iglesia. Allí, dos caminos surgieron de una misma entrada y separaron su continuidad en dos líneas.\n\nEn una línea, Rojo llegó al enfrentamiento, fue abandonado por Negro y sobrevivió gracias al disparo de Carmela.\n\nEn la otra, el recorrido desde la iglesia tomó una dirección distinta. Esa continuidad de Rojo quedó fuera del presente conocido, ligada a los espacios temporales de la palanca y quizá al origen del Robot Ninja del Espacio. No sabemos cuánto tiempo ha vivido, dónde desembocó su camino ni si contempla la primera línea desde el otro lado.\n\n[color=#e8b86a][i]—No podrás con nosotros.[/i][/color]\n\nEl plural puede nombrar ahora a los dos destinos de Rojo nacidos en la iglesia, no a una división causada por el láser.",
+      "body": "La clave no está en el destello final, sino en el túnel espacio-temporal que desembocó en la iglesia. Allí, dos caminos separaron la continuidad de Rojo.\n\nEn la línea A, Rojo llegó al enfrentamiento, fue abandonado por Negro y sobrevivió gracias a Carmela. En la línea B, el otro Rojo recorrió un futuro distinto y descubrió una consecuencia terrible: mientras ambas versiones siguieran existiendo, las dos realidades intentarían ocupar el mismo espacio, provocando fallos, cruces y un conflicto espacio-temporal cada vez mayor.\n\nEl Robot Ninja del Espacio quería matar al Rojo de la línea A porque su misión era reducir las dos continuidades a una sola. Todavía queda una pregunta: ¿quién pudo conocer la bifurcación, construir una máquina capaz de atravesarla y decidir cuál de los dos Rojos merecía continuar?",
       "image": "res://assets/comic/la_palanca_iii_pagina_05.webp",
-      "image_caption": "Página 5 · Carmela salva a Rojo en una línea ya bifurcada desde la iglesia. Pulsa para ampliar."
+      "image_caption": "Página 5 · Carmela impide que el Robot elimine al Rojo de la línea A. Pulsa para ampliar."
     },
     {
-      "eyebrow": "EPÍLOGO · ENTRE LÍNEAS",
-      "title": "La tercera palanca",
+      "eyebrow": "REVELACIÓN FINAL · EL VERDADERO VILLANO",
+      "title": "Rojo creó al Robot Ninja del Espacio",
       "accent": "green",
-      "body": "Una continuidad de Rojo sobrevivió al enfrentamiento gracias a Carmela. La otra tomó un camino distinto cuando el túnel espacio-temporal desembocó en la iglesia. Ambas proceden del mismo Rojo, pero pertenecen a líneas separadas desde aquel cruce.\n\nNegro debe enfrentarse ahora a una verdad más difícil que la muerte que imaginó: puede reencontrarse con el Rojo rescatado y, al mismo tiempo, descubrir qué ocurrió con el Rojo que siguió el otro camino. Carmela conoce el desenlace de una línea. El Gaucho Saltarín lo ha preparado para cruzar la grieta. La palanca original podría ser la única llave capaz de regresar a la iglesia y recorrer la bifurcación en sentido contrario.\n\nEn [i]Entre líneas[/i], el Invitado llega desde fuera de este conflicto. No ocupa el lugar de Negro, Rojo, Carmela, el Gaucho Saltarín ni el Robot Ninja del Espacio. Escucha sus versiones, reconstruye los espacios atravesados y ayuda a decidir qué camino debe abrir la tercera palanca.\n\n[center][color=#e8b86a][b]Una palanca despertó al enemigo.\nUn túnel condujo hasta una iglesia.\nAllí, un camino se convirtió en dos.\nLa tercera parte decidirá si las líneas pueden volver a encontrarse.[/b][/color][/center]"
+      "body": "El enemigo no nació en el túnel. Fue construido en el futuro de la línea B por el propio Rojo.\n\nEl Rojo alternativo comprendió que la bifurcación de la iglesia había creado dos versiones incompatibles. Convencido de que solo una línea podía sobrevivir, fabricó al Robot Ninja del Espacio y lo envió hacia el pasado. Por eso el Robot ya estaba esperando antes de que se produjera la división: su existencia forma un círculo temporal. La palanca no lo creó; lo despertó cuando llegó el momento de vigilar y eliminar al Rojo de La Palanca II.\n\nEl verdadero villano es, por tanto, Rojo: no el que Carmela salvó, sino el que siguió el otro camino y decidió conservar su realidad asesinando a su otra versión. El Robot obedecía una orden auténtica. Carmela rompió el plan al impedir la muerte, manteniendo vivas las dos líneas y agravando sin saberlo el conflicto espacio-temporal.\n\nNegro deberá reencontrarse con el Rojo salvado y enfrentarse al Rojo que se convirtió en su propio verdugo. El Gaucho Saltarín lo ha preparado para cruzar la grieta. Carmela conoce el desenlace de la línea A. La palanca original es la llave para regresar a la iglesia.\n\nEn [i]Entre líneas[/i], el Invitado no sustituye a ninguno de ellos. Deberá descubrir si realmente es necesario borrar a uno de los dos Rojos o si esa supuesta necesidad es la mentira con la que el Rojo alternativo justifica sus crímenes.\n\n[center][color=#e8b86a][b]Rojo creó al enemigo que debía matarlo.\nCarmela impidió el asesinato.\nDos realidades continúan chocando.\nLa tercera palanca decidirá quién tiene derecho a existir.[/b][/color][/center]"
     }
   ]
 }
