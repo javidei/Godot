@@ -38,8 +38,8 @@ func _run() -> void:
 	if not canon_text.contains("espacio-temporales") or not canon_text.contains("iglesia") or not canon_text.contains("dos líneas") or not canon_text.contains("Gaucho Saltarín") or not canon_text.contains("Carmela"):
 		_fail("Faltan el túnel hacia la iglesia, la bifurcación o los nombres ficticios nuevos")
 		return
-	if canon_text.contains("división causada por el láser") or canon_text.contains("bifurcación causada por el láser"):
-		_fail("La bifurcación temporal se atribuye incorrectamente al láser")
+	if not canon_text.contains("La división no la provoca el enfrentamiento posterior ni el láser"):
+		_fail("No queda claro que la bifurcación ocurre en la iglesia y no por el láser")
 		return
 
 	manager.call("_open_story", "trilogia_innecesaria")
