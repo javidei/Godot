@@ -38,7 +38,7 @@ func _run() -> void:
 	if not canon_text.contains("espacio-temporal") or not canon_text.contains("iglesia") or not canon_text.contains("dos líneas") or not canon_text.contains("Gaucho Saltarín") or not canon_text.contains("Carmela"):
 		_fail("Faltan el túnel hacia la iglesia, la bifurcación o los nombres ficticios nuevos")
 		return
-	if not canon_text.contains("La división ocurrió allí: no la causó el láser ni el combate posterior"):
+	if not canon_text.contains("La división ocurrió allí; no la causó el láser ni el combate posterior"):
 		_fail("No queda claro que la bifurcación ocurre en la iglesia y no por el láser")
 		return
 
