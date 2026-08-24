@@ -296,8 +296,8 @@ func _build_menu() -> void:
 	var info := Label.new()
 	info.name = "VersionLabel"
 	var version: String = str(ProjectSettings.get_setting("application/config/version", "0.1.0"))
-	info.text = "Versión " + version + " · EARLY ACCESS · Diálogos, preguntas, amistad, guardado, efectos y audio."
-	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	info.text = "v" + version + " · EARLY ACCESS"
+	info.autowrap_mode = TextServer.AUTOWRAP_OFF
 	info.add_theme_color_override("font_color", Color(0.78, 0.73, 0.67, 0.86))
 	info.add_theme_font_size_override("font_size", 12)
 	menu_content.add_child(info)
