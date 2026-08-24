@@ -14,6 +14,27 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.17] - 2026-08-25
+
+### Added
+
+- La Palanca II incorpora **El Gran Libro sobre las Palancas del Mundo**, llegado muy recientemente a la papelería con las coordenadas preparadas por el Gaucho Saltarín.
+- Bajo las piedras se encuentra la verdadera **Profecía de la Palanca**: un dibujo cutre que anuncia que el Robot Ninja del Espacio viene a aniquilarlos a todos.
+- Negro descubre al autor porque el fuego que sale de la boca del Robot está dibujado igual que en los personajes que el Gaucho garabatea borracho sobre las servilletas del bar.
+- Rojo A pidió al Gaucho que protegiera a Negro en secreto, ya que el Robot podía rastrear su huella temporal y cualquier contacto habría puesto a Negro en peligro.
+
+### Changed
+
+- Desaparece el mapa temporal: Rojo entrega a Negro el papel de la profecía antes de ordenarle «Huye, y no mires atrás».
+- El Gaucho confiesa haber preparado el libro, las coordenadas y la profecía para conducir a Negro y Rojo hasta el Robot y evitar la destrucción de su línea temporal.
+- El Gaucho no formó a Rojo B ni le proporcionó tecnología. El Rojo alternativo comparte la formación previa del Instituto del GPS y construye al Robot con medios de su propio futuro.
+- Carmela rompe el secreto quince años después porque Rojo B ha localizado a Negro y el silencio ya no puede protegerlo.
+- La Palanca III cierra el montaje del Gaucho y la supervivencia de Rojo A, pero mantiene abierto el destino definitivo de los dos Rojos para una posible continuación.
+
+### Fixed
+
+- El relato ilustrado, su versión de texto y la prueba automática comparten el nuevo canon sin sustituir todavía las cinco imágenes existentes.
+
 ## [0.10.16] - 2026-08-24
 
 ### Added
