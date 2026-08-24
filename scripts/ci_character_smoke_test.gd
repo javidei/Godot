@@ -176,8 +176,8 @@ func _run() -> void:
 	if _find_named(main, "ExitGameConfirmation") != null:
 		_fail("El popup de confirmación de salida no se ha eliminado")
 		return
-	if version_label == null or not version_label.text.contains("Versión %s · EARLY ACCESS" % project_version):
-		_fail("La versión actual no se muestra en el menú")
+	if version_label == null or version_label.text != "v%s · EARLY ACCESS" % project_version:
+		_fail("La versión actual no usa la nomenclatura compacta del menú")
 		return
 	if music_down_button == null or music_up_button == null or music_volume_label == null or music_mute_button == null:
 		_fail("El menú no contiene todos los controles de música")
