@@ -14,6 +14,14 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.12] - 2026-08-24
+
+### Fixed
+
+- Corregido el desplazamiento táctil de **La Palanca III** en móvil: tarjetas, textos y elementos decorativos ya no interceptan el gesto vertical.
+- Las páginas del cómic siguen abriéndose con un toque corto, pero permiten deslizar desde la propia imagen sin activar el visor.
+- Añadida cobertura de regresión para validar el ScrollContainer y los filtros de entrada de la experiencia narrativa.
+
 ## [0.10.11] - 2026-08-24
 
 ### Added
