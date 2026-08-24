@@ -19,6 +19,7 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 ### Fixed
 
 - El botón **Volver** del lector de historias utiliza el icono SVG de flecha izquierda en lugar del carácter Unicode que Monocraft mostraba como un cuadrado.
+- Se fuerza una exportación web limpia de la 0.10.10 para evitar que una comprobación histórica desactualizada de Charlie mantenga publicada la compilación anterior.
 
 ## [0.10.9] - 2026-08-24
 
