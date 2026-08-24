@@ -14,6 +14,14 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.14] - 2026-08-24
+
+### Fixed
+
+- Corregido el origen de la bifurcación: Rojo atraviesa un túnel espacio-temporal, aparece en una iglesia y es allí donde los caminos se separan en dos líneas.
+- El disparo posterior de Carmela salva a Rojo en una de esas líneas, pero no provoca la división temporal.
+- Actualizados la presentación, el relato completo y la prueba automática para conservar esta causalidad.
+
 ## [0.10.13] - 2026-08-24
 
 ### Added
