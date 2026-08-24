@@ -49,6 +49,7 @@ Quedan como posibles ampliaciones:
 - [ ] Valorar estados de ánimo o expresiones que evolucionen y persistan según respuestas, amistad y progreso.
 - [ ] Valorar encuentros especiales entre varios personajes fuera de las visitas individuales.
 - [ ] Valorar reacciones, diálogos o pequeñas escenas opcionales desbloqueadas por determinados hitos de amistad.
+- [ ] Valorar una **La Palanca IV** que resuelva el arco de los dos Rojos e incorpore equivalentes propios de La Palanca para Ana, Sue y Charlie. Sus identidades y funciones dentro de la historia siguen pendientes de decidir.
 
 ## Economía y contenido opcional
 

@@ -14,6 +14,25 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.16] - 2026-08-24
+
+### Added
+
+- La Palanca II incluye el hallazgo de un mapa bajo las piedras del túnel y la orden directa de Rojo a Negro: «Huye, y no mires atrás».
+- El mapa conecta el túnel, las coordenadas de Carmela, los símbolos del Gaucho Saltarín y una ruta todavía incompleta de regreso a la iglesia.
+- Se documenta como idea futura una posible La Palanca IV con equivalentes propios para Ana, Sue y Charlie.
+
+### Changed
+
+- Negro ya no abandona a Rojo: obedece su petición y carga durante quince años con la culpa de no haber regresado.
+- Negro y el Gaucho Saltarín se conocen desde hace años, se reúnen habitualmente en el bar y mantienen una antigua relación de amistad y maestro-discípulo.
+- El Gaucho conoce las grietas temporales y sus enseñanzas llegan al Rojo alternativo, haciendo que la revelación se viva como una traición personal sin convertirlo en el villano principal.
+- La Palanca III termina como cliffhanger: revela al Rojo de la línea B como creador del Robot, pero reserva el reencuentro y la resolución del conflicto para una posible continuación.
+
+### Fixed
+
+- Los archivos 01 y 02, la experiencia ilustrada y el relato alternativo comparten ahora la misma continuidad y conservan las cinco imágenes actuales.
+
 ## [0.10.15] - 2026-08-24
 
 ### Added

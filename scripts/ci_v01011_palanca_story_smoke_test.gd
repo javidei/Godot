@@ -38,7 +38,7 @@ func _run() -> void:
 	if not canon_text.contains("espacio-temporal") or not canon_text.contains("iglesia") or not canon_text.contains("dos líneas") or not canon_text.contains("Gaucho Saltarín") or not canon_text.contains("Carmela"):
 		_fail("Faltan el túnel hacia la iglesia, la bifurcación o los nombres ficticios nuevos")
 		return
-	if not canon_text.contains("La división no la provoca el enfrentamiento posterior ni el láser"):
+	if not canon_text.contains("La división ocurrió allí: no la causó el láser ni el combate posterior"):
 		_fail("No queda claro que la bifurcación ocurre en la iglesia y no por el láser")
 		return
 
@@ -47,6 +47,19 @@ func _run() -> void:
 		return
 	if not canon_text.contains("pretendía matarlo") or not canon_text.contains("Carmela rompió el plan"):
 		_fail("La intención homicida del Robot o la intervención de Carmela no quedan claras")
+		return
+	if not canon_text.contains("Bajo unas piedras encontraron un mapa") or not canon_text.contains("Huye, y no mires atrás"):
+		_fail("Faltan el mapa del túnel o la orden directa de Rojo")
+		return
+	if not canon_text.contains("Negro no abandonó a Rojo") or not canon_text.contains("conoce al Gaucho Saltarín desde hace muchos años"):
+		_fail("La relación de Negro con Rojo o con el Gaucho conserva el canon antiguo")
+		return
+	for forbidden_canon in ["Negro huyó", "fue abandonado por Negro", "conoce al Gaucho Saltarín: un monje"]:
+		if canon_text.contains(forbidden_canon):
+			_fail("El relato conserva una contradicción de continuidad: " + forbidden_canon)
+			return
+	if not canon_text.contains("EL ARCO DE LOS DOS ROJOS CONTINUARÁ"):
+		_fail("La Palanca III cierra el arco que debe quedar abierto")
 		return
 
 	manager.call("_open_story", "trilogia_innecesaria")
