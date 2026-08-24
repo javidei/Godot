@@ -47,6 +47,7 @@ func _ready() -> void:
 	_build_main_composition()
 	_move_controls_into_settings()
 	_hide_legacy_menu_nodes()
+	_place_version_label()
 	_apply_layout()
 
 	get_viewport().size_changed.connect(_queue_layout)
@@ -206,6 +207,28 @@ func _hide_legacy_menu_nodes() -> void:
 		exit_spacer.visible = false
 
 
+func _place_version_label() -> void:
+	if version_label == null or menu_screen == null:
+		return
+	var version := str(ProjectSettings.get_setting("application/config/version", "0.1.0"))
+	version_label.text = "v%s · EARLY ACCESS" % version
+	version_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	version_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	version_label.z_index = 3
+	if version_label.get_parent() != menu_screen:
+		version_label.reparent(menu_screen)
+	version_label.anchor_left = 0.0
+	version_label.anchor_top = 1.0
+	version_label.anchor_right = 0.0
+	version_label.anchor_bottom = 1.0
+	version_label.offset_left = 18.0
+	version_label.offset_top = -36.0
+	version_label.offset_right = 300.0
+	version_label.offset_bottom = -12.0
+	version_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	version_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+
+
 func _order_main_menu() -> void:
 	var title := menu_content.find_child("GameTitle", false, false) as Label
 	var subtitle := _menu_subtitle(title)
@@ -352,4 +375,5 @@ func _apply_layout() -> void:
 			if button != null:
 				_prepare_main_button(button, 52 if not portrait else 48)
 	if version_label != null:
+		_place_version_label()
 		version_label.add_theme_font_size_override("font_size", 10 if portrait else 11)
