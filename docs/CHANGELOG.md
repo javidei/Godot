@@ -32,6 +32,7 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 - Se eliminan interpretaciones anteriores no respaldadas por los cortos, incluida la apertura inventada de Rojo caminando solo con un mechero y la atribución a Charlie de información fuera de plano no establecida.
 - La exportación web valida que el JSON, el logotipo y las cinco páginas de **La Palanca III** estén presentes en el PCK antes de publicar.
 - La publicación forzada incorpora el smoke test de portada, capítulos, cómic, ampliación e independencia de **Historia de un asesino**, evitando saltarse la validación nueva cuando un test histórico ajeno bloquea el workflow general.
+- El reintento de producción conserva el permiso ejecutable de `prepare_web_export.sh` al publicar mediante la API de GitHub.
 
 ## [0.10.10] - 2026-08-24
 

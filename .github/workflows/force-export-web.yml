@@ -171,4 +171,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-# Publicación validada de La Palanca III 0.10.11 (24/08/2026)
+# Reintento de La Palanca III conservando ejecutable el empaquetador (24/08/2026)
