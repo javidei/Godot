@@ -171,4 +171,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-# Publicación de la Profecía de la Palanca 0.10.17 (25/08/2026)
+# Reintento validado de la Profecía de la Palanca 0.10.17 (25/08/2026)
