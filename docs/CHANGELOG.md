@@ -14,6 +14,24 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.13] - 2026-08-24
+
+### Added
+
+- La Palanca II incorpora los espacios y fracturas espacio-temporales atravesados por Rojo durante el viaje hacia el túnel.
+- El instante del láser se bifurca en dos líneas: Carmela rescata a una continuidad de Rojo mientras otra queda atrapada al otro lado de la grieta.
+- La Palanca III conecta ambas líneas y convierte la palanca original en una posible llave para reunirlas o destruir una de ellas.
+
+### Changed
+
+- La Palanca I y II se narran íntegramente como sucesos reales dentro del mundo, sin referencias a cámaras, rodaje, películas, espectadores ni entregas audiovisuales.
+- Todos los personajes del relato usan exclusivamente sus identidades ficticias: Negro, Rojo, Robot Ninja del Espacio, Carmela y Gaucho Saltarín.
+- La presentación y el texto alternativo de «Una trilogía innecesaria» comparten el mismo canon temporal.
+
+### Fixed
+
+- Añadida una validación automática que impide reintroducir nombres reales o lenguaje externo a la ficción en el relato de La Palanca.
+
 ## [0.10.12] - 2026-08-24
 
 ### Fixed
