@@ -171,4 +171,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-# Reintento de publicación del canon 0.10.16 de La Palanca III (24/08/2026)
+# Publicación de la Profecía de la Palanca 0.10.17 (25/08/2026)
