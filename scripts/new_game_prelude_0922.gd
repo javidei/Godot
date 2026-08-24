@@ -181,7 +181,7 @@ func _build_intro_quote_screen() -> void:
     source.anchor_top = 0.58
     source.anchor_right = 0.84
     source.anchor_bottom = 0.73
-    source.text = "— " + str(selected.get("source", ""))
+    source.text = "- " + str(selected.get("source", ""))
     source.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     source.vertical_alignment = VERTICAL_ALIGNMENT_TOP
     source.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
