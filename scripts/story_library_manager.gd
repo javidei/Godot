@@ -1,6 +1,7 @@
 extends Node
 
 const DATA_PATH := "res://data/story_library.json"
+const BACK_ICON_PATH := "res://assets/ui/icons/arrow-left.svg"
 const GOLD := Color("e8b86a")
 const TEXT := Color("f2eee8")
 const TEXT_DIM := Color("aaa39a")
@@ -213,13 +214,20 @@ func _build_story_screen() -> void:
 	story_subtitle.add_theme_font_size_override("font_size", 14)
 	heading_box.add_child(story_subtitle)
 
-	back_button = main.call("_make_button", "← Volver", false) as Button
+	back_button = main.call("_make_button", "Volver", false) as Button
 	if back_button == null:
 		back_button = Button.new()
-		back_button.text = "← Volver"
+		back_button.text = "Volver"
 	back_button.name = "StoryBackButton"
 	back_button.custom_minimum_size = Vector2(142, 52)
 	back_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	if ResourceLoader.exists(BACK_ICON_PATH):
+		back_button.icon = ResourceLoader.load(BACK_ICON_PATH) as Texture2D
+		back_button.expand_icon = true
+		back_button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		back_button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+		back_button.add_theme_constant_override("icon_max_width", 18)
+		back_button.add_theme_constant_override("h_separation", 7)
 	back_button.tooltip_text = "Volver al menú principal"
 	back_button.pressed.connect(_close_story)
 	header.add_child(back_button)
