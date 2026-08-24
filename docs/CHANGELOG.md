@@ -14,6 +14,12 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.9] - 2026-08-24
+
+### Fixed
+
+- El separador que precede a la atribución de las frases iniciales usa ahora un carácter incluido en Monocraft, evitando el cuadrado de glifo ausente que aparecía antes de textos como **Mensaje eliminado del grupo de WhatsApp**.
+
 ## [0.10.8] - 2026-08-24
 
 ### Changed
