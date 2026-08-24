@@ -14,6 +14,23 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.15] - 2026-08-24
+
+### Added
+
+- El Robot Ninja del Espacio pretendía realmente matar al Rojo de La Palanca II para eliminar una de las dos continuidades creadas en la iglesia y evitar el choque de realidades.
+- Revelación final: el verdadero villano es el Rojo alternativo de la línea B, quien construyó al Robot en su futuro y lo envió al pasado para asesinar a su otra versión.
+- La existencia del Robot forma un bucle causal: espera la bifurcación antes de que su creador llegue a existir.
+
+### Changed
+
+- El disparo de Carmela frustra el asesinato y mantiene vivas las dos líneas, agravando involuntariamente el conflicto espacio-temporal.
+- La Palanca III plantea si uno de los dos Rojos debe desaparecer realmente o si esa necesidad es una justificación del Rojo alternativo.
+
+### Fixed
+
+- La prueba narrativa valida la intención del Robot, la intervención de Carmela y la identidad del villano final.
+
 ## [0.10.14] - 2026-08-24
 
 ### Fixed
