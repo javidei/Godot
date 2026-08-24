@@ -14,6 +14,13 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.8] - 2026-08-24
+
+### Changed
+
+- El pie del menú principal muestra únicamente la nomenclatura `v0.10.8 · EARLY ACCESS`; desaparece el texto descriptivo adicional.
+- La versión sale del bloque de botones y queda anclada en la esquina inferior izquierda de la pantalla, por lo que mantiene su posición al cambiar el tamaño de la ventana.
+
 ## [0.10.7] - 2026-08-24
 
 ### Changed

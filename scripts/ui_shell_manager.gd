@@ -124,7 +124,7 @@ func _add_version_label() -> void:
 	var version: String = str(ProjectSettings.get_setting("application/config/version", "0.1.0"))
 	var label := Label.new()
 	label.name = "VersionLabel"
-	label.text = "Versión " + version + " · EARLY ACCESS"
+	label.text = "v" + version + " · EARLY ACCESS"
 	label.add_theme_color_override("font_color", Color("e8b86a"))
 	label.add_theme_font_size_override("font_size", 12)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
