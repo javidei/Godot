@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La novena silla"
-config/version="0.10.5"
+config/version="0.10.6"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -64,3 +64,4 @@ driver/enable_input=false
 ; 0.10.3: la exportación web incluye los relatos TXT de la biblioteca y valida su presencia dentro del PCK antes de publicar.
 ; 0.10.4: el menú principal elimina su scroll y reorganiza acciones, historias, utilidades, audio y salida en filas compactas fijas.
 ; 0.10.5: el lector de historias desactiva la selección de texto para que el gesto táctil de scroll no marque párrafos.
+; 0.10.6: menú principal simplificado; volumen y pantalla completa pasan a Ajustes y Continuar adopta la etiqueta Continuar partida.

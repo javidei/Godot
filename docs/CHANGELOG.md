@@ -14,6 +14,20 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.6] - 2026-08-24
+
+### Changed
+
+- El menú principal adopta la composición visual simplificada: **Nueva partida** y **Continuar partida** comparten la primera fila; las dos historias y **Extras** ocupan filas completas; **Ajustes** y **Salir** cierran el bloque inferior.
+- **Pantalla completa** deja de ocupar el menú principal y pasa a **Ajustes**.
+- El control real de **Volumen general** se mueve a **Ajustes**, conservando sus botones de bajar, subir y silenciar.
+- **Partidas guardadas** se conserva accesible dentro de **Ajustes** para mantener la gestión de slots sin recargar el menú principal.
+- Se elimina del menú principal el acceso redundante **Personajes de la historia**; las fichas de personajes siguen disponibles desde **Extras**.
+
+### Fixed
+
+- La reorganización reutiliza los botones y callbacks existentes de nueva partida, continuación, historias, Extras, guardados, audio y pantalla completa, evitando duplicar lógica de navegación o persistencia.
+
 ## [0.10.5] - 2026-08-24
 
 ### Fixed
