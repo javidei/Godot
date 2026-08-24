@@ -2,70 +2,70 @@
   "schema_version": 1,
   "hero": {
     "image": "res://assets/comic/la_palanca_iii_logo.webp",
-    "image_caption": "Logotipo oficial de La Palanca III",
-    "eyebrow": "DOS CORTOS · UNA DEUDA · QUINCE AÑOS",
-    "title": "LA HISTORIA QUE QUEDÓ FUERA DE PLANO",
-    "body": "[center]Todo empezó con una palanca que ya venía instalada en un coche. Nadie sabía para qué servía. Quince años después, Negro sigue pagando por haber descubierto la respuesta demasiado tarde.[/center]",
-    "hint": "DESLIZA PARA ENTRAR EN EL TÚNEL"
+    "image_caption": "Emblema de La Palanca III",
+    "eyebrow": "UNA PALANCA · DOS LÍNEAS · QUINCE AÑOS",
+    "title": "LA HISTORIA QUE EL TIEMPO PARTIÓ EN DOS",
+    "body": "[center]La palanca no era un simple interruptor. Despertó al Robot Ninja del Espacio y abrió grietas entre lugares, instantes y posibilidades. Rojo las atravesó. Negro huyó. Quince años después, ambas decisiones siguen ocurriendo en más de una línea temporal.[/center]",
+    "hint": "DESLIZA PARA ATRAVESAR LA PRIMERA GRIETA"
   },
   "chapters": [
     {
-      "eyebrow": "ARCHIVO 01 · LA PALANCA",
-      "title": "Una pregunta junto al asiento",
+      "eyebrow": "ARCHIVO 01 · LA PALANCA I",
+      "title": "El interruptor que no parecía hacer nada",
       "accent": "red",
-      "body": "Javi y Fran solo querían estrenar coche. Javi presumía de sus prestaciones con una lista que mezclaba aire acondicionado, Bluetooth, cuatro ruedas y la tranquilizadora certeza de que el vehículo tenía motor. Entonces Fran señaló un pequeño mando junto al conductor.\n\n[color=#e8b86a][i]—¿Y esto? ¿Esa palanquita?\n—Pues no sé, tío… Venía con el coche.\n—Dale.[/i][/color]\n\nAl accionarla, despertaron a distancia al Robot Ninja del Espacio: Jony, oculto bajo un pasamontañas verde militar y armado con un paraguas. Al moverla de nuevo lo desactivaron. Ellos no vieron ninguna de las dos cosas. Para Javi y Fran, el mando no había hecho nada; para el espectador, acababan de poner en marcha todo el problema.\n\nLa primera entrega fijó así el tono de la saga: amistad, improvisación y ciencia ficción construida con objetos domésticos. Carlos J. Vidal estaba detrás de la cámara. Delante de ella todavía no había héroes, solo dos amigos demasiado curiosos."
+      "body": "Negro y Rojo encontraron una pequeña palanca instalada junto al asiento del conductor. No tenía etiqueta, mecanismo visible ni una función razonable. La curiosidad ganó.\n\n[color=#e8b86a][i]—¿Y esto? ¿Esa palanquita?\n—Pues no sé… Venía con el coche.\n—Dale.[/i][/color]\n\nAl accionarla, despertaron a distancia al Robot Ninja del Espacio, oculto bajo un pasamontañas verde militar y armado con un paraguas capaz de canalizar una energía desconocida. Al moverla de nuevo, lo desactivaron.\n\nNegro y Rojo no presenciaron el despertar. Creyeron que la palanca no servía para nada. En realidad habían activado dos mecanismos unidos: al ser que esperaba en la oscuridad y una red de grietas espacio-temporales que todavía no podían ver."
     },
     {
       "eyebrow": "ARCHIVO 02 · LA PALANCA II",
-      "title": "Las coordenadas y la huida",
+      "title": "Los espacios entre un segundo y el siguiente",
       "accent": "green",
-      "body": "La segunda parte convirtió la broma en investigación. El coche pasó por las manos de un mecánico; después llegó un libro sobre palancas, una ilustración idéntica al mando, unos símbolos y unas coordenadas. Las coordenadas conducían al mismo túnel en el que el RNE había despertado. Allí encontraron una profecía que aseguraba que solo ellos podían detenerlo.\n\nJavi adoptó el negro. Fran, el rojo. Pero cuando apareció el RNE con su paraguas, Javi huyó. No fue una retirada pactada ni una maniobra: el miedo pudo más y dejó a Fran solo.\n\n[color=#e8b86a][i]—No podrás con nosotros.[/i][/color]\n\nFran pronunció el plural antes de descubrir que su amigo ya no estaba. Luchó solo. El último plano mostró al RNE apuntándole y se oyó un arma cargarse, pero nunca hubo disparo visible ni cuerpo. La película terminaba justo donde empezaba la culpa de Javi."
+      "body": "La investigación comenzó con el coche, siguió en el taller de un mecánico y terminó frente a un libro que representaba una palanca idéntica. Sus símbolos escondían coordenadas y una profecía: quienes habían accionado el mecanismo también podían detener aquello que habían despertado.\n\nDurante el trayecto hacia las coordenadas, Rojo empezó a atravesar espacios imposibles. Una puerta lo devolvía a un lugar que acababa de abandonar. Un corredor se prolongaba más de lo que permitían sus paredes. Sus propios pasos sonaban antes de apoyar el pie y, durante breves instantes, veía a Negro unos metros por delante y a la vez detrás de él.\n\nNo eran alucinaciones ni simples desplazamientos. La palanca había aflojado las costuras del tiempo, y Rojo, expuesto a su energía, se había convertido en el punto de paso. Cada grieta mostraba una posibilidad distinta del mismo viaje. Todas desembocaban en el túnel del Robot Ninja del Espacio."
     },
     {
       "eyebrow": "PÁGINA 1 · QUINCE AÑOS DESPUÉS",
-      "title": "Un altar para Rojo",
+      "title": "Un altar para una sola versión de Rojo",
       "accent": "red",
-      "body": "Javi ha pasado quince años convencido de que abandonó a Fran para morir. Vuelve bajo la lluvia a un altar improvisado junto al puerto: velas, flores, una fotografía y un cartel escrito a mano, [i]«Rojo siempre con nosotros»[/i]. No es un monumento heroico; es el lugar al que regresa alguien que nunca consiguió absolverse.\n\nEl túnel invade sus recuerdos. Ve de nuevo el pasamontañas verde, el pañuelo rojo y el instante exacto en el que eligió escapar. Después entra en un bar con una norma colgada de la pared: [i]«No hay palanca sin riesgo»[/i]. La frase parece una broma, pero para él resume media vida.",
+      "body": "En el túnel, Negro y Rojo adoptaron los colores de la profecía. Cuando apareció el Robot Ninja del Espacio con su paraguas, Negro huyó. No fue una maniobra ni un sacrificio calculado: tuvo miedo y dejó a Rojo solo.\n\n[color=#e8b86a][i]—No podrás con nosotros.[/i][/color]\n\nRojo pronunció el plural justo antes de comprender que Negro ya no estaba. Después llegó el destello, el sonido de un arma cargándose y una nueva grieta.\n\nQuince años más tarde, Negro sigue convencido de que abandonó a Rojo para morir. Bajo la lluvia visita un altar con velas, flores y un cartel: [i]«Rojo siempre con nosotros»[/i]. El monumento honra una conclusión, no una certeza. Negro recuerda un único túnel porque nunca vio cómo aquel instante se separó en dos.",
       "image": "res://assets/comic/la_palanca_iii_pagina_01.webp",
-      "image_caption": "Página 1 · El altar, el recuerdo del túnel y la entrada al bar. Pulsa para ampliar."
+      "image_caption": "Página 1 · El altar, el recuerdo incompleto y la entrada al bar. Pulsa para ampliar."
     },
     {
-      "eyebrow": "PÁGINA 2 · EL MAESTRO IMPROBABLE",
+      "eyebrow": "PÁGINA 2 · EL GAUCHO SALTARÍN",
       "title": "Todo es sufrimiento (incluso el happy hour)",
       "accent": "green",
-      "body": "En la barra, Javi conoce a un monje calvo de túnica naranja. Ninguno de los dos está en su mejor momento. El maestro brinda con una filosofía tan solemne como poco útil para un borracho.\n\n[color=#e8b86a][i]—Todo es sufrimiento.\n—¿Y el happy hour?\n—Eso también es sufrimiento. Solo que con hielo.[/i][/color]\n\nCuando varios hombres intentan atracarlos a la salida, el monje los derriba sin perder la calma. Javi descubre que bajo la charla absurda hay una disciplina real. El desconocido le deja una cita: si quiere dejar de sufrir, deberá presentarse a la mañana siguiente en la misma playa. La tercera entrega conserva así la identidad de la saga: una herida verdadera puede convivir con el chiste más tonto de la noche.",
+      "body": "En un bar marcado por la máxima [i]«No hay palanca sin riesgo»[/i], Negro conoce al Gaucho Saltarín: un monje calvo de túnica naranja, aire pirata y un cigarro que parece sobrevivir a cualquier movimiento. Ninguno de los dos está en su mejor momento.\n\n[color=#e8b86a][i]—Todo es sufrimiento.\n—¿Y el happy hour?\n—Eso también es sufrimiento. Solo que con hielo.[/i][/color]\n\nCuando varios hombres intentan atracarlos a la salida, el Gaucho Saltarín los derriba sin perder la calma. Bajo su aspecto improbable hay una disciplina real. Le ofrece a Negro una cita en la playa al amanecer. No promete cambiar el pasado, solo prepararlo para mirar de frente aquello de lo que lleva quince años escapando.",
       "image": "res://assets/comic/la_palanca_iii_pagina_02.webp",
-      "image_caption": "Página 2 · El encuentro en el bar y la demostración del monje. Pulsa para ampliar."
+      "image_caption": "Página 2 · El encuentro con el Gaucho Saltarín. Pulsa para ampliar."
     },
     {
       "eyebrow": "PÁGINA 3 · ENTRENAMIENTO",
       "title": "La paz empieza aquí",
       "accent": "green",
-      "body": "Javi vuelve. Entrena bajo la lluvia, cae, se levanta y golpea hasta que el cuerpo empieza a obedecerle. El monje no puede borrar el túnel ni convertir su huida en un acto noble; solo puede enseñarle a no seguir huyendo de la siguiente decisión.\n\nSu lección central permanece intacta:\n\n[color=#e8b86a][i]«Debes recordar, que la paz empieza aquí —mano en la cabeza—, igual que la guerra».[/i][/color]\n\nLa frase no promete que pelear arregle el pasado. Sitúa el verdadero combate en la interpretación que Javi ha repetido durante quince años. Prepararse para regresar al túnel significa aprender a soportar lo que encuentre allí, no ensayar una venganza. Cuando vuelve al bar, sigue solo, pero ya no está inmóvil.",
+      "body": "Negro vuelve. Entrena bajo la lluvia, cae, se levanta y golpea hasta que el cuerpo empieza a obedecerle. El Gaucho Saltarín comprende que su enemigo no es solo el Robot Ninja del Espacio: es un recuerdo congelado en el peor instante posible.\n\nSu enseñanza central permanece intacta:\n\n[color=#e8b86a][i]«Debes recordar, que la paz empieza aquí —mano en la cabeza—, igual que la guerra».[/i][/color]\n\nLa frase adquiere otro sentido ante una historia dividida. Si una decisión puede abrir dos futuros, la guerra comienza al aceptar una única versión por miedo a conocer la otra. Negro no puede convertir su huida en un acto noble, pero sí decidir qué hará cuando el túnel vuelva a abrirse.",
       "image": "res://assets/comic/la_palanca_iii_pagina_03.webp",
-      "image_caption": "Página 3 · Caer, aprender y regresar al lugar donde empezó el cambio. Pulsa para ampliar."
+      "image_caption": "Página 3 · Caer, aprender y dejar de huir. Pulsa para ampliar."
     },
     {
-      "eyebrow": "PÁGINA 4 · CARMEN",
-      "title": "La primera grieta en la certeza",
+      "eyebrow": "PÁGINA 4 · CARMELA",
+      "title": "Una prueba llegada de la otra línea",
       "accent": "red",
-      "body": "Una mujer se sienta junto a Javi y utiliza un nombre que pertenece a otra época.\n\n[color=#e8b86a][i]—¿Negro?\n—Rojo me habló de ti. En el Instituto del GPS.[/i][/color]\n\nEs Carmen, antigua compañera de Fran. No llega fingiendo conocer personalmente a Javi: lo reconoce por lo que Rojo le contó. En su teléfono conserva una imagen reciente, imposible de conciliar con el altar, los quince años de luto y la conclusión que Javi había convertido en recuerdo.\n\n[color=#e8b86a][i]—Rojo salió con vida de aquello.[/i][/color]\n\nLa noticia no absuelve a Javi. Fran sobreviviera o no, él lo abandonó. Lo que cambia es la pregunta. Ya no se trata de averiguar cómo murió Rojo, sino de comprender qué ocurrió después de que Negro saliera corriendo y por qué nadie consiguió cerrar esa distancia durante quince años.",
+      "body": "Carmela se sienta junto a Negro y utiliza el nombre que este enterró con su amigo.\n\n[color=#e8b86a][i]—¿Negro?\n—Rojo me habló de ti. En el Instituto del GPS.[/i][/color]\n\nCarmela no lo conoce personalmente; lo reconoce por las historias y las imágenes que Rojo conservaba. En su teléfono guarda una prueba reciente imposible de conciliar con el altar.\n\n[color=#e8b86a][i]—Rojo salió con vida de aquello.[/i][/color]\n\nLa noticia no absuelve a Negro: él huyó en todas las versiones que recuerda. Pero Carmela no habla solo de un rescate. Explica que, cuando disparó en el túnel, vio dos siluetas de Rojo separarse a ambos lados del destello. Sacó a una de ellas. La otra cayó hacia una grieta que se cerró antes de que pudiera alcanzarla.",
       "image": "res://assets/comic/la_palanca_iii_pagina_04.webp",
-      "image_caption": "Página 4 · Carmen reconoce a Negro y le muestra que Rojo sobrevivió. Pulsa para ampliar."
+      "image_caption": "Página 4 · Carmela trae la primera prueba de la bifurcación. Pulsa para ampliar."
     },
     {
-      "eyebrow": "PÁGINA 5 · EL PLANO QUE FALTABA",
-      "title": "El láser nunca apuntó a Rojo",
+      "eyebrow": "PÁGINA 5 · EL INSTANTE BIFURCADO",
+      "title": "Dos líneas temporales, dos destinos para Rojo",
       "accent": "red",
-      "body": "El último plano de La Palanca II decía la verdad, pero no toda la verdad. El RNE tenía a Fran acorralado y levantó su paraguas-arma. La carga que se oyó parecía anunciar la ejecución. Fuera de la interpretación de Javi, sin embargo, había una tercera persona.\n\n[color=#e8b86a][i]—No podrás con nosotros.[/i][/color]\n\nEsta vez el plural sí tenía sentido. Carmen apareció en el túnel y disparó contra el RNE. El sonido que durante quince años Javi atribuyó al paraguas procedía de su arma. Carmen ayudó a Fran a salir con vida.\n\nLa revelación no reescribe la cobardía de Negro ni convierte el dolor en un malentendido inocente. Reinterpreta el encuadre: la culpa nació de una decisión real, pero el duelo se construyó sobre una muerte que nunca se confirmó.",
+      "body": "El final de La Palanca II no ocultaba un único desenlace, sino dos.\n\nEn la primera línea, el Robot Ninja del Espacio acorraló a Rojo y alzó el paraguas. El arma que se oyó cargar pertenecía a Carmela. Su disparo alcanzó al enemigo y permitió que Rojo saliera del túnel con vida.\n\nEn la segunda línea, la grieta se abrió una fracción de segundo antes. Otra continuidad de Rojo quedó al otro lado, atrapada en un túnel donde Negro todavía acababa de huir y Carmela aún no había llegado. Para ese Rojo, los quince años quizá no han transcurrido. Para el Robot Ninja del Espacio, ambas versiones pueden formar parte del mismo plan.\n\n[color=#e8b86a][i]—No podrás con nosotros.[/i][/color]\n\nEl plural ya no alude solo a una ayuda inesperada. También nombra a los dos Rojos nacidos de una misma resistencia.",
       "image": "res://assets/comic/la_palanca_iii_pagina_05.webp",
-      "image_caption": "Página 5 · El rescate que ocurrió fuera de la conclusión de Javi. Pulsa para ampliar."
+      "image_caption": "Página 5 · El disparo de Carmela y el instante que separó a Rojo en dos líneas. Pulsa para ampliar."
     },
     {
       "eyebrow": "EPÍLOGO · ENTRE LÍNEAS",
-      "title": "Lo que queda por resolver",
+      "title": "La tercera palanca",
       "accent": "green",
-      "body": "Rojo está vivo. Negro lo sabe al fin. Eso no significa que la amistad esté reparada, que el RNE haya desaparecido ni que una conversación pueda devolver los quince años perdidos. La Palanca III empieza de verdad en ese punto: con un reencuentro pendiente y una disculpa que no puede exigir perdón.\n\nCarmen une el túnel con el presente. El monje ha preparado a Javi para dejar de escapar. El RNE conserva el pasamontañas verde y el paraguas que lo identifican desde el primer corto. Y Charlie sigue formando parte del grupo sin necesidad de inventarle acciones que los vídeos no muestran.\n\nEn [i]Entre líneas[/i], tú no eres Javi, Fran, Carmen, Jony ni Charlie. Entras desde fuera, como invitado. Tu lugar consiste en escuchar versiones, examinar las piezas y decidir qué hacer con una verdad que llega quince años tarde.\n\n[center][color=#e8b86a][b]Una palanca despertó al RNE.\nUna huida separó a dos amigos.\nLa tercera parte tendrá que decidir si todavía existe un camino de vuelta.[/b][/color][/center]"
+      "body": "Una versión de Rojo sobrevivió y siguió adelante. Otra continúa perdida entre espacios temporales, vinculada al túnel y quizá prisionera del Robot Ninja del Espacio. Ambas son reales dentro de sus respectivas líneas.\n\nNegro debe enfrentarse ahora a una verdad más difícil que la muerte que imaginó: puede reencontrarse con el Rojo rescatado y, al mismo tiempo, tener que volver por aquel al que todavía está abandonando en otro presente. Carmela conoce el punto de ruptura. El Gaucho Saltarín lo ha preparado para cruzarlo. La palanca original podría ser la única llave capaz de reunir las líneas o destruir una de ellas.\n\nEn [i]Entre líneas[/i], el Invitado llega desde fuera de este conflicto. No ocupa el lugar de Negro, Rojo, Carmela, el Gaucho Saltarín ni el Robot Ninja del Espacio. Escucha sus versiones, reconstruye los espacios atravesados y ayuda a decidir qué futuro debe abrir la tercera palanca.\n\n[center][color=#e8b86a][b]Una palanca despertó al enemigo.\nUna huida separó a dos amigos.\nUna grieta dividió a Rojo.\nLa tercera parte decidirá si dos líneas pueden volver a ser una.[/b][/color][/center]"
     }
   ]
 }
