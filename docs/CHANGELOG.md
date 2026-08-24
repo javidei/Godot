@@ -14,6 +14,13 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.5] - 2026-08-24
+
+### Fixed
+
+- El lector de **Historia de un asesino** y **Una trilogía innecesaria** desactiva la selección del `RichTextLabel`, evitando que al arrastrar para hacer scroll en móvil se marque el texto.
+- El gesto táctil sigue propagándose al `ScrollContainer`, por lo que se puede desplazar la historia empezando el arrastre directamente sobre cualquier párrafo.
+
 ## [0.10.4] - 2026-08-23
 
 ### Changed
