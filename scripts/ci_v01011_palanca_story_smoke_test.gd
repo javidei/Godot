@@ -21,6 +21,24 @@ func _run() -> void:
 		_fail("No se encuentra StoryLibraryManager")
 		return
 
+	var canon_path := "res://data/stories/la_palanca_iii_experience.json"
+	var canon_file := FileAccess.open(canon_path, FileAccess.READ)
+	if canon_file == null:
+		_fail("No se puede leer el canon de La Palanca III")
+		return
+	var canon_text := canon_file.get_as_text()
+	for forbidden_name in ["Javi", "Fran", "Jony", "Carlos", "Carmen"]:
+		if canon_text.contains(forbidden_name):
+			_fail("El relato todavía menciona un nombre real: " + forbidden_name)
+			return
+	for forbidden_term in ["detrás de la cámara", "para el espectador", "la película", "fuera de plano"]:
+		if canon_text.to_lower().contains(forbidden_term):
+			_fail("El relato rompe la ficción con lenguaje de rodaje: " + forbidden_term)
+			return
+	if not canon_text.contains("espacio-temporales") or not canon_text.contains("dos líneas") or not canon_text.contains("Gaucho Saltarín") or not canon_text.contains("Carmela"):
+		_fail("Faltan los espacios temporales, la bifurcación o los nombres ficticios nuevos")
+		return
+
 	manager.call("_open_story", "trilogia_innecesaria")
 	for _i in range(3):
 		await process_frame
