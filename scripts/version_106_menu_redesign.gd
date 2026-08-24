@@ -172,6 +172,17 @@ func _move_controls_into_settings() -> void:
 		settings_content.move_child(fullscreen_button, insert_at)
 		insert_at += 1
 
+	# La selección del reparto es una preferencia de la próxima partida, no una
+	# ficha del códice. Recuperamos aquí su acceso y conservamos el overlay y la
+	# persistencia que ya proporciona StoryRuntimeManager.
+	if roster_button != null:
+		roster_button.reparent(settings_content)
+		roster_button.visible = true
+		roster_button.text = "Personajes de la historia"
+		_prepare_settings_button(roster_button)
+		settings_content.move_child(roster_button, insert_at)
+		insert_at += 1
+
 	# Gestión de slots deja de ocupar el menú, pero se conserva accesible dentro
 	# de Ajustes para no perder ninguna función existente.
 	if manage_button != null:
@@ -193,10 +204,6 @@ func _hide_legacy_menu_nodes() -> void:
 	var exit_spacer := menu_content.find_child("ExitSpacer050", true, false) as Control
 	if exit_spacer != null:
 		exit_spacer.visible = false
-	if roster_button != null:
-		# Personajes sigue disponible desde Extras; retiramos el acceso redundante
-		# del menú principal para mantener la composición solicitada.
-		roster_button.visible = false
 
 
 func _order_main_menu() -> void:

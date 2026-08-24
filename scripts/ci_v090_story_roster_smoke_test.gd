@@ -106,6 +106,11 @@ func _run() -> void:
 		main.queue_free()
 		_fail("El selector de personajes no está integrado en el menú")
 		return
+	var settings_screen := main.find_child("SettingsScreen060", true, false) as Control
+	if settings_screen == null or not settings_screen.is_ancestor_of(roster_button) or not roster_button.visible:
+		main.queue_free()
+		_fail("El selector de personajes no está disponible dentro de Ajustes")
+		return
 	if next_day == null:
 		main.queue_free()
 		_fail("No existe el botón manual para pasar de día")

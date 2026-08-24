@@ -14,6 +14,18 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.7] - 2026-08-24
+
+### Changed
+
+- **Personajes de la historia** vuelve a estar disponible dentro de **Ajustes**, junto a volumen, pantalla completa y partidas guardadas.
+- La pantalla conserva la selección del reparto para la próxima partida y sigue arrancando por defecto con Javi y Fran/Smokey.
+
+### Fixed
+
+- Se recupera el acceso al selector que permite decidir qué personajes aparecen en el juego; **Extras → Personajes** continúa reservado para las fichas y cosméticos del grupo.
+- La nueva partida mantiene al protagonista fijo como **Invitado**, sin reintroducir la selección de personaje jugable.
+
 ## [0.10.6] - 2026-08-24
 
 ### Changed
