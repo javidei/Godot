@@ -11,8 +11,9 @@ func _wrap_main_menu_for_growth() -> void:
 func _apply_layout() -> void:
 	super()
 	if story_body != null:
-		# El texto sigue siendo seleccionable, pero el gesto táctil puede ascender
-		# al ScrollContainer del lector y desplazar el relato desde cualquier párrafo.
+		# En móvil el gesto de arrastre pertenece al ScrollContainer. Desactivamos
+		# la selección para que deslizar sobre un párrafo nunca marque el texto.
+		story_body.selection_enabled = false
 		story_body.mouse_filter = Control.MOUSE_FILTER_PASS
 	if menu_content == null:
 		return
