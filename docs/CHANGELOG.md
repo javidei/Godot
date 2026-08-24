@@ -14,6 +14,24 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.11] - 2026-08-24
+
+### Added
+
+- **Una trilogía innecesaria** se convierte en una experiencia dedicada de **La Palanca III**, con el logotipo del PDF como portada, cinco páginas de cómic integradas en orden y tarjetas narrativas diferenciadas.
+- Las páginas del cómic se pueden pulsar para abrirlas a pantalla completa; el visor funciona con ratón y toque, conserva la proporción original y se cierra con su botón o con `Esc`.
+
+### Changed
+
+- La historia se reescribe a partir del canon documentado de **La Palanca I** y **La Palanca II**: la palanca activa al RNE a distancia, la investigación conduce al túnel, Negro huye y el final nunca confirma la muerte de Rojo.
+- **La Palanca III** desarrolla el salto de quince años, el altar, el monje, su enseñanza, la llegada de Carmen y la reinterpretación del láser como una secuencia continua apoyada por las páginas originales.
+- La presentación se carga desde datos estructurados independientes y adapta márgenes, tipografía e imágenes a escritorio y móvil sin modificar **Historia de un asesino**.
+
+### Fixed
+
+- Se eliminan interpretaciones anteriores no respaldadas por los cortos, incluida la apertura inventada de Rojo caminando solo con un mechero y la atribución a Charlie de información fuera de plano no establecida.
+- La exportación web valida que el JSON, el logotipo y las cinco páginas de **La Palanca III** estén presentes en el PCK antes de publicar.
+
 ## [0.10.10] - 2026-08-24
 
 ### Fixed

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "hero": {
+    "image": "res://assets/comic/la_palanca_iii_logo.webp",
+    "image_caption": "Logotipo oficial de La Palanca III",
+    "eyebrow": "DOS CORTOS · UNA DEUDA · QUINCE AÑOS",
+    "title": "LA HISTORIA QUE QUEDÓ FUERA DE PLANO",
+    "body": "[center]Todo empezó con una palanca que ya venía instalada en un coche. Nadie sabía para qué servía. Quince años después, Negro sigue pagando por haber descubierto la respuesta demasiado tarde.[/center]",
+    "hint": "DESLIZA PARA ENTRAR EN EL TÚNEL"
+  },
+  "chapters": [
+    {
+      "eyebrow": "ARCHIVO 01 · LA PALANCA",
+      "title": "Una pregunta junto al asiento",
+      "accent": "red",
+      "body": "Javi y Fran solo querían estrenar coche. Javi presumía de sus prestaciones con una lista que mezclaba aire acondicionado, Bluetooth, cuatro ruedas y la tranquilizadora certeza de que el vehículo tenía motor. Entonces Fran señaló un pequeño mando junto al conductor.\n\n[color=#e8b86a][i]—¿Y esto? ¿Esa palanquita?\n—Pues no sé, tío… Venía con el coche.\n—Dale.[/i][/color]\n\nAl accionarla, despertaron a distancia al Robot Ninja del Espacio: Jony, oculto bajo un pasamontañas verde militar y armado con un paraguas. Al moverla de nuevo lo desactivaron. Ellos no vieron ninguna de las dos cosas. Para Javi y Fran, el mando no había hecho nada; para el espectador, acababan de poner en marcha todo el problema.\n\nLa primera entrega fijó así el tono de la saga: amistad, improvisación y ciencia ficción construida con objetos domésticos. Carlos J. Vidal estaba detrás de la cámara. Delante de ella todavía no había héroes, solo dos amigos demasiado curiosos."
+    },
+    {
+      "eyebrow": "ARCHIVO 02 · LA PALANCA II",
+      "title": "Las coordenadas y la huida",
+      "accent": "green",
+      "body": "La segunda parte convirtió la broma en investigación. El coche pasó por las manos de un mecánico; después llegó un libro sobre palancas, una ilustración idéntica al mando, unos símbolos y unas coordenadas. Las coordenadas conducían al mismo túnel en el que el RNE había despertado. Allí encontraron una profecía que aseguraba que solo ellos podían detenerlo.\n\nJavi adoptó el negro. Fran, el rojo. Pero cuando apareció el RNE con su paraguas, Javi huyó. No fue una retirada pactada ni una maniobra: el miedo pudo más y dejó a Fran solo.\n\n[color=#e8b86a][i]—No podrás con nosotros.[/i][/color]\n\nFran pronunció el plural antes de descubrir que su amigo ya no estaba. Luchó solo. El último plano mostró al RNE apuntándole y se oyó un arma cargarse, pero nunca hubo disparo visible ni cuerpo. La película terminaba justo donde empezaba la culpa de Javi."
+    },
+    {
+      "eyebrow": "PÁGINA 1 · QUINCE AÑOS DESPUÉS",
+      "title": "Un altar para Rojo",
+      "accent": "red",
+      "body": "Javi ha pasado quince años convencido de que abandonó a Fran para morir. Vuelve bajo la lluvia a un altar improvisado junto al puerto: velas, flores, una fotografía y un cartel escrito a mano, [i]«Rojo siempre con nosotros»[/i]. No es un monumento heroico; es el lugar al que regresa alguien que nunca consiguió absolverse.\n\nEl túnel invade sus recuerdos. Ve de nuevo el pasamontañas verde, el pañuelo rojo y el instante exacto en el que eligió escapar. Después entra en un bar con una norma colgada de la pared: [i]«No hay palanca sin riesgo»[/i]. La frase parece una broma, pero para él resume media vida.",
+      "image": "res://assets/comic/la_palanca_iii_pagina_01.webp",
+      "image_caption": "Página 1 · El altar, el recuerdo del túnel y la entrada al bar. Pulsa para ampliar."
+    },
+    {
+      "eyebrow": "PÁGINA 2 · EL MAESTRO IMPROBABLE",
+      "title": "Todo es sufrimiento (incluso el happy hour)",
+      "accent": "green",
+      "body": "En la barra, Javi conoce a un monje calvo de túnica naranja. Ninguno de los dos está en su mejor momento. El maestro brinda con una filosofía tan solemne como poco útil para un borracho.\n\n[color=#e8b86a][i]—Todo es sufrimiento.\n—¿Y el happy hour?\n—Eso también es sufrimiento. Solo que con hielo.[/i][/color]\n\nCuando varios hombres intentan atracarlos a la salida, el monje los derriba sin perder la calma. Javi descubre que bajo la charla absurda hay una disciplina real. El desconocido le deja una cita: si quiere dejar de sufrir, deberá presentarse a la mañana siguiente en la misma playa. La tercera entrega conserva así la identidad de la saga: una herida verdadera puede convivir con el chiste más tonto de la noche.",
+      "image": "res://assets/comic/la_palanca_iii_pagina_02.webp",
+      "image_caption": "Página 2 · El encuentro en el bar y la demostración del monje. Pulsa para ampliar."
+    },
+    {
+      "eyebrow": "PÁGINA 3 · ENTRENAMIENTO",
+      "title": "La paz empieza aquí",
+      "accent": "green",
+      "body": "Javi vuelve. Entrena bajo la lluvia, cae, se levanta y golpea hasta que el cuerpo empieza a obedecerle. El monje no puede borrar el túnel ni convertir su huida en un acto noble; solo puede enseñarle a no seguir huyendo de la siguiente decisión.\n\nSu lección central permanece intacta:\n\n[color=#e8b86a][i]«Debes recordar, que la paz empieza aquí —mano en la cabeza—, igual que la guerra».[/i][/color]\n\nLa frase no promete que pelear arregle el pasado. Sitúa el verdadero combate en la interpretación que Javi ha repetido durante quince años. Prepararse para regresar al túnel significa aprender a soportar lo que encuentre allí, no ensayar una venganza. Cuando vuelve al bar, sigue solo, pero ya no está inmóvil.",
+      "image": "res://assets/comic/la_palanca_iii_pagina_03.webp",
+      "image_caption": "Página 3 · Caer, aprender y regresar al lugar donde empezó el cambio. Pulsa para ampliar."
+    },
+    {
+      "eyebrow": "PÁGINA 4 · CARMEN",
+      "title": "La primera grieta en la certeza",
+      "accent": "red",
+      "body": "Una mujer se sienta junto a Javi y utiliza un nombre que pertenece a otra época.\n\n[color=#e8b86a][i]—¿Negro?\n—Rojo me habló de ti. En el Instituto del GPS.[/i][/color]\n\nEs Carmen, antigua compañera de Fran. No llega fingiendo conocer personalmente a Javi: lo reconoce por lo que Rojo le contó. En su teléfono conserva una imagen reciente, imposible de conciliar con el altar, los quince años de luto y la conclusión que Javi había convertido en recuerdo.\n\n[color=#e8b86a][i]—Rojo salió con vida de aquello.[/i][/color]\n\nLa noticia no absuelve a Javi. Fran sobreviviera o no, él lo abandonó. Lo que cambia es la pregunta. Ya no se trata de averiguar cómo murió Rojo, sino de comprender qué ocurrió después de que Negro saliera corriendo y por qué nadie consiguió cerrar esa distancia durante quince años.",
+      "image": "res://assets/comic/la_palanca_iii_pagina_04.webp",
+      "image_caption": "Página 4 · Carmen reconoce a Negro y le muestra que Rojo sobrevivió. Pulsa para ampliar."
+    },
+    {
+      "eyebrow": "PÁGINA 5 · EL PLANO QUE FALTABA",
+      "title": "El láser nunca apuntó a Rojo",
+      "accent": "red",
+      "body": "El último plano de La Palanca II decía la verdad, pero no toda la verdad. El RNE tenía a Fran acorralado y levantó su paraguas-arma. La carga que se oyó parecía anunciar la ejecución. Fuera de la interpretación de Javi, sin embargo, había una tercera persona.\n\n[color=#e8b86a][i]—No podrás con nosotros.[/i][/color]\n\nEsta vez el plural sí tenía sentido. Carmen apareció en el túnel y disparó contra el RNE. El sonido que durante quince años Javi atribuyó al paraguas procedía de su arma. Carmen ayudó a Fran a salir con vida.\n\nLa revelación no reescribe la cobardía de Negro ni convierte el dolor en un malentendido inocente. Reinterpreta el encuadre: la culpa nació de una decisión real, pero el duelo se construyó sobre una muerte que nunca se confirmó.",
+      "image": "res://assets/comic/la_palanca_iii_pagina_05.webp",
+      "image_caption": "Página 5 · El rescate que ocurrió fuera de la conclusión de Javi. Pulsa para ampliar."
+    },
+    {
+      "eyebrow": "EPÍLOGO · ENTRE LÍNEAS",
+      "title": "Lo que queda por resolver",
+      "accent": "green",
+      "body": "Rojo está vivo. Negro lo sabe al fin. Eso no significa que la amistad esté reparada, que el RNE haya desaparecido ni que una conversación pueda devolver los quince años perdidos. La Palanca III empieza de verdad en ese punto: con un reencuentro pendiente y una disculpa que no puede exigir perdón.\n\nCarmen une el túnel con el presente. El monje ha preparado a Javi para dejar de escapar. El RNE conserva el pasamontañas verde y el paraguas que lo identifican desde el primer corto. Y Charlie sigue formando parte del grupo sin necesidad de inventarle acciones que los vídeos no muestran.\n\nEn [i]Entre líneas[/i], tú no eres Javi, Fran, Carmen, Jony ni Charlie. Entras desde fuera, como invitado. Tu lugar consiste en escuchar versiones, examinar las piezas y decidir qué hacer con una verdad que llega quince años tarde.\n\n[center][color=#e8b86a][b]Una palanca despertó al RNE.\nUna huida separó a dos amigos.\nLa tercera parte tendrá que decidir si todavía existe un camino de vuelta.[/b][/color][/center]"
+    }
+  ]
+}

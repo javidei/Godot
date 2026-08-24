@@ -12,9 +12,10 @@
     {
       "id": "trilogia_innecesaria",
       "menu_label": "Una trilogía innecesaria",
-      "title": "Una trilogía innecesaria",
-      "subtitle": "La Palanca I · La Palanca II · La Palanca III",
+      "title": "La Palanca III",
+      "subtitle": "Una trilogía innecesaria · Quince años después del túnel",
       "content_file": "res://data/stories/una_trilogia_innecesaria.txt",
+      "presentation_file": "res://data/stories/la_palanca_iii_experience.json",
       "images": [
         "res://assets/characters/javi/skins/javi-lapalanca.png",
         "res://assets/characters/smokey/skins/smokey-lapalanca.png",

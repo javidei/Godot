@@ -131,6 +131,19 @@ jobs:
           fi
           grep -q "V045 OK:" v045-smoke.log
 
+      - name: Smoke test narrativo de La Palanca III
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v01011_palanca_story_smoke_test.gd > palanca-story-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat palanca-story-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V01011 PALANCA FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" palanca-story-smoke.log; then
+            echo "La experiencia narrativa de La Palanca III ha fallado; no se exportará."
+            exit 1
+          fi
+          grep -q "V01011 PALANCA OK:" palanca-story-smoke.log
+
       - name: Smoke test de Extras y códice 0.5/0.6
         run: |
           set +e

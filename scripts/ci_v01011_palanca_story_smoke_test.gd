@@ -1,0 +1,84 @@
+extends SceneTree
+
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	var packed := load("res://scenes/main.tscn") as PackedScene
+	if packed == null:
+		_fail("No se puede cargar main.tscn")
+		return
+
+	var main := packed.instantiate() as Control
+	root.add_child(main)
+	for _i in range(42):
+		await process_frame
+
+	var manager := main.get_node_or_null("StoryLibraryManager")
+	if manager == null:
+		_fail("No se encuentra StoryLibraryManager")
+		return
+
+	manager.call("_open_story", "trilogia_innecesaria")
+	for _i in range(3):
+		await process_frame
+
+	var story_screen := manager.get("story_screen") as Control
+	var experience := manager.get("story_experience") as VBoxContainer
+	var story_body := manager.get("story_body") as RichTextLabel
+	var gallery := manager.get("story_gallery") as GridContainer
+	if story_screen == null or not story_screen.visible:
+		_fail("La pantalla de La Palanca III no se abre")
+		return
+	if experience == null or not experience.visible or experience.get_child_count() != 9:
+		_fail("La experiencia no contiene portada y ocho capítulos")
+		return
+	if story_body == null or story_body.visible or gallery == null or gallery.visible:
+		_fail("La presentación antigua sigue visible detrás de la experiencia")
+		return
+
+	var logo_count := 0
+	var comic_count := 0
+	var comic_image: TextureRect
+	for node in experience.find_children("*", "TextureRect", true, false):
+		var image := node as TextureRect
+		if image == null or image.texture == null:
+			continue
+		var role := str(image.get_meta("experience_role", ""))
+		if role == "hero_image":
+			logo_count += 1
+		elif role == "comic_image":
+			comic_count += 1
+			if comic_image == null:
+				comic_image = image
+	if logo_count != 1 or comic_count != 5 or comic_image == null:
+		_fail("No se han cargado el logo y las cinco páginas del cómic")
+		return
+
+	manager.call("_show_comic_lightbox", comic_image.texture, str(comic_image.get_meta("experience_caption", "")))
+	var lightbox := manager.get("comic_lightbox") as ColorRect
+	var lightbox_image := manager.get("comic_lightbox_image") as TextureRect
+	if lightbox == null or not lightbox.visible or lightbox_image == null or lightbox_image.texture == null:
+		_fail("El visor ampliado no abre la página seleccionada")
+		return
+	manager.call("_close_comic_lightbox")
+	if lightbox.visible:
+		_fail("El visor ampliado no se cierra")
+		return
+
+	manager.call("_open_story", "historia_asesino")
+	for _i in range(3):
+		await process_frame
+	if experience.visible or not story_body.visible:
+		_fail("La experiencia de La Palanca invade Historia de un asesino")
+		return
+
+	print("V01011 PALANCA OK: portada, capítulos, cómic, ampliación y aislamiento validados.")
+	quit(0)
+
+
+func _fail(message: String) -> void:
+	push_error("V01011 PALANCA FAIL: " + message)
+	quit(1)

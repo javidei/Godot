@@ -37,6 +37,29 @@ do
 	fi
 done
 
+# La experiencia de La Palanca III se compone en tiempo de ejecución desde un
+# JSON y seis imágenes extraídas del PDF original. Una ruta mal escrita dejaría
+# una tarjeta vacía aunque la exportación terminase correctamente.
+for PALANCA_RESOURCE in \
+	"data/stories/la_palanca_iii_experience.json" \
+	"assets/comic/la_palanca_iii_logo.webp" \
+	"assets/comic/la_palanca_iii_pagina_01.webp" \
+	"assets/comic/la_palanca_iii_pagina_02.webp" \
+	"assets/comic/la_palanca_iii_pagina_03.webp" \
+	"assets/comic/la_palanca_iii_pagina_04.webp" \
+	"assets/comic/la_palanca_iii_pagina_05.webp"
+do
+	if [ ! -s "${PALANCA_RESOURCE}" ]; then
+		echo "Falta un recurso de La Palanca III: ${PALANCA_RESOURCE}" >&2
+		exit 1
+	fi
+	PALANCA_NAME="$(basename "${PALANCA_RESOURCE}")"
+	if ! grep -aFq "${PALANCA_NAME}" "${PACK_FILE}"; then
+		echo "La exportacion PCK no contiene el recurso: ${PALANCA_RESOURCE}" >&2
+		exit 1
+	fi
+done
+
 # Define una identidad exclusiva y estable para Entre lineas. Sin `id`, Chrome
 # puede asociar la exportacion generica de Godot a otra PWA del mismo sitio y
 # afirmar que ya esta instalada aunque el juego no tenga acceso visible.

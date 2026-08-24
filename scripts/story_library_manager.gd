@@ -3,9 +3,12 @@ extends Node
 const DATA_PATH := "res://data/story_library.json"
 const BACK_ICON_PATH := "res://assets/ui/icons/arrow-left.svg"
 const GOLD := Color("e8b86a")
+const PALANCA_RED := Color("c8413b")
+const PALANCA_GREEN := Color("386b63")
 const TEXT := Color("f2eee8")
 const TEXT_DIM := Color("aaa39a")
 const STORY_BG := Color(0.0, 0.0, 0.0, 1.0)
+const CARD_BG := Color("11100f")
 
 var main: Control
 var menu_screen: Control
@@ -19,11 +22,16 @@ var story_title: Label
 var story_subtitle: Label
 var story_scroll: ScrollContainer
 var story_content: VBoxContainer
+var story_experience: VBoxContainer
 var story_gallery: GridContainer
 var story_gallery_caption: Label
 var story_body: RichTextLabel
 var back_button: Button
 var footer_hint: Label
+var comic_lightbox: ColorRect
+var comic_lightbox_image: TextureRect
+var comic_lightbox_caption: Label
+var comic_lightbox_close: Button
 
 var stories: Dictionary = {}
 var current_story_id := ""
@@ -252,6 +260,13 @@ func _build_story_screen() -> void:
 	story_content.add_theme_constant_override("separation", 14)
 	story_scroll.add_child(story_content)
 
+	story_experience = VBoxContainer.new()
+	story_experience.name = "StoryExperience"
+	story_experience.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	story_experience.add_theme_constant_override("separation", 22)
+	story_experience.visible = false
+	story_content.add_child(story_experience)
+
 	story_gallery = GridContainer.new()
 	story_gallery.name = "StoryGallery"
 	story_gallery.columns = 3
@@ -292,6 +307,8 @@ func _build_story_screen() -> void:
 	footer_hint.add_theme_font_size_override("font_size", 11)
 	root.add_child(footer_hint)
 
+	_build_comic_lightbox()
+
 
 func _open_story(story_id: String) -> void:
 	if not stories.has(story_id) or story_screen == null:
@@ -312,7 +329,15 @@ func _open_story(story_id: String) -> void:
 	story_title.text = str(story.get("title", story_id))
 	story_subtitle.text = str(story.get("subtitle", ""))
 	story_body.text = body
-	_populate_gallery(story)
+
+	var has_experience := _populate_experience(story)
+	story_experience.visible = has_experience
+	story_body.visible = not has_experience
+	if has_experience:
+		story_gallery.visible = false
+		story_gallery_caption.visible = false
+	else:
+		_populate_gallery(story)
 
 	menu_screen.visible = false
 	story_screen.visible = true
@@ -348,9 +373,282 @@ func _populate_gallery(story: Dictionary) -> void:
 	story_gallery_caption.visible = story_gallery.visible and not caption.is_empty()
 
 
+func _populate_experience(story: Dictionary) -> bool:
+	_clear_container(story_experience)
+
+	var presentation_file := str(story.get("presentation_file", ""))
+	if presentation_file.is_empty() or not FileAccess.file_exists(presentation_file):
+		return false
+
+	var file := FileAccess.open(presentation_file, FileAccess.READ)
+	if file == null:
+		return false
+
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if typeof(parsed) != TYPE_DICTIONARY:
+		push_error("StoryLibraryManager: presentación narrativa no válida: " + presentation_file)
+		return false
+
+	var experience := parsed as Dictionary
+	var raw_hero: Variant = experience.get("hero", {})
+	if typeof(raw_hero) == TYPE_DICTIONARY:
+		_add_experience_hero(raw_hero as Dictionary)
+
+	var raw_chapters: Variant = experience.get("chapters", [])
+	if typeof(raw_chapters) == TYPE_ARRAY:
+		for raw_chapter in raw_chapters:
+			if typeof(raw_chapter) == TYPE_DICTIONARY:
+				_add_experience_chapter(raw_chapter as Dictionary)
+
+	return story_experience.get_child_count() > 0
+
+
+func _add_experience_hero(hero: Dictionary) -> void:
+	var panel := PanelContainer.new()
+	panel.name = "PalancaHero"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(Color("080808"), PALANCA_RED, 2, 18))
+	story_experience.add_child(panel)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 24)
+	margin.add_theme_constant_override("margin_right", 24)
+	margin.add_theme_constant_override("margin_top", 22)
+	margin.add_theme_constant_override("margin_bottom", 22)
+	panel.add_child(margin)
+
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 10)
+	margin.add_child(content)
+
+	var image_path := str(hero.get("image", ""))
+	if not image_path.is_empty() and ResourceLoader.exists(image_path):
+		var logo := _experience_image(image_path, "hero", str(hero.get("image_caption", "Logo de La Palanca III")))
+		content.add_child(logo)
+
+	var eyebrow := _experience_label(str(hero.get("eyebrow", "")), 13, PALANCA_RED, HORIZONTAL_ALIGNMENT_CENTER)
+	eyebrow.set_meta("experience_role", "eyebrow")
+	content.add_child(eyebrow)
+
+	var title := _experience_label(str(hero.get("title", "")), 30, TEXT, HORIZONTAL_ALIGNMENT_CENTER)
+	title.set_meta("experience_role", "hero_title")
+	content.add_child(title)
+
+	var intro := _experience_text(str(hero.get("body", "")), 18, TEXT_DIM)
+	intro.set_meta("experience_role", "body")
+	content.add_child(intro)
+
+	var hint := _experience_label(str(hero.get("hint", "Desliza para comenzar")), 12, GOLD, HORIZONTAL_ALIGNMENT_CENTER)
+	hint.set_meta("experience_role", "caption")
+	content.add_child(hint)
+
+
+func _add_experience_chapter(chapter: Dictionary) -> void:
+	var panel := PanelContainer.new()
+	panel.name = "PalancaChapter"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var accent := PALANCA_GREEN if str(chapter.get("accent", "red")) == "green" else PALANCA_RED
+	panel.add_theme_stylebox_override("panel", _panel_style(CARD_BG, accent.darkened(0.25), 1, 14))
+	story_experience.add_child(panel)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 26)
+	margin.add_theme_constant_override("margin_right", 26)
+	margin.add_theme_constant_override("margin_top", 24)
+	margin.add_theme_constant_override("margin_bottom", 26)
+	panel.add_child(margin)
+
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 10)
+	margin.add_child(content)
+
+	var eyebrow := _experience_label(str(chapter.get("eyebrow", "")), 13, accent, HORIZONTAL_ALIGNMENT_LEFT)
+	eyebrow.set_meta("experience_role", "eyebrow")
+	content.add_child(eyebrow)
+
+	var title := _experience_label(str(chapter.get("title", "")), 28, TEXT, HORIZONTAL_ALIGNMENT_LEFT)
+	title.set_meta("experience_role", "chapter_title")
+	content.add_child(title)
+
+	var body := _experience_text(str(chapter.get("body", "")), 19, TEXT)
+	body.set_meta("experience_role", "body")
+	content.add_child(body)
+
+	var image_path := str(chapter.get("image", ""))
+	if not image_path.is_empty() and ResourceLoader.exists(image_path):
+		var caption := str(chapter.get("image_caption", "Pulsa la página para ampliarla"))
+		content.add_child(_experience_image(image_path, "comic", caption))
+		if not caption.is_empty():
+			var caption_label := _experience_label(caption, 12, TEXT_DIM, HORIZONTAL_ALIGNMENT_CENTER)
+			caption_label.set_meta("experience_role", "caption")
+			content.add_child(caption_label)
+
+
+func _experience_text(bbcode: String, font_size: int, color: Color) -> RichTextLabel:
+	var label := RichTextLabel.new()
+	label.bbcode_enabled = true
+	label.text = bbcode
+	label.fit_content = true
+	label.scroll_active = false
+	label.selection_enabled = false
+	label.mouse_filter = Control.MOUSE_FILTER_PASS
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_color_override("default_color", color)
+	label.add_theme_font_size_override("normal_font_size", font_size)
+	label.add_theme_font_size_override("bold_font_size", font_size)
+	label.add_theme_font_size_override("italics_font_size", font_size)
+	label.add_theme_constant_override("line_separation", 5)
+	return label
+
+
+func _experience_label(value: String, font_size: int, color: Color, alignment: HorizontalAlignment) -> Label:
+	var label := Label.new()
+	label.text = value
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.horizontal_alignment = alignment
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_font_size_override("font_size", font_size)
+	return label
+
+
+func _experience_image(path: String, kind: String, caption: String) -> TextureRect:
+	var image := TextureRect.new()
+	image.custom_minimum_size = Vector2(0, 340 if kind == "hero" else 900)
+	image.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	image.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	image.texture = ResourceLoader.load(path) as Texture2D
+	image.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	# PASS permite comenzar el gesto de scroll sobre la propia página. Solo un
+	# toque/clic corto abre el visor; un arrastre pertenece al ScrollContainer.
+	image.mouse_filter = Control.MOUSE_FILTER_PASS
+	image.tooltip_text = "Pulsa para ampliar"
+	image.set_meta("experience_role", kind + "_image")
+	image.set_meta("experience_caption", caption)
+	image.gui_input.connect(_on_experience_image_input.bind(image, image.texture, caption))
+	return image
+
+
+func _panel_style(background: Color, border: Color, border_width: int, radius: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.border_width_left = border_width
+	style.border_width_top = border_width
+	style.border_width_right = border_width
+	style.border_width_bottom = border_width
+	style.corner_radius_top_left = radius
+	style.corner_radius_top_right = radius
+	style.corner_radius_bottom_left = radius
+	style.corner_radius_bottom_right = radius
+	return style
+
+
+func _clear_container(container: Container) -> void:
+	for child in container.get_children():
+		container.remove_child(child)
+		child.queue_free()
+
+
+func _build_comic_lightbox() -> void:
+	comic_lightbox = ColorRect.new()
+	comic_lightbox.name = "ComicLightbox"
+	comic_lightbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	comic_lightbox.color = Color(0.0, 0.0, 0.0, 0.97)
+	comic_lightbox.mouse_filter = Control.MOUSE_FILTER_STOP
+	comic_lightbox.z_index = 80
+	comic_lightbox.visible = false
+	story_screen.add_child(comic_lightbox)
+
+	var margin := MarginContainer.new()
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	margin.add_theme_constant_override("margin_left", 18)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_top", 18)
+	margin.add_theme_constant_override("margin_bottom", 18)
+	comic_lightbox.add_child(margin)
+
+	var root := VBoxContainer.new()
+	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_theme_constant_override("separation", 10)
+	margin.add_child(root)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 12)
+	root.add_child(header)
+
+	comic_lightbox_caption = Label.new()
+	comic_lightbox_caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	comic_lightbox_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	comic_lightbox_caption.add_theme_color_override("font_color", TEXT_DIM)
+	comic_lightbox_caption.add_theme_font_size_override("font_size", 13)
+	header.add_child(comic_lightbox_caption)
+
+	comic_lightbox_close = main.call("_make_button", "Cerrar imagen", false) as Button
+	if comic_lightbox_close == null:
+		comic_lightbox_close = Button.new()
+		comic_lightbox_close.text = "Cerrar imagen"
+	comic_lightbox_close.custom_minimum_size = Vector2(156, 48)
+	comic_lightbox_close.pressed.connect(_close_comic_lightbox)
+	header.add_child(comic_lightbox_close)
+
+	comic_lightbox_image = TextureRect.new()
+	comic_lightbox_image.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	comic_lightbox_image.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	comic_lightbox_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	comic_lightbox_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	comic_lightbox_image.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	comic_lightbox_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(comic_lightbox_image)
+
+
+func _on_experience_image_input(event: InputEvent, source: TextureRect, texture: Texture2D, caption: String) -> void:
+	var pointer_position := Vector2.ZERO
+	var valid_pointer := false
+	var pressed := false
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		pointer_position = event.position
+		valid_pointer = true
+		pressed = event.pressed
+	elif event is InputEventScreenTouch:
+		pointer_position = event.position
+		valid_pointer = true
+		pressed = event.pressed
+	if not valid_pointer:
+		return
+	if pressed:
+		source.set_meta("experience_press_position", pointer_position)
+		return
+	var press_position: Vector2 = source.get_meta("experience_press_position", pointer_position)
+	if press_position.distance_to(pointer_position) > 18.0:
+		return
+	_show_comic_lightbox(texture, caption)
+	get_viewport().set_input_as_handled()
+
+
+func _show_comic_lightbox(texture: Texture2D, caption: String) -> void:
+	comic_lightbox_image.texture = texture
+	comic_lightbox_caption.text = caption
+	comic_lightbox.visible = true
+	comic_lightbox_close.grab_focus()
+
+
+func _close_comic_lightbox() -> void:
+	if comic_lightbox == null:
+		return
+	comic_lightbox.visible = false
+	comic_lightbox_image.texture = null
+	if story_screen != null and story_screen.visible and back_button != null:
+		back_button.grab_focus()
+
+
 func _close_story() -> void:
 	if story_screen == null:
 		return
+	_close_comic_lightbox()
 	story_screen.visible = false
 	current_story_id = ""
 	if menu_screen != null:
@@ -362,7 +660,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
 		get_viewport().set_input_as_handled()
-		_close_story()
+		if comic_lightbox != null and comic_lightbox.visible:
+			_close_comic_lightbox()
+		else:
+			_close_story()
 
 
 func _queue_layout() -> void:
@@ -393,7 +694,8 @@ func _apply_layout() -> void:
 		menu_scroll.offset_bottom = 0.0
 
 	if story_outer != null:
-		var side_margin := 22 if portrait else maxi(42, int(viewport_size.x * 0.07))
+		var reading_margin := 0.13 if current_story_id == "trilogia_innecesaria" else 0.07
+		var side_margin := 14 if portrait else maxi(42, int(viewport_size.x * reading_margin))
 		var top_margin := 18 if portrait else 26
 		story_outer.add_theme_constant_override("margin_left", side_margin)
 		story_outer.add_theme_constant_override("margin_right", side_margin)
@@ -415,3 +717,35 @@ func _apply_layout() -> void:
 		for child in story_gallery.get_children():
 			if child is TextureRect:
 				(child as TextureRect).custom_minimum_size.y = 310 if portrait else 250
+	if story_experience != null:
+		story_experience.add_theme_constant_override("separation", 14 if portrait else 22)
+		for node in story_experience.find_children("*", "TextureRect", true, false):
+			var image := node as TextureRect
+			if image == null:
+				continue
+			var role := str(image.get_meta("experience_role", ""))
+			if role == "hero_image":
+				image.custom_minimum_size.y = 240 if portrait else 360
+			else:
+				image.custom_minimum_size.y = 520 if portrait else 900
+		for node in story_experience.find_children("*", "Label", true, false):
+			var label := node as Label
+			if label == null:
+				continue
+			var role := str(label.get_meta("experience_role", ""))
+			if role == "hero_title":
+				label.add_theme_font_size_override("font_size", 24 if portrait else 30)
+			elif role == "chapter_title":
+				label.add_theme_font_size_override("font_size", 22 if portrait else 28)
+			elif role == "eyebrow":
+				label.add_theme_font_size_override("font_size", 11 if portrait else 13)
+			elif role == "caption":
+				label.add_theme_font_size_override("font_size", 11 if portrait else 12)
+		for node in story_experience.find_children("*", "RichTextLabel", true, false):
+			var text_block := node as RichTextLabel
+			if text_block == null:
+				continue
+			var body_size := 17 if portrait else 19
+			text_block.add_theme_font_size_override("normal_font_size", body_size)
+			text_block.add_theme_font_size_override("bold_font_size", body_size)
+			text_block.add_theme_font_size_override("italics_font_size", body_size)
