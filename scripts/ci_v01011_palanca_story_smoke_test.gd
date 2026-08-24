@@ -35,7 +35,7 @@ func _run() -> void:
 		if canon_text.to_lower().contains(forbidden_term):
 			_fail("El relato rompe la ficción con lenguaje de rodaje: " + forbidden_term)
 			return
-	if not canon_text.contains("espacio-temporales") or not canon_text.contains("iglesia") or not canon_text.contains("dos líneas") or not canon_text.contains("Gaucho Saltarín") or not canon_text.contains("Carmela"):
+	if not canon_text.contains("espacio-temporal") or not canon_text.contains("iglesia") or not canon_text.contains("dos líneas") or not canon_text.contains("Gaucho Saltarín") or not canon_text.contains("Carmela"):
 		_fail("Faltan el túnel hacia la iglesia, la bifurcación o los nombres ficticios nuevos")
 		return
 	if not canon_text.contains("La división no la provoca el enfrentamiento posterior ni el láser"):
