@@ -92,6 +92,25 @@ jobs:
           echo "GAME_VERSION=$GAME_VERSION" >> "$GITHUB_ENV"
           echo "Exportando Entre líneas ${GAME_VERSION}"
 
+      - name: Validar experiencia narrativa de La Palanca III
+        run: |
+          set +e
+          godot --headless --path . --script res://scripts/ci_v01011_palanca_story_smoke_test.gd > palanca-story-smoke.log 2>&1
+          STATUS=$?
+          set -e
+          cat palanca-story-smoke.log
+          if [ "$STATUS" -ne 0 ] || grep -Eqi "V01011 PALANCA FAIL:|SCRIPT ERROR:|Parse Error:|Failed to load script" palanca-story-smoke.log; then
+            {
+              echo "FAILED PALANCA STORY"
+              tail -n 120 palanca-story-smoke.log
+            } > web/force-export-status.txt
+            git add -f web/force-export-status.txt
+            git commit -m "ci: registrar fallo de La Palanca III" || true
+            git push origin HEAD:main
+            exit 1
+          fi
+          grep -q "V01011 PALANCA OK:" palanca-story-smoke.log
+
       - name: Exportar Web
         run: |
           rm -rf web
@@ -152,4 +171,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-# Reintento limpio de publicación 0.10.10 (24/08/2026)
+# Publicación validada de La Palanca III 0.10.11 (24/08/2026)
