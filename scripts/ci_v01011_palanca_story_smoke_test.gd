@@ -35,8 +35,11 @@ func _run() -> void:
 		if canon_text.to_lower().contains(forbidden_term):
 			_fail("El relato rompe la ficción con lenguaje de rodaje: " + forbidden_term)
 			return
-	if not canon_text.contains("espacio-temporales") or not canon_text.contains("dos líneas") or not canon_text.contains("Gaucho Saltarín") or not canon_text.contains("Carmela"):
-		_fail("Faltan los espacios temporales, la bifurcación o los nombres ficticios nuevos")
+	if not canon_text.contains("espacio-temporales") or not canon_text.contains("iglesia") or not canon_text.contains("dos líneas") or not canon_text.contains("Gaucho Saltarín") or not canon_text.contains("Carmela"):
+		_fail("Faltan el túnel hacia la iglesia, la bifurcación o los nombres ficticios nuevos")
+		return
+	if canon_text.contains("división causada por el láser") or canon_text.contains("bifurcación causada por el láser"):
+		_fail("La bifurcación temporal se atribuye incorrectamente al láser")
 		return
 
 	manager.call("_open_story", "trilogia_innecesaria")
