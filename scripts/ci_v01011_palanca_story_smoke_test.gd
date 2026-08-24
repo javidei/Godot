@@ -42,6 +42,13 @@ func _run() -> void:
 		_fail("No queda claro que la bifurcación ocurre en la iglesia y no por el láser")
 		return
 
+	if not canon_text.contains("Rojo creó al Robot Ninja del Espacio") or not canon_text.contains("línea B") or not canon_text.contains("conflicto espacio-temporal"):
+		_fail("Falta la revelación del Rojo alternativo como creador y villano real")
+		return
+	if not canon_text.contains("pretendía matarlo") or not canon_text.contains("Carmela rompió el plan"):
+		_fail("La intención homicida del Robot o la intervención de Carmela no quedan claras")
+		return
+
 	manager.call("_open_story", "trilogia_innecesaria")
 	for _i in range(3):
 		await process_frame
