@@ -91,10 +91,10 @@ func _run() -> void:
 		_fail("La experiencia de La Palanca invade Historia de un asesino")
 		return
 
-	print("V01012 PALANCA OK: portada, capítulos, scroll táctil, cómic, ampliación y aislamiento validados.")
+	print("V01011 PALANCA OK: portada, capítulos, scroll táctil, cómic, ampliación y aislamiento validados.")
 	quit(0)
 
 
 func _fail(message: String) -> void:
-	push_error("V01012 PALANCA FAIL: " + message)
+	push_error("V01011 PALANCA FAIL: " + message)
 	quit(1)
