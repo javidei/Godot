@@ -1,6 +1,36 @@
 extends "res://scripts/story_library_manager.gd"
 
 
+# 0.10.12: la experiencia de La Palanca III contiene paneles, etiquetas e
+# imágenes de gran tamaño. En móvil, todos ellos deben dejar que el gesto llegue
+# al ScrollContainer; las imágenes conservan PASS para distinguir un toque corto
+# (ampliar) de un arrastre (desplazar).
+func _open_story(story_id: String) -> void:
+	super(story_id)
+	_configure_story_touch_scroll()
+	call_deferred("_configure_story_touch_scroll")
+
+
+func _configure_story_touch_scroll() -> void:
+	if story_scroll == null or story_content == null:
+		return
+	story_scroll.scroll_deadzone = 0
+	story_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	story_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	story_scroll.mouse_filter = Control.MOUSE_FILTER_PASS
+
+	for node in story_content.find_children("*", "Control", true, false):
+		var control := node as Control
+		if control == null:
+			continue
+		if control is BaseButton:
+			control.mouse_filter = Control.MOUSE_FILTER_PASS
+		elif control is TextureRect and str(control.get_meta("experience_role", "")).ends_with("_image"):
+			control.mouse_filter = Control.MOUSE_FILTER_PASS
+		else:
+			control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
 # 0.10.4: el menú principal vuelve a ser una composición fija. La biblioteca de
 # historias ya no envuelve todo el menú en un ScrollContainer; en su lugar se
 # compactan y ordenan las filas existentes para que todas las opciones quepan.
