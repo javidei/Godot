@@ -43,11 +43,11 @@ done
 for PALANCA_RESOURCE in \
 	"data/stories/la_palanca_iii_experience.json" \
 	"assets/comic/la_palanca_iii_logo.webp" \
-	"assets/comic/la_palanca_iii_pagina_01.webp" \
-	"assets/comic/la_palanca_iii_pagina_02.webp" \
-	"assets/comic/la_palanca_iii_pagina_03.webp" \
-	"assets/comic/la_palanca_iii_pagina_04.webp" \
-	"assets/comic/la_palanca_iii_pagina_05.webp"
+	"assets/generated/la_palanca_iii_pagina_01_v2.webp" \
+	"assets/generated/la_palanca_iii_pagina_02_v2.webp" \
+	"assets/generated/la_palanca_iii_pagina_03_v2.webp" \
+	"assets/generated/la_palanca_iii_pagina_04_v2.webp" \
+	"assets/generated/la_palanca_iii_pagina_05_v2.webp"
 do
 	if [ ! -s "${PALANCA_RESOURCE}" ]; then
 		echo "Falta un recurso de La Palanca III: ${PALANCA_RESOURCE}" >&2

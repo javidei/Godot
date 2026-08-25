@@ -14,6 +14,22 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.18] - 2026-08-25
+
+### Added
+
+- La Palanca III estrena cinco páginas ilustradas que recogen el libro manipulado, la profecía cutre, la confesión del Gaucho, el rescate de Rojo A y la bifurcación de la iglesia.
+- El Gaucho Saltarín adopta una identidad visual propia: gaucho de pasado monástico, sombrero oscuro, cigarro, gafas, tatuajes y túnica borgoña.
+
+### Changed
+
+- Las viñetas sustituyen al antiguo monje por el Gaucho Saltarín en todas sus apariciones y mantienen su aspecto de forma consistente entre presente, recuerdos y líneas temporales.
+- La secuencia ilustrada termina con el conflicto de los dos Rojos abierto para una posible La Palanca IV.
+
+### Fixed
+
+- Las imágenes ya coinciden con el canon narrativo vigente de La Palanca I, II y III, incluida la orden «Huye, y no mires atrás» y la autoría falsa de la profecía.
+
 ## [0.10.17] - 2026-08-25
 
 ### Added
