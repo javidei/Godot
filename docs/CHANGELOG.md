@@ -29,6 +29,7 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 ### Fixed
 
 - Las imágenes ya coinciden con el canon narrativo vigente de La Palanca I, II y III, incluida la orden «Huye, y no mires atrás» y la autoría falsa de la profecía.
+- La exportación web incluye las nuevas páginas de `assets/generated` sin incorporar otros recursos de trabajo ajenos a la historia.
 
 ## [0.10.17] - 2026-08-25
 
