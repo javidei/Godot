@@ -171,4 +171,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-# Exportación de las nuevas ilustraciones y del Gaucho Saltarín 0.10.18 (25/08/2026)
+# Reintento con recursos generados incluidos · Gaucho Saltarín 0.10.18 (25/08/2026)
