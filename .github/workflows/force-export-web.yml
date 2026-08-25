@@ -171,4 +171,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-# Reintento validado de la Profecía de la Palanca 0.10.17 (25/08/2026)
+# Exportación de las nuevas ilustraciones y del Gaucho Saltarín 0.10.18 (25/08/2026)
