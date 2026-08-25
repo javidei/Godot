@@ -171,4 +171,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-# Reintento con recursos generados incluidos · Gaucho Saltarín 0.10.18 (25/08/2026)
+# Reintento final con empaquetador ejecutable · Gaucho Saltarín 0.10.18 (25/08/2026)
