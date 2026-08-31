@@ -14,6 +14,12 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.19] - 2026-08-31
+
+### Changed
+
+- La versión visible del menú y de la build web pasa a **0.10.19**.
+
 ## [0.10.18] - 2026-08-25
 
 ### Added
