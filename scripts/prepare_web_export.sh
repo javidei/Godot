@@ -62,14 +62,14 @@ done
 
 for ASESINO_RESOURCE in \
 	"data/stories/historia_de_un_asesino_experience.json" \
-	"assets/generated/historia_asesino_cinta_nota.jpg" \
-	"assets/generated/historia_asesino_fotografia.jpg" \
-	"assets/generated/historia_asesino_nave.jpg" \
-	"assets/generated/historia_asesino_caja.jpg" \
-	"assets/generated/historia_asesino_disparo.jpg" \
-	"assets/generated/historia_asesino_accidente.jpg" \
-	"assets/generated/historia_asesino_sobre.jpg" \
-	"assets/generated/historia_asesino_sillas.jpg"
+	"assets/generated/historia_asesino_cinta_nota.webp" \
+	"assets/generated/historia_asesino_fotografia.webp" \
+	"assets/generated/historia_asesino_nave.webp" \
+	"assets/generated/historia_asesino_caja.webp" \
+	"assets/generated/historia_asesino_disparo.webp" \
+	"assets/generated/historia_asesino_accidente.webp" \
+	"assets/generated/historia_asesino_sobre.webp" \
+	"assets/generated/historia_asesino_sillas.webp"
 do
 	if [ ! -s "${ASESINO_RESOURCE}" ]; then
 		echo "Falta un recurso de Historia de un asesino: ${ASESINO_RESOURCE}" >&2
