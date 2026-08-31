@@ -29,6 +29,7 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 ### Fixed
 
 - El smoke test de La Palanca III deja de exigir que Historia de un asesino sea un muro de texto plano, y comprueba que ambas experiencias no se contaminen.
+- La exportación forzada deja de subir `index.pck` a git cuando supera 100 MB; el juego se publica por el artefacto de GitHub Pages.
 
 ## [0.10.19] - 2026-08-31
 
