@@ -1,4 +1,3 @@
-
 [center][font_size=34][b]HISTORIA DE UN ASESINO[/b][/font_size][/center]
 [center][i]Un caso cerrado. Ocho testigos. Un hombre que no recuerda dónde estuvo hace quince años.[/i][/center]
 
@@ -44,8 +43,6 @@ Debajo, otra línea:
 
 [i]«Empieza por Charlie. Pregunta qué quedó fuera de plano.»[/i]
 
-No sabías todavía que la letra era tuya.
-
 
 [b]II. OCHO PERSONAS QUE SABEN CALLARSE[/b]
 
@@ -82,6 +79,10 @@ Charlie levantó la mirada.
 Fue la primera conversación en la que tuviste la sensación de que el interrogado sabía algo sobre ti que tú ignorabas.
 
 No sería la última.
+
+Antes de irte, Charlie te dejó una sola pieza, como quien suelta una moneda sobre la mesa y se niega a decir de quién es.
+
+—Yo grabé. No vi la cara. Eso es lo único que te voy a confirmar.
 
 Javi te recibió con menos ceremonia.
 
@@ -127,6 +128,10 @@ No tenías respuesta.
 
 Javi sí tenía una, pero decidió tragársela.
 
+Su pieza, cuando por fin la soltó, no era un nombre. Era un orden.
+
+—Elías entró antes. Darío después. Eso lo vi yo. El resto, que te lo cuente otro.
+
 Sue fue más directa.
 
 Escuchó tus preguntas, te dejó terminar y después dijo:
@@ -151,6 +156,10 @@ Sue apoyó los brazos sobre la mesa.
 
 Aquello fue peor que un sí.
 
+Antes de cerrar la puerta, Sue te dio lo suyo:
+
+—Esa noche Darío no llegó solo. Llevaba copias. Las copias no estaban en la nave.
+
 
 [b]III. LAS PEQUEÑAS COSAS[/b]
 
@@ -164,6 +173,10 @@ Entraste en una calle que nunca habías visitado y supiste que al final había u
 
 En la habitación de Jony viste un adaptador antiguo y dijiste el modelo antes de leer la etiqueta.
 
+Jony no se sorprendió. Se quedó mirándote como si el reloj de la cinta ya te hubiera mentido una vez y tú todavía no lo supieras.
+
+—La hora de esa MiniDV es mentira —dijo—. El resto, todavía no.
+
 Carmen puso una taza sobre la mesa y tú la apartaste dos centímetros para que no quedara al borde. Ella se quedó mirándote.
 
 —Hacías eso.
@@ -173,6 +186,10 @@ Carmen puso una taza sobre la mesa y tú la apartaste dos centímetros para que 
 Carmen negó con la cabeza.
 
 —Nada.
+
+Luego, sin mirarte, añadió su pieza:
+
+—Horas antes de la nave vi un arma en un coche. Fuera de la funda. Nunca dije de quién era. Nunca dije de quién no era.
 
 Ana tenía una caja que no quería abrir delante de ti. Cuando finalmente lo hizo, dentro había una llave pequeña, ennegrecida por el calor, un mechero que ya no funcionaba y un trozo de papel doblado cuatro veces.
 
@@ -197,6 +214,10 @@ Ana cerró los ojos.
 —Joder.
 
 Fue la primera vez que alguien dejó de fingir del todo.
+
+Su pieza no era una acusación. Era un límite.
+
+—Esto no prueba quién disparó. Prueba quién se quedó.
 
 El Argentino fue distinto. No parecía asustado. Parecía enfadado.
 
@@ -311,6 +332,10 @@ Charlie se quedó inmóvil.
 
 El silencio posterior fue la primera confesión real.
 
+Antes de apagar el aparato, Charlie te dejó la última pieza de la cinta:
+
+—Esta copia se corta. Lo que oyes después no está aquí. No me pidas que te lo ponga yo en la boca.
+
 
 [b]V. ELÍAS VELA[/b]
 
@@ -358,7 +383,7 @@ Jony no intentó convencerte.
 
 Sue, que había insistido en estar presente, dijo:
 
-—Eso es lo que recuerdas. No es lo mismo.
+—Eso es lo que oyes. No es lo mismo que lo que recuerdas.
 
 La grabación continuó.
 
@@ -394,7 +419,7 @@ Clarísima.
 
 —Esto se acaba aquí.
 
-Un disparo.
+Un ruido seco. Podía ser un disparo. Podía ser la puerta metálica. Podía ser las dos cosas a la vez.
 
 La cinta se cortaba siete segundos después.
 
@@ -404,7 +429,11 @@ Tardaste más de un minuto en hablar.
 
 Nadie respondió.
 
-Y el hecho de que nadie respondiera fue una respuesta.
+Sue negó, muy despacio.
+
+—Eso es lo que has decidido oír.
+
+Y el hecho de que nadie te corrigiera del todo tampoco era una sentencia.
 
 
 [b]VI. EL ASESINO QUE BUSCABAS[/b]
@@ -502,6 +531,8 @@ Darío Luna era la razón.
 
 Darío se dedicaba a conseguir información que la gente prefería mantener escondida. No importaba si era importante o ridícula. Si podía convertirla en presión, lo hacía.
 
+No era un monstruo de película. Tenía una hermana en otra provincia a la que debía dinero y una forma torpe de sobrevivir: coleccionar vergüenzas ajenas porque las propias no le daban de comer. Eso no lo convierte en inocente. Solo impide que el disparo se sienta gratuito.
+
 Elías trabajaba para él.
 
 No como amigo.
@@ -556,9 +587,9 @@ Pero Elías ya sabía que Darío no pensaba cumplir.
 
 Por eso entró antes.
 
-Por eso llevaba el arma de Darío, que había robado unas horas antes.
+Por eso llevaba el arma de Darío, que había robado unas horas antes. El arma que Carmen vio en el coche y no nombró.
 
-Y por eso todos habían mentido sobre lo que vieron.
+Y por eso todos habían mentido sobre lo que vieron: cada uno guardó una pieza distinta, para que ninguna boca pudiera reconstruir el tiro ella sola.
 
 
 [b]VIII. EL DISPARO[/b]
@@ -615,19 +646,25 @@ Carmen bajó la mirada.
 
 —En ese momento no.
 
+El Argentino habló por primera vez sin rodeos. Él había visto el final. La cinta, no.
+
+—Dijo que no sabía hacer otra cosa. Que si dejaba de apretar a la gente se quedaba sin nada. Que su hermana no iba a entenderlo.
+
+—¿Eso es una amenaza?
+
+—No. Eso es un hombre asustado.
+
+—¿Y después?
+
+—Después se rio. Y entonces sí: nombres, casas, a quién queríais. Como si no pudiera parar.
+
 —Entonces lo ejecuté.
 
 Nadie corrigió la palabra.
 
 Elías le dijo a Darío que jamás volvería a acercarse a ninguno de ellos.
 
-Darío se rio.
-
-Le recordó que sabía quiénes eran.
-
-Dónde vivían.
-
-A quién querían.
+Darío se rio otra vez.
 
 Elías apretó el gatillo.
 
@@ -721,6 +758,14 @@ Ana asintió.
 Sue respondió:
 
 —Porque nadie quería ser la persona que te devolviera ese recuerdo.
+
+Jony, que había estado callado, añadió la suya:
+
+—Yo sabía que el reloj de la cámara mentía. Dejé que la cronología oficial se quedara mal. Así nadie podía clavar el minuto del disparo.
+
+Carmen no levantó la vista.
+
+—Y yo vi el arma horas antes. Si lo hubiera dicho entonces, quizá no llegamos a la nave. O quizá llegamos igual. Nunca lo voy a saber.
 
 
 [b]X. EL ACCIDENTE[/b]
@@ -913,7 +958,11 @@ Charlie miró la cámara vieja de la mesa.
 
 —No.
 
-Por primera vez desde que empezó la investigación, una respuesta te pareció completa.
+Añadió, casi al final, lo único que la cinta nunca iba a mostrar:
+
+—Darío, en el suelo, miró la puerta. Como si esperara a alguien más. Nunca supe a quién.
+
+Por primera vez desde que empezó la investigación, una respuesta te pareció completa. Y, aun así, dejaba un hueco.
 
 
 [b]XIII. LA NOVENA SILLA[/b]
@@ -964,15 +1013,29 @@ El Argentino sonrió sin humor.
 
 Sue te observó durante unos segundos.
 
+—Si lo entregas entero, algunos de nosotros también vamos a tener que hablar.
+
+—Lo sé.
+
 —¿Estás seguro?
 
 —No.
 
 —Vale.
 
-—¿Eso es todo?
+Fran negó.
 
-—Es suficiente.
+—Yo no voy a la comisaría. No ahora. Dadme una semana. O no me la deis. Pero no me pidas que cruce esa puerta hoy.
+
+Nadie lo discutió.
+
+Javi se pasó una mano por la cara.
+
+—Yo sí voy. Contigo.
+
+Ana apoyó el papel de la nota sobre la mesa.
+
+—Esto también. Si vamos a hacerlo entero, que sea entero.
 
 Charlie señaló la memoria.
 
@@ -983,6 +1046,10 @@ Por primera vez en días te reíste.
 —Claro que ibas a decir eso.
 
 —He aprendido algo en quince años.
+
+La novena silla no reunió al grupo.
+
+Lo partió lo justo para que dejara de ser un secreto y todavía no fuera un adiós.
 
 
 [b]XIV. EPÍLOGO[/b]
@@ -1011,9 +1078,9 @@ Admitiste que disparaste.
 
 Y admitiste que durante quince años no lo supiste.
 
-El tribunal decidiría qué hacer con esos hechos.
+Charlie entregó el máster. Ana, la nota. Carmen, lo del arma en el coche. Javi fue contigo. Fran no cruzó la puerta el primer día; lo hizo más tarde, con una declaración más corta de lo que nadie esperaba. El periódico de Naranjal publicó ocho nombres junto al tuyo.
 
-La historia no necesitaba fingir que una sentencia podía resolver la pregunta que quedaba.
+El tribunal no resolvió la pregunta que quedaba. Nadie lo iba a hacer.
 
 Antes de entrar a declarar, Charlie te entregó una fotografía.
 

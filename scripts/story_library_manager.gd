@@ -694,7 +694,7 @@ func _apply_layout() -> void:
 		menu_scroll.offset_bottom = 0.0
 
 	if story_outer != null:
-		var reading_margin := 0.13 if current_story_id == "trilogia_innecesaria" else 0.07
+		var reading_margin := 0.13 if current_story_id in ["trilogia_innecesaria", "historia_asesino"] else 0.07
 		var side_margin := 14 if portrait else maxi(42, int(viewport_size.x * reading_margin))
 		var top_margin := 18 if portrait else 26
 		story_outer.add_theme_constant_override("margin_left", side_margin)

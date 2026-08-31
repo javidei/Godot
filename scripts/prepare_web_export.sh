@@ -60,6 +60,28 @@ do
 	fi
 done
 
+for ASESINO_RESOURCE in \
+	"data/stories/historia_de_un_asesino_experience.json" \
+	"assets/generated/historia_asesino_cinta_nota.jpg" \
+	"assets/generated/historia_asesino_fotografia.jpg" \
+	"assets/generated/historia_asesino_nave.jpg" \
+	"assets/generated/historia_asesino_caja.jpg" \
+	"assets/generated/historia_asesino_disparo.jpg" \
+	"assets/generated/historia_asesino_accidente.jpg" \
+	"assets/generated/historia_asesino_sobre.jpg" \
+	"assets/generated/historia_asesino_sillas.jpg"
+do
+	if [ ! -s "${ASESINO_RESOURCE}" ]; then
+		echo "Falta un recurso de Historia de un asesino: ${ASESINO_RESOURCE}" >&2
+		exit 1
+	fi
+	ASESINO_NAME="$(basename "${ASESINO_RESOURCE}")"
+	if ! grep -aFq "${ASESINO_NAME}" "${PACK_FILE}"; then
+		echo "La exportacion PCK no contiene el recurso: ${ASESINO_RESOURCE}" >&2
+		exit 1
+	fi
+done
+
 # Define una identidad exclusiva y estable para Entre lineas. Sin `id`, Chrome
 # puede asociar la exportacion generica de Godot a otra PWA del mismo sitio y
 # afirmar que ya esta instalada aunque el juego no tenga acceso visible.

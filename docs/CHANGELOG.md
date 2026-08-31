@@ -14,6 +14,22 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.20] - 2026-08-31
+
+### Added
+
+- **Historia de un asesino** pasa a una experiencia por capítulos, con portada y siete ilustraciones en tinta blanca y negra: siluetas, objetos y recortes, sin rostros.
+- Las imágenes se pueden ampliar igual que las páginas de **La Palanca III**.
+
+### Changed
+
+- El relato reparte el secreto entre los ocho: cada uno guarda una pieza distinta y la cinta ya no cierra el caso ella sola.
+- Desaparece el spoiler de la letra de la nota; Darío gana un tramo humano antes del disparo; el grupo se parte al entregar las pruebas.
+
+### Fixed
+
+- El smoke test de La Palanca III deja de exigir que Historia de un asesino sea un muro de texto plano, y comprueba que ambas experiencias no se contaminen.
+
 ## [0.10.19] - 2026-08-31
 
 ### Changed

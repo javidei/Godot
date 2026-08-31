@@ -153,8 +153,26 @@ func _run() -> void:
 	manager.call("_open_story", "historia_asesino")
 	for _i in range(3):
 		await process_frame
-	if experience.visible or not story_body.visible:
+	var story_title := manager.get("story_title") as Label
+	if story_title == null or story_title.text != "Historia de un asesino":
+		_fail("Historia de un asesino no conserva su título")
+		return
+	if experience == null or not experience.visible or story_body.visible:
+		_fail("Historia de un asesino no abre su propia experiencia")
+		return
+	if experience.get_child_count() != 15:
+		_fail("Historia de un asesino no contiene portada y catorce capítulos")
+		return
+	var dumped := ""
+	for node in experience.find_children("*", "Label", true, false):
+		dumped += (node as Label).text + "\n"
+	for node in experience.find_children("*", "RichTextLabel", true, false):
+		dumped += (node as RichTextLabel).text + "\n"
+	if dumped.contains("Robot Ninja") or dumped.contains("Gaucho Saltarín") or dumped.contains("LA HISTORIA QUE SE DIVIDIÓ"):
 		_fail("La experiencia de La Palanca invade Historia de un asesino")
+		return
+	if not dumped.contains("Elías") or not dumped.contains("Darío") or dumped.contains("No sabías todavía que la letra era tuya"):
+		_fail("El relato reescrito de Historia de un asesino no está presente o conserva el spoiler")
 		return
 
 	print("V01011 PALANCA OK: portada, capítulos, scroll táctil, cómic, ampliación y aislamiento validados.")

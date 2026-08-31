@@ -5,8 +5,9 @@
       "id": "historia_asesino",
       "menu_label": "Historia de un asesino",
       "title": "Historia de un asesino",
-      "subtitle": "Un caso cerrado · Ocho testigos · Una identidad enterrada durante quince años",
+      "subtitle": "Ocho piezas. Ninguna basta. La cinta no cierra el caso.",
       "content_file": "res://data/stories/historia_de_un_asesino.txt",
+      "presentation_file": "res://data/stories/historia_de_un_asesino_experience.json",
       "images": []
     },
     {
