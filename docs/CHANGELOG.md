@@ -14,6 +14,23 @@ El historial anterior a la rama 0.10 se conserva íntegro en [`CHANGELOG_ARCHIVE
 
 ### Fixed
 
+## [0.10.21] - 2026-09-06
+
+### Added
+
+- **Día 4 · Fuera de plano**: jornada nueva tras el código de la octava silla.
+- Ruta jugable **Fuera de plano** (Charlie → Smokey/Fran → Javi) que planta la semilla `palanca_4_semilla` y el arco **La Palanca IV** sin resolver a los dos Rojos.
+- Diálogos de Charlie, Fran y Javi para el día 4; Charlie puede soltar el detalle del sombrero del Gaucho si tiras del hilo.
+- Pistas de Diario: figura al fondo de la iglesia, silencio de Fran, recuerdos divergentes.
+
+### Changed
+
+- El primer arco ya no termina al resolver el Día 3: avanza al Día 4 antes del cierre de arco.
+
+### Fixed
+
+- El smoke test de jornadas valida también el Día 4 y la cadena de visitas de la nueva ruta.
+
 ## [0.10.20] - 2026-08-31
 
 ### Added
