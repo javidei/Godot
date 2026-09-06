@@ -28,8 +28,8 @@ func _run() -> void:
 		_fail("El DataManager no expone la progresión por días")
 		return
 	var day_ids: Array = dm.call("get_narrative_day_ids")
-	if day_ids != [1, 2, 3]:
-		_fail("Se esperaban los días 1, 2 y 3")
+	if day_ids != [1, 2, 3, 4]:
+		_fail("Se esperaban los días 1, 2, 3 y 4")
 		return
 	var day_three: Dictionary = dm.call("get_narrative_day", 3)
 	if typeof(day_three.get("puzzle", null)) != TYPE_DICTIONARY:
@@ -120,6 +120,16 @@ func _run() -> void:
 	if int(solved_progress.get("completed", 0)) != 5 or not bool(solved_progress.get("ready", false)):
 		_fail("El Día 3 no queda listo tras resolver las cuatro pistas y el código")
 		return
+	manager.call("_commit_day_advance", 3, 4)
+	if int(manager.call("get_current_day_id")) != 4:
+		_fail("La progresión no avanza al Día 4 tras el código")
+		return
+	for character_id in ["charlie", "smokey", "javi"]:
+		manager.call("on_character_visit_completed", character_id)
+	var day_four_progress: Dictionary = manager.call("get_current_day_progress")
+	if int(day_four_progress.get("completed", 0)) != 3 or not bool(day_four_progress.get("ready", false)):
+		_fail("El Día 4 no se completa al visitar a Charlie, Smokey y Javi")
+		return
 	manager.call("_begin_arc_completion")
 	if not bool(manager.call("is_arc_complete")):
 		_fail("El primer arco no queda marcado como completado")
@@ -130,7 +140,7 @@ func _run() -> void:
 		_fail("El progreso global no alcanza el 100% al completar el arco disponible")
 		return
 
-	print("V080 NARRATIVE DAYS OK: 3 días, ocho miembros, objetivos variables, pistas, código, migración y progreso persistente validados.")
+	print("V080 NARRATIVE DAYS OK: 4 días, ocho miembros, Fuera de plano, pistas, código, migración y progreso persistente validados.")
 	quit(0)
 
 
