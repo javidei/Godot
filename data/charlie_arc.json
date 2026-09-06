@@ -4,28 +4,76 @@
     "1": {
       "character": "charlie",
       "intro": [
-        {"speaker": "Narrador", "speaker_id": "", "text": "Hay una habitación nueva en el recorrido. Antes de entrar ya te han advertido de una cosa: a Carlos también le llaman Charlie. Y a veces, El Trípode."},
-        {"speaker": "Charlie", "speaker_id": "charlie", "text": "Antes de que preguntes: no, tampoco sé por qué empezó lo del Trípode."},
-        {"speaker": "Narrador", "speaker_id": "", "text": "En la habitación conviven un PC, cosas japonesas, cartas de Magic y suficiente historia de Xbox como para abrir varias conversaciones a la vez."}
+        {
+          "speaker": "Narrador",
+          "speaker_id": "",
+          "text": "Hay una habitación nueva en el recorrido. Antes de entrar ya te han advertido de una cosa: a Carlos también le llaman Charlie. Y a veces, El Trípode."
+        },
+        {
+          "speaker": "Charlie",
+          "speaker_id": "charlie",
+          "text": "Antes de que preguntes: no, tampoco sé por qué empezó lo del Trípode."
+        },
+        {
+          "speaker": "Narrador",
+          "speaker_id": "",
+          "text": "En la habitación conviven un PC, cosas japonesas, cartas de Magic y suficiente historia de Xbox como para abrir varias conversaciones a la vez."
+        }
       ],
       "questions": [
         {
           "id": "charlie_d1_q1",
           "text": "¿Qué tema eliges para romper el hielo?",
           "answers": [
-            {"text": "Japón", "side": "left", "score": 1, "feedback": "japon"},
-            {"text": "Halo y Xbox", "side": "right", "score": 1, "feedback": "xbox"},
-            {"text": "Magic", "side": "left", "score": 1, "feedback": "magic"},
-            {"text": "El Trípode", "side": "right", "score": 1, "feedback": "tripode"}
+            {
+              "text": "Japón",
+              "side": "left",
+              "score": 1,
+              "feedback": "japon"
+            },
+            {
+              "text": "Halo y Xbox",
+              "side": "right",
+              "score": 1,
+              "feedback": "xbox"
+            },
+            {
+              "text": "Magic",
+              "side": "left",
+              "score": 1,
+              "feedback": "magic"
+            },
+            {
+              "text": "El Trípode",
+              "side": "right",
+              "score": 1,
+              "feedback": "tripode"
+            }
           ],
           "feedback": {
-            "japon": {"text": "Charlie señala varias cosas de estética japonesa. Has elegido un tema seguro.", "expression": "happy"},
-            "xbox": {"text": "Halo, Skate 2, Portal... la generación Xbox tiene aquí representación de sobra.", "expression": "happy"},
-            "magic": {"text": "Charlie mira las cartas. Esta conversación podría durar bastante más de lo previsto.", "expression": "happy"},
-            "tripode": {"text": "La teoría más sólida sigue siendo ninguna. El apodo existe. El motivo, no.", "expression": "thoughtful"}
+            "japon": {
+              "text": "Charlie señala varias cosas de estética japonesa. Has elegido un tema seguro.",
+              "expression": "happy"
+            },
+            "xbox": {
+              "text": "Halo, Skate 2, Portal... la generación Xbox tiene aquí representación de sobra.",
+              "expression": "happy"
+            },
+            "magic": {
+              "text": "Charlie mira las cartas. Esta conversación podría durar bastante más de lo previsto.",
+              "expression": "happy"
+            },
+            "tripode": {
+              "text": "La teoría más sólida sigue siendo ninguna. El apodo existe. El motivo, no.",
+              "expression": "thoughtful"
+            }
           },
           "after": [
-            {"speaker": "Narrador", "speaker_id": "", "text": "Primer dato importante sobre Charlie: el misterio del Trípode no se resuelve. Se conserva."}
+            {
+              "speaker": "Narrador",
+              "speaker_id": "",
+              "text": "Primer dato importante sobre Charlie: el misterio del Trípode no se resuelve. Se conserva."
+            }
           ]
         }
       ]
@@ -33,30 +81,86 @@
     "2": {
       "character": "charlie",
       "intro": [
-        {"speaker": "Charlie", "speaker_id": "charlie", "text": "¿Te han contado alguna vez cómo una tarta casi provoca un conflicto diplomático?"},
-        {"speaker": "Narrador", "speaker_id": "", "text": "La historia ocurrió en un mexicano. Javi compartía una tarta con una antigua novia de Charlie."},
-        {"speaker": "Narrador", "speaker_id": "", "text": "Ella tenía una costumbre: siempre se guardaba el pico de la tarta para el final."},
-        {"speaker": "Narrador", "speaker_id": "", "text": "Javi no lo sabía."}
+        {
+          "speaker": "Charlie",
+          "speaker_id": "charlie",
+          "text": "¿Te han contado alguna vez cómo una tarta casi provoca un conflicto diplomático?"
+        },
+        {
+          "speaker": "Narrador",
+          "speaker_id": "",
+          "text": "La historia ocurrió en un mexicano. Javi compartía una tarta con una antigua novia de Charlie."
+        },
+        {
+          "speaker": "Narrador",
+          "speaker_id": "",
+          "text": "Ella tenía una costumbre: siempre se guardaba el pico de la tarta para el final."
+        },
+        {
+          "speaker": "Narrador",
+          "speaker_id": "",
+          "text": "Javi no lo sabía."
+        }
       ],
       "questions": [
         {
           "id": "charlie_d2_q1",
           "text": "¿Qué crees que hizo Javi?",
           "answers": [
-            {"text": "Se comió el pico sin preguntar", "side": "left", "score": 1, "feedback": "pico"},
-            {"text": "Pidió otra tarta", "side": "right", "score": 0, "feedback": "otra"},
-            {"text": "Partió el pico por la mitad", "side": "left", "score": 0, "feedback": "mitad"},
-            {"text": "Se lo guardó para ella", "side": "right", "score": 0, "feedback": "bueno"}
+            {
+              "text": "Se comió el pico sin preguntar",
+              "side": "left",
+              "score": 1,
+              "feedback": "pico"
+            },
+            {
+              "text": "Pidió otra tarta",
+              "side": "right",
+              "score": 0,
+              "feedback": "otra"
+            },
+            {
+              "text": "Partió el pico por la mitad",
+              "side": "left",
+              "score": 0,
+              "feedback": "mitad"
+            },
+            {
+              "text": "Se lo guardó para ella",
+              "side": "right",
+              "score": 0,
+              "feedback": "bueno"
+            }
           ],
           "feedback": {
-            "pico": {"text": "Exacto. Se comió justo el trozo que ella llevaba toda la tarta reservándose mentalmente.", "expression": "happy"},
-            "otra": {"text": "Ojalá. Se comió el pico y solo después descubrió que aquello tenía dueño emocional.", "expression": "thoughtful"},
-            "mitad": {"text": "Eso habría sido negociación. Aquí no hubo negociación: el pico desapareció.", "expression": "thoughtful"},
-            "bueno": {"text": "Eso habría evitado toda la historia. Javi se lo comió sin saber nada.", "expression": "thoughtful"}
+            "pico": {
+              "text": "Exacto. Se comió justo el trozo que ella llevaba toda la tarta reservándose mentalmente.",
+              "expression": "happy"
+            },
+            "otra": {
+              "text": "Ojalá. Se comió el pico y solo después descubrió que aquello tenía dueño emocional.",
+              "expression": "thoughtful"
+            },
+            "mitad": {
+              "text": "Eso habría sido negociación. Aquí no hubo negociación: el pico desapareció.",
+              "expression": "thoughtful"
+            },
+            "bueno": {
+              "text": "Eso habría evitado toda la historia. Javi se lo comió sin saber nada.",
+              "expression": "thoughtful"
+            }
           },
           "after": [
-            {"speaker": "Charlie", "speaker_id": "charlie", "text": "Ella se enfadó con Javi. Javi seguía sin entender por qué una esquina de tarta tenía tanta jerarquía."},
-            {"speaker": "Narrador", "speaker_id": "", "text": "Desde entonces, el grupo sabe que el último pico de una tarta puede tener propietario aunque no exista ningún documento que lo acredite."}
+            {
+              "speaker": "Charlie",
+              "speaker_id": "charlie",
+              "text": "Ella se enfadó con Javi. Javi seguía sin entender por qué una esquina de tarta tenía tanta jerarquía."
+            },
+            {
+              "speaker": "Narrador",
+              "speaker_id": "",
+              "text": "Desde entonces, el grupo sabe que el último pico de una tarta puede tener propietario aunque no exista ningún documento que lo acredite."
+            }
           ]
         }
       ]
@@ -64,29 +168,218 @@
     "3": {
       "character": "charlie",
       "intro": [
-        {"speaker": "Narrador", "speaker_id": "", "text": "Entre las cosas de Charlie hay una cámara. No es decoración aleatoria."},
-        {"speaker": "Charlie", "speaker_id": "charlie", "text": "Yo grabé La Palanca I y La Palanca II."},
-        {"speaker": "Charlie", "speaker_id": "charlie", "text": "Cuando todos recuerdan una escena, suelen recordar lo que pasó delante. El cámara también recuerda lo que quedó fuera del encuadre."}
+        {
+          "speaker": "Narrador",
+          "speaker_id": "",
+          "text": "Entre las cosas de Charlie hay una cámara. No es decoración aleatoria."
+        },
+        {
+          "speaker": "Charlie",
+          "speaker_id": "charlie",
+          "text": "Yo grabé La Palanca I y La Palanca II."
+        },
+        {
+          "speaker": "Charlie",
+          "speaker_id": "charlie",
+          "text": "Cuando todos recuerdan una escena, suelen recordar lo que pasó delante. El cámara también recuerda lo que quedó fuera del encuadre."
+        }
       ],
       "questions": [
         {
           "id": "charlie_d3_q1",
           "text": "¿Qué le preguntas sobre aquellos cortos?",
           "answers": [
-            {"text": "¿Hay algo que no saliera en cámara?", "side": "left", "score": 1, "feedback": "fuera"},
-            {"text": "¿Conservas alguna toma rara?", "side": "right", "score": 1, "feedback": "toma"},
-            {"text": "¿Quién sujetaba la cámara de verdad?", "side": "left", "score": 1, "feedback": "camara"},
-            {"text": "¿Lo del Trípode empezó por el trípode de cámara?", "side": "right", "score": 1, "feedback": "tripode"}
+            {
+              "text": "¿Hay algo que no saliera en cámara?",
+              "side": "left",
+              "score": 1,
+              "feedback": "fuera"
+            },
+            {
+              "text": "¿Conservas alguna toma rara?",
+              "side": "right",
+              "score": 1,
+              "feedback": "toma"
+            },
+            {
+              "text": "¿Quién sujetaba la cámara de verdad?",
+              "side": "left",
+              "score": 1,
+              "feedback": "camara"
+            },
+            {
+              "text": "¿Lo del Trípode empezó por el trípode de cámara?",
+              "side": "right",
+              "score": 1,
+              "feedback": "tripode"
+            }
           ],
           "feedback": {
-            "fuera": {"text": "Charlie tarda un segundo en responder. «Más de una cosa.»", "expression": "thoughtful"},
-            "toma": {"text": "«Puede.» No añade nada más, que es exactamente lo que hace que parezca importante.", "expression": "thoughtful"},
-            "camara": {"text": "«Yo. Por eso sé dónde estaba mirando y, sobre todo, dónde no.»", "expression": "happy"},
-            "tripode": {"text": "Charlie lo piensa. «Sería una explicación demasiado lógica. Así que probablemente no.»", "expression": "happy"}
+            "fuera": {
+              "text": "Charlie tarda un segundo en responder. «Más de una cosa.»",
+              "expression": "thoughtful"
+            },
+            "toma": {
+              "text": "«Puede.» No añade nada más, que es exactamente lo que hace que parezca importante.",
+              "expression": "thoughtful"
+            },
+            "camara": {
+              "text": "«Yo. Por eso sé dónde estaba mirando y, sobre todo, dónde no.»",
+              "expression": "happy"
+            },
+            "tripode": {
+              "text": "Charlie lo piensa. «Sería una explicación demasiado lógica. Así que probablemente no.»",
+              "expression": "happy"
+            }
           },
           "after": [
-            {"speaker": "Narrador", "speaker_id": "", "text": "No has descubierto qué ocurrió en La Palanca III. Pero acabas de descubrir que Charlie puede recordar información que el resto del reparto nunca vio desde su posición."},
-            {"speaker": "Charlie", "speaker_id": "charlie", "text": "Si alguna vez reconstruís aquello, empezad por preguntar qué quedó fuera de plano."}
+            {
+              "speaker": "Narrador",
+              "speaker_id": "",
+              "text": "No has descubierto qué ocurrió en La Palanca III. Pero acabas de descubrir que Charlie puede recordar información que el resto del reparto nunca vio desde su posición."
+            },
+            {
+              "speaker": "Charlie",
+              "speaker_id": "charlie",
+              "text": "Si alguna vez reconstruís aquello, empezad por preguntar qué quedó fuera de plano."
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "character": "charlie",
+      "intro": [
+        {
+          "speaker": "Narrador",
+          "speaker_id": "",
+          "text": "Charlie tiene la cámara sobre la mesa. No la enseña como un trofeo: la enseña como una prueba."
+        },
+        {
+          "speaker": "Charlie",
+          "speaker_id": "charlie",
+          "text": "Ayer te dije que empecéis por lo que quedó fuera de plano. Hoy te enseño a qué me refería."
+        },
+        {
+          "speaker": "Narrador",
+          "speaker_id": "",
+          "text": "En un fotograma de la iglesia, al fondo, hay una silueta. No lleva micrófono. No está en el plan de rodaje."
+        }
+      ],
+      "questions": [
+        {
+          "id": "charlie_d4_q1",
+          "text": "¿Qué miras primero?",
+          "answers": [
+            {
+              "text": "La silueta del fondo",
+              "side": "left",
+              "score": 1,
+              "feedback": "silueta"
+            },
+            {
+              "text": "El encuadre de Charlie",
+              "side": "right",
+              "score": 1,
+              "feedback": "encuadre"
+            },
+            {
+              "text": "Si el archivo está manipulado",
+              "side": "left",
+              "score": 0,
+              "feedback": "archivo"
+            },
+            {
+              "text": "Si el Trípode explica esto",
+              "side": "right",
+              "score": 1,
+              "feedback": "tripode"
+            }
+          ],
+          "feedback": {
+            "silueta": {
+              "text": "«Esa persona no estaba en el call sheet.» Charlie no sonríe.",
+              "expression": "thoughtful"
+            },
+            "encuadre": {
+              "text": "«Yo miraba al altar. Lo del fondo lo vi al revisar. Por eso el cámara recuerda otra película.»",
+              "expression": "thoughtful"
+            },
+            "archivo": {
+              "text": "«Ojalá. Lo he comparado con tres copias. La silueta está en todas.»",
+              "expression": "thoughtful"
+            },
+            "tripode": {
+              "text": "«Si el apodo sirviera para algo útil, sería ahora. Spoiler: no.»",
+              "expression": "happy"
+            }
+          },
+          "after": [
+            {
+              "speaker": "Charlie",
+              "speaker_id": "charlie",
+              "text": "Llévaselo a Fran. Si alguien debería reconocer esa iglesia… es él."
+            },
+            {
+              "speaker": "Narrador",
+              "speaker_id": "",
+              "text": "No te ha resuelto La Palanca. Te ha dado un hilo que tira hacia ella."
+            }
+          ]
+        },
+        {
+          "id": "charlie_d4_q2",
+          "text": "Antes de irte, ¿insistes en un detalle?",
+          "answers": [
+            {
+              "text": "¿Hay algo más en el corte?",
+              "side": "left",
+              "score": 2,
+              "feedback": "mas"
+            },
+            {
+              "text": "¿Se lo has enseñado a alguien?",
+              "side": "right",
+              "score": 1,
+              "feedback": "alguien"
+            },
+            {
+              "text": "Mejor no saber más todavía",
+              "side": "left",
+              "score": 0,
+              "feedback": "parar"
+            },
+            {
+              "text": "¿Y si es solo un figurante?",
+              "side": "right",
+              "score": 0,
+              "feedback": "figurante"
+            }
+          ],
+          "feedback": {
+            "mas": {
+              "text": "Charlie duda. Luego señala un corte posterior: un sombrero oscuro, un cigarro. «El Gaucho. O alguien que quiere parecerlo. Solo te lo digo porque… bueno. Porque ya te has ganado el cotilleo.»",
+              "expression": "thoughtful"
+            },
+            "alguien": {
+              "text": "«A nadie del grupo. Hasta ahora.»",
+              "expression": "thoughtful"
+            },
+            "parar": {
+              "text": "«También es una estrategia.» No suena convencido.",
+              "expression": "happy"
+            },
+            "figurante": {
+              "text": "«En aquella iglesia no había figurantes. Había demasiadas cosas reales intentando parecer ficción.»",
+              "expression": "thoughtful"
+            }
+          },
+          "after": [
+            {
+              "speaker": "Narrador",
+              "speaker_id": "",
+              "text": "Si Charlie confía en ti, el sombrero del Gaucho queda dicho. Si no, te quedas solo con la silueta. En ambos casos, el siguiente paso es Fran."
+            }
           ]
         }
       ]
