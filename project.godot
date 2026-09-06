@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Entre líneas: La novena silla"
-config/version="0.10.20"
+config/version="0.10.21"
 run/main_scene="res://scenes/naranjal_studio_splash.tscn"
 config/features=PackedStringArray("4.7")
 config/icon="res://assets/ui/menu-lineup.png"
@@ -72,3 +72,4 @@ driver/enable_input=false
 ; 0.10.11: La Palanca III estrena portada, relato canónico por capítulos, cinco páginas de cómic y visor ampliado.
 ; 0.10.19: se publica una nueva entrega para que el menú y la build web muestren v0.10.19.
 ; 0.10.20: Historia de un asesino se reescribe y se presenta con ilustraciones en tinta, sin rostros.
+; 0.10.21: Día 4 «Fuera de plano» — ruta Charlie → Fran → Javi que planta la semilla de La Palanca IV.
