@@ -1,1 +1,156 @@
-{"schema_version":2,"default_day":1,"days":[{"id":1,"title":"El reencuentro","subtitle":"Volver a situar a todo el grupo","dialogue_profile":"day_1","opening":{"title":"DÍA 1 · EL REENCUENTRO","message":"Ha pasado tiempo desde la última vez que estuvisteis todos juntos. Empieza por saludar. Ya habrá tiempo de arrepentirse."},"completion_message":"El primer día termina con la sensación de que todo sigue más o menos donde lo dejaste. Más o menos.","required_visits":"all_available","exclude_player":true,"puzzle":null},{"id":2,"title":"Conversaciones pendientes","subtitle":"Preguntas raras y pequeñas investigaciones","dialogue_profile":"day_2","opening":{"title":"DÍA 2 · CONVERSACIONES PENDIENTES","message":"Las conversaciones cambian. Hoy cuentan cosas más generales y las preguntas se vuelven un poco raras: detalles, patrones y pequeñas investigaciones."},"completion_message":"Las conversaciones que tocaban hoy quedan cerradas. Mañana las habitaciones también tendrán algo que decir.","required_visits":["ana","jony","carmen"],"exclude_player":true,"puzzle":null},{"id":3,"title":"El código de la octava silla","subtitle":"Conversaciones, pistas y elementos de la habitación","dialogue_profile":"day_3","opening":{"title":"DÍA 3 · EL CÓDIGO DE LA OCTAVA SILLA","message":"Hoy no basta con hablar. Algunas habitaciones habilitan elementos clicables: observa el escenario, busca pistas y prueba aquello que parezca interactivo."},"completion_message":"El código encaja. La nota no explica quién preparó el juego, pero confirma algo más interesante: esto solo era la primera prueba.","required_visits":[],"exclude_player":true,"puzzle":{"id":"octava_silla_codigo_01","title":"Las cuatro cifras","description":"Encuentra las pistas repartidas por el grupo. Cada pista entrega una cifra; introdúcelas en el orden en que aparecen en el Diario.","solution":"2026","success_message":"2026. El código abre la nota final. En el reverso solo hay una frase: «Ahora ya sabes cómo funciona el juego». Y eso suena peligrosamente a que habrá más.","failure_message":"El código no encaja. Las pistas siguen disponibles y puedes intentarlo de nuevo sin perder progreso.","clue_groups":[{"id":"cifra_1","characters":["javi","jony","sue","smokey","carmen","ana","argentino"],"fragment":"2","destination_hints":{"javi":"Busca a quien suele empezar una protesta con «Pero vamos a ver…».","jony":"Busca a quien no suele dejar escapar un juego de palabras malo."},"reveal":"Primera cifra: 2. La nota habla de dos líneas que nunca terminan de ser paralelas."},{"id":"cifra_2","characters":["sue","ana","javi","jony","smokey","carmen","argentino"],"fragment":"0","destination_hints":{"sue":"Busca entre plantas, fantasía y una taza de chocolate demasiado espeso.","ana":"Busca donde lo gótico, los libros y lo vampírico parecen decoración normal."},"reveal":"Segunda cifra: 0. «Nada en el centro, pero el círculo sigue completo»."},{"id":"cifra_3","characters":["smokey","carmen","javi","sue","jony","ana","argentino"],"fragment":"2","destination_hints":{"smokey":"Busca a quien puede decir «Confía en mí» justo antes de que algo se complique.","carmen":"Busca a quien comparte taller, colores y demasiadas ideas con Fran."},"reveal":"Tercera cifra: 2. Aparece repetida a propósito: «Lo que vuelve no siempre es un error»."},{"id":"cifra_4","characters":["argentino","jony","javi","sue","smokey","carmen","ana"],"fragment":"6","destination_hints":{"argentino":"Busca al que probablemente tenga tabaco, una historia de motores y un «che» preparado.","jony":"Busca a quien podría estar mirando el móvil incluso durante un fenómeno astronómico.","javi":"Busca a quien siempre termina metiendo informática en algún proyecto personal."},"reveal":"Cuarta cifra: 6. «Seis visitas posibles cuando tú ocupas una de las siete sillas»."}]}}],"arc_complete":{"title":"PRIMER ARCO COMPLETADO","message":"Has completado los tres primeros días. El mapa queda abierto para revisitas mientras llegan nuevos días, eventos y acertijos."}}
+{
+  "schema_version": 2,
+  "default_day": 1,
+  "days": [
+    {
+      "id": 1,
+      "title": "El reencuentro",
+      "subtitle": "Volver a situar a todo el grupo",
+      "dialogue_profile": "day_1",
+      "opening": {
+        "title": "DÍA 1 · EL REENCUENTRO",
+        "message": "Ha pasado tiempo desde la última vez que estuvisteis todos juntos. Empieza por saludar. Ya habrá tiempo de arrepentirse."
+      },
+      "completion_message": "El primer día termina con la sensación de que todo sigue más o menos donde lo dejaste. Más o menos.",
+      "required_visits": "all_available",
+      "exclude_player": true,
+      "puzzle": null
+    },
+    {
+      "id": 2,
+      "title": "Conversaciones pendientes",
+      "subtitle": "Preguntas raras y pequeñas investigaciones",
+      "dialogue_profile": "day_2",
+      "opening": {
+        "title": "DÍA 2 · CONVERSACIONES PENDIENTES",
+        "message": "Las conversaciones cambian. Hoy cuentan cosas más generales y las preguntas se vuelven un poco raras: detalles, patrones y pequeñas investigaciones."
+      },
+      "completion_message": "Las conversaciones que tocaban hoy quedan cerradas. Mañana las habitaciones también tendrán algo que decir.",
+      "required_visits": [
+        "ana",
+        "jony",
+        "carmen"
+      ],
+      "exclude_player": true,
+      "puzzle": null
+    },
+    {
+      "id": 3,
+      "title": "El código de la octava silla",
+      "subtitle": "Conversaciones, pistas y elementos de la habitación",
+      "dialogue_profile": "day_3",
+      "opening": {
+        "title": "DÍA 3 · EL CÓDIGO DE LA OCTAVA SILLA",
+        "message": "Hoy no basta con hablar. Algunas habitaciones habilitan elementos clicables: observa el escenario, busca pistas y prueba aquello que parezca interactivo."
+      },
+      "completion_message": "El código encaja. La nota no explica quién preparó el juego, pero confirma algo más interesante: esto solo era la primera prueba.",
+      "required_visits": [],
+      "exclude_player": true,
+      "puzzle": {
+        "id": "octava_silla_codigo_01",
+        "title": "Las cuatro cifras",
+        "description": "Encuentra las pistas repartidas por el grupo. Cada pista entrega una cifra; introdúcelas en el orden en que aparecen en el Diario.",
+        "solution": "2026",
+        "success_message": "2026. El código abre la nota final. En el reverso solo hay una frase: «Ahora ya sabes cómo funciona el juego». Y eso suena peligrosamente a que habrá más.",
+        "failure_message": "El código no encaja. Las pistas siguen disponibles y puedes intentarlo de nuevo sin perder progreso.",
+        "clue_groups": [
+          {
+            "id": "cifra_1",
+            "characters": [
+              "javi",
+              "jony",
+              "sue",
+              "smokey",
+              "carmen",
+              "ana",
+              "argentino"
+            ],
+            "fragment": "2",
+            "destination_hints": {
+              "javi": "Busca a quien suele empezar una protesta con «Pero vamos a ver…».",
+              "jony": "Busca a quien no suele dejar escapar un juego de palabras malo."
+            },
+            "reveal": "Primera cifra: 2. La nota habla de dos líneas que nunca terminan de ser paralelas."
+          },
+          {
+            "id": "cifra_2",
+            "characters": [
+              "sue",
+              "ana",
+              "javi",
+              "jony",
+              "smokey",
+              "carmen",
+              "argentino"
+            ],
+            "fragment": "0",
+            "destination_hints": {
+              "sue": "Busca entre plantas, fantasía y una taza de chocolate demasiado espeso.",
+              "ana": "Busca donde lo gótico, los libros y lo vampírico parecen decoración normal."
+            },
+            "reveal": "Segunda cifra: 0. «Nada en el centro, pero el círculo sigue completo»."
+          },
+          {
+            "id": "cifra_3",
+            "characters": [
+              "smokey",
+              "carmen",
+              "javi",
+              "sue",
+              "jony",
+              "ana",
+              "argentino"
+            ],
+            "fragment": "2",
+            "destination_hints": {
+              "smokey": "Busca a quien puede decir «Confía en mí» justo antes de que algo se complique.",
+              "carmen": "Busca a quien comparte taller, colores y demasiadas ideas con Fran."
+            },
+            "reveal": "Tercera cifra: 2. Aparece repetida a propósito: «Lo que vuelve no siempre es un error»."
+          },
+          {
+            "id": "cifra_4",
+            "characters": [
+              "argentino",
+              "jony",
+              "javi",
+              "sue",
+              "smokey",
+              "carmen",
+              "ana"
+            ],
+            "fragment": "6",
+            "destination_hints": {
+              "argentino": "Busca al que probablemente tenga tabaco, una historia de motores y un «che» preparado.",
+              "jony": "Busca a quien podría estar mirando el móvil incluso durante un fenómeno astronómico.",
+              "javi": "Busca a quien siempre termina metiendo informática en algún proyecto personal."
+            },
+            "reveal": "Cuarta cifra: 6. «Seis visitas posibles cuando tú ocupas una de las siete sillas»."
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "title": "Fuera de plano",
+      "subtitle": "Lo que la cámara no encuadró",
+      "dialogue_profile": "day_4",
+      "opening": {
+        "title": "DÍA 4 · FUERA DE PLANO",
+        "message": "El código de ayer no cerró nada: solo demostró que alguien está jugando. Charlie insiste en empezar por lo que quedó fuera de encuadre."
+      },
+      "completion_message": "Hay una semilla plantada. No sabes todavía qué germinará, pero ya no puedes fingir que La Palanca terminó en el corte final.",
+      "required_visits": [
+        "charlie",
+        "smokey",
+        "javi"
+      ],
+      "exclude_player": true,
+      "puzzle": null
+    }
+  ],
+  "arc_complete": {
+    "title": "PRIMER ARCO COMPLETADO",
+    "message": "Has completado los tres primeros días. El mapa queda abierto para revisitas mientras llegan nuevos días, eventos y acertijos."
+  }
+}
